@@ -8,7 +8,7 @@ var FR = function(){
 		{floor : 4, name : 'Kino', number : 406, location : [1099,56,118,85] },
 		{floor : 4, name : 'Vekkula', number : 407, location : [978,56,118,85] },
 		{floor : 4, name : 'Metkula', number : 408, location : [776,56,199,85] },
-		{floor : 4, name : 'Keittiö', number : 499, location : [10,186,142,130,10,316,480,120] },
+		{floor : 4, name : 'Keittiö', number : 499, location : [10,186,142,130,10,316,480,120] }
 	];
 	
   var reservations = [
