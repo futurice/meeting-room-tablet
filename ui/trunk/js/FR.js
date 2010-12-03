@@ -19,7 +19,7 @@ var FR = function(){
 	];
 
 	var populateRooms = function() {
-		$('<div><div id="room_${number}" style="left:${location[0]}"><b>${name}</b> (${number})</div></div>').tmpl( rooms )
+		$('#room_template').tmpl( rooms )
         .appendTo( "#floormap_4" );
 	};
 	
@@ -27,3 +27,5 @@ var FR = function(){
 	return {
     };
 }();
+
+
