@@ -1,16 +1,10 @@
 from django.conf.urls.defaults import *
+from django.http import HttpResponse
 
-# Uncomment the next two lines to enable the admin:
-# from django.contrib import admin
-# admin.autodiscover()
+def index(request):
+    return HttpResponse("Hello, world. You're at the poll index.")
 
 urlpatterns = patterns('',
-    # Example:
-    # (r'^backend/', include('backend.foo.urls')),
-
-    # Uncomment the admin/doc line below to enable admin documentation:
-    # (r'^admin/doc/', include('django.contrib.admindocs.urls')),
-
-    # Uncomment the next line to enable the admin:
-    # (r'^admin/', include(admin.site.urls)),
+   (r'^reservation/$', 'views.reservation.index'),
 )
+
