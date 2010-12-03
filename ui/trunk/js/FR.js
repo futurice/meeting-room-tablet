@@ -11,11 +11,11 @@ var FR = function(){
 		{floor : 4, name : 'Keittiö', number : 499, location : [10,186,142,130,10,316,480,120] },
 	];
 	
-	var reservations = [
-		{name : 'Kino', owner : 'Mats', starttime : '2010-12-03 13:00:00.000', endtime : '2010-12-03 15:50:00.000'},
-		{name : 'Keittiö', owner : 'Mats', starttime : '2010-12-03 11:00:00.000', endtime : '2010-12-03 16:00:00.000'},
-		{name : 'Metkula', owner : 'Mats', starttime : '2010-12-03 08:00:00.000', endtime : '2010-12-03 10:00:00.000'}
-	];
+  var reservations = [
+    new Reservation({name : 'Kino', owner : 'Mats', starttime : '2010-12-03 13:00:00.000', endtime : '2010-12-03 15:30:00.000'}),
+    new Reservation({name : 'Keittiö', owner : 'Mats', starttime : '2010-12-03 11:00:00.000', endtime : '2010-12-03 16:00:00.000'}),
+    new Reservation({name : 'Metkula', owner : 'Mats', starttime : '2010-12-03 08:00:00.000', endtime : '2010-12-03 10:00:00.000'})
+  ];
 
 	var populateRooms = function() {
 		$('#room_template').tmpl( rooms )
