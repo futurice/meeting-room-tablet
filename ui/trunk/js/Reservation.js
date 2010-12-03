@@ -3,6 +3,7 @@ var Reservation = function(params) {
   this.endtime = params.endtime;
   this.owner = params.owner;
   this.name = params.name;
+  this.number = params.number;
 };
 
 Reservation.prototype.getParsedStartTime = function(){

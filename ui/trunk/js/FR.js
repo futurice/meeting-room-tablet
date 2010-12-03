@@ -29,6 +29,8 @@ var FR = function(){
 			this.render_reservations();
 		},
 		render_reservations: function(){
+      log('render_reservations');
+      log(reservations);
 			for (var i = 0; i < reservations.length; i++) {
 				var reservation = reservations[i];
 				$('#room_'+reservation['number']).css('background-color', 'yellow');
