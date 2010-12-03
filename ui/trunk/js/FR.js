@@ -1,0 +1,5 @@
+var FR = function(){
+    return {
+        
+    };
+}();
