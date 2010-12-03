@@ -93,7 +93,10 @@ button {  width: auto; overflow: visible; }
 	position: relative;
 }
 
-
+.room {
+	position: absolute;
+	background-color: red;
+}
 
 
 

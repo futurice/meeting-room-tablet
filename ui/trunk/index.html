@@ -345,8 +345,8 @@
   <script>!window.jQuery && document.write(unescape('%3Cscript src="js/libs/jquery-1.4.4.js"%3E%3C/script%3E'))</script>
   <script src="js/plugins/jquery.tmpl.min.js"></script>
   <script src="js/plugins/pubsub.js"></script>
-  <script type="text/html" id="room_template">
-    <div><div class="room" id="room_${number}" style="left:${location[0]}px"><b>${name}</b> (${number})</div></div>
+  <script type="text/x-jquery-tmpl" id="room_template">
+    <div class="room" id="room_${number}" style="left:${location[0]}px;top:${location[1]}px;width:${location[2]}px;height:${location[3]}px;"><b>${name}</b> (${number})</div>
   </script>
   
   <!-- scripts concatenated and minified via ant build script-->
