@@ -1,4 +1,4 @@
-from django.http import HttpResponse
+from django.shortcuts import render_to_response
 
 def index(request):
     if request.method == 'GET':
@@ -7,7 +7,7 @@ def index(request):
         return post(request)
 
 def get(request):
-    return HttpResponse("Hello, world. You're at the poll index.")
+    return render_to_response('get-reservation-test-data.json')
 
 def post(request):
-    return HttpResponse("Hello, world. You're at the poll index.")
+    return render_to_response('post-reservation-test-data.json')
