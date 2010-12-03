@@ -86,7 +86,12 @@ button {  width: auto; overflow: visible; }
     Author: 
  */
 
-
+#floormap_4 {
+	background: url('../images/floormap_4.png') no-repeat;
+	width: 1645px;
+	height: 482px;
+	position: relative;
+}
 
 
 
