@@ -9,5 +9,5 @@ def index(request):
 def get(request):
     return HttpResponse("Hello, world. You're at the poll index.")
 
-def get(request):
+def post(request):
     return HttpResponse("Hello, world. You're at the poll index.")
