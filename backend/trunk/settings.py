@@ -1,5 +1,8 @@
 # Django settings for backend project.
 
+import os, sys
+sys.path.append(os.path.abspath('django_restapi'))
+
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
