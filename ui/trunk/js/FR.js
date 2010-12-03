@@ -30,9 +30,12 @@ var FR = function(){
 				dataType: 'json',
 				context: document.body,
 				success: function(data){
-					log(data);
+					var currentTime = new Date()
 					for (var i = 0; i < data.length; i++) {
-						$('#room_' + data[i]['number']).css('background-color', 'yellow');
+						$('#room_' + data[i]['number'])
+							.css('background-color', 'yellow')
+							.addClass('reserved')
+							.find('.content').html("Varattu");
 					}
 				},
 				error: function(msg){

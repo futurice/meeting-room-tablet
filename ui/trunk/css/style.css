@@ -95,9 +95,11 @@ button {  width: auto; overflow: visible; }
 
 .room {
 	position: absolute;
-	background-color: red;
+	background-color: #23e023;
 }
-
+.room .title, .room .content {
+	padding: 5px;
+}
 
 
 
