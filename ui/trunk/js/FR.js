@@ -17,21 +17,26 @@ var FR = function(){
     new Reservation({name : 'Metkula', number : 408, owner : 'Mats', starttime : '2010-12-03 08:00:00.000', endtime : '2010-12-03 10:00:00.000'})
   ];
 
-	var populateRooms = function() {
+	var populate_rooms = function() {
 		$('#room_template').tmpl( rooms )
 			.appendTo( "#floormap_4" );
 	};
 	
-    populateRooms();
+    populate_rooms();
+	
 	return {
+		init : function() {
+			this.render_reservations();
+		},
+		render_reservations: function(){
+			for (var i = 0; i < reservations.length; i++) {
+				var reservation = reservations[i];
+				$('#room_'+reservation['number']).css('background-color', 'yellow');
+			}
+		}
     };
 }();
 
-var render_reservations = function(reservations) {
-	for(var i = 0; $i < count(reservations); $i++) {
-		var reservation = $reservations[$i];
-		$('room_' . $reservation['number']).css('background-color', 'yellow');
-	}
-};
-
-
+$().ready(function() {
+	FR.init();
+});
