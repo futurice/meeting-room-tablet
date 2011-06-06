@@ -1,0 +1,22 @@
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="fill_parent" android:layout_height="fill_parent"
+	android:id="@+id/relativeLayout1" android:padding="15px">
+	<TextView android:layout_height="wrap_content"
+		android:id="@+id/textView1" android:layout_width="wrap_content"
+		android:layout_alignParentTop="true" android:text="@string/start"></TextView>
+	<SeekBar android:layout_width="match_parent" android:id="@+id/startBar"
+		android:layout_height="wrap_content" android:layout_below="@+id/textView1"
+		android:layout_alignLeft="@+id/textView1" android:paddingBottom="5dp"></SeekBar>
+	<TextView android:layout_above="@+id/startBar" android:layout_height="wrap_content" android:layout_width="wrap_content" android:layout_alignLeft="@+id/startBar" android:layout_alignRight="@+id/startBar" android:gravity="center|center_horizontal" android:text="00:00" android:id="@+id/startLabel"></TextView>
+	<TextView android:layout_height="wrap_content"
+		android:layout_below="@+id/startBar" android:id="@+id/textView2"
+		android:layout_width="wrap_content" android:layout_alignLeft="@+id/startBar" android:text="@string/end"></TextView>
+	<SeekBar android:layout_width="match_parent" android:id="@+id/endBar"
+		android:layout_height="wrap_content" android:layout_below="@+id/textView2"
+		android:layout_alignLeft="@+id/textView2"></SeekBar>
+	<TextView android:layout_above="@+id/endBar" android:layout_height="wrap_content" android:layout_width="wrap_content" android:layout_alignLeft="@+id/endBar" android:layout_alignRight="@+id/endBar" android:gravity="center_horizontal" android:id="@+id/endLabel" android:text="00:00"></TextView>
+	<Button android:id="@+id/button1" android:layout_height="wrap_content"
+		android:layout_below="@+id/endBar"
+		android:layout_width="wrap_content" android:layout_centerHorizontal="true" android:text="@string/reserve"></Button>
+</RelativeLayout>

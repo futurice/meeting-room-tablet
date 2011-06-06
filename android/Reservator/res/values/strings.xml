@@ -3,4 +3,7 @@
     <string name="hello">Hello World, Reservator!</string>
     <string name="app_name">Reservator</string>
     <string name="get_a_room">Get a room!</string>
+    <string name="start">start</string>
+    <string name="end">end</string>
+    <string name="reserve">reserve</string>
 </resources>

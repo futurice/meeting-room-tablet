@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.Button;
 
 public class Reservator extends Activity implements OnClickListener{
     /** Called when the activity is first created. */
@@ -13,12 +14,8 @@ public class Reservator extends Activity implements OnClickListener{
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.free_rooms);
-        findViewById(R.id.button1).setOnClickListener(this);
-        //DataProxy proxy = ((ReservatorApplication)getApplication()).getDataProxy();
-        
-        /*ListView roomList = (ListView)findViewById(R.id.listView1);
-        ArrayAdapter<Room> adapter = new ArrayAdapter<Room>(this, android.R.layout.simple_list_item_1, proxy.getRooms().toArray(new Room[0]));
-        roomList.setAdapter(adapter);*/
+        Button btn = (Button)findViewById(R.id.button1);
+        btn.setOnClickListener(this);
     }
 
 	@Override

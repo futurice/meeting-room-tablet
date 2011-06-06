@@ -6,26 +6,26 @@ import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
-
 import com.futurice.android.reservator.model.DataProxy;
 import com.futurice.android.reservator.model.Reservation;
 import com.futurice.android.reservator.model.Room;
 
-public class DummyDataProxy implements DataProxy{
+public class DummyDataProxy implements DataProxy {
 	List<Room> rooms = null;
 	List<Reservation> reservations = null;
+
 	@Override
 	public boolean init(String user, String password) {
 		this.rooms = new ArrayList<Room>();
 		this.reservations = new ArrayList<Reservation>();
-		
-		for(int i = 0; i < 10; i++){
-			Room room = new Room("Room " + 400+i, "futu.naut@futurice.com", null);
+
+		for (int i = 0; i < 10; i++) {
+			Room room = new Room("Room " + 400 + i, "futu.naut@futurice.com",
+					null);
 			generateReservationsForRoom(room);
 			rooms.add(room);
 		}
-		
-		
+
 		return true;
 	}
 
@@ -52,22 +52,27 @@ public class DummyDataProxy implements DataProxy{
 		r.setConfirmed(true);
 		return true;
 	}
-	
-	private void generateReservationsForRoom(Room room){
-		Random rand = new Random();
-		long begin = new Date().getTime() - 60*60*24*2*1000;
-		long end = new Date().getTime() + 60*60*24*2*1000;
 
-		while(begin < end){
-			int reservationLength = rand.nextInt(7200000) + 1;
-			Calendar b = Calendar.getInstance();
-			b.setTimeInMillis(begin);
-			Calendar e = Calendar.getInstance();
-			e.setTimeInMillis(begin + reservationLength);
-			Reservation r = new Reservation(room, b, e);
-			reservations.add(r);
-			room.addReservation(r);
-			begin += reservationLength + rand.nextInt(7200000) + 1;
+	private void generateReservationsForRoom(Room room) {
+		Random rand = new Random();
+		Calendar cal = Calendar.getInstance();
+		cal.set(Calendar.HOUR_OF_DAY, 8);
+		for (int i = 0; i < 10; i++) {
+			long begin = cal.getTimeInMillis();
+			long end = begin + 10 * 60 * 60 * 1000;
+
+			while (begin < end) {
+				int reservationLength = rand.nextInt(7200000) + 1;
+				Calendar b = Calendar.getInstance();
+				b.setTimeInMillis(begin);
+				Calendar e = Calendar.getInstance();
+				e.setTimeInMillis(begin + reservationLength > end ? end : begin + reservationLength);
+				Reservation r = new Reservation(room, b, e);
+				reservations.add(r);
+				room.addReservation(r);
+				begin += reservationLength + rand.nextInt(7200000) + 1;
+			}
+			cal.add(Calendar.DAY_OF_YEAR, 1);
 		}
 	}
 }
