@@ -1,0 +1,14 @@
+
+    <RelativeLayout android:id="@+id/relativeLayout" android:layout_width="fill_parent" android:layout_height="fill_parent" xmlns:android="http://schemas.android.com/apk/res/android">
+        <Button android:layout_height="wrap_content" android:id="@+id/buttonPrev" android:layout_width="wrap_content" android:text="&lt;" android:layout_toLeftOf="@+id/textView1" android:layout_alignParentTop="true"></Button>
+        <TableRow android:layout_below="@+id/buttonPrev" android:id="@+id/tableRow1" android:layout_alignParentLeft="true" android:layout_height="fill_parent" android:layout_width="fill_parent" android:weightSum="1">
+            <LinearLayout android:layout_height="fill_parent" android:layout_weight="0.2" android:orientation="vertical">
+            </LinearLayout>
+            <LinearLayout android:layout_height="fill_parent" android:layout_weight="0.2" android:orientation="vertical"></LinearLayout>
+            <LinearLayout android:layout_height="fill_parent" android:layout_weight="0.2" android:orientation="vertical"></LinearLayout>
+            <LinearLayout android:layout_height="fill_parent" android:layout_weight="0.2" android:orientation="vertical"></LinearLayout>
+            <LinearLayout android:layout_height="fill_parent" android:layout_weight="0.2" android:orientation="vertical"></LinearLayout>
+        </TableRow>
+        <TextView android:id="@+id/textView1" android:layout_width="wrap_content" android:text="Week 42" android:layout_centerHorizontal="true" android:layout_alignBaseline="@+id/buttonPrev" android:layout_height="wrap_content"></TextView>
+        <Button android:layout_height="wrap_content" android:id="@+id/buttonNext" android:layout_width="wrap_content" android:text="&gt;" android:layout_toRightOf="@+id/textView1" android:layout_alignParentTop="true"></Button>
+    </RelativeLayout>

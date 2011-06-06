@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     >
-<TextView  
-    android:layout_width="fill_parent" 
-    android:layout_height="wrap_content" 
-    android:text="@string/hello"
-    />
-</LinearLayout>
+    <HorizontalScrollView android:id="@+id/scrollView1" android:layout_toLeftOf="@+id/listView1" android:layout_alignParentTop="true" android:layout_alignParentLeft="true" android:layout_height="fill_parent" android:minWidth="200dp" android:layout_width="wrap_content">
+        <ImageView android:id="@+id/imageView1" android:layout_width="wrap_content" android:layout_height="fill_parent" android:src="@drawable/hki_5" android:adjustViewBounds="true"></ImageView>
+    </HorizontalScrollView>
+    <ListView android:id="@+id/listView1" android:layout_alignParentRight="true" android:minWidth="200dp" android:layout_height="fill_parent" android:layout_width="200dp"></ListView>
+    
+</RelativeLayout>
