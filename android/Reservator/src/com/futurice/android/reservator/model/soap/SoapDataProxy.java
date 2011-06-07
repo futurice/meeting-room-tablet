@@ -80,9 +80,7 @@ public class SoapDataProxy implements DataProxy{
 
 		DefaultHttpClient httpclient = new DefaultHttpClient(mgr, params);
 		
-		password = password == null ? "" : password; // debug
-		
-		UsernamePasswordCredentials credentials = new UsernamePasswordCredentials("ogre@futurice.com", "k1taraS4nkari");
+		UsernamePasswordCredentials credentials = new UsernamePasswordCredentials(user, password);
 		httpclient.getCredentialsProvider().setCredentials(AuthScope.ANY, credentials);
 		
 		HttpPost httpPost = new HttpPost("https://mail.futurice.com/EWS/Exchange.asmx");
