@@ -20,7 +20,7 @@ import com.futurice.android.reservator.model.ReservatorException;
 import com.futurice.android.reservator.model.Room;
 
 public class WeekView extends TableRow implements OnClickListener{
-	public static final int NUMBER_OF_DAYS_TO_SHOW = 7;
+	public static final int NUMBER_OF_DAYS_TO_SHOW = 5;
 	private Room currentRoom = null;
 	
 	public WeekView(Context context){

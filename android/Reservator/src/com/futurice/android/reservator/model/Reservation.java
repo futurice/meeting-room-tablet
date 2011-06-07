@@ -1,7 +1,6 @@
 package com.futurice.android.reservator.model;
 
 import java.util.Calendar;
-import java.util.Calendar;
 
 
 

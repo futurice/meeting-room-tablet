@@ -6,4 +6,6 @@
     <string name="start">start</string>
     <string name="end">end</string>
     <string name="reserve">reserve</string>
+    <string name="PREFERENCES_NAME">ReservatorPreferences</string>
+    <string name="login">Login</string>
 </resources>
