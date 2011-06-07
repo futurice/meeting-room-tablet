@@ -8,6 +8,7 @@ import java.util.List;
 import android.content.Context;
 import android.content.Intent;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.LinearLayout;
@@ -15,6 +16,7 @@ import android.widget.TableRow;
 
 import com.futurice.android.reservator.ReserveActivity;
 import com.futurice.android.reservator.model.Reservation;
+import com.futurice.android.reservator.model.ReservatorException;
 import com.futurice.android.reservator.model.Room;
 
 public class WeekView extends TableRow implements OnClickListener{
@@ -47,7 +49,14 @@ public class WeekView extends TableRow implements OnClickListener{
 			column.setLayoutParams(lp);
 			this.addView(column);
 			
-			List<Reservation> daysReservations = getReservationsForDay(currentRoom.getReservations(), day);
+			List<Reservation> daysReservations;
+			try {
+				daysReservations = getReservationsForDay(currentRoom.getReservations(true), day);
+			} catch (ReservatorException e) {
+				// TODO: XXX
+				Log.e("DataProxy", "getReservations", e);
+				return;
+			}
 			if(daysReservations.isEmpty()){
 				continue;
 			}

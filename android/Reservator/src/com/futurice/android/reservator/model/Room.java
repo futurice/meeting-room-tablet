@@ -18,8 +18,8 @@ public class Room {
 			this.reservations = reservations;
 		}
 	}
-
-	public List<Reservation> getReservations() {
+	
+	public List<Reservation> getReservations(boolean forceRefresh) throws ReservatorException {
 		return this.reservations;
 	}
 

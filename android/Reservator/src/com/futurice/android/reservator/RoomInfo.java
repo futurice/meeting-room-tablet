@@ -3,11 +3,13 @@ package com.futurice.android.reservator;
 
 import java.util.List;
 
+import com.futurice.android.reservator.model.ReservatorException;
 import com.futurice.android.reservator.model.Room;
 import com.futurice.android.reservator.view.WeekView;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -25,7 +27,12 @@ public class RoomInfo extends Activity implements OnItemSelectedListener{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.room_browse_view);
 		this.weekView = (WeekView)findViewById(R.id.weekView1);
-		rooms = ((ReservatorApplication)getApplication()).getDataProxy().getRooms();
+		try {
+			rooms = ((ReservatorApplication)getApplication()).getDataProxy().getRooms();
+		} catch (ReservatorException e) {
+			// TODO: XXX
+			Log.e("DataProxy", "getRooms", e);
+		}
 		roomSelector = (Spinner)findViewById(R.id.spinner1); 
 		roomAdapter = new ArrayAdapter<Room>(this, android.R.layout.simple_dropdown_item_1line, rooms);
 		roomSelector.setAdapter(roomAdapter);

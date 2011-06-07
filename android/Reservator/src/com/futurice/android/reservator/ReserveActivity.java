@@ -3,10 +3,12 @@ package com.futurice.android.reservator;
 import java.util.Calendar;
 
 import com.futurice.android.reservator.model.DataProxy;
+import com.futurice.android.reservator.model.ReservatorException;
 import com.futurice.android.reservator.model.Room;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
@@ -36,10 +38,15 @@ public class ReserveActivity extends Activity implements
 		end.setTimeInMillis(getIntent().getLongExtra("end", 0));
 		proxy = ((ReservatorApplication) getApplication()).getDataProxy();
 		roomMail = getIntent().getStringExtra("roomMail");
-		for (Room r : proxy.getRooms()) {
-			if (r.getEmail().equals(roomMail)) {
-				target = r;
+		try {
+			for (Room r : proxy.getRooms()) {
+				if (r.getEmail().equals(roomMail)) {
+					target = r;
+				}
 			}
+		} catch (ReservatorException e) {
+			// TODO: XXX
+			Log.e("DataProxy", "getRooms", e);
 		}
 		startBar = (SeekBar) findViewById(R.id.startBar);
 		startBar.setMax((int) ((end.getTimeInMillis() - begin.getTimeInMillis()) / 300000));

@@ -15,7 +15,7 @@ public class DummyDataProxy implements DataProxy {
 	List<Reservation> reservations = null;
 
 	@Override
-	public boolean init(String user, String password) {
+	public void init() {
 		this.rooms = new ArrayList<Room>();
 		this.reservations = new ArrayList<Reservation>();
 
@@ -25,15 +25,12 @@ public class DummyDataProxy implements DataProxy {
 			generateReservationsForRoom(room);
 			rooms.add(room);
 		}
-
-		return true;
 	}
-
+	
 	@Override
-	public boolean deinit() {
+	public void deinit() {
 		this.rooms = null;
 		this.reservations = null;
-		return true;
 	}
 
 	@Override
@@ -74,5 +71,10 @@ public class DummyDataProxy implements DataProxy {
 			}
 			cal.add(Calendar.DAY_OF_YEAR, 1);
 		}
+	}
+
+	@Override
+	public void setCredentials(String user, String password) {
+		// Do nothing	
 	}
 }
