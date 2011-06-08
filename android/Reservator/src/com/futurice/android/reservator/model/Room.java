@@ -8,22 +8,29 @@ import java.util.List;
 public class Room {
 	private String name, email;
 	private List<Reservation> reservations;
+	private DataProxy dataProxy;
 
-	public Room(String name, String email, List<Reservation> reservations) {
+	public Room(String name, String email, DataProxy dataProxy) {
 		this.name = name;
 		this.email = email;
-		if (reservations == null) {
-			this.reservations = new ArrayList<Reservation>();
-		} else {
-			this.reservations = reservations;
-		}
+		this.dataProxy = dataProxy;
+		this.reservations = new ArrayList<Reservation>();
 	}
 	
 	public List<Reservation> getReservations(boolean forceRefresh) throws ReservatorException {
+		if (forceRefresh || this.reservations == null) {
+			reservations = dataProxy.getRoomReservations(this);
+		}
+		if (reservations == null) {
+			reservations = new ArrayList<Reservation>();
+		}
 		return this.reservations;
 	}
 
 	public void addReservation(Reservation r) {
+		// TODO: tell data proxy
+		// should this take start, begin time and reservator's name as parameters?
+		
 		this.reservations.add(r);
 		Collections.sort(this.reservations);
 	}

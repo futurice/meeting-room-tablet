@@ -22,6 +22,7 @@ public class RoomInfo extends Activity implements OnItemSelectedListener{
 	List<Room> rooms;
 	ArrayAdapter<Room> roomAdapter;
 	Spinner roomSelector;
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);

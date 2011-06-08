@@ -7,6 +7,7 @@ import java.util.Random;
 
 import com.futurice.android.reservator.model.DataProxy;
 import com.futurice.android.reservator.model.Reservation;
+import com.futurice.android.reservator.model.ReservatorException;
 import com.futurice.android.reservator.model.Room;
 
 public class DummyDataProxy implements DataProxy {
@@ -19,9 +20,7 @@ public class DummyDataProxy implements DataProxy {
 		this.reservations = new ArrayList<Reservation>();
 
 		for (int i = 0; i < 10; i++) {
-			Room room = new Room("Room " + 400 + i, "futu.naut@futurice.com",
-					null);
-			generateReservationsForRoom(room);
+			Room room = new Room("Room " + 400 + i, "futu.naut@futurice.com", this);
 			rooms.add(room);
 		}
 	}
@@ -38,8 +37,9 @@ public class DummyDataProxy implements DataProxy {
 	}
 
 	@Override
-	public List<Reservation> getReservations() {
-		return reservations;
+	public List<Reservation> getReservations() throws ReservatorException {
+		throw new ReservatorException("not implemented"); // need to fix getRoomReservation to keep data consistent
+		// return reservations;
 	}
 
 	@Override
@@ -49,11 +49,22 @@ public class DummyDataProxy implements DataProxy {
 		return true;
 	}
 
-	private void generateReservationsForRoom(Room room) {
+	@Override
+	public void setCredentials(String user, String password) {
+		// Do nothing	
+	}
+
+	@Override
+	public List<Reservation> getRoomReservations(Room room) {
+		
+		List<Reservation> ret = new ArrayList<Reservation>();
 		Random rand = new Random();
 		Calendar cal = Calendar.getInstance();
 		cal.set(Calendar.HOUR_OF_DAY, 8);
-		for (int i = 0; i < 10; i++) {
+		
+		int reservationCount = rand.nextInt(5) + 5;
+		for (int i = 0; i < reservationCount; i++) {
+			
 			long begin = cal.getTimeInMillis();
 			long end = begin + 10 * 60 * 60 * 1000;
 
@@ -64,16 +75,12 @@ public class DummyDataProxy implements DataProxy {
 				Calendar e = Calendar.getInstance();
 				e.setTimeInMillis(begin + reservationLength > end ? end : begin + reservationLength);
 				Reservation r = new Reservation(room, b, e);
-				reservations.add(r);
-				room.addReservation(r);
+				ret.add(r);
 				begin += reservationLength + rand.nextInt(7200000) + 1;
 			}
 			cal.add(Calendar.DAY_OF_YEAR, 1);
 		}
-	}
-
-	@Override
-	public void setCredentials(String user, String password) {
-		// Do nothing	
+		
+		return ret;
 	}
 }

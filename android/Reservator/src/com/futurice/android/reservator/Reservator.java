@@ -55,7 +55,7 @@ public class Reservator extends Activity implements OnClickListener {
 			editor.putString("username", username);
 			editor.putString("password", password);
 			editor.commit();
-			login(username, password);
+			//login(username, password); - loop, bug?
 			Intent i = new Intent(this, RoomInfo.class);
 			startActivityForResult(i, 0);
 		} catch (ReservatorException ex) {
