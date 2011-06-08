@@ -22,11 +22,11 @@ public class Reservator extends Activity implements OnClickListener {
 		super.onCreate(savedInstanceState);
 		SharedPreferences preferences = getSharedPreferences(
 				this.getString(R.string.PREFERENCES_NAME), 0);
+		
 		if (preferences.contains("username")
-				&& preferences.contains("password")) {
-			String username = preferences.getString("username", null);
-			String password = preferences.getString("password", null);
-			login(username, password);
+				&& preferences.contains("password")
+				&& login(preferences.getString("username", null), preferences.getString("password", null))) {
+			// do nothing, activity is changed in login
 		} else {
 			setContentView(R.layout.login);
 			((Button) findViewById(R.id.loginButton)).setOnClickListener(this);
@@ -42,7 +42,7 @@ public class Reservator extends Activity implements OnClickListener {
 		v.setEnabled(true);
 	}
 
-	private void login(String username, String password) {
+	private boolean login(String username, String password) {
 
 		DataProxy dataProxy = ((ReservatorApplication) getApplication())
 				.getDataProxy();
@@ -55,13 +55,15 @@ public class Reservator extends Activity implements OnClickListener {
 			editor.putString("username", username);
 			editor.putString("password", password);
 			editor.commit();
-			//login(username, password); - loop, bug?
+			
 			Intent i = new Intent(this, RoomInfo.class);
 			startActivityForResult(i, 0);
+			return true;
 		} catch (ReservatorException ex) {
 			Toast err = Toast.makeText(this, ex.getMessage(),
 					Toast.LENGTH_SHORT);
 			err.show();
+			return false;
 		}
 
 	}
