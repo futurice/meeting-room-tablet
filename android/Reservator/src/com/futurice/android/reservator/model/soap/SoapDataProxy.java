@@ -3,15 +3,19 @@ package com.futurice.android.reservator.model.soap;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.StringReader;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.conn.scheme.PlainSocketFactory;
 import org.apache.http.conn.scheme.Scheme;
@@ -23,11 +27,18 @@ import org.apache.http.impl.conn.SingleClientConnManager;
 import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpParams;
 import org.apache.http.protocol.HTTP;
+import org.xml.sax.Attributes;
+import org.xml.sax.ContentHandler;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
+import org.xml.sax.XMLReader;
+import org.xml.sax.helpers.DefaultHandler;
 
 import android.util.Log;
 
 import com.futurice.android.reservator.model.DataProxy;
 import com.futurice.android.reservator.model.Reservation;
+import com.futurice.android.reservator.model.ReservatorException;
 import com.futurice.android.reservator.model.Room;
 
 public class SoapDataProxy implements DataProxy{
@@ -51,10 +62,9 @@ public class SoapDataProxy implements DataProxy{
 	public void init() {
 		Log.v("SOAP", "created SoapDataProxy");
 		
-		this.rooms = new ArrayList<Room>();
+		this.roomLists = null;
+		this.rooms = null;
 		this.reservations = new ArrayList<Reservation>();
-		
-		fetch();
 	}
 	
 	@Override
@@ -63,11 +73,7 @@ public class SoapDataProxy implements DataProxy{
 		this.password = password;		
 	}
 	
-	private String httpPost(String entity) {
-		return "";
-	}
-	
-	private void fetch() {
+	private String httpPost(String entity) throws ReservatorException {
 		String result = "";
 		
 		SchemeRegistry schemeRegistry = new SchemeRegistry();
@@ -86,12 +92,12 @@ public class SoapDataProxy implements DataProxy{
 		HttpPost httpPost = new HttpPost("https://mail.futurice.com/EWS/Exchange.asmx");
 		
 		try {
-			StringEntity se = new StringEntity(getRoomListsXml,HTTP.UTF_8);
+			StringEntity se = new StringEntity(entity,HTTP.UTF_8);
 			se.setContentType("text/xml"); 
 			httpPost.setEntity(se);
 		} catch (UnsupportedEncodingException e) {
 			Log.w("SOAP", "Exception", e);
-			return;
+			throw new ReservatorException("Internal error", e);
 		}
 
 		httpPost.setHeader("Content-Type","text/xml; charset=utf=8'");
@@ -111,13 +117,79 @@ public class SoapDataProxy implements DataProxy{
 			}
 		} catch (ClientProtocolException e) {
 			Log.w("SOAP", "Exception", e);
-			return;
+			throw new ReservatorException("Internal error", e);
 		} catch (IOException e) {
 			Log.w("SOAP", "Exception", e);
-			return;
+			throw new ReservatorException("Internal error", e);
 		}
 		
 		Log.v("SOAP", result);
+		
+		return result;
+	}
+	
+	private void xmlParse(ContentHandler handler, String xml) throws ReservatorException {
+		try {
+			SAXParserFactory spf = SAXParserFactory.newInstance();
+			SAXParser sp = spf.newSAXParser();
+			XMLReader xr = sp.getXMLReader();
+	
+			/** Create handler to handle XML Tags */
+			xr.setContentHandler(handler);
+			xr.parse(new InputSource(new StringReader(xml)));
+		} catch (ParserConfigurationException e) {
+			throw new ReservatorException(e);
+		} catch (SAXException e) {
+			throw new ReservatorException(e);
+		} catch (IOException e) {
+			throw new ReservatorException(e);
+		}	
+		
+	}
+	
+	
+	protected class GetRoomListsHandler extends DefaultHandler  {
+		private boolean emailAddress = false;
+		private List<String> roomLists = new ArrayList<String>();
+		
+		@Override
+		public void characters(char[] ch, int start, int length)
+				throws SAXException {
+			if (emailAddress) {
+				roomLists.add(new String(ch, start, length).trim());
+			}
+			
+		}
+
+		@Override
+		public void endElement(String uri, String localName, String qName)
+				throws SAXException {
+			if (qName.equals("t:EmailAddress")) emailAddress = false;
+		}
+
+		@Override
+		public void startElement(String uri, String localName, String qName,
+				Attributes attributes) throws SAXException {
+			// TODO Auto-generated method stub
+			if (qName.equals("t:EmailAddress")) emailAddress = true;
+		}
+		
+		public List<String> getRoomLists() {
+			return roomLists;
+		}
+		
+	}
+	
+	protected void fetchRoomLists() throws ReservatorException{
+		// fetch only once
+		if (roomLists != null) return;
+
+		String result = httpPost(getRoomListsXml);
+			
+		GetRoomListsHandler handler = new GetRoomListsHandler();
+		xmlParse(handler, result);
+		
+		roomLists = handler.getRoomLists();
 	}
 	
 	@Override
@@ -127,8 +199,17 @@ public class SoapDataProxy implements DataProxy{
 	}
 
 	@Override
-	public List<Room> getRooms() {
-		return rooms;
+	public List<Room> getRooms() throws ReservatorException {
+		// cache	
+		if (rooms != null) return rooms;
+		
+		fetchRoomLists();
+		
+		for (String roomAddress : roomLists) {
+			Log.v("Room", roomAddress);
+		}
+		
+		return new ArrayList<Room>(); // TODO!
 	}
 
 	@Override
@@ -141,5 +222,10 @@ public class SoapDataProxy implements DataProxy{
 		reservations.add(r);
 		r.setConfirmed(true);
 		return true;
+	}
+
+	@Override
+	public List<Reservation> getRoomReservations(Room room) throws ReservatorException {
+		return new ArrayList<Reservation>();
 	}
 }
