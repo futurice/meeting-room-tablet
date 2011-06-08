@@ -45,7 +45,7 @@ public class Room {
 
 	@Override
 	public String toString() {
-		return name + " " + (isFree() ? "(free)" : "(reserved)");
+		return name; // + " " + (isFree() ? "(free)" : "(reserved)");
 	}
 
 	public boolean isFree() {
