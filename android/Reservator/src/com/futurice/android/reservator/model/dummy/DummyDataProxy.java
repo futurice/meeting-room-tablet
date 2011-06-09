@@ -5,6 +5,7 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Random;
 
+
 import com.futurice.android.reservator.model.DataProxy;
 import com.futurice.android.reservator.model.Reservation;
 import com.futurice.android.reservator.model.ReservatorException;
@@ -20,7 +21,7 @@ public class DummyDataProxy implements DataProxy {
 		this.reservations = new ArrayList<Reservation>();
 
 		for (int i = 0; i < 10; i++) {
-			Room room = new Room("Room " + 400 + i, "futu.naut@futurice.com", this);
+			Room room = new Room("Room " + 400 + i, "futu.naut"+i+"@futurice.com", this);
 			rooms.add(room);
 		}
 	}
@@ -56,7 +57,6 @@ public class DummyDataProxy implements DataProxy {
 
 	@Override
 	public List<Reservation> getRoomReservations(Room room) {
-		
 		List<Reservation> ret = new ArrayList<Reservation>();
 		Random rand = new Random();
 		Calendar cal = Calendar.getInstance();
@@ -74,7 +74,7 @@ public class DummyDataProxy implements DataProxy {
 				b.setTimeInMillis(begin);
 				Calendar e = Calendar.getInstance();
 				e.setTimeInMillis(begin + reservationLength > end ? end : begin + reservationLength);
-				Reservation r = new Reservation(room, b, e);
+				Reservation r = new Reservation(room, "foobar!", b, e);
 				ret.add(r);
 				begin += reservationLength + rand.nextInt(7200000) + 1;
 			}

@@ -56,7 +56,7 @@ public class Reservator extends Activity implements OnClickListener {
 			editor.putString("password", password);
 			editor.commit();
 			
-			Intent i = new Intent(this, RoomInfo.class);
+			Intent i = new Intent(this, HomeActivity.class);
 			startActivityForResult(i, 0);
 			return true;
 		} catch (ReservatorException ex) {

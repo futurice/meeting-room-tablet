@@ -8,4 +8,12 @@
     <string name="reserve">reserve</string>
     <string name="PREFERENCES_NAME">ReservatorPreferences</string>
     <string name="login">Login</string>
+    <string name="username">Username:</string>
+    <string name="password">Password:</string>
+    <string name="default_room">Default room to show in calendar view</string>
+    <string name="PREFERENCES_SHOW_ROOM">showRoom</string>
+    <string name="reservationTextTemplate">Reserved: ^1</string>
+    <string name="book_now">Book now!</string>
+    <string name="dateLabelFormat">E d.M.</string>
+    <string name="weekLabelTemplate">Week ^1</string>
 </resources>

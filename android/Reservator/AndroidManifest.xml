@@ -15,7 +15,8 @@
             </intent-filter>
         </activity>
         <activity android:name="RoomInfo"></activity>
-        <activity android:name="ReserveActivity"></activity>
+        <activity android:name="SettingsActivity"></activity>
+        <activity android:name="HomeActivity"></activity>
 
     </application>
 </manifest>

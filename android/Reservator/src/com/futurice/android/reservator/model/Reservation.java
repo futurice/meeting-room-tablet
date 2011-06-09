@@ -7,13 +7,18 @@ import java.util.Calendar;
 public class Reservation implements Comparable<Reservation> {
 	private Calendar beginTime, endTime;
 	private Room room;
+	private String subject;
 	private boolean confirmed = false;
-	public Reservation(Room room, Calendar beginTime, Calendar endTime){
+	public Reservation(Room room, String subject, Calendar beginTime, Calendar endTime){
 		this.room = room;
 		this.beginTime = beginTime;
 		this.endTime = endTime;
+		this.subject = subject;
 	}
 	
+	public String getSubject(){
+		return this.subject;
+	}
 	public Calendar getBeginTime(){
 		return beginTime;
 	}

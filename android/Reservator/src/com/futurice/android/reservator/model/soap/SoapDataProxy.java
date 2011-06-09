@@ -370,7 +370,7 @@ public class SoapDataProxy implements DataProxy{
 						return;
 					}
 
-					reservations.add(new Reservation(room, startTime, endTime));
+					reservations.add(new Reservation(room, currentSubject, startTime, endTime));
 				} else {
 					Log.e("GetUserAvailabilityHandler", "malformed xml");
 				}
