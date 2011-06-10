@@ -22,7 +22,7 @@ public class Reservator extends Activity implements OnClickListener {
 		super.onCreate(savedInstanceState);
 		SharedPreferences preferences = getSharedPreferences(
 				this.getString(R.string.PREFERENCES_NAME), 0);
-		
+
 		if (preferences.contains("username")
 				&& preferences.contains("password")
 				&& login(preferences.getString("username", null), preferences.getString("password", null))) {
@@ -55,13 +55,13 @@ public class Reservator extends Activity implements OnClickListener {
 			editor.putString("username", username);
 			editor.putString("password", password);
 			editor.commit();
-			
+
 			Intent i = new Intent(this, HomeActivity.class);
 			startActivityForResult(i, 0);
 			return true;
 		} catch (ReservatorException ex) {
 			Toast err = Toast.makeText(this, ex.getMessage(),
-					Toast.LENGTH_SHORT);
+					Toast.LENGTH_LONG);
 			err.show();
 			return false;
 		}

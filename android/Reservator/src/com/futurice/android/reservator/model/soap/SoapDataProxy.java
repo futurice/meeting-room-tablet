@@ -25,7 +25,6 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.conn.scheme.PlainSocketFactory;
 import org.apache.http.conn.scheme.Scheme;
 import org.apache.http.conn.scheme.SchemeRegistry;
-import org.apache.http.conn.ssl.SSLSocketFactory;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.conn.SingleClientConnManager;
@@ -49,6 +48,12 @@ import com.futurice.android.reservator.model.Room;
 public class SoapDataProxy implements DataProxy{
 	private String user = null;
 	private String password = null;
+
+	private String server;
+
+	public SoapDataProxy(String server) {
+		this.server = server;
+	}
 
 	private static String readFromInputStream(InputStream is) {
 		try {
@@ -92,12 +97,14 @@ public class SoapDataProxy implements DataProxy{
 		this.password = password;
 	}
 
+
+
 	private String httpPost(String entity) throws ReservatorException {
 		Log.v("httpPost", entity);
 		String result = "";
 
 		SchemeRegistry schemeRegistry = new SchemeRegistry();
-		schemeRegistry.register(new Scheme("https", SSLSocketFactory.getSocketFactory(), 443));
+		schemeRegistry.register(new Scheme("https", UnsafeSSLSocketFactory.getUnsafeSocketFactory(), 443)); // XXX, Unsafe for debugging!
 		schemeRegistry.register(new Scheme("http", PlainSocketFactory.getSocketFactory(), 80));
 
 		HttpParams params = new BasicHttpParams();
@@ -106,11 +113,14 @@ public class SoapDataProxy implements DataProxy{
 
 		DefaultHttpClient httpclient = new DefaultHttpClient(mgr, params);
 
+		// http://msdn.microsoft.com/en-us/library/bb856547(v=exchg.80).aspx
+		// Authentication scheme ntlm not supported
+
 		Log.v("httpPost","credentials "+user+":"+password);
 		UsernamePasswordCredentials credentials = new UsernamePasswordCredentials(user, password);
 		httpclient.getCredentialsProvider().setCredentials(AuthScope.ANY, credentials);
 
-		HttpPost httpPost = new HttpPost("https://mail.futurice.com/EWS/Exchange.asmx");
+		HttpPost httpPost = new HttpPost("https://" + server + "/EWS/Exchange.asmx");
 
 		try {
 			StringEntity se = new StringEntity(entity,HTTP.UTF_8);
@@ -118,16 +128,16 @@ public class SoapDataProxy implements DataProxy{
 			httpPost.setEntity(se);
 		} catch (UnsupportedEncodingException e) {
 			Log.w("SOAP", "Exception", e);
-			throw new ReservatorException("Internal error", e);
+			throw new ReservatorException("Internal error - " + e.getMessage(), e);
 		}
 
-		httpPost.setHeader("Content-Type","text/xml; charset=utf=8'");
+		httpPost.setHeader("Content-Type","text/xml; charset=utf-8");
 
 		try {
 			HttpResponse response = httpclient.execute(httpPost);
 
 			if (response.getStatusLine().getStatusCode() != 200) {
-				throw new ReservatorException("Http error, probably wrong credentials");
+				throw new ReservatorException("Http error -- " + response.getStatusLine().getStatusCode() + " " + response.getStatusLine().getReasonPhrase());
 			}
 
 			BufferedReader reader = new BufferedReader(
@@ -142,10 +152,10 @@ public class SoapDataProxy implements DataProxy{
 			}
 		} catch (ClientProtocolException e) {
 			Log.w("SOAP", "Exception", e);
-			throw new ReservatorException("Internal error", e);
+			throw new ReservatorException("Internal error - " + e.getMessage(), e);
 		} catch (IOException e) {
 			Log.w("SOAP", "Exception", e);
-			throw new ReservatorException("Internal error", e);
+			throw new ReservatorException("Internal error - " + e.getMessage(), e);
 		}
 
 		Log.v("SOAP", result);

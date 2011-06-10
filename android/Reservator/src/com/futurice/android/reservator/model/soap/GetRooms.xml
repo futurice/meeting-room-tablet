@@ -4,7 +4,7 @@
                xmlns:t="http://schemas.microsoft.com/exchange/services/2006/types"
                xmlns:m="http://schemas.microsoft.com/exchange/services/2006/messages">
   <soap:Header>
-    <t:RequestServerVersion Version ="Exchange2010_SP1"/>
+    <t:RequestServerVersion Version ="Exchange2010"/>
   </soap:Header>
   <soap:Body>
     <m:GetRooms>
