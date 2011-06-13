@@ -5,17 +5,11 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.StringReader;
 import java.io.UnsupportedEncodingException;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.parsers.SAXParser;
-import javax.xml.parsers.SAXParserFactory;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.auth.AuthScope;
@@ -31,12 +25,10 @@ import org.apache.http.impl.conn.SingleClientConnManager;
 import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpParams;
 import org.apache.http.protocol.HTTP;
-import org.xml.sax.Attributes;
-import org.xml.sax.ContentHandler;
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
-import org.xml.sax.XMLReader;
-import org.xml.sax.helpers.DefaultHandler;
+
+import org.simpleframework.xml.Serializer;
+import org.simpleframework.xml.core.Persister;
+import org.simpleframework.xml.stream.Format;
 
 import android.util.Log;
 
@@ -44,6 +36,9 @@ import com.futurice.android.reservator.model.DataProxy;
 import com.futurice.android.reservator.model.Reservation;
 import com.futurice.android.reservator.model.ReservatorException;
 import com.futurice.android.reservator.model.Room;
+
+import com.futurice.android.reservator.model.soap.EWS.MicrosoftStyle;
+import com.futurice.android.reservator.model.soap.SoapEWS.Envelope;
 
 public class SoapDataProxy implements DataProxy{
 	private String user = null;
@@ -78,7 +73,7 @@ public class SoapDataProxy implements DataProxy{
 	private static final String getRoomsXmlTemplate = getResourceAsString("GetRooms.xml");
 	private static final String getUserAvailabilityXmlTemplate = getResourceAsString("GetUserAvailability.xml");
 
-	private static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+	public static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
 
 	List<String> roomLists = null;
 	List<Room> rooms = null;
@@ -163,129 +158,29 @@ public class SoapDataProxy implements DataProxy{
 		return result;
 	}
 
-	private void xmlParse(ContentHandler handler, String xml) throws ReservatorException {
-		try {
-			SAXParserFactory spf = SAXParserFactory.newInstance();
-			SAXParser sp = spf.newSAXParser();
-			XMLReader xr = sp.getXMLReader();
-
-			/** Create handler to handle XML Tags */
-			xr.setContentHandler(handler);
-			xr.parse(new InputSource(new StringReader(xml)));
-		} catch (ParserConfigurationException e) {
-			throw new ReservatorException(e);
-		} catch (SAXException e) {
-			throw new ReservatorException(e);
-		} catch (IOException e) {
-			throw new ReservatorException(e);
-		}
-
-	}
-
-
-	protected class GetRoomListsHandler extends DefaultHandler  {
-		private boolean inEmailAddress = false;
-		private List<String> roomLists = new ArrayList<String>();
-
-		@Override
-		public void characters(char[] ch, int start, int length)
-				throws SAXException {
-			if (inEmailAddress) {
-				roomLists.add(new String(ch, start, length).trim());
-			}
-
-		}
-
-		@Override
-		public void endElement(String uri, String localName, String qName)
-				throws SAXException {
-			if (qName.equals("t:EmailAddress")) inEmailAddress = false;
-		}
-
-		@Override
-		public void startElement(String uri, String localName, String qName,
-				Attributes attributes) throws SAXException {
-			if (qName.equals("t:EmailAddress")) inEmailAddress = true;
-		}
-
-		public List<String> getRoomLists() {
-			return roomLists;
-		}
-
-	}
-
-	protected class GetRoomsHandler extends DefaultHandler  {
-		private DataProxy dataProxy = null;
-
-		private boolean inName = false;
-		private boolean inEmail= false;
-		private String currentName;
-		private String currentEmail;
-
-		private List<Room> rooms = new ArrayList<Room>();
-
-		public GetRoomsHandler(DataProxy dataProxy) {
-			this.dataProxy = dataProxy;
-		}
-
-		@Override
-		public void characters(char[] ch, int start, int length)
-				throws SAXException {
-			if (inName) {
-				currentName = new String(ch, start, length).trim();
-			}
-			else if (inEmail) {
-				currentEmail = new String(ch, start, length).trim();
-			}
-
-		}
-
-		@Override
-		public void endElement(String uri, String localName, String qName)
-				throws SAXException {
-			if (qName.equals("t:Room")) {
-				if (currentName != null && currentEmail != null) {
-					rooms.add(new Room(currentName, currentEmail, dataProxy));
-				} else {
-					Log.e("GetRoomsHandler", "malformed xml");
-				}
-			}
-			else if (qName.equals("t:Name")) inName = false;
-			else if (qName.equals("t:EmailAddress")) inEmail = false;
-
-		}
-
-		@Override
-		public void startElement(String uri, String localName, String qName,
-				Attributes attributes) throws SAXException {
-			// Log.d("GetRoomsHandler", qName);
-			if (qName.equals("t:Room")) {
-				currentName = null;
-				currentEmail = null;
-				inName = false;
-				inEmail= false;
-			}
-			else if (qName.equals("t:Name")) inName = true;
-			else if (qName.equals("t:EmailAddress")) inEmail = true;
-		}
-
-		public List<Room> getRooms() {
-			return rooms;
-		}
-
-	}
-
-	protected void fetchRoomLists() throws ReservatorException{
+	protected void fetchRoomLists() throws ReservatorException {
 		// fetch only once
 		if (roomLists != null) return;
 
 		String result = httpPost(getRoomListsXml);
 		Log.d("fetchRoomLists", result);
 
-		GetRoomListsHandler handler = new GetRoomListsHandler();
-		xmlParse(handler, result);
+		Serializer serializer = new Persister(new Format(new MicrosoftStyle()));
 
-		roomLists = handler.getRoomLists();
+		try {
+			//StringWriter writer = new StringWriter();
+			//Envelope env = new Envelope();
+			//serializer.write(env, writer);
+			// Log.v("SimpleXML", writer.toString());
+
+			// why nonstrictness doesn't work with the attributes?
+			Envelope envelope = serializer.read(Envelope.class, result, false);
+			Log.v("SimpleXML", envelope.toString());
+			roomLists = envelope.getRoomLists();
+		} catch (Exception e) {
+			Log.e("SimpleXML", "fu-", e);
+			throw new ReservatorException(e);
+		}
 	}
 
 	protected List<Room> fetchRooms(String roomAddress) throws ReservatorException {
@@ -295,10 +190,16 @@ public class SoapDataProxy implements DataProxy{
 		String result = httpPost(xml);
 		Log.d("fetchRooms", result);
 
-		GetRoomsHandler handler = new GetRoomsHandler(this);
-		xmlParse(handler, result);
+		Serializer serializer = new Persister(new Format(new MicrosoftStyle()));
 
-		return handler.getRooms();
+		try {
+			Envelope envelope = serializer.read(Envelope.class, result, false);
+			Log.v("SimpleXML", envelope.toString());
+			return envelope.getRooms(this);
+		} catch (Exception e) {
+			Log.e("SimpleXML", "fu-", e);
+			throw new ReservatorException(e);
+		}
 	}
 
 	@Override
@@ -332,88 +233,6 @@ public class SoapDataProxy implements DataProxy{
 		throw new ReservatorException("not implemented");
 	}
 
-	protected class GetUserAvailabilityHandler extends DefaultHandler  {
-		private boolean inSubject = false;
-		private boolean inStartTime = false;
-		private boolean inEndTime = false;
-
-		private String currentSubject;
-		private String currentStartTime;
-		private String currentEndTime;
-
-		private Room room;
-		private ArrayList<Reservation> reservations = new ArrayList<Reservation>();
-
-		public GetUserAvailabilityHandler(Room room) {
-			this.room = room;
-		}
-
-		@Override
-		public void characters(char[] ch, int start, int length)
-				throws SAXException {
-			if (inSubject) {
-				currentSubject = new String(ch, start, length).trim();
-			}
-			else if (inStartTime) {
-				currentStartTime = new String(ch, start, length).trim();
-			}
-			else if (inEndTime) {
-				currentEndTime = new String(ch, start, length).trim();
-			}
-
-		}
-
-		@Override
-		public void endElement(String uri, String localName, String qName)
-				throws SAXException {
-			if (qName.equals("CalendarEvent")) {
-				if (currentSubject != null && currentStartTime != null && currentEndTime != null) {
-					Log.i("GetUserAvailabilty", currentSubject + currentStartTime + currentEndTime);
-
-					Calendar startTime = Calendar.getInstance();
-					Calendar endTime = Calendar.getInstance();
-					try {
-						startTime.setTime(dateFormat.parse(currentStartTime));
-						endTime.setTime(dateFormat.parse(currentEndTime));
-					} catch (ParseException e) {
-						Log.e("GetUserAvailabilityHandler", "malformed xml - parse error", e);
-						return;
-					}
-
-					reservations.add(new Reservation(room, currentSubject, startTime, endTime));
-				} else {
-					Log.e("GetUserAvailabilityHandler", "malformed xml");
-				}
-			}
-			else if (qName.equals("Subject")) inSubject = false;
-			else if (qName.equals("StartTime")) inStartTime = false;
-			else if (qName.equals("EndTime")) inEndTime = false;
-
-		}
-
-		@Override
-		public void startElement(String uri, String localName, String qName,
-				Attributes attributes) throws SAXException {
-			// Log.d("GetRoomsHandler", qName);
-			if (qName.equals("CalendarEvent")) {
-				currentSubject = null;
-				currentStartTime = null;
-				currentEndTime = null;
-				inSubject = false;
-				inStartTime = false;
-				inEndTime = false;
-			}
-			else if (qName.equals("Subject")) inSubject = true;
-			else if (qName.equals("StartTime")) inStartTime = true;
-			else if (qName.equals("EndTime")) inEndTime = true;
-		}
-
-		public List<Reservation> getReservations() {
-			return reservations;
-		}
-	}
-
-
 	@Override
 	public List<Reservation> getRoomReservations(Room room) throws ReservatorException {
 		Log.v("getRoomReservations", room.toString());
@@ -436,9 +255,15 @@ public class SoapDataProxy implements DataProxy{
 		String result = httpPost(xml);
 		Log.v("getRoomReservations", result);
 
-		GetUserAvailabilityHandler handler = new GetUserAvailabilityHandler(room);
-		xmlParse(handler, result);
+		Serializer serializer = new Persister(new Format(new MicrosoftStyle()));
 
-		return handler.getReservations();
+		try {
+			Envelope envelope = serializer.read(Envelope.class, result, false);
+			Log.v("SimpleXML", envelope.toString());
+			return envelope.getReservations(room);
+		} catch (Exception e) {
+			Log.e("SimpleXML", "fu-", e);
+			throw new ReservatorException(e);
+		}
 	}
 }
