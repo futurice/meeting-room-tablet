@@ -1,9 +1,12 @@
 package com.futurice.android.reservator;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.futurice.android.reservator.model.AddressBookEntry;
+import com.futurice.android.reservator.model.AddressBook;
 import com.futurice.android.reservator.model.ReservatorException;
 import com.futurice.android.reservator.model.Room;
 
@@ -16,6 +19,8 @@ import android.view.View;
 import android.view.MenuItem.OnMenuItemClickListener;
 import android.view.View.OnClickListener;
 import android.view.Window;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -29,13 +34,13 @@ public class HomeActivity extends Activity implements OnMenuItemClickListener {
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		this.setContentView(R.layout.lobby_view);
 	}
-	
+
 	@Override
 	public void onResume(){
 		super.onResume();
 		container = (LinearLayout)findViewById(R.id.linearLayout1);
 		container.removeAllViews();
-		
+
 		try {
 			List<Room> rooms = ((ReservatorApplication)getApplication()).getDataProxy().getRooms();
 			roomMap = new HashMap<View, Room>(rooms.size());
@@ -56,14 +61,25 @@ public class HomeActivity extends Activity implements OnMenuItemClickListener {
 					}
 				});
 				v.findViewById(R.id.cancelButton).setOnClickListener(new OnClickListener() {
-					
+
 					@Override
 					public void onClick(View v) {
 						bookingMode.setVisibility(View.GONE);
 						normalMode.setVisibility(View.VISIBLE);
 					}
 				});
-				
+
+				// TODO: move so only one adapter is created
+				AddressBook addressBook = ((ReservatorApplication)getApplication()).getAddressBookProxy();
+				List<String> names = new ArrayList<String>();
+				for (AddressBookEntry entry : addressBook.getEntries()) {
+					names.add(entry.getName());
+				}
+
+				AutoCompleteTextView reservator = (AutoCompleteTextView) v.findViewById(R.id.nameAutoEditText);
+				ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.list_item, names);
+			    reservator.setAdapter(adapter);
+
 				v.findViewById(R.id.calendarButton).setOnClickListener(new OnClickListener() {
 					@Override
 					public void onClick(View vi) {
@@ -79,7 +95,7 @@ public class HomeActivity extends Activity implements OnMenuItemClickListener {
 			e.printStackTrace();
 		}
 	}
-	
+
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 	    menu.add("Settings").setOnMenuItemClickListener(this);

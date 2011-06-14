@@ -32,6 +32,7 @@ import org.simpleframework.xml.stream.Format;
 
 import android.util.Log;
 
+import com.futurice.android.reservator.common.Helpers;
 import com.futurice.android.reservator.model.DataProxy;
 import com.futurice.android.reservator.model.Reservation;
 import com.futurice.android.reservator.model.ReservatorException;
@@ -50,23 +51,8 @@ public class SoapDataProxy implements DataProxy{
 		this.server = server;
 	}
 
-	private static String readFromInputStream(InputStream is) {
-		try {
-			ByteArrayOutputStream os = new ByteArrayOutputStream();
-			byte buffer[] = new byte[4096];
-			int len;
-			while ((len = is.read(buffer)) != -1) {
-				os.write(buffer, 0, len);
-			}
-			return os.toString("UTF-8");
-		} catch (IOException e) {
-			Log.e("SOAP", "readFromInputStream", e);
-			return "";
-		}
-	}
-
 	private static String getResourceAsString(String resource) {
-		return readFromInputStream(SoapDataProxy.class.getResourceAsStream(resource));
+		return Helpers.readFromInputStream(SoapDataProxy.class.getResourceAsStream(resource), -1);
 	}
 
 	private static final String getRoomListsXml = getResourceAsString("GetRoomLists.xml");
@@ -91,8 +77,6 @@ public class SoapDataProxy implements DataProxy{
 		this.user = user;
 		this.password = password;
 	}
-
-
 
 	private String httpPost(String entity) throws ReservatorException {
 		Log.v("httpPost", entity);
@@ -135,16 +119,7 @@ public class SoapDataProxy implements DataProxy{
 				throw new ReservatorException("Http error -- " + response.getStatusLine().getStatusCode() + " " + response.getStatusLine().getReasonPhrase());
 			}
 
-			BufferedReader reader = new BufferedReader(
-			    new InputStreamReader(
-			      response.getEntity().getContent()
-			    )
-			  );
-
-			String line = null;
-			while ((line = reader.readLine()) != null){
-			  result += line + "\n";
-			}
+			result = Helpers.readFromInputStream(response.getEntity().getContent(), (int) response.getEntity().getContentLength());
 		} catch (ClientProtocolException e) {
 			Log.w("SOAP", "Exception", e);
 			throw new ReservatorException("Internal error - " + e.getMessage(), e);

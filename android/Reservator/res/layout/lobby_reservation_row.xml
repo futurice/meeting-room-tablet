@@ -29,8 +29,8 @@
 		</LinearLayout>
 		<AutoCompleteTextView android:layout_width="wrap_content"
 			android:id="@+id/nameAutoEditText" android:layout_height="wrap_content"
-			android:text="AutoCompleteTextView" android:layout_toRightOf="@+id/linearLayout2"
-			android:maxLines="1" android:layout_centerVertical="true"></AutoCompleteTextView>
+			android:layout_toRightOf="@+id/linearLayout2"
+			android:maxLines="1" android:layout_centerVertical="true" android:width="100sp" android:hint="Your name"></AutoCompleteTextView>
 		<Button android:layout_height="wrap_content"
 			android:layout_width="wrap_content" android:text="OK"
 			android:minWidth="40sp" android:id="@+id/reserveButton"></Button>

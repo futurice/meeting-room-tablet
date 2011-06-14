@@ -2,6 +2,6 @@ package com.futurice.android.reservator.model;
 
 import java.util.List;
 
-public interface AddressBookProxy {
+public interface AddressBook {
 	public List<AddressBookEntry> getEntries() throws ReservatorException;
 }
