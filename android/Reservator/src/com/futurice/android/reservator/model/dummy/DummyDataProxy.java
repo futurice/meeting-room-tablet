@@ -25,7 +25,7 @@ public class DummyDataProxy implements DataProxy {
 			rooms.add(room);
 		}
 	}
-	
+
 	@Override
 	public void deinit() {
 		this.rooms = null;
@@ -52,7 +52,7 @@ public class DummyDataProxy implements DataProxy {
 
 	@Override
 	public void setCredentials(String user, String password) {
-		// Do nothing	
+		// Do nothing
 	}
 
 	@Override
@@ -61,26 +61,32 @@ public class DummyDataProxy implements DataProxy {
 		Random rand = new Random();
 		Calendar cal = Calendar.getInstance();
 		cal.set(Calendar.HOUR_OF_DAY, 8);
-		
+		cal.set(Calendar.MILLISECOND, 0);
+		cal.set(Calendar.MINUTE, 0);
+		cal.set(Calendar.SECOND, 0);
+
 		int reservationCount = rand.nextInt(5) + 5;
 		for (int i = 0; i < reservationCount; i++) {
-			
+
 			long begin = cal.getTimeInMillis();
 			long end = begin + 10 * 60 * 60 * 1000;
 
+			begin += (rand.nextInt(4)+1)*1800000;
+
 			while (begin < end) {
-				int reservationLength = rand.nextInt(7200000) + 1;
+				int reservationLength = (rand.nextInt(4)+1)*1800000;
 				Calendar b = Calendar.getInstance();
 				b.setTimeInMillis(begin);
 				Calendar e = Calendar.getInstance();
 				e.setTimeInMillis(begin + reservationLength > end ? end : begin + reservationLength);
+
 				Reservation r = new Reservation(room, "foobar!", b, e);
 				ret.add(r);
-				begin += reservationLength + rand.nextInt(7200000) + 1;
+				begin += reservationLength + (rand.nextInt(6))*1800000;
 			}
 			cal.add(Calendar.DAY_OF_YEAR, 1);
 		}
-		
+
 		return ret;
 	}
 }
