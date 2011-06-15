@@ -48,7 +48,7 @@
 			android:layout_height="wrap_content" android:text="@string/book_now"
 			android:id="@+id/bookNowButton"></Button>
 		<FrameLayout android:layout_height="match_parent" android:id="@+id/frameLayout1" android:layout_width="wrap_content" android:layout_weight="0.2"></FrameLayout>
-		<Button android:background="@drawable/kalenterinappi" android:text="Button" android:id="@+id/calendarButton" android:layout_height="wrap_content" android:layout_width="wrap_content"></Button>
+		<Button android:background="@drawable/kalenterinappi" android:id="@+id/calendarButton" android:layout_height="wrap_content" android:layout_width="wrap_content"></Button>
 		<FrameLayout android:layout_height="match_parent" android:id="@+id/frameLayout3" android:layout_width="wrap_content" android:layout_weight="0.4"></FrameLayout>
 	</LinearLayout>
 </LinearLayout>

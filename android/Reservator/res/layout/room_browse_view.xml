@@ -3,6 +3,20 @@
 	android:layout_width="fill_parent" android:layout_height="fill_parent"
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	android:background="@drawable/background" android:padding="1dip">
-    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="TextView" android:id="@+id/roomNameLabel" android:layout_marginTop="20dp" android:layout_marginLeft="80dp" android:paddingLeft="40dp"></TextView>
-    <com.futurice.android.reservator.view.WeekView android:layout_width="fill_parent" android:id="@+id/weekView1" android:layout_height="fill_parent" android:layout_below="@+id/roomNameLabel" android:layout_alignLeft="@+id/roomNameLabel" android:layout_marginLeft="0dp" android:layout_marginTop="50dp"></com.futurice.android.reservator.view.WeekView>
+	<TextView android:layout_width="wrap_content"
+		android:layout_height="wrap_content" android:text="TextView"
+		android:id="@+id/roomNameLabel" android:layout_marginTop="20dp"
+		android:layout_marginLeft="80dp" android:paddingLeft="40dp"></TextView>
+	<com.futurice.android.reservator.view.WeekView
+		android:layout_width="fill_parent" android:id="@+id/weekView1"
+		android:layout_height="fill_parent" android:layout_below="@+id/roomNameLabel"
+		android:layout_alignLeft="@+id/roomNameLabel"
+		android:layout_marginLeft="0dp" android:layout_marginTop="50dp">)
+		<com.futurice.android.reservator.view.CalendarView
+		android:layout_width="fill_parent"
+		android:layout_height="fill_parent"
+		android:layout_marginBottom="10dp"
+		android:layout_marginRight="10dp"
+		android:id="@+id/calendarView1"></com.futurice.android.reservator.view.CalendarView>
+	</com.futurice.android.reservator.view.WeekView>
 </RelativeLayout>

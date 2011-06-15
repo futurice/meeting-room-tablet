@@ -47,8 +47,9 @@ public class RoomInfo extends Activity implements OnItemSelectedListener, OnMenu
 			
 			SharedPreferences settings = getSharedPreferences(getString(R.string.PREFERENCES_NAME), 0);
 			String roomEmail = getIntent().getStringExtra(ROOM_EMAIL_EXTRA);
-			if(roomEmail != null)
+			if(roomEmail == null){
 				roomEmail = settings.getString(getString(R.string.PREFERENCES_SHOW_ROOM), "");
+			}
 			if(roomEmail != null){
 				for(Room r : rooms){
 					if(r.getEmail().equals(roomEmail)){
@@ -60,7 +61,6 @@ public class RoomInfo extends Activity implements OnItemSelectedListener, OnMenu
 			else if(!rooms.isEmpty()){
 				setRoom(rooms.get(0));
 			}
-			
 		} catch (ReservatorException e) {
 			// TODO: XXX
 			Log.e("DataProxy", "getRooms", e);
