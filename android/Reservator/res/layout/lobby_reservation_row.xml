@@ -1,10 +1,14 @@
 
 <LinearLayout android:layout_width="fill_parent"
 	xmlns:android="http://schemas.android.com/apk/res/android"
-	android:gravity="center_vertical" android:layout_height="wrap_content" android:paddingBottom="10mm">
-	<LinearLayout android:layout_width="200px"
-		android:id="@+id/linearLayout1" android:layout_height="wrap_content"
-		android:orientation="vertical" android:layout_centerVertical="true">
+	android:gravity="center_vertical" android:layout_height="wrap_content"
+	android:layout_gravity="center">
+	<FrameLayout android:layout_height="match_parent"
+			android:id="@+id/frameLayout3" android:layout_width="wrap_content"
+			android:layout_weight="0.4"></FrameLayout>
+	<LinearLayout android:layout_width="200px" android:id="@+id/linearLayout1"
+		android:layout_height="wrap_content" android:orientation="vertical"
+		android:layout_centerVertical="true">
 		<TextView android:id="@+id/roomNameLabel"
 			android:layout_width="wrap_content" android:layout_height="wrap_content"
 			android:text="Room name XXX"></TextView>
@@ -13,24 +17,18 @@
 			android:text="(42 persons)"></TextView>
 	</LinearLayout>
 	<LinearLayout android:id="@+id/bookingMode"
-		android:layout_height="wrap_content"
-		android:gravity="center_vertical" android:visibility="gone" android:layout_width="fill_parent">
-		<TimePicker android:id="@+id/timePicker"
-			android:layout_width="wrap_content" android:layout_height="wrap_content"
-			android:layout_toRightOf="@+id/linearLayout1"></TimePicker>
-		<LinearLayout android:layout_width="wrap_content"
-			android:id="@+id/linearLayout2" android:layout_height="wrap_content"
-			android:layout_toRightOf="@+id/timePicker1"
-			android:layout_centerVertical="true" android:orientation="vertical">
-			<TextView android:text="12:00" android:id="@+id/startTimeLabel"
-				android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView>
-			<TextView android:text="13:45" android:id="@+id/endTimeLabel"
-				android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView>
-		</LinearLayout>
+		android:layout_height="wrap_content" android:gravity="center_vertical"
+		android:layout_width="1px" android:visibility="gone" android:layout_weight="3">
+		<com.futurice.android.reservator.view.TimeSpanPicker
+			android:id="@+id/timeSpanPicker1" android:layout_width="wrap_content"
+			android:layout_height="wrap_content">
+
+		</com.futurice.android.reservator.view.TimeSpanPicker>
 		<AutoCompleteTextView android:layout_width="wrap_content"
 			android:id="@+id/nameAutoEditText" android:layout_height="wrap_content"
-			android:layout_toRightOf="@+id/linearLayout2"
-			android:maxLines="1" android:layout_centerVertical="true" android:width="100sp" android:hint="Your name"></AutoCompleteTextView>
+			android:layout_toRightOf="@+id/timeSpanPicker1" android:maxLines="1"
+			android:layout_centerVertical="true" android:width="100sp"
+			android:hint="Your name"></AutoCompleteTextView>
 		<Button android:layout_height="wrap_content"
 			android:layout_width="wrap_content" android:text="OK"
 			android:minWidth="40sp" android:id="@+id/reserveButton"></Button>
@@ -39,16 +37,18 @@
 			android:minWidth="40sp" android:id="@+id/cancelButton"></Button>
 	</LinearLayout>
 	<LinearLayout android:id="@+id/normalMode"
-		android:layout_height="wrap_content" android:visibility="visible" android:layout_width="fill_parent">
+		android:layout_height="wrap_content" android:layout_width="1px" android:visibility="visible" android:layout_weight="3">
 		<TextView android:layout_width="wrap_content"
 			android:layout_height="wrap_content" android:id="@+id/roomStatusLabel"
-			android:text="&lt;status&gt;" android:layout_weight="0.2"></TextView>
-		<FrameLayout android:layout_height="match_parent" android:id="@+id/frameLayout2" android:layout_width="wrap_content" android:layout_weight="0.2"></FrameLayout>
+			android:text="&lt;status&gt;"></TextView>
 		<Button android:layout_width="wrap_content"
 			android:layout_height="wrap_content" android:text="@string/book_now"
 			android:id="@+id/bookNowButton"></Button>
-		<FrameLayout android:layout_height="match_parent" android:id="@+id/frameLayout1" android:layout_width="wrap_content" android:layout_weight="0.2"></FrameLayout>
-		<Button android:background="@drawable/kalenterinappi" android:id="@+id/calendarButton" android:layout_height="wrap_content" android:layout_width="wrap_content"></Button>
-		<FrameLayout android:layout_height="match_parent" android:id="@+id/frameLayout3" android:layout_width="wrap_content" android:layout_weight="0.4"></FrameLayout>
+		<Button android:background="@drawable/kalenterinappi"
+			android:id="@+id/calendarButton" android:layout_height="wrap_content"
+			android:layout_width="wrap_content"></Button>
 	</LinearLayout>
+	<FrameLayout android:layout_height="match_parent"
+			android:id="@+id/frameLayout3" android:layout_width="wrap_content"
+			android:layout_weight="0.4"></FrameLayout>
 </LinearLayout>

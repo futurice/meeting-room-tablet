@@ -18,12 +18,15 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.view.View.OnClickListener;
 
 public class CalendarView extends LinearLayout implements OnClickListener {
-	private static final int THICK_DELIM = 3, THIN_DELIM = 1;
+	private static final int THICK_DELIM = 3, THIN_DELIM = 1,
+			BOTTOM_PADDING = 65;
 	private CalendarMarkerReservator calendarReservatorView = null;
 	private SimpleDateFormat dayLabelFormatter = new SimpleDateFormat("E M.d.");
 	private LinearLayout scrollView;
@@ -33,27 +36,30 @@ public class CalendarView extends LinearLayout implements OnClickListener {
 
 	Calendar startHour = new GregorianCalendar(2000, 1, 1, 8, 0);
 	Calendar endHour = new GregorianCalendar(2000, 1, 1, 18, 0);
- 
-	LinearLayout hourColumn; 
-	
+
+	LinearLayout hourColumn;
+
 	public CalendarView(Context context) {
 		this(context, null);
 	}
-	
-	public CalendarView(Context context, AttributeSet attrs){
+
+	public CalendarView(Context context, AttributeSet attrs) {
 		super(context, attrs);
 		gridPaint = new Paint();
-		gridPaint.setColor(Color.LTGRAY);
-		
+		gridPaint.setColor(Color.argb(255, 209, 211, 212));
+
 		hourColumn = new LinearLayout(getContext());
+		hourColumn.setPadding(0, 0, 0, BOTTOM_PADDING);
 		hourColumn.setOrientation(LinearLayout.VERTICAL);
 		hourColumn.addView(new TextView(getContext()));
 		hourColumn.addView(new TextView(getContext()));
-		for(int i = startHour.get(Calendar.HOUR_OF_DAY); i < endHour.get(Calendar.HOUR_OF_DAY); i++){
+
+		for (int i = startHour.get(Calendar.HOUR_OF_DAY); i < endHour
+				.get(Calendar.HOUR_OF_DAY); i++) {
 			TextView tv = new TextView(getContext());
 			tv.setText(Html.fromHtml(i + "<small>00</small>"));
 			tv.setGravity(Gravity.TOP | Gravity.RIGHT);
-			
+
 			LayoutParams lp = new LayoutParams(LayoutParams.FILL_PARENT, 1, 1);
 			lp.weight = 1;
 			hourColumn.addView(tv, lp);
@@ -64,10 +70,10 @@ public class CalendarView extends LinearLayout implements OnClickListener {
 		scrollView = (LinearLayout) findViewById(R.id.linearLayout1);
 		calendarReservatorView = new CalendarMarkerReservator(getContext());
 	}
-	
+
 	@Override
 	protected void dispatchDraw(Canvas c) {
-		for(int i = 2; i < hourColumn.getChildCount(); i++){
+		for (int i = 2; i < hourColumn.getChildCount(); i++) {
 			int y = hourColumn.getChildAt(i).getTop();
 			c.drawLine(0, y, getWidth(), y, gridPaint);
 		}
@@ -76,28 +82,37 @@ public class CalendarView extends LinearLayout implements OnClickListener {
 
 	private void addVerticalDelimeter(int width, LinearLayout parent) {
 		View v = new View(getContext());
-		v.setLayoutParams(new LinearLayout.LayoutParams(width,
-				LinearLayout.LayoutParams.FILL_PARENT));
+		LayoutParams lp = new LinearLayout.LayoutParams(width,
+				LayoutParams.FILL_PARENT);
+		lp.bottomMargin = BOTTOM_PADDING;
+		v.setLayoutParams(lp);
 		v.setBackgroundColor(gridPaint.getColor());
 		parent.addView(v);
 	}
 
 	public void addDay(Calendar day) {
 		RelativeLayout container = new RelativeLayout(getContext());
-		
-		LinearLayout column = (LinearLayout)inflate(getContext(), R.layout.day_column, null);
-		column.setWeightSum(endHour.getTimeInMillis() - startHour.getTimeInMillis());
+
+		LinearLayout column = (LinearLayout) inflate(getContext(),
+				R.layout.day_column, null);
+		column.setPadding(0, 0, 0, BOTTOM_PADDING);
+		column.setWeightSum(endHour.getTimeInMillis()
+				- startHour.getTimeInMillis());
 		column.setOrientation(LinearLayout.VERTICAL);
 		if (day.get(Calendar.DAY_OF_WEEK) == Calendar.MONDAY) {
-			((TextView)column.findViewById(R.id.weekLabel)).setText("Week " + day.get(Calendar.WEEK_OF_YEAR));
+			((TextView) column.findViewById(R.id.weekLabel)).setText("Week "
+					+ day.get(Calendar.WEEK_OF_YEAR));
 		}
-		((TextView)column.findViewById(R.id.dayLabel)).setText(dayLabelFormatter.format(day.getTime()));
-		container.addView(column, LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
+		((TextView) column.findViewById(R.id.dayLabel))
+				.setText(dayLabelFormatter.format(day.getTime()));
+		container.addView(column, LayoutParams.MATCH_PARENT,
+				LayoutParams.MATCH_PARENT);
 		scrollView.addView(container, 200, LayoutParams.MATCH_PARENT);
-		
+
 		columns.put(getDayIdentifier(day), column);
-		
-		addVerticalDelimeter(isLastDayOfWeek(day) ? THICK_DELIM : THIN_DELIM, scrollView);
+
+		addVerticalDelimeter(isLastDayOfWeek(day) ? THICK_DELIM : THIN_DELIM,
+				scrollView);
 	}
 
 	public void setSkipWeekend(boolean skip) {
@@ -116,24 +131,26 @@ public class CalendarView extends LinearLayout implements OnClickListener {
 
 	public CalendarMarker addMarker(Calendar begin, Calendar end) {
 		CalendarMarker marker = getViewForTimeSpan(begin, end);
-		if(begin.get(Calendar.HOUR_OF_DAY) < endHour.get(Calendar.HOUR_OF_DAY)){
+		if (begin.get(Calendar.HOUR_OF_DAY) < endHour.get(Calendar.HOUR_OF_DAY)) {
 			columns.get(getDayIdentifier(begin)).addView(marker);
 			marker.setOnClickListener(this);
 		}
-		
+
 		return marker;
 	}
 
 	private CalendarMarker getViewForTimeSpan(Calendar begin, Calendar end) {
-		 Calendar endTime = end;
-		if(end.get(Calendar.HOUR_OF_DAY) < endHour.get(Calendar.HOUR_OF_DAY)){
-			endTime = new GregorianCalendar(end.get(Calendar.YEAR), end.get(Calendar.MONTH),end.get(Calendar.DAY_OF_MONTH), 
+		Calendar endTime = end;
+		if (end.get(Calendar.HOUR_OF_DAY) < endHour.get(Calendar.HOUR_OF_DAY)) {
+			endTime = new GregorianCalendar(end.get(Calendar.YEAR),
+					end.get(Calendar.MONTH), end.get(Calendar.DAY_OF_MONTH),
 					end.get(Calendar.HOUR_OF_DAY), end.get(Calendar.MINUTE));
-			
+
 		}
 		CalendarMarker v = new CalendarMarker(this.getContext());
 		LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
-				LayoutParams.MATCH_PARENT, 1, (float) (endTime.getTimeInMillis() - begin.getTimeInMillis()));
+				LayoutParams.MATCH_PARENT, 1,
+				(float) (endTime.getTimeInMillis() - begin.getTimeInMillis()));
 		v.setLayoutParams(lp);
 		return v;
 	}
@@ -144,13 +161,61 @@ public class CalendarView extends LinearLayout implements OnClickListener {
 
 	@Override
 	public void onClick(View v) {
-		if(calendarReservatorView.getParent() != null){
-			((ViewGroup)calendarReservatorView.getParent()).removeView(calendarReservatorView);
-			calendarReservatorView.setVisibility(View.VISIBLE);
-		}
-		((RelativeLayout)v.getParent().getParent()).addView(calendarReservatorView, LayoutParams.MATCH_PARENT, LayoutParams.FILL_PARENT);
-		this.recomputeViewAttributes(calendarReservatorView);
-		calendarReservatorView.setLimits(v.getTop(), v.getBottom());
+		/*
+		 * if(calendarReservatorView.getParent() != null){
+		 * ((ViewGroup)calendarReservatorView
+		 * .getParent()).removeView(calendarReservatorView);
+		 * calendarReservatorView.setVisibility(View.VISIBLE); }
+		 * ((RelativeLayout
+		 * )v.getParent().getParent()).addView(calendarReservatorView,
+		 * LayoutParams.MATCH_PARENT, LayoutParams.FILL_PARENT);
+		 * this.recomputeViewAttributes(calendarReservatorView);
+		 * calendarReservatorView.setLimits(v.getTop(), v.getBottom());
+		 * calendarReservatorView
+		 * .findViewById(R.id.okButton).setOnClickListener(new OnClickListener()
+		 * {
+		 * 
+		 * @Override public void onClick(View v) {
+		 */
 		
-	}	
+		View content = inflate(getContext(), R.layout.reservation_popup,null);
+		content.setBackgroundResource(R.drawable.popup_background);
+		
+		final PopupWindow w = new PopupWindow(content, 800, 150, true);
+		
+		content.findViewById(R.id.cancelButton).setOnClickListener(
+				new OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						w.dismiss();
+					}
+				});
+		content.findViewById(R.id.reserveButton).setOnClickListener(
+				new OnClickListener() {
+
+					@Override
+					public void onClick(View v) {
+						TimeSpanPicker tp = (TimeSpanPicker) ((ViewGroup) v
+								.getParent())
+								.findViewById(R.id.timeSpanPicker1);
+						Toast t = Toast.makeText(getContext(), tp
+								.getStartTime().toLocaleString()
+								+ "-"
+								+ tp.getEndTime().toLocaleString(),
+								Toast.LENGTH_LONG);
+						t.show();
+						w.dismiss();
+					}
+				});
+		content.findViewById(R.id.normalMode).setVisibility(GONE);
+		content.findViewById(R.id.bookingMode).setVisibility(VISIBLE);
+		TimeSpanPicker timePicker = (TimeSpanPicker)content.findViewById(R.id.timeSpanPicker1);
+		timePicker.setStartTime(((CalendarMarker)v).getReservation().getBeginTime());
+		timePicker.setMaxTime(((CalendarMarker)v).getReservation().getEndTime());
+		w.showAtLocation(CalendarView.this, Gravity.CENTER, 0, 0);
+		/*
+		 * } } );
+		 */
+
+	}
 }

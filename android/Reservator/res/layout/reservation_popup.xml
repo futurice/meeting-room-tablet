@@ -1,0 +1,4 @@
+
+    <RelativeLayout android:id="@+id/relativeLayout1" xmlns:android="http://schemas.android.com/apk/res/android" android:background="@drawable/popup_background" android:isScrollContainer="false" android:layout_height="wrap_content" android:layout_width="fill_parent">
+    	<include  layout="@layout/lobby_reservation_row" android:layout_centerInParent="true" android:id="@+id/popup" android:layout_width="match_parent" android:layout_height="match_parent"/>
+    </RelativeLayout>

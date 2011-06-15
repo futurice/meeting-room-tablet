@@ -1,6 +1,7 @@
 package com.futurice.android.reservator.model;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -24,6 +25,7 @@ public class Room {
 		if (reservations == null) {
 			reservations = new ArrayList<Reservation>();
 		}
+		Collections.sort(reservations);
 		return this.reservations;
 	}
 
@@ -60,5 +62,14 @@ public class Room {
 			}
 		}
 		return true;
+	}
+	public Reservation getNextFreeTime(){
+		Calendar now = Calendar.getInstance();
+		for (Reservation r : reservations) {
+			if(r.getBeginTime().after(now)){
+				return new Reservation(this, "free", now, r.getBeginTime()); //TODO maybe there are many reservations after each other..
+			}
+		}
+		return null;
 	}
 }

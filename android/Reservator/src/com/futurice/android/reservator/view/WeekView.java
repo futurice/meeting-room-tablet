@@ -5,7 +5,6 @@ import java.util.Calendar;
 import java.util.List;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.widget.RelativeLayout;
@@ -66,7 +65,7 @@ public class WeekView extends RelativeLayout {
 			} else {
 				Reservation first = daysReservations.get(0);
 				if (first.getBeginTime().after(day)) {
-					calendar.addMarker(day, first.getBeginTime());
+					calendar.addMarker(day, first.getBeginTime()).setReservation(new Reservation(currentRoom, null, day, first.getBeginTime()), false);
 				}
 				for (int j = 0; j < daysReservations.size(); j++) {
 					Reservation current = daysReservations.get(j);

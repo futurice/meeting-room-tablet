@@ -40,7 +40,7 @@ public class CalendarMarkerReservator extends FrameLayout implements
 		this.topLimit = topLimit;
 		this.bottomLimit = bottomLimit;
 		this.minPaddingTop = this.topLimit - beginDragger.getHeight();
-		this.minPaddingBot = getHeight() - bottomLimit - okButton.getHeight() - endDragger.getHeight();
+		this.minPaddingBot = getHeight() - bottomLimit - endDragger.getHeight();
 		this.setPadding(0, this.minPaddingTop, 0, minPaddingBot);
 	}
 
@@ -51,12 +51,11 @@ public class CalendarMarkerReservator extends FrameLayout implements
 					- beginDragger.getHeight() + (int) event.getY();
 			if (getHeight() < padding + innerLayout.getPaddingBottom()
 					+ endDragger.getHeight() + beginDragger.getHeight()
-					+ okButton.getHeight()) {
+					) {
 				padding = getHeight()
 						- (innerLayout.getPaddingBottom()
 								+ endDragger.getHeight()
-								+ beginDragger.getHeight() + okButton
-								.getHeight());
+								+ beginDragger.getHeight());
 			}
 			innerLayout.setPadding(0, padding > minPaddingTop ? padding : minPaddingTop,
 					0, innerLayout.getPaddingBottom());
@@ -66,11 +65,10 @@ public class CalendarMarkerReservator extends FrameLayout implements
 					+ endDragger.getHeight() - (int) event.getY();
 			if (getHeight() < padding + innerLayout.getPaddingTop()
 					+ endDragger.getHeight() + beginDragger.getHeight()
-					+ okButton.getHeight()) {
+					) {
 				padding = getHeight()
 						- (innerLayout.getPaddingTop() + endDragger.getHeight()
-								+ beginDragger.getHeight() + okButton
-								.getHeight());
+								+ beginDragger.getHeight());
 			}
 			innerLayout.setPadding(0, innerLayout.getPaddingTop(), 0,
 					padding > minPaddingBot ? padding : minPaddingBot);

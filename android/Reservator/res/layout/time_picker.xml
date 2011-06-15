@@ -1,7 +1,26 @@
 
-    <LinearLayout android:id="@+id/linearLayout1" android:layout_width="fill_parent" android:layout_height="fill_parent" xmlns:android="http://schemas.android.com/apk/res/android" android:orientation="vertical" android:background="#666">
-        <ImageButton android:id="@+id/imageButton1" android:layout_height="wrap_content" android:src="@drawable/icon" android:layout_width="fill_parent" android:background="@drawable/border_background" android:layout_margin="1dp"></ImageButton>
-        <TextView android:text="TextView" android:id="@+id/textView1" android:layout_height="wrap_content" android:layout_width="fill_parent" android:gravity="center_horizontal" android:background="#fff" android:layout_margin="1dp"></TextView>
-        <ImageButton android:id="@+id/imageButton2" android:layout_height="wrap_content" android:src="@drawable/icon" android:layout_width="fill_parent" android:background="@drawable/border_background" android:layout_margin="1dp"></ImageButton>
-        <TableLayout android:id="@+id/tableLayout1" android:layout_width="match_parent" android:layout_height="wrap_content"></TableLayout>
-    </LinearLayout>
+<RelativeLayout	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_height="wrap_content" android:layout_width="wrap_content">
+	<LinearLayout android:id="@+id/linearLayout1" android:orientation="vertical" android:background="#666" android:layout_height="wrap_content" android:layout_width="wrap_content">
+	<TextView android:id="@+id/plusButton" android:layout_height="wrap_content"
+		android:background="@drawable/border_background" android:gravity="center_vertical|center_horizontal"
+		android:text="+" android:textSize="22dp" android:layout_margin="1dp" android:layout_width="100dp"></TextView>
+	<TextView android:text="" android:id="@+id/timeView"
+		android:layout_height="wrap_content" android:gravity="center_horizontal"
+		android:background="#fff" android:layout_margin="1dp"
+		android:layout_width="fill_parent" android:textSize="22dp"></TextView>
+	<TextView android:id="@+id/minusButton" android:layout_height="wrap_content"
+		android:background="@drawable/border_background" android:gravity="center_vertical|center_horizontal"
+		android:textSize="22dp" android:layout_margin="1dp"
+		android:layout_width="fill_parent" android:text="-"></TextView>
+	</LinearLayout>
+	<LinearLayout android:layout_width="wrap_content"
+		android:id="@+id/linearLayout2" android:layout_height="wrap_content"
+		android:layout_toRightOf="@+id/linearLayout1"
+		android:layout_centerVertical="true" android:orientation="vertical" android:paddingLeft="20dp" android:paddingRight="20dp">
+		<TextView android:text="00:00" android:id="@+id/startLabel"
+			android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView>
+		<TextView android:text="00:45" android:id="@+id/endLabel"
+			android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView>
+	</LinearLayout>
+</RelativeLayout>

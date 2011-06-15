@@ -2,6 +2,7 @@ package com.futurice.android.reservator;
 
 import com.futurice.android.reservator.model.AddressBook;
 import com.futurice.android.reservator.model.DataProxy;
+import com.futurice.android.reservator.model.dummy.DummyDataProxy;
 import com.futurice.android.reservator.model.fum3.FumAddressBook;
 import com.futurice.android.reservator.model.soap.SoapDataProxy;
 
@@ -21,8 +22,9 @@ public class ReservatorApplication extends Application {
 
 	@Override
 	public void onCreate(){
-		// proxy = new DummyDataProxy();
-		proxy = new SoapDataProxy("10.4.2.214"); // TODO: preference, prod: mail.futurice.com
+		
+		proxy = new DummyDataProxy();
+		//proxy = new SoapDataProxy("10.4.2.214"); // TODO: preference, prod: mail.futurice.com
 		addressBook  = new FumAddressBook();
 
 		proxy.init(); // TODO: delete

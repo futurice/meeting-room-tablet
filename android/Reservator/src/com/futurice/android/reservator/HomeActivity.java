@@ -7,8 +7,10 @@ import java.util.Map;
 
 import com.futurice.android.reservator.model.AddressBookEntry;
 import com.futurice.android.reservator.model.AddressBook;
+import com.futurice.android.reservator.model.Reservation;
 import com.futurice.android.reservator.model.ReservatorException;
 import com.futurice.android.reservator.model.Room;
+import com.futurice.android.reservator.view.TimeSpanPicker;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -18,6 +20,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.MenuItem.OnMenuItemClickListener;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
@@ -45,9 +48,11 @@ public class HomeActivity extends Activity implements OnMenuItemClickListener {
 			List<Room> rooms = ((ReservatorApplication)getApplication()).getDataProxy().getRooms();
 			roomMap = new HashMap<View, Room>(rooms.size());
 			for(final Room r : rooms){
+				r.getReservations(true);
 				View v = getLayoutInflater().inflate(R.layout.lobby_reservation_row, null);
 				final View bookingMode = v.findViewById(R.id.bookingMode);
 				final View normalMode = v.findViewById(R.id.normalMode);
+				
 				TextView roomNameLabel = (TextView)v.findViewById(R.id.roomNameLabel);
 				roomNameLabel.setText(r.getName());
 				TextView roomInfoLabel = (TextView)v.findViewById(R.id.roomNameLabel);
@@ -58,34 +63,30 @@ public class HomeActivity extends Activity implements OnMenuItemClickListener {
 					public void onClick(View v) {
 						bookingMode.setVisibility(View.VISIBLE);
 						normalMode.setVisibility(View.GONE);
+						Reservation nextFreeTime = r.getNextFreeTime();
+						TimeSpanPicker timePicker = (TimeSpanPicker)((ViewGroup)((ViewGroup)v.getParent()).getParent()).findViewById(R.id.timeSpanPicker1);
+						timePicker.setStartTime(nextFreeTime.getBeginTime());
+						timePicker.setMaxTime(nextFreeTime.getEndTime());
 					}
 				});
-
-				// Book button
-				v.findViewById(R.id.reserveButton).setOnClickListener(new OnClickListener() {
-					@Override
-					public void onClick(View v) {
-						// success
-						Toast toast = Toast.makeText(v.getContext(), "Meeting reserved", Toast.LENGTH_LONG);
-						toast.show();
-
-						bookingMode.setVisibility(View.GONE);
-						normalMode.setVisibility(View.VISIBLE);
-
-						// set unavailable
-					}
-				});
-				// Cancel button
 				v.findViewById(R.id.cancelButton).setOnClickListener(new OnClickListener() {
+
 					@Override
 					public void onClick(View v) {
 						bookingMode.setVisibility(View.GONE);
 						normalMode.setVisibility(View.VISIBLE);
 					}
 				});
-
-
-
+				v.findViewById(R.id.reserveButton).setOnClickListener(new OnClickListener() {
+					
+					@Override
+					public void onClick(View v) {
+						TimeSpanPicker tp = (TimeSpanPicker)((ViewGroup)v.getParent()).findViewById(R.id.timeSpanPicker1); 
+						Toast t = Toast.makeText(HomeActivity.this, tp.getStartTime().toLocaleString() + "-" + tp.getEndTime().toLocaleString(), Toast.LENGTH_LONG);
+						t.show();
+					}
+				});
+				
 				// TODO: move so only one adapter is created
 				AddressBook addressBook = ((ReservatorApplication)getApplication()).getAddressBookProxy();
 				List<String> names = new ArrayList<String>();
