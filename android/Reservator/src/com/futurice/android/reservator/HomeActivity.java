@@ -60,14 +60,31 @@ public class HomeActivity extends Activity implements OnMenuItemClickListener {
 						normalMode.setVisibility(View.GONE);
 					}
 				});
-				v.findViewById(R.id.cancelButton).setOnClickListener(new OnClickListener() {
 
+				// Book button
+				v.findViewById(R.id.reserveButton).setOnClickListener(new OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						// success
+						Toast toast = Toast.makeText(v.getContext(), "Meeting reserved", Toast.LENGTH_LONG);
+						toast.show();
+
+						bookingMode.setVisibility(View.GONE);
+						normalMode.setVisibility(View.VISIBLE);
+
+						// set unavailable
+					}
+				});
+				// Cancel button
+				v.findViewById(R.id.cancelButton).setOnClickListener(new OnClickListener() {
 					@Override
 					public void onClick(View v) {
 						bookingMode.setVisibility(View.GONE);
 						normalMode.setVisibility(View.VISIBLE);
 					}
 				});
+
+
 
 				// TODO: move so only one adapter is created
 				AddressBook addressBook = ((ReservatorApplication)getApplication()).getAddressBookProxy();

@@ -1,10 +1,6 @@
 package com.futurice.android.reservator.model.soap;
 
-import java.io.BufferedReader;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -237,7 +233,7 @@ public class SoapDataProxy implements DataProxy{
 			Log.v("SimpleXML", envelope.toString());
 			return envelope.getReservations(room);
 		} catch (Exception e) {
-			Log.e("SimpleXML", "fu-", e);
+			Log.e("SimpleXML", "unserialization error", e);
 			throw new ReservatorException(e);
 		}
 	}

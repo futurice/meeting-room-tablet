@@ -45,6 +45,23 @@ public class FumAddressBook implements AddressBook {
 		return entries;
 	}
 
+	/**
+	 *
+	 * @param name
+	 * @return corresponding email or null if not found
+	 */
+	@Override
+	public String getEmailByName(String name) {
+		if (entries == null) return null; // no entries, no win
+
+		for (AddressBookEntry entry : entries) {
+			if (entry.getName().equals(name)) {
+				return entry.getEmail();
+			}
+		}
+		return null;
+	}
+
 	private void fetchEntries() throws ReservatorException {
 		entries = new ArrayList<AddressBookEntry>();
 
