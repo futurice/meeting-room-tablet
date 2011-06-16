@@ -175,7 +175,7 @@ public class SoapEWS {
 		}
 
 		public String getResponseCode() {
-			return responseMessage.getResponseClass();
+			return responseMessage.getResponseCode();
 		}
 
 		public String getFreeBusyViewType() {
