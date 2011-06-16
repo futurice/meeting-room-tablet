@@ -2,6 +2,8 @@ package com.futurice.android.reservator.model.dummy;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Random;
 
@@ -15,15 +17,31 @@ public class DummyDataProxy implements DataProxy {
 	List<Room> rooms = null;
 	List<Reservation> reservations = null;
 
-	@Override
-	public void init() {
+	public DummyDataProxy() {
 		this.rooms = new ArrayList<Room>();
 		this.reservations = new ArrayList<Reservation>();
 
-		for (int i = 0; i < 10; i++) {
-			Room room = new Room("Room " + 400 + i, "futu.naut"+i+"@futurice.com", this);
-			rooms.add(room);
-		}
+		rooms.add(new Room("Project-Kino-406", "406-Kino@futu.com", this));
+		rooms.add(new Room("Project-Metkula-408", "406-Metkula@futu.com", this));
+		rooms.add(new Room("Project-Regatta-405", "406-Regatta@futu.com", this));
+		rooms.add(new Room("Project-Vekkula-407", "406-Vekkula@futu.com", this));
+		rooms.add(new Room("Room-Panorama-401", "406-Panorama@futu.com", this));
+		rooms.add(new Room("Room-Pilotti-402", "402-Pilotti@futu.com", this));
+		rooms.add(new Room("Room-Space Shot-404", "404-Spaceshot@futu.com", this));
+		rooms.add(new Room("Room-Vauhtimato-403", "403-vauhtimato@futu.com", this));
+
+		rooms.add(new Room("Project-Verstas-506", "506-Verstas@futu.com", this));
+		rooms.add(new Room("Room-Kenkäkauppa-503", "503-Kenkakauppa@futu.com", this));
+		rooms.add(new Room("Room-Koivumetsä-504", "504-Koivumetsa@futu.com", this));
+		rooms.add(new Room("Room-Merineukkari-502", "502-Merineukkari@futu.com", this));
+		rooms.add(new Room("Room-Pikku Neukkari-501", "501-pikkuneukkari@futu.com", this));
+
+		Collections.sort(rooms, new Comparator<Room>() {
+			@Override
+			public int compare(Room room1, Room room2) {
+				return room1.getEmail().compareTo(room2.getEmail());
+			}
+		});
 	}
 
 	@Override

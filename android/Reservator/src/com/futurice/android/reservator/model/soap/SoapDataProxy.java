@@ -5,6 +5,8 @@ import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import org.apache.http.HttpResponse;
@@ -61,14 +63,6 @@ public class SoapDataProxy implements DataProxy{
 	List<Room> rooms = null;
 
 	@Override
-	public void init() {
-		Log.v("SOAP", "created SoapDataProxy");
-
-		this.roomLists = null;
-		this.rooms = null;
-	}
-
-	@Override
 	public void setCredentials(String user, String password) {
 		this.user = user;
 		this.password = password;
@@ -79,7 +73,7 @@ public class SoapDataProxy implements DataProxy{
 		String result = "";
 
 		SchemeRegistry schemeRegistry = new SchemeRegistry();
-		schemeRegistry.register(new Scheme("https", UnsafeSSLSocketFactory.getUnsafeSocketFactory(), 443)); // XXX, Unsafe for debugging!
+		schemeRegistry.register(new Scheme("https", UnsafeSSLSocketFactory.getUnsafeSocketFactory(), 443)); // XXX, Unsafe, only for debugging!
 		schemeRegistry.register(new Scheme("http", PlainSocketFactory.getSocketFactory(), 80));
 
 		HttpParams params = new BasicHttpParams();
@@ -190,6 +184,13 @@ public class SoapDataProxy implements DataProxy{
 		for (String roomAddress : roomLists) {
 			rooms.addAll(fetchRooms(roomAddress));
 		}
+
+		Collections.sort(rooms, new Comparator<Room>() {
+			@Override
+			public int compare(Room room1, Room room2) {
+				return room1.getEmail().compareTo(room2.getEmail());
+			}
+		});
 
 		return rooms;
 	}

@@ -22,11 +22,9 @@ public class ReservatorApplication extends Application {
 
 	@Override
 	public void onCreate(){
-		
+
 		proxy = new DummyDataProxy();
 		//proxy = new SoapDataProxy("10.4.2.214"); // TODO: preference, prod: mail.futurice.com
 		addressBook  = new FumAddressBook();
-
-		proxy.init(); // TODO: delete
 	}
 }
