@@ -7,12 +7,14 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.futurice.android.reservator.R;
+import com.futurice.android.reservator.model.Reservation;
 
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.text.Html;
+import android.text.format.DateFormat;
 import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.View;
@@ -27,7 +29,6 @@ import android.view.View.OnClickListener;
 public class CalendarView extends LinearLayout implements OnClickListener {
 	private static final int THICK_DELIM = 3, THIN_DELIM = 1,
 			BOTTOM_PADDING = 65;
-	private CalendarMarkerReservator calendarReservatorView = null;
 	private SimpleDateFormat dayLabelFormatter = new SimpleDateFormat("E M.d.");
 	private LinearLayout scrollView;
 	private boolean skipWeekend = true;
@@ -68,7 +69,6 @@ public class CalendarView extends LinearLayout implements OnClickListener {
 		addVerticalDelimeter(THIN_DELIM, this);
 		inflate(context, R.layout.calendar_view, this);
 		scrollView = (LinearLayout) findViewById(R.id.linearLayout1);
-		calendarReservatorView = new CalendarMarkerReservator(getContext());
 	}
 
 	@Override
@@ -177,11 +177,10 @@ public class CalendarView extends LinearLayout implements OnClickListener {
 		 * 
 		 * @Override public void onClick(View v) {
 		 */
-		
+		v.setBackgroundColor(Color.GREEN);
 		View content = inflate(getContext(), R.layout.reservation_popup,null);
-		content.setBackgroundResource(R.drawable.popup_background);
-		
-		final PopupWindow w = new PopupWindow(content, 800, 150, true);
+		View root = getRootView();
+		final PopupWindow w = new PopupWindow(content, root.getWidth(), root.getHeight(), true);
 		
 		content.findViewById(R.id.cancelButton).setOnClickListener(
 				new OnClickListener() {
@@ -195,13 +194,11 @@ public class CalendarView extends LinearLayout implements OnClickListener {
 
 					@Override
 					public void onClick(View v) {
-						TimeSpanPicker tp = (TimeSpanPicker) ((ViewGroup) v
+						CustomTimeSpanPicker timePicker = (CustomTimeSpanPicker) ((ViewGroup) v
 								.getParent())
 								.findViewById(R.id.timeSpanPicker1);
-						Toast t = Toast.makeText(getContext(), tp
-								.getStartTime().toLocaleString()
-								+ "-"
-								+ tp.getEndTime().toLocaleString(),
+						Toast t = Toast.makeText(getContext(), DateFormat.format("kk:mm", timePicker.getStartTime())
+								+ "-" + DateFormat.format("kk:mm", timePicker.getEndTime()),
 								Toast.LENGTH_LONG);
 						t.show();
 						w.dismiss();
@@ -209,9 +206,11 @@ public class CalendarView extends LinearLayout implements OnClickListener {
 				});
 		content.findViewById(R.id.normalMode).setVisibility(GONE);
 		content.findViewById(R.id.bookingMode).setVisibility(VISIBLE);
-		TimeSpanPicker timePicker = (TimeSpanPicker)content.findViewById(R.id.timeSpanPicker1);
-		timePicker.setStartTime(((CalendarMarker)v).getReservation().getBeginTime());
-		timePicker.setMaxTime(((CalendarMarker)v).getReservation().getEndTime());
+		CustomTimeSpanPicker timePicker = (CustomTimeSpanPicker)content.findViewById(R.id.timeSpanPicker1);
+		
+		Reservation r = ((CalendarMarker)v).getReservation();
+		timePicker.setMinTime(r.getBeginTime());
+		timePicker.setMaxTime(r.getEndTime());
 		w.showAtLocation(CalendarView.this, Gravity.CENTER, 0, 0);
 		/*
 		 * } } );

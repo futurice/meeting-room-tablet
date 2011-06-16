@@ -75,6 +75,11 @@ public class DummyDataProxy implements DataProxy {
 
 	@Override
 	public List<Reservation> getRoomReservations(Room room) {
+		try {
+			Thread.sleep((int)(Math.random()*500));
+		} catch (InterruptedException e1) {
+			e1.printStackTrace();
+		}
 		List<Reservation> ret = new ArrayList<Reservation>();
 		Random rand = new Random();
 		Calendar cal = Calendar.getInstance();

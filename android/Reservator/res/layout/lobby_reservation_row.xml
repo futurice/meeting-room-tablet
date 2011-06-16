@@ -7,7 +7,7 @@
 			android:id="@+id/frameLayout3" android:layout_width="wrap_content"
 			android:layout_weight="0.4"></FrameLayout>
 	<LinearLayout android:layout_width="200px" android:id="@+id/linearLayout1"
-		android:layout_height="wrap_content" android:orientation="vertical"
+		android:layout_height="wrap_content" android:orientation="vertical" android:layout_marginRight="20dp"
 		android:layout_centerVertical="true">
 		<TextView android:id="@+id/roomNameLabel"
 			android:layout_width="wrap_content" android:layout_height="wrap_content"
@@ -18,35 +18,38 @@
 	</LinearLayout>
 	<LinearLayout android:id="@+id/bookingMode"
 		android:layout_height="wrap_content" android:gravity="center_vertical"
-		android:layout_width="1px" android:visibility="gone" android:layout_weight="3">
-		<com.futurice.android.reservator.view.TimeSpanPicker
+		android:layout_width="1px" android:layout_weight="3" android:visibility="gone">
+		<com.futurice.android.reservator.view.CustomTimeSpanPicker
 			android:id="@+id/timeSpanPicker1" android:layout_width="wrap_content"
-			android:layout_height="wrap_content">
-
-		</com.futurice.android.reservator.view.TimeSpanPicker>
+			android:layout_height="wrap_content" android:layout_weight="1" />
+		<FrameLayout android:layout_height="match_parent" android:layout_width="wrap_content" android:layout_weight="1"></FrameLayout>
 		<AutoCompleteTextView android:layout_width="wrap_content"
-			android:id="@+id/nameAutoEditText" android:layout_height="wrap_content"
-			android:layout_toRightOf="@+id/timeSpanPicker1" android:maxLines="1"
-			android:layout_centerVertical="true" android:width="100sp"
-			android:hint="Your name"></AutoCompleteTextView>
+			android:id="@+id/autoCompleteTextView1" android:layout_height="wrap_content"
+			android:layout_toRightOf="@+id/timeSpanPicker1" android:maxLines="1" android:lines="1"
+			android:layout_centerVertical="true"
+			android:hint="Your name" android:layout_weight="2" android:completionHint="Your name" android:completionThreshold="3" android:inputType="textFilter" android:maxWidth="200dp"></AutoCompleteTextView>
+		<FrameLayout android:layout_height="match_parent" android:layout_width="wrap_content" android:layout_weight="1"></FrameLayout>
 		<Button android:layout_height="wrap_content"
 			android:layout_width="wrap_content" android:text="OK"
-			android:minWidth="40sp" android:id="@+id/reserveButton"></Button>
+			android:minWidth="40sp" android:id="@+id/reserveButton" android:layout_weight="1" android:focusable="true"></Button>
+		<FrameLayout android:layout_height="match_parent" android:layout_width="wrap_content" android:layout_weight="1"></FrameLayout>
 		<Button android:layout_width="wrap_content"
 			android:layout_height="wrap_content" android:text="X"
-			android:minWidth="40sp" android:id="@+id/cancelButton"></Button>
+			android:minWidth="40sp" android:id="@+id/cancelButton" android:layout_weight="1" android:focusable="true"></Button>
 	</LinearLayout>
 	<LinearLayout android:id="@+id/normalMode"
-		android:layout_height="wrap_content" android:layout_width="1px" android:visibility="visible" android:layout_weight="3">
+		android:layout_height="wrap_content" android:layout_width="1px" android:layout_weight="3" android:visibility="visible">
 		<TextView android:layout_width="wrap_content"
 			android:layout_height="wrap_content" android:id="@+id/roomStatusLabel"
 			android:text="&lt;status&gt;"></TextView>
+		<FrameLayout android:layout_height="match_parent" android:layout_width="wrap_content" android:layout_weight="1"></FrameLayout>
 		<Button android:layout_width="wrap_content"
 			android:layout_height="wrap_content" android:text="@string/book_now"
-			android:id="@+id/bookNowButton"></Button>
+			android:id="@+id/bookNowButton" android:focusable="true"></Button>
+		<FrameLayout android:layout_height="match_parent" android:layout_width="wrap_content" android:layout_weight="1"></FrameLayout>
 		<Button android:background="@drawable/kalenterinappi"
 			android:id="@+id/calendarButton" android:layout_height="wrap_content"
-			android:layout_width="wrap_content"></Button>
+			android:layout_width="wrap_content" android:focusable="true"></Button>
 	</LinearLayout>
 	<FrameLayout android:layout_height="match_parent"
 			android:id="@+id/frameLayout3" android:layout_width="wrap_content"

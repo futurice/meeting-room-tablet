@@ -1,0 +1,8 @@
+
+    <LinearLayout android:id="@+id/linearLayout1" android:layout_width="fill_parent" android:layout_height="fill_parent" xmlns:android="http://schemas.android.com/apk/res/android">
+        <com.futurice.android.reservator.view.CustomTimePicker android:id="@+id/startTimePicker" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_gravity="center">
+        </com.futurice.android.reservator.view.CustomTimePicker>
+        <TextView android:id="@+id/textView2" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_gravity="center" android:textColor="#000" android:text="-" android:textSize="30dp" android:padding="5dp"></TextView>
+    	<com.futurice.android.reservator.view.CustomTimePicker android:id="@+id/endTimePicker" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_gravity="center">
+        </com.futurice.android.reservator.view.CustomTimePicker>
+    </LinearLayout>
