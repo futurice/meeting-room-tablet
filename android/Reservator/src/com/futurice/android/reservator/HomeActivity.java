@@ -10,6 +10,7 @@ import com.futurice.android.reservator.model.AddressBook;
 import com.futurice.android.reservator.model.Reservation;
 import com.futurice.android.reservator.model.ReservatorException;
 import com.futurice.android.reservator.model.Room;
+import com.futurice.android.reservator.model.rooms.RoomsInfo;
 import com.futurice.android.reservator.view.TimeSpanPicker;
 
 import android.app.Activity;
@@ -52,11 +53,14 @@ public class HomeActivity extends Activity implements OnMenuItemClickListener {
 				View v = getLayoutInflater().inflate(R.layout.lobby_reservation_row, null);
 				final View bookingMode = v.findViewById(R.id.bookingMode);
 				final View normalMode = v.findViewById(R.id.normalMode);
-				
+
 				TextView roomNameLabel = (TextView)v.findViewById(R.id.roomNameLabel);
 				roomNameLabel.setText(r.getName());
-				TextView roomInfoLabel = (TextView)v.findViewById(R.id.roomNameLabel);
-				roomInfoLabel.setText(r.getEmail());
+
+				TextView roomInfoLabel = (TextView)v.findViewById(R.id.roomInfoLabel);
+				RoomsInfo info = RoomsInfo.getRoomsInfo(r);
+				roomInfoLabel.setText("(" + Integer.toString(info.getRoomSize()) + " persons)" ); // r.getEmail()
+
 				roomMap.put(v.findViewById(R.id.calendarButton), r);
 				v.findViewById(R.id.bookNowButton).setOnClickListener(new OnClickListener() {
 					@Override
@@ -78,15 +82,15 @@ public class HomeActivity extends Activity implements OnMenuItemClickListener {
 					}
 				});
 				v.findViewById(R.id.reserveButton).setOnClickListener(new OnClickListener() {
-					
+
 					@Override
 					public void onClick(View v) {
-						TimeSpanPicker tp = (TimeSpanPicker)((ViewGroup)v.getParent()).findViewById(R.id.timeSpanPicker1); 
+						TimeSpanPicker tp = (TimeSpanPicker)((ViewGroup)v.getParent()).findViewById(R.id.timeSpanPicker1);
 						Toast t = Toast.makeText(HomeActivity.this, tp.getStartTime().toLocaleString() + "-" + tp.getEndTime().toLocaleString(), Toast.LENGTH_LONG);
 						t.show();
 					}
 				});
-				
+
 				// TODO: move so only one adapter is created
 				AddressBook addressBook = ((ReservatorApplication)getApplication()).getAddressBookProxy();
 				List<String> names = new ArrayList<String>();
