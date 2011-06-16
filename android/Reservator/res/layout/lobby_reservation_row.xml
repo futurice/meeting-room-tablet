@@ -25,9 +25,9 @@
 		<FrameLayout android:layout_height="match_parent" android:layout_width="wrap_content" android:layout_weight="1"></FrameLayout>
 		<AutoCompleteTextView android:layout_width="wrap_content"
 			android:id="@+id/autoCompleteTextView1" android:layout_height="wrap_content"
-			android:layout_toRightOf="@+id/timeSpanPicker1" android:maxLines="1" android:lines="1"
+			android:layout_toRightOf="@+id/timeSpanPicker1" android:lines="1"
 			android:layout_centerVertical="true"
-			android:hint="Your name" android:layout_weight="2" android:completionHint="Your name" android:completionThreshold="3" android:inputType="textFilter" android:maxWidth="200dp"></AutoCompleteTextView>
+			android:hint="Your name" android:layout_weight="2" android:completionHint="Your name" android:inputType="textFilter" android:maxLines="1" android:imeOptions="actionDone" android:completionThreshold="1"></AutoCompleteTextView>
 		<FrameLayout android:layout_height="match_parent" android:layout_width="wrap_content" android:layout_weight="1"></FrameLayout>
 		<Button android:layout_height="wrap_content"
 			android:layout_width="wrap_content" android:text="OK"
