@@ -22,11 +22,11 @@ public class WeekView extends RelativeLayout {
 
 	public WeekView(Context context) {
 		this(context, null);
-		
+
 	}
 	public WeekView(Context context, AttributeSet attrs) {
 		this(context, attrs, 0);
-		
+
 	}
 	public WeekView(Context context, AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);
@@ -44,19 +44,22 @@ public class WeekView extends RelativeLayout {
 		day.set(Calendar.MINUTE, 0);
 		day.set(Calendar.SECOND, 0);
 
+		List<Reservation> reservations;
+		try {
+			reservations = currentRoom.getReservations(true);
+		} catch (ReservatorException e) {
+			// TODO: XXX
+			Log.e("DataProxy", "getReservations", e);
+			return;
+		}
+
 		for (int i = 0; i < NUMBER_OF_DAYS_TO_SHOW; i++) {
 			Calendar endOfDay = (Calendar) day.clone();
 			endOfDay.set(Calendar.HOUR_OF_DAY, 18);
 			calendar.addDay((Calendar) day.clone());
 			List<Reservation> daysReservations;
-			try {
-				daysReservations = getReservationsForDay(
-						currentRoom.getReservations(true), day);
-			} catch (ReservatorException e) {
-				// TODO: XXX
-				Log.e("DataProxy", "getReservations", e);
-				return;
-			}
+
+			daysReservations = getReservationsForDay(reservations, day);
 
 			if (daysReservations.isEmpty()) {
 				calendar.addMarker(day, endOfDay).setReservation(
@@ -90,10 +93,8 @@ public class WeekView extends RelativeLayout {
 			List<Reservation> reservations, Calendar day) {
 		List<Reservation> daysReservations = new ArrayList<Reservation>();
 		for (Reservation r : reservations) {
-			if (r.getBeginTime().get(Calendar.DAY_OF_YEAR) == day
-					.get(Calendar.DAY_OF_YEAR)
-					&& r.getBeginTime().get(Calendar.YEAR) == day
-							.get(Calendar.YEAR)) {
+			if (r.getBeginTime().get(Calendar.DAY_OF_YEAR) == day.get(Calendar.DAY_OF_YEAR)
+					&& r.getBeginTime().get(Calendar.YEAR) == day.get(Calendar.YEAR)) {
 				daysReservations.add(r);
 			}
 		}
