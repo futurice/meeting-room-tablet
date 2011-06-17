@@ -14,7 +14,7 @@ import android.widget.ArrayAdapter;
 public class FumAddressBookAdapter extends ArrayAdapter<String>{
 	static AddressBook fab;
 	public FumAddressBookAdapter(Context ctx){
-		super(ctx,android.R.layout.simple_spinner_dropdown_item);
+		super(ctx,android.R.layout.simple_list_item_1);
 		
 		try {
 			if(fab == null){

@@ -14,16 +14,15 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.text.Html;
-import android.text.format.DateFormat;
 import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
+import android.widget.PopupWindow.OnDismissListener;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.view.View.OnClickListener;
 
 public class CalendarView extends LinearLayout implements OnClickListener {
@@ -160,61 +159,17 @@ public class CalendarView extends LinearLayout implements OnClickListener {
 	}
 
 	@Override
-	public void onClick(View v) {
-		/*
-		 * if(calendarReservatorView.getParent() != null){
-		 * ((ViewGroup)calendarReservatorView
-		 * .getParent()).removeView(calendarReservatorView);
-		 * calendarReservatorView.setVisibility(View.VISIBLE); }
-		 * ((RelativeLayout
-		 * )v.getParent().getParent()).addView(calendarReservatorView,
-		 * LayoutParams.MATCH_PARENT, LayoutParams.FILL_PARENT);
-		 * this.recomputeViewAttributes(calendarReservatorView);
-		 * calendarReservatorView.setLimits(v.getTop(), v.getBottom());
-		 * calendarReservatorView
-		 * .findViewById(R.id.okButton).setOnClickListener(new OnClickListener()
-		 * {
-		 * 
-		 * @Override public void onClick(View v) {
-		 */
+	public void onClick(final View v) {
 		v.setBackgroundColor(Color.GREEN);
-		View content = inflate(getContext(), R.layout.reservation_popup,null);
-		View root = getRootView();
-		final PopupWindow w = new PopupWindow(content, root.getWidth(), root.getHeight(), true);
-		
-		content.findViewById(R.id.cancelButton).setOnClickListener(
-				new OnClickListener() {
-					@Override
-					public void onClick(View v) {
-						w.dismiss();
-					}
-				});
-		content.findViewById(R.id.reserveButton).setOnClickListener(
-				new OnClickListener() {
-
-					@Override
-					public void onClick(View v) {
-						CustomTimeSpanPicker timePicker = (CustomTimeSpanPicker) ((ViewGroup) v
-								.getParent())
-								.findViewById(R.id.timeSpanPicker1);
-						Toast t = Toast.makeText(getContext(), DateFormat.format("kk:mm", timePicker.getStartTime())
-								+ "-" + DateFormat.format("kk:mm", timePicker.getEndTime()),
-								Toast.LENGTH_LONG);
-						t.show();
-						w.dismiss();
-					}
-				});
-		content.findViewById(R.id.normalMode).setVisibility(GONE);
-		content.findViewById(R.id.bookingMode).setVisibility(VISIBLE);
-		CustomTimeSpanPicker timePicker = (CustomTimeSpanPicker)content.findViewById(R.id.timeSpanPicker1);
-		
-		Reservation r = ((CalendarMarker)v).getReservation();
-		timePicker.setMinTime(r.getBeginTime());
-		timePicker.setMaxTime(r.getEndTime());
+		Reservation reservation = ((CalendarMarker)v).getReservation();  
+		final PopupWindow w = RoomReservationPopup.create(this, reservation.getRoom(), reservation.getBeginTime(), reservation.getEndTime());
+		w.setOnDismissListener(new OnDismissListener() {
+			@Override
+			public void onDismiss() {
+				v.setBackgroundColor(Color.WHITE);
+			}
+		});
 		w.showAtLocation(CalendarView.this, Gravity.CENTER, 0, 0);
-		/*
-		 * } } );
-		 */
 
 	}
 }

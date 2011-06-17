@@ -1,5 +1,7 @@
 package com.futurice.android.reservator.view;
 
+import java.util.Calendar;
+
 import com.futurice.android.reservator.R;
 import com.futurice.android.reservator.RoomInfo;
 import com.futurice.android.reservator.model.Reservation;
@@ -26,13 +28,15 @@ public class RoomReservationView extends FrameLayout implements
 			bookingMode, normalMode;
 	AutoCompleteTextView nameField;
 	CustomTimeSpanPicker timePicker;
-
+	private Calendar maxTime, minTime;
+	
+	
 	private Room room;
 
 	public RoomReservationView(Context context) {
 		this(context, null);
 	}
-
+	
 	private OnFocusChangeListener userNameFocusChangeListener = new OnFocusChangeListener() {
 
 		@Override
@@ -95,9 +99,8 @@ public class RoomReservationView extends FrameLayout implements
 	public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
 		reserveButton.setEnabled(true);
 		nameField.setSelected(false);
-		InputMethodManager imm = (InputMethodManager) getContext()
-				.getSystemService(Context.INPUT_METHOD_SERVICE);
-		imm.hideSoftInputFromWindow(nameField.getWindowToken(), 0);
+		InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+		imm.hideSoftInputFromWindow(nameField.getRootView().getWindowToken(), 0);
 		// Toast t = Toast.makeText(context, text, duration)
 	}
 
@@ -109,12 +112,12 @@ public class RoomReservationView extends FrameLayout implements
 		t.show();
 	}
 
-	private void setNormalMode() {
+	protected void setNormalMode() {
 		bookingMode.setVisibility(View.GONE);
 		normalMode.setVisibility(View.VISIBLE);
 	}
 
-	private void setReserveMode() {
+	protected void setReserveMode() {
 		refreshData();
 		reserveButton.setEnabled(false);
 		bookingMode.setVisibility(View.VISIBLE);
@@ -122,9 +125,20 @@ public class RoomReservationView extends FrameLayout implements
 	}
 
 	private void refreshData() {
-		Reservation nextFreeTime = room.getNextFreeTime();
-		timePicker.setMinTime(nextFreeTime.getBeginTime());
-		timePicker.setMaxTime(nextFreeTime.getEndTime());
+		if(maxTime == null || minTime == null){
+			Reservation nextFreeTime = room.getNextFreeTime();
+			timePicker.setMinTime(nextFreeTime.getBeginTime());
+			timePicker.setMaxTime(nextFreeTime.getEndTime());
+		}else{
+			timePicker.setMinTime(minTime);
+			timePicker.setMaxTime(maxTime);
+		}
+	}
+	public void setMinTime(Calendar time){
+		this.minTime = time;
+	}
+	public void setMaxTime(Calendar time){
+		this.maxTime = time;
 	}
 
 	private void showRoomInCalendar() {
