@@ -5,4 +5,7 @@
         <item name="android:textSize">18pt</item>
     </style>
     <color name="CalendarBorderColor">#444</color>
+    <color name="CalendarMarkerColor">#d8f6d5c5</color>
+    <color name="StatusFreeColor">#529200</color>
+    <color name="StatusReservedColor">#b24c4c</color>
 </resources>
