@@ -4,12 +4,10 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import com.futurice.android.reservator.R;
-import com.futurice.android.reservator.model.Reservation;
-import com.futurice.android.reservator.model.ReservatorException;
+
 
 import android.app.Dialog;
 import android.content.Context;
@@ -28,7 +26,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.view.View.OnClickListener;
 
-public class CalendarView extends RelativeLayout implements OnClickListener {
+public class CalendarView extends LinearLayout implements OnClickListener {
 	private static final int THICK_DELIM = 3, THIN_DELIM = 1,
 			BOTTOM_PADDING = 65;
 	private SimpleDateFormat dayLabelFormatter = new SimpleDateFormat("E M.d.");
@@ -40,7 +38,7 @@ public class CalendarView extends RelativeLayout implements OnClickListener {
 	Calendar startHour = new GregorianCalendar(2000, 1, 1, 8, 0);
 	Calendar endHour = new GregorianCalendar(2000, 1, 1, 18, 0);
 
-	LinearLayout hourColumn, innerLayout;
+	LinearLayout hourColumn;
 
 	public CalendarView(Context context) {
 		this(context, null);
@@ -52,8 +50,6 @@ public class CalendarView extends RelativeLayout implements OnClickListener {
 		gridPaint.setColor(Color.argb(255, 209, 211, 212));
 
 		
-		innerLayout = new LinearLayout(context);
-		this.addView(innerLayout, LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
 		hourColumn = new LinearLayout(getContext());
 		hourColumn.setPadding(0, 0, 0, BOTTOM_PADDING);
 		hourColumn.setOrientation(LinearLayout.VERTICAL);
@@ -70,8 +66,8 @@ public class CalendarView extends RelativeLayout implements OnClickListener {
 			lp.weight = 1;
 			hourColumn.addView(tv, lp);
 		}
-		innerLayout.addView(hourColumn, LayoutParams.WRAP_CONTENT, LayoutParams.FILL_PARENT);
-		addVerticalDelimeter(THIN_DELIM, innerLayout);
+		addView(hourColumn, LayoutParams.WRAP_CONTENT, LayoutParams.FILL_PARENT);
+		addVerticalDelimeter(THIN_DELIM, this);
 		inflate(context, R.layout.calendar_view, this);
 		scrollView = (LinearLayout) findViewById(R.id.linearLayout1);
 	}
