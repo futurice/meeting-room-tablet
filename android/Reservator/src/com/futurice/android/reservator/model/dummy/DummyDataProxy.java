@@ -56,12 +56,6 @@ public class DummyDataProxy implements DataProxy {
 	}
 
 	@Override
-	public List<Reservation> getReservations() throws ReservatorException {
-		throw new ReservatorException("not implemented"); // need to fix getRoomReservation to keep data consistent
-		// return reservations;
-	}
-
-	@Override
 	public boolean reserve(Reservation r) {
 		reservations.add(r);
 		r.setConfirmed(true);

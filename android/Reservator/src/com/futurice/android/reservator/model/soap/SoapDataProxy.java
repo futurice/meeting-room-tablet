@@ -196,13 +196,13 @@ public class SoapDataProxy implements DataProxy{
 	}
 
 	@Override
-	public List<Reservation> getReservations() throws ReservatorException {
+	public boolean reserve(Reservation r) throws ReservatorException {
 		throw new ReservatorException("not implemented");
 	}
 
-	@Override
-	public boolean reserve(Reservation r) throws ReservatorException {
-		throw new ReservatorException("not implemented");
+	public boolean reserve(Calendar beginTime, Calendar endTime, String subject, String ownerEmail, Room room) throws ReservatorException {
+
+		return true;
 	}
 
 	@Override
