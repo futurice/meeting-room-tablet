@@ -17,6 +17,7 @@
         <activity android:name="RoomInfo"></activity>
         <activity android:name="SettingsActivity"></activity>
         <activity android:name="HomeActivity"></activity>
+        <activity android:name=".view.RoomReservationPopup" android:theme="@style/Theme.Transparent"></activity>
 
     </application>
 </manifest>

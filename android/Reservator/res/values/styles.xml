@@ -8,4 +8,13 @@
     <color name="CalendarMarkerColor">#d8f6d5c5</color>
     <color name="StatusFreeColor">#529200</color>
     <color name="StatusReservedColor">#b24c4c</color>
+    <color name="Transparent">#0000</color>
+    <style name="Theme.Transparent" parent="android:Theme">
+    	<item name="android:windowIsTranslucent">true</item>
+    	<item name="android:windowBackground">@color/Transparent</item>
+    	<item name="android:windowContentOverlay">@null</item>
+    	<item name="android:windowNoTitle">true</item>
+    	<!-- <item name="android:windowIsFloating">true</item> -->
+    	<item name="android:backgroundDimEnabled">true</item>
+  </style>
 </resources>

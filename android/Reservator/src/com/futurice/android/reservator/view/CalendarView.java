@@ -4,12 +4,17 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import com.futurice.android.reservator.R;
 import com.futurice.android.reservator.model.Reservation;
+import com.futurice.android.reservator.model.ReservatorException;
 
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnCancelListener;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -19,13 +24,11 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
-import android.widget.PopupWindow;
-import android.widget.PopupWindow.OnDismissListener;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.view.View.OnClickListener;
 
-public class CalendarView extends LinearLayout implements OnClickListener {
+public class CalendarView extends RelativeLayout implements OnClickListener {
 	private static final int THICK_DELIM = 3, THIN_DELIM = 1,
 			BOTTOM_PADDING = 65;
 	private SimpleDateFormat dayLabelFormatter = new SimpleDateFormat("E M.d.");
@@ -37,7 +40,7 @@ public class CalendarView extends LinearLayout implements OnClickListener {
 	Calendar startHour = new GregorianCalendar(2000, 1, 1, 8, 0);
 	Calendar endHour = new GregorianCalendar(2000, 1, 1, 18, 0);
 
-	LinearLayout hourColumn;
+	LinearLayout hourColumn, innerLayout;
 
 	public CalendarView(Context context) {
 		this(context, null);
@@ -48,6 +51,9 @@ public class CalendarView extends LinearLayout implements OnClickListener {
 		gridPaint = new Paint();
 		gridPaint.setColor(Color.argb(255, 209, 211, 212));
 
+		
+		innerLayout = new LinearLayout(context);
+		this.addView(innerLayout, LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
 		hourColumn = new LinearLayout(getContext());
 		hourColumn.setPadding(0, 0, 0, BOTTOM_PADDING);
 		hourColumn.setOrientation(LinearLayout.VERTICAL);
@@ -60,12 +66,12 @@ public class CalendarView extends LinearLayout implements OnClickListener {
 			tv.setText(Html.fromHtml(i + "<small>00</small>"));
 			tv.setGravity(Gravity.TOP | Gravity.RIGHT);
 
-			LayoutParams lp = new LayoutParams(LayoutParams.FILL_PARENT, 1, 1);
+			LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LayoutParams.FILL_PARENT, 1, 1);
 			lp.weight = 1;
 			hourColumn.addView(tv, lp);
 		}
-		addView(hourColumn, LayoutParams.WRAP_CONTENT, LayoutParams.FILL_PARENT);
-		addVerticalDelimeter(THIN_DELIM, this);
+		innerLayout.addView(hourColumn, LayoutParams.WRAP_CONTENT, LayoutParams.FILL_PARENT);
+		addVerticalDelimeter(THIN_DELIM, innerLayout);
 		inflate(context, R.layout.calendar_view, this);
 		scrollView = (LinearLayout) findViewById(R.id.linearLayout1);
 	}
@@ -81,7 +87,7 @@ public class CalendarView extends LinearLayout implements OnClickListener {
 
 	private void addVerticalDelimeter(int width, LinearLayout parent) {
 		View v = new View(getContext());
-		LayoutParams lp = new LinearLayout.LayoutParams(width,
+		LayoutParams lp = new LayoutParams(width,
 				LayoutParams.FILL_PARENT);
 		lp.bottomMargin = BOTTOM_PADDING;
 		v.setLayoutParams(lp);
@@ -98,7 +104,15 @@ public class CalendarView extends LinearLayout implements OnClickListener {
 		column.setWeightSum(endHour.getTimeInMillis()
 				- startHour.getTimeInMillis());
 		column.setOrientation(LinearLayout.VERTICAL);
-		if (day.get(Calendar.DAY_OF_WEEK) == Calendar.MONDAY) {
+		
+		
+		final int dayOfWeek = day.get(Calendar.DAY_OF_WEEK);
+		//Hide weekend days..
+		if(skipWeekend && dayOfWeek == Calendar.SATURDAY || dayOfWeek == Calendar.SUNDAY){
+			container.setVisibility(View.GONE);
+		}
+		
+		if (dayOfWeek == Calendar.MONDAY) {
 			((TextView) column.findViewById(R.id.weekLabel)).setText("Week "
 					+ day.get(Calendar.WEEK_OF_YEAR));
 		}
@@ -160,16 +174,19 @@ public class CalendarView extends LinearLayout implements OnClickListener {
 
 	@Override
 	public void onClick(final View v) {
-		v.setBackgroundColor(Color.GREEN);
-		Reservation reservation = ((CalendarMarker)v).getReservation();  
-		final PopupWindow w = RoomReservationPopup.create(this, reservation.getRoom(), reservation.getBeginTime(), reservation.getEndTime());
-		w.setOnDismissListener(new OnDismissListener() {
-			@Override
-			public void onDismiss() {
-				v.setBackgroundColor(Color.WHITE);
-			}
-		});
-		w.showAtLocation(CalendarView.this, Gravity.CENTER, 0, 0);
-
+		
+		if(v instanceof CalendarMarker){
+			final CalendarMarker marker = (CalendarMarker)v;
+			Dialog d = new RoomReservationPopup(getContext(), marker);
+			d.show();
+			d.setOnCancelListener(new OnCancelListener() {
+				
+				@Override
+				public void onCancel(DialogInterface dialog) {
+					((WeekView)getParent()).setRoom(marker.getReservation().getRoom());
+				}
+			});
+			
+		}
 	}
 }

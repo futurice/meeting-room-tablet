@@ -2,6 +2,8 @@ package com.futurice.android.reservator.model;
 
 import java.util.Calendar;
 
+import android.text.Editable;
+
 
 
 public class Reservation implements Comparable<Reservation> {
@@ -38,5 +40,10 @@ public class Reservation implements Comparable<Reservation> {
 	@Override
 	public int compareTo(Reservation another) {
 		return (int)(this.beginTime.getTimeInMillis() - another.beginTime.getTimeInMillis());
+	}
+
+	public void setSubject(String text) {
+		this.subject = text;
+		
 	}
 }
