@@ -136,9 +136,9 @@ public class RoomReservationView extends FrameLayout implements
 	private void refreshData() {
 		Reservation nextFreeTime = room.getNextFreeTime();
 
+		timePicker2.reset();
 		timePicker2.setMinimumTime(nextFreeTime.getBeginTime());
 		timePicker2.setMaximumTime(nextFreeTime.getEndTime());
-
 		timePicker2.setEndTimeRelatively(60); // let book the room for an hour
 
 		RoomsInfo info = RoomsInfo.getRoomsInfo(room);
