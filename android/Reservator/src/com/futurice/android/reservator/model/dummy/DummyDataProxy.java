@@ -4,22 +4,23 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 
 import com.futurice.android.reservator.model.DataProxy;
 import com.futurice.android.reservator.model.Reservation;
-import com.futurice.android.reservator.model.ReservatorException;
 import com.futurice.android.reservator.model.Room;
 
 public class DummyDataProxy implements DataProxy {
 	List<Room> rooms = null;
-	List<Reservation> reservations = null;
+	Map<String,List<Reservation>> reservations;
 
 	public DummyDataProxy() {
 		this.rooms = new ArrayList<Room>();
-		this.reservations = new ArrayList<Reservation>();
+		this.reservations = new HashMap<String,List<Reservation>>();
 
 		rooms.add(new Room("Room-Panorama-401", "401-Panorama@futu.com", this));
 		rooms.add(new Room("Room-Pilotti-402", "402-Pilotti@futu.com", this));
@@ -57,8 +58,6 @@ public class DummyDataProxy implements DataProxy {
 
 	@Override
 	public boolean reserve(Reservation r) {
-		reservations.add(r);
-		r.setConfirmed(true);
 		return true;
 	}
 
@@ -71,10 +70,12 @@ public class DummyDataProxy implements DataProxy {
 	public List<Reservation> getRoomReservations(Room room) {
 		try {
 			Thread.sleep((int)(Math.random()*10));
-		} catch (InterruptedException e1) {
-			e1.printStackTrace();
-		}
-		List<Reservation> ret = new ArrayList<Reservation>();
+		} catch (InterruptedException e1) {}
+
+		List<Reservation> ret = reservations.get(room.getEmail());
+		if (ret != null) return ret; // found in cache
+
+		ret = new ArrayList<Reservation>();
 		Random rand = new Random();
 		Calendar cal = Calendar.getInstance();
 		cal.set(Calendar.HOUR_OF_DAY, 8);
@@ -103,6 +104,8 @@ public class DummyDataProxy implements DataProxy {
 			}
 			cal.add(Calendar.DAY_OF_YEAR, 1);
 		}
+
+		reservations.put(room.getEmail(), ret); // put into the cache
 
 		return ret;
 	}
