@@ -1,4 +1,6 @@
 package com.futurice.android.reservator;
+import java.util.Calendar;
+import java.util.Comparator;
 import java.util.List;
 
 import com.futurice.android.reservator.model.ReservatorException;
@@ -9,6 +11,7 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MenuItem.OnMenuItemClickListener;
@@ -16,9 +19,11 @@ import android.view.Window;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-public class HomeActivity extends Activity implements OnMenuItemClickListener{
+public class HomeActivity extends Activity implements OnMenuItemClickListener {
 	MenuItem settingsMenu, refreshMenu;
 	LinearLayout container = null;
+	private long lastTimeRefreshed = 0;
+
 	private ProgressDialog progressDialog = null;
 	@Override
 	public void onCreate(Bundle savedInstanceState){
@@ -30,6 +35,14 @@ public class HomeActivity extends Activity implements OnMenuItemClickListener{
 	@Override
 	public void onResume(){
 		super.onResume();
+
+		// Do not refresh too often
+		long now = System.currentTimeMillis();
+		if (lastTimeRefreshed + 60000 > now) {
+			return;
+		}
+		lastTimeRefreshed = now;
+
 		refreshRoomInfo();
 	}
 
@@ -47,7 +60,43 @@ public class HomeActivity extends Activity implements OnMenuItemClickListener{
 							public void run() {
 								RoomReservationView v = new RoomReservationView(HomeActivity.this);
 								v.setRoom(r);
-								container.addView(v);// TODO Auto-generated method stub
+
+								// This is ugly, adding views in order.
+
+								Comparator<Room> roomCmp = new Comparator<Room>() {
+									private Calendar now = Calendar.getInstance();
+
+									@Override
+									public int compare(Room room1, Room room2) {
+										boolean room1Free = room1.isFree();
+										boolean room2Free = room2.isFree();
+
+										if (room1Free && !room2Free) {
+											return -1;
+										} else if (!room1Free && room2Free){
+											return 1;
+										} else if (room1Free && room2Free) {
+											return room2.minutesFreeFrom(now) - room1.minutesFreeFrom(now);
+										} else {
+											return room1.reservedForFrom(now) - room2.reservedForFrom(now);
+										}
+									}
+								};
+
+								int roomCount = container.getChildCount();
+								boolean added = false;
+								for (int index = 0; index < roomCount; index++) {
+									Room r2 =  ((RoomReservationView) container.getChildAt(index)).getRoom();
+									Log.v("activity", r.toString() + " -- " + Integer.toString(r2.minutesFreeFromNow()));
+									if (roomCmp.compare(r, r2) < 0) {
+										container.addView(v, index);
+										added = true;
+										break;
+									}
+								}
+								if (!added) {
+									container.addView(v);
+								}
 							}
 						});
 					}
@@ -63,12 +112,12 @@ public class HomeActivity extends Activity implements OnMenuItemClickListener{
 			}
 		}.start();
 	}
-	
+
 	private void showLoading(){
 		if(this.progressDialog == null){
-			this.progressDialog = ProgressDialog.show(this, "Loading", "Loading", true, false); 
+			this.progressDialog = ProgressDialog.show(this, "Loading" ,"Refreshing meeting rooms list", true, false);
 		}
-		
+
 	}
 	private void hideLoading(){
 		if(this.progressDialog != null){
