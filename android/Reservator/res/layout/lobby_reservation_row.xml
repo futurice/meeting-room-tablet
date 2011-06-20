@@ -17,7 +17,7 @@
 	</LinearLayout>
 	<LinearLayout android:id="@+id/bookingMode"
 		android:gravity="center_vertical"
-		android:layout_width="1px" android:layout_weight="3" android:visibility="gone" android:layout_height="100sp">
+		android:layout_width="1px" android:layout_weight="3" android:visibility="gone" android:layout_height="wrap_content">
 		<com.futurice.android.reservator.view.CustomTimeSpanPicker
 			android:id="@+id/timeSpanPicker1" android:layout_width="wrap_content"
 			android:layout_height="wrap_content" android:layout_weight="1"  android:visibility="gone" />
