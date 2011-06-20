@@ -27,7 +27,7 @@ public class CalendarMarker extends LinearLayout {
 	public void setReservation(Reservation reservation, boolean isReserved) {
 		if (isReserved) {
 			this.setText(TextUtils.expandTemplate(infoTextTemplate, reservation.getSubject()).toString());
-			this.setBackgroundColor(Color.argb(65, 251, 142, 99));
+			this.setBackgroundResource(R.color.CalendarMarkerColor);
 		} else {
 			this.setBackgroundColor(Color.TRANSPARENT);
 		}
