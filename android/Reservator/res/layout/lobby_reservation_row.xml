@@ -11,7 +11,7 @@
 		android:layout_centerVertical="true">
 		<TextView android:id="@+id/roomNameLabel"
 			android:layout_width="wrap_content" android:layout_height="wrap_content"
-			android:text="Room name XXX"></TextView>
+			android:text="Room name XXX" android:textStyle="bold"></TextView>
 		<TextView android:id="@+id/roomInfoLabel"
 			android:layout_width="wrap_content" android:layout_height="wrap_content"
 			android:text="(42 persons)"></TextView>
@@ -40,7 +40,7 @@
 		android:layout_height="wrap_content" android:layout_width="1px" android:layout_weight="3" android:visibility="visible">
 		<TextView android:layout_width="wrap_content"
 			android:layout_height="wrap_content" android:id="@+id/roomStatusLabel"
-			android:text="&lt;status&gt;"></TextView>
+			android:text="&lt;status&gt;" android:width="200px"></TextView>
 		<FrameLayout android:layout_height="match_parent" android:layout_width="wrap_content" android:layout_weight="1"></FrameLayout>
 		<Button android:layout_width="wrap_content"
 			android:layout_height="wrap_content" android:text="@string/book_now"
