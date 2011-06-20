@@ -48,6 +48,11 @@ public class CustomTimeSpanPicker2 extends FrameLayout implements OnClickListene
 		endMinus = findViewById(R.id.endMinus);
 		endPlus = findViewById(R.id.endPlus);
 
+		startMinus.setOnClickListener(this);
+		startPlus.setOnClickListener(this);
+		endMinus.setOnClickListener(this);
+		endPlus.setOnClickListener(this);
+
 		startLabel = (TextView) findViewById(R.id.startTimeLabel);
 		endLabel = (TextView) findViewById(R.id.endTimeLabel);
 
@@ -60,17 +65,23 @@ public class CustomTimeSpanPicker2 extends FrameLayout implements OnClickListene
 		currentDay = Calendar.getInstance();
 		currentTimeStart = minimumTime;
 		currentTimeEnd = maximumTime;
+
+		refreshLabels();
 	}
 
 	@Override
 	public void onClick(View v) {
 		if (v == startMinus) {
-			int start = currentTimeStart += timeStep;
+			int start = currentTimeStart - timeStep;
 
-			currentTimeStart = Math.min(start, currentTimeEnd-minimumDuration);
+			currentTimeStart = Math.max(start, minimumTime);
+			refreshLabels();
 		}
 		else if (v == startPlus) {
+			int start = currentTimeStart + timeStep;
 
+			currentTimeStart = Math.min(start, currentTimeEnd-minimumDuration);
+			refreshLabels();
 		}
 		else if (v == endMinus) {
 
@@ -81,8 +92,8 @@ public class CustomTimeSpanPicker2 extends FrameLayout implements OnClickListene
 	}
 
 	protected void refreshLabels() {
-		startLabel.setText(Integer.toString(currentTimeStart / 60) + ":" + (currentTimeStart % 60));
-		endLabel.setText(Integer.toString(currentTimeEnd / 60) + ":" + (currentTimeEnd % 60));
+		startLabel.setText(String.format("%02d:%02d", currentTimeStart / 60, currentTimeStart % 60));
+		endLabel.setText(String.format("%02d:%02d", currentTimeEnd / 60, currentTimeEnd % 60));
 	}
 
 	public void setMinimumDuration(int minimumDuration) {
