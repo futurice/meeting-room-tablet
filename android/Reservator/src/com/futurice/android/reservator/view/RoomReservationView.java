@@ -4,9 +4,11 @@ import java.util.Calendar;
 
 import com.futurice.android.reservator.R;
 import com.futurice.android.reservator.RoomInfo;
+import com.futurice.android.reservator.common.Helpers;
 import com.futurice.android.reservator.model.Reservation;
 import com.futurice.android.reservator.model.Room;
 import com.futurice.android.reservator.model.fum3.FumAddressBookAdapter;
+import com.futurice.android.reservator.model.rooms.RoomsInfo;
 
 import android.content.Context;
 import android.content.Intent;
@@ -17,6 +19,7 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AutoCompleteTextView;
 import android.widget.FrameLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.view.View.OnClickListener;
 import android.view.inputmethod.InputMethodManager;
@@ -29,14 +32,14 @@ public class RoomReservationView extends FrameLayout implements
 	AutoCompleteTextView nameField;
 	CustomTimeSpanPicker timePicker;
 	private Calendar maxTime, minTime;
-	
-	
+	TextView roomNameView, roomInfoView, roomStatusView;
+
 	private Room room;
 
 	public RoomReservationView(Context context) {
 		this(context, null);
 	}
-	
+
 	private OnFocusChangeListener userNameFocusChangeListener = new OnFocusChangeListener() {
 
 		@Override
@@ -66,6 +69,9 @@ public class RoomReservationView extends FrameLayout implements
 		nameField.setAdapter(new FumAddressBookAdapter(context));
 		nameField.setOnFocusChangeListener(userNameFocusChangeListener);
 		timePicker = (CustomTimeSpanPicker) findViewById(R.id.timeSpanPicker1);
+		roomNameView = (TextView) findViewById(R.id.roomNameLabel);
+		roomInfoView = (TextView) findViewById(R.id.roomInfoLabel);
+		roomStatusView = (TextView) findViewById(R.id.roomStatusLabel);
 	}
 
 	public void setRoom(Room room) {
@@ -133,10 +139,51 @@ public class RoomReservationView extends FrameLayout implements
 			timePicker.setMinTime(minTime);
 			timePicker.setMaxTime(maxTime);
 		}
+
+		Reservation nextFreeTime = room.getNextFreeTime();
+		timePicker.setMinTime(nextFreeTime.getBeginTime());
+		timePicker.setMaxTime(nextFreeTime.getEndTime());
+
+		RoomsInfo info = RoomsInfo.getRoomsInfo(room);
+		roomNameView.setText(info.getRoomName());
+		if (info.getRoomNumber() == 0) {
+			roomInfoView.setText("for " + info.getRoomSize());
+		} else {
+			// U+2022 is a dot
+			roomInfoView.setText(Integer.toString(info.getRoomNumber()) + " \u2022 for " + info.getRoomSize());
+		}
+
+		boolean bookable = false;
+		if (room.isFree()) {
+			int freeMinutes = room.minutesFreeFromNow();
+			bookable = true;
+
+			if (freeMinutes > 180) {
+				roomStatusView.setText("Free");
+			} else if (freeMinutes < 15) {
+				roomStatusView.setText("Reserved");
+				bookable = false;
+			} else {
+				roomStatusView.setText("Free for " + Helpers.humanizeTimeSpan(freeMinutes));
+			}
+		} else {
+			roomStatusView.setText("Reserved");
+		}
+
+		if (bookable) {
+			roomStatusView.setTextColor(getResources().getColor(R.color.StatusFreeColor));
+			bookNowButton.setVisibility(View.VISIBLE);
+		} else {
+			roomStatusView.setTextColor(getResources().getColor(R.color.StatusReservedColor));
+			bookNowButton.setVisibility(View.INVISIBLE);
+		}
 	}
+
+
 	public void setMinTime(Calendar time){
 		this.minTime = time;
 	}
+
 	public void setMaxTime(Calendar time){
 		this.maxTime = time;
 	}
