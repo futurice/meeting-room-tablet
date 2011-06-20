@@ -7,6 +7,7 @@ import com.futurice.android.reservator.RoomInfo;
 import com.futurice.android.reservator.common.Helpers;
 import com.futurice.android.reservator.model.Reservation;
 import com.futurice.android.reservator.model.Room;
+import com.futurice.android.reservator.model.TimeSpan;
 import com.futurice.android.reservator.model.fum3.FumAddressBookAdapter;
 import com.futurice.android.reservator.model.rooms.RoomsInfo;
 
@@ -134,11 +135,11 @@ public class RoomReservationView extends FrameLayout implements
 	}
 
 	private void refreshData() {
-		Reservation nextFreeTime = room.getNextFreeTime();
+		TimeSpan nextFreeTime = room.getNextFreeTime();
 
 		timePicker2.reset();
-		timePicker2.setMinimumTime(nextFreeTime.getBeginTime());
-		timePicker2.setMaximumTime(nextFreeTime.getEndTime());
+		timePicker2.setMinimumTime(nextFreeTime.getStart());
+		timePicker2.setMaximumTime(nextFreeTime.getEnd());
 		timePicker2.setEndTimeRelatively(60); // let book the room for an hour
 
 		RoomsInfo info = RoomsInfo.getRoomsInfo(room);

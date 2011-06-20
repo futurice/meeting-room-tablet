@@ -57,12 +57,12 @@ public class CustomTimeSpanPicker2 extends FrameLayout implements OnClickListene
 		startLabel = (TextView) findViewById(R.id.startTimeLabel);
 		endLabel = (TextView) findViewById(R.id.endTimeLabel);
 		timeBar = (TimeBarView)findViewById(R.id.timeBarView);
-		
+
 		minimumDuration = 15;
 		timeStep = 15;
-		
-		
-		
+
+
+
 		reset();
 	}
 
@@ -111,10 +111,10 @@ public class CustomTimeSpanPicker2 extends FrameLayout implements OnClickListene
 	protected void refreshLabels() {
 		startLabel.setText(String.format("%02d:%02d", currentTimeStart / 60, currentTimeStart % 60));
 		endLabel.setText(String.format("%02d:%02d", currentTimeEnd / 60, currentTimeEnd % 60));
-		
+
 		Calendar start = (Calendar)currentDay.clone();
 		start.add(Calendar.MINUTE, minimumTime);
-		
+
 		Calendar end = (Calendar)currentDay.clone();
 		end.add(Calendar.MINUTE, maximumTime);
 		timeBar.setTimeLimits(new TimeSpan(start, end));
@@ -151,6 +151,13 @@ public class CustomTimeSpanPicker2 extends FrameLayout implements OnClickListene
 
 	public void setMaximumTime(Calendar cal) {
 		int max = cal.get(Calendar.HOUR_OF_DAY)*60+cal.get(Calendar.MINUTE);
+		boolean tomorrow = false;
+
+		if (max == 0) {
+			max = 24*60; // full day
+			tomorrow =  true;
+		}
+
 		if (max < minimumTime)
 			throw new IllegalArgumentException("setting maximumTime to be before the minimum");
 
@@ -164,6 +171,9 @@ public class CustomTimeSpanPicker2 extends FrameLayout implements OnClickListene
 		}
 
 		currentDay = (Calendar) cal.clone(); // set current day
+		if (tomorrow) {
+			currentDay.add(Calendar.DAY_OF_YEAR, -1);
+		}
 
 		refreshLabels();
 	}

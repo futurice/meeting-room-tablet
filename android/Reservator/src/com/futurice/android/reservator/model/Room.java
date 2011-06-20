@@ -105,13 +105,31 @@ public class Room {
 		return reservedForFrom(Calendar.getInstance());
 	}
 
-	public Reservation getNextFreeTime(){
+	/**
+	 *
+	 * Prerequisite: isFree
+	 * @return
+	 */
+	public TimeSpan getNextFreeTime(){
 		Calendar now = Calendar.getInstance();
+		Calendar max = Calendar.getInstance();
+
+		max.roll(Calendar.DAY_OF_WEEK, 1);
+		max.set(Calendar.HOUR_OF_DAY, 0);
+		max.set(Calendar.MINUTE, 0);
+		max.set(Calendar.SECOND, 0);
+		max.set(Calendar.MILLISECOND, 0);
+
 		for (Reservation r : reservations) {
+			// bound nextFreeTime to
+			if (r.getBeginTime().after(max)) {
+				return new TimeSpan(now, max);
+			}
 			if(r.getBeginTime().after(now)){
-				return new Reservation(this, "free", now, r.getBeginTime()); //TODO maybe there are many reservations after each other..
+				return new TimeSpan(now, r.getBeginTime()); //TODO maybe there are many reservations after each other..
 			}
 		}
+
 		return null;
 	}
 }
