@@ -31,7 +31,7 @@ public class RoomReservationView extends FrameLayout implements
 			bookingMode, normalMode, titleView;
 	AutoCompleteTextView nameField;
 	CustomTimeSpanPicker timePicker;
-	private Calendar maxTime, minTime;
+	CustomTimeSpanPicker2 timePicker2;
 	TextView roomNameView, roomInfoView, roomStatusView;
 
 	private Room room;
@@ -71,6 +71,7 @@ public class RoomReservationView extends FrameLayout implements
 		nameField.setAdapter(new FumAddressBookAdapter(context));
 		nameField.setOnFocusChangeListener(userNameFocusChangeListener);
 		timePicker = (CustomTimeSpanPicker) findViewById(R.id.timeSpanPicker1);
+		timePicker2 = (CustomTimeSpanPicker2) findViewById(R.id.timeSpanPicker2);
 		roomNameView = (TextView) findViewById(R.id.roomNameLabel);
 		roomInfoView = (TextView) findViewById(R.id.roomInfoLabel);
 		roomStatusView = (TextView) findViewById(R.id.roomStatusLabel);
@@ -127,7 +128,7 @@ public class RoomReservationView extends FrameLayout implements
 	}
 
 	protected void setReserveMode() {
-		refreshData();
+		// refreshData(); // no need?
 		this.setBackgroundColor(getResources().getColor(R.color.FutuLightGreen));
 		reserveButton.setEnabled(false);
 		bookingMode.setVisibility(View.VISIBLE);
@@ -135,18 +136,15 @@ public class RoomReservationView extends FrameLayout implements
 	}
 
 	private void refreshData() {
-		if(maxTime == null || minTime == null){
-			Reservation nextFreeTime = room.getNextFreeTime();
-			timePicker.setMinTime(nextFreeTime.getBeginTime());
-			timePicker.setMaxTime(nextFreeTime.getEndTime());
-		}else{
-			timePicker.setMinTime(minTime);
-			timePicker.setMaxTime(maxTime);
-		}
-
 		Reservation nextFreeTime = room.getNextFreeTime();
+
 		timePicker.setMinTime(nextFreeTime.getBeginTime());
 		timePicker.setMaxTime(nextFreeTime.getEndTime());
+
+		timePicker2.setMinimumTime(nextFreeTime.getBeginTime());
+		timePicker2.setMaximumTime(nextFreeTime.getEndTime());
+
+		timePicker2.setEndTimeRelatively(60); // let book the room for an hour
 
 		RoomsInfo info = RoomsInfo.getRoomsInfo(room);
 		roomNameView.setText(info.getRoomName());
@@ -185,11 +183,11 @@ public class RoomReservationView extends FrameLayout implements
 
 
 	public void setMinTime(Calendar time){
-		this.minTime = time;
+		timePicker2.setMinimumTime(time);
 	}
 
 	public void setMaxTime(Calendar time){
-		this.maxTime = time;
+		timePicker2.setMaximumTime(time);
 	}
 
 	private void showRoomInCalendar() {

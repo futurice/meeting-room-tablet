@@ -69,25 +69,35 @@ public class CustomTimeSpanPicker2 extends FrameLayout implements OnClickListene
 		refreshLabels();
 	}
 
+	protected int quantize(int m) {
+		return (m / timeStep) * timeStep;
+	}
+
 	@Override
 	public void onClick(View v) {
 		if (v == startMinus) {
-			int start = currentTimeStart - timeStep;
+			int start = quantize(currentTimeStart - timeStep);
 
 			currentTimeStart = Math.max(start, minimumTime);
 			refreshLabels();
 		}
 		else if (v == startPlus) {
-			int start = currentTimeStart + timeStep;
+			int start = quantize(currentTimeStart + timeStep);
 
-			currentTimeStart = Math.min(start, currentTimeEnd-minimumDuration);
+			currentTimeStart = Math.min(start, currentTimeEnd - minimumDuration);
 			refreshLabels();
 		}
 		else if (v == endMinus) {
+			int end = quantize(currentTimeEnd - timeStep);
 
+			currentTimeEnd = Math.max(end, currentTimeStart + minimumDuration);
+			refreshLabels();
 		}
 		else if (v == endPlus) {
+			int end = quantize(currentTimeEnd + timeStep);
 
+			currentTimeEnd = Math.min(end, maximumTime);
+			refreshLabels();
 		}
 	}
 
@@ -106,8 +116,6 @@ public class CustomTimeSpanPicker2 extends FrameLayout implements OnClickListene
 
 
 	public void setMinimumTime(Calendar cal) {
-		currentDay = (Calendar) cal.clone(); // set the current day
-
 		int min = cal.get(Calendar.HOUR_OF_DAY)*60+cal.get(Calendar.MINUTE);
 		if (min > maximumTime)
 			throw new IllegalArgumentException("setting minimumTime to be after the maximum");
@@ -122,10 +130,66 @@ public class CustomTimeSpanPicker2 extends FrameLayout implements OnClickListene
 		}
 
 		refreshLabels();
+
+		currentDay = (Calendar) cal.clone(); // set current day
 	}
 
 	public void setMaximumTime(Calendar cal) {
-		throw new RuntimeException("unimplemented");
+		int max = cal.get(Calendar.HOUR_OF_DAY)*60+cal.get(Calendar.MINUTE);
+		if (max < minimumTime)
+			throw new IllegalArgumentException("setting maximumTime to be before the minimum");
+
+		maximumTime = max;
+		if (currentTimeEnd > maximumTime) {
+			currentTimeEnd = maximumTime;
+		}
+
+		if (currentTimeStart > maximumTime) {
+			currentTimeStart = Math.max(minimumTime, maximumTime - minimumDuration);
+		}
+
+		currentDay = (Calendar) cal.clone(); // set current day
+	}
+
+	public void setStartTime(Calendar cal) {
+		int start = cal.get(Calendar.HOUR_OF_DAY)*60+cal.get(Calendar.MINUTE);
+
+		if (start < minimumTime || start > maximumTime) {
+			throw new IllegalArgumentException("setting startTime outside of minmax");
+		}
+
+		if (start > currentTimeEnd) {
+			throw new IllegalArgumentException("setting startTime after endTime");
+		}
+
+		currentTimeStart = start;
+		currentDay = (Calendar) cal.clone();
+
+		refreshLabels();
+	}
+
+	public void setEndTime(Calendar cal) {
+		int end = cal.get(Calendar.HOUR_OF_DAY)*60+cal.get(Calendar.MINUTE);
+
+		if (end < minimumTime || end > maximumTime) {
+			throw new IllegalArgumentException("setting endTime outside of minmax");
+		}
+
+		if (end < currentTimeStart) {
+			throw new IllegalArgumentException("setting endTime before startTime");
+		}
+
+		currentTimeEnd = end;
+		currentDay = (Calendar) cal.clone();
+
+		refreshLabels();
+	}
+
+	public void setEndTimeRelatively(int minutes) {
+		int end = quantize(currentTimeStart + minutes);
+
+		currentTimeEnd = Math.min(end, maximumTime);
+		refreshLabels();
 	}
 
 
@@ -142,7 +206,7 @@ public class CustomTimeSpanPicker2 extends FrameLayout implements OnClickListene
 		Calendar ret = (Calendar) currentDay.clone();
 
 		ret.set(Calendar.HOUR_OF_DAY, currentTimeStart / 60);
-		ret.set(Calendar.MINUTE, currentTimeEnd % 60);
+		ret.set(Calendar.MINUTE, currentTimeStart % 60);
 		ret.set(Calendar.SECOND, 0);
 		ret.set(Calendar.MILLISECOND, 0);
 
@@ -150,7 +214,14 @@ public class CustomTimeSpanPicker2 extends FrameLayout implements OnClickListene
 	}
 
 	public Calendar getEndTime() {
-		throw new RuntimeException("unimplemented");
+		Calendar ret = (Calendar) currentDay.clone();
+
+		ret.set(Calendar.HOUR_OF_DAY, currentTimeEnd / 60);
+		ret.set(Calendar.MINUTE, currentTimeEnd % 60);
+		ret.set(Calendar.SECOND, 0);
+		ret.set(Calendar.MILLISECOND, 0);
+
+		return ret;
 	}
 
 }
