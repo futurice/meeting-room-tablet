@@ -30,7 +30,6 @@ public class RoomReservationView extends FrameLayout implements
 	View cancelButton, bookNowButton, reserveButton, calendarButton,
 			bookingMode, normalMode, titleView;
 	AutoCompleteTextView nameField;
-	CustomTimeSpanPicker timePicker;
 	CustomTimeSpanPicker2 timePicker2;
 	TextView roomNameView, roomInfoView, roomStatusView;
 
@@ -70,7 +69,6 @@ public class RoomReservationView extends FrameLayout implements
 		nameField.setOnItemClickListener(this);
 		nameField.setAdapter(new FumAddressBookAdapter(context));
 		nameField.setOnFocusChangeListener(userNameFocusChangeListener);
-		timePicker = (CustomTimeSpanPicker) findViewById(R.id.timeSpanPicker1);
 		timePicker2 = (CustomTimeSpanPicker2) findViewById(R.id.timeSpanPicker2);
 		roomNameView = (TextView) findViewById(R.id.roomNameLabel);
 		roomInfoView = (TextView) findViewById(R.id.roomInfoLabel);
@@ -115,8 +113,8 @@ public class RoomReservationView extends FrameLayout implements
 
 	private void makeReservation() {
 		Toast t = Toast.makeText(getContext(),
-				DateFormat.format("kk:mm", timePicker.getStartTime()) + "-"
-						+ DateFormat.format("kk:mm", timePicker.getEndTime()),
+				DateFormat.format("kk:mm", timePicker2.getStartTime()) + "-"
+						+ DateFormat.format("kk:mm", timePicker2.getEndTime()),
 				Toast.LENGTH_LONG);
 		t.show();
 	}
@@ -137,9 +135,6 @@ public class RoomReservationView extends FrameLayout implements
 
 	private void refreshData() {
 		Reservation nextFreeTime = room.getNextFreeTime();
-
-		timePicker.setMinTime(nextFreeTime.getBeginTime());
-		timePicker.setMaxTime(nextFreeTime.getEndTime());
 
 		timePicker2.setMinimumTime(nextFreeTime.getBeginTime());
 		timePicker2.setMaximumTime(nextFreeTime.getEndTime());
@@ -181,6 +176,9 @@ public class RoomReservationView extends FrameLayout implements
 		}
 	}
 
+	public void resetTimeSpan() {
+		timePicker2.reset();
+	}
 
 	public void setMinTime(Calendar time){
 		timePicker2.setMinimumTime(time);
@@ -188,6 +186,10 @@ public class RoomReservationView extends FrameLayout implements
 
 	public void setMaxTime(Calendar time){
 		timePicker2.setMaximumTime(time);
+	}
+
+	public void setEndTimeRelatively(int minutes) {
+		timePicker2.setEndTimeRelatively(minutes);
 	}
 
 	private void showRoomInCalendar() {

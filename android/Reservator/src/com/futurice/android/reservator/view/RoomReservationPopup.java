@@ -6,23 +6,26 @@ import com.futurice.android.reservator.model.Reservation;
 import android.app.Dialog;
 import android.content.Context;
 import android.view.View;
-import android.widget.AutoCompleteTextView;
 
 public class RoomReservationPopup extends Dialog{
 	RoomReservationView reservationView;
 	CalendarMarker marker;
-	
+
 	protected RoomReservationPopup(Context context, CalendarMarker marker) {
 		super(context, R.style.Theme_Transparent);
 		setCancelable(true);
 		this.marker = marker;
-		
+
 		setContentView(R.layout.reservation_popup);
 		reservationView = (RoomReservationView)findViewById(R.id.roomReservationView1);
+
 		Reservation r = marker.getReservation();
 		reservationView.setRoom(r.getRoom());
+		reservationView.resetTimeSpan();
 		reservationView.setMinTime(r.getBeginTime());
 		reservationView.setMaxTime(r.getEndTime());
+		reservationView.setEndTimeRelatively(60);
+
 		reservationView.findViewById(R.id.cancelButton).setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -32,7 +35,7 @@ public class RoomReservationPopup extends Dialog{
 			}
 		});
 		reservationView.findViewById(R.id.reserveButton).setOnClickListener(new View.OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
 				reservationView.onClick(v);
@@ -42,5 +45,5 @@ public class RoomReservationPopup extends Dialog{
 		reservationView.setReserveMode();
 	}
 
-	
+
 }

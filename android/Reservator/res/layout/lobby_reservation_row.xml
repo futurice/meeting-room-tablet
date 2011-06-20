@@ -17,13 +17,10 @@
 	</LinearLayout>
 	<LinearLayout android:id="@+id/bookingMode"
 		android:gravity="center_vertical"
-		android:layout_width="1px" android:layout_weight="3" android:visibility="gone" android:layout_height="wrap_content">
-		<com.futurice.android.reservator.view.CustomTimeSpanPicker
-			android:id="@+id/timeSpanPicker1" android:layout_width="wrap_content"
-			android:layout_height="wrap_content" android:layout_weight="1"  android:visibility="gone" />
+		android:layout_width="1px" android:layout_weight="3" android:visibility="gone" android:layout_height="wrap_content" android:layout_marginTop="30dp" android:layout_marginBottom="30dp">
 		<com.futurice.android.reservator.view.CustomTimeSpanPicker2
 			android:id="@+id/timeSpanPicker2" android:layout_width="wrap_content"
-			android:layout_height="wrap_content" android:layout_weight="1" android:layout_gravity="center"/>			
+			android:layout_height="wrap_content" android:layout_weight="1" android:layout_gravity="center"/>
 		<FrameLayout android:layout_height="match_parent" android:layout_width="wrap_content" android:layout_weight="1"></FrameLayout>
 		<AutoCompleteTextView android:id="@+id/autoCompleteTextView1" android:layout_height="wrap_content"
 			android:layout_toRightOf="@+id/timeSpanPicker1" android:lines="1"
@@ -39,7 +36,7 @@
 			android:minWidth="40sp" android:id="@+id/cancelButton" android:layout_weight="1" android:focusable="true"></Button>
 	</LinearLayout>
 	<LinearLayout android:id="@+id/normalMode"
-		android:layout_width="1px" android:layout_weight="3" android:visibility="visible" android:layout_height="70sp">
+		android:layout_width="1px" android:layout_weight="3" android:visibility="visible" android:layout_height="wrap_content" android:layout_marginTop="10dp" android:layout_marginBottom="10dp">
 		<TextView android:layout_width="wrap_content"
 			android:layout_height="wrap_content" android:id="@+id/roomStatusLabel"
 			android:text="&lt;status&gt;" android:width="200px" android:layout_gravity="center"></TextView>

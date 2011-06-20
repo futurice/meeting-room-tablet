@@ -63,17 +63,20 @@ public class CustomTimeSpanPicker2 extends FrameLayout implements OnClickListene
 		startLabel = (TextView) findViewById(R.id.startTimeLabel);
 		endLabel = (TextView) findViewById(R.id.endTimeLabel);
 
-		minimumTime = 0;
-		maximumTime = 24*60;
-
 		minimumDuration = 15;
 		timeStep = 15;
+
+		reset();
+		refreshLabels();
+	}
+
+	public void reset() {
+		minimumTime = 0;
+		maximumTime = 24*60;
 
 		currentDay = Calendar.getInstance();
 		currentTimeStart = minimumTime;
 		currentTimeEnd = maximumTime;
-
-		refreshLabels();
 	}
 
 	protected int quantize(int m) {
@@ -192,9 +195,9 @@ public class CustomTimeSpanPicker2 extends FrameLayout implements OnClickListene
 			currentTimeEnd = Math.min(maximumTime, minimumTime + minimumDuration);
 		}
 
-		refreshLabels();
-
 		currentDay = (Calendar) cal.clone(); // set current day
+
+		refreshLabels();
 	}
 
 	public void setMaximumTime(Calendar cal) {
@@ -212,6 +215,8 @@ public class CustomTimeSpanPicker2 extends FrameLayout implements OnClickListene
 		}
 
 		currentDay = (Calendar) cal.clone(); // set current day
+
+		refreshLabels();
 	}
 
 	public void setStartTime(Calendar cal) {
@@ -254,7 +259,6 @@ public class CustomTimeSpanPicker2 extends FrameLayout implements OnClickListene
 		currentTimeEnd = Math.min(end, maximumTime);
 		refreshLabels();
 	}
-
 
 	/**
 	 * Duration of the selected time span in minutes.
