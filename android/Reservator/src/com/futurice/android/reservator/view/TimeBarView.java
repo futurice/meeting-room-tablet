@@ -18,7 +18,11 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 
 public class TimeBarView extends FrameLayout{
+	int animStep = 60000;
+	private long startDelta = 0, endDelta = 0;
+	private TimeSpan targetTimeSpan = null;
 	TextView durationLabel;
+	Thread animatorThread = null;
 	TimeSpan limits, span;
 	List<TimeSpan> reservations = new ArrayList<TimeSpan>();
 	public TimeBarView(Context context) {
@@ -44,15 +48,50 @@ public class TimeBarView extends FrameLayout{
 		invalidate();
 	}
 	public void setSpan(TimeSpan span){
-		this.span = span;
+		if(this.span == null){
+			this.span = span;
+			return;
+		}
+		targetTimeSpan = span;
+		startDelta = span.getStart().getTimeInMillis() - this.span.getStart().getTimeInMillis();
+		endDelta = span.getEnd().getTimeInMillis() - this.span.getEnd().getTimeInMillis() ;
+		animStep = (int)Math.max(Math.max(Math.abs(endDelta), Math.abs(startDelta)) / 10, 60000);
+		
+		
+		if(animatorThread == null){
+			animatorThread = new Thread(){
+				public void run(){
+					while(Math.abs(startDelta) <  animStep || Math.abs(endDelta) < animStep){
+						TimeBarView.this.span.getStart().add(Calendar.MILLISECOND, (int)Math.signum(startDelta) * animStep);
+						TimeBarView.this.span.getEnd().add(Calendar.MILLISECOND, (int)Math.signum(endDelta) * animStep);
+						startDelta -= Math.signum(startDelta) * animStep;
+						endDelta -= Math.signum(endDelta) * animStep;
+						postInvalidate();
+						try {
+							Thread.sleep(10);
+						} catch (InterruptedException e) {
+							e.printStackTrace();
+						}
+					}
+					TimeBarView.this.span = targetTimeSpan;
+					postInvalidate();
+					animatorThread = null;
+				}
+			};
+			animatorThread.start();
+		}
 		invalidate();
 	}
+	
 	public void addReservation(TimeSpan span){
 		reservations.add(span);
 		invalidate();
 	}
 	@Override
 	public void dispatchDraw(Canvas c){
+		
+		
+		
 		super.dispatchDraw(c);
 		Paint p = new Paint();
 		p.setColor(Color.argb(255, 0, 128, 0));
