@@ -29,7 +29,9 @@ public class TimeSpan {
 		this.end = end;
 	}
 	public long getLength(){
-		return end.getTimeInMillis() - start.getTimeInMillis();
+		long startMillis = start.getTimeInMillis();
+		long endMillis = end.getTimeInMillis();
+		return endMillis - startMillis;
 	}
 	@Override
 	public TimeSpan clone(){

@@ -61,33 +61,32 @@ public class TimeBarView extends FrameLayout{
 		int endCenterX = getWidth() / 4 * 3;
 		int w = 10;
 		int left = 0;
+		int bottom = durationLabel.getTop();
 		int right = getWidth();
 		int y = 0;
-		
 		 
 		final int padding = durationLabel.getTop() / 5;;
 
-		//The static lines
+		//The horizontal lines
 		c.drawLine(startCenterX - w, y, startCenterX + w, y, p);
 		c.drawLine(endCenterX - w, y, endCenterX + w, y, p);
-		c.drawLine(startCenterX , y, startCenterX, y + padding, p);
-		c.drawLine(endCenterX, y, endCenterX, y + padding, p);
+		//Static vertical lines
+		c.drawLine(startCenterX , y, startCenterX, y + padding + 1, p);
+		c.drawLine(endCenterX, y, endCenterX, y + padding * 3 / 2 + 1, p); //3 / 2 to shift the other line to bit lower
 		y += padding;
-		
 		
 		int width = getWidth(); 
 		int startX = (int)(width * getProportional(span.getStart()));
 		int endX = (int)(width * getProportional(span.getEnd()));
 		//dynamic horizontal lines
 		c.drawLine(startCenterX, y, startX, y, p);
-		c.drawLine(endCenterX, y, endX, y, p);
+		c.drawLine(endCenterX, y + padding / 2, endX, y + padding / 2 , p);
 		//and the vertical ones
-		c.drawLine(startX, y, startX, y + padding, p);
-		c.drawLine(endX, y, endX, y + padding, p);
+		c.drawLine(startX, y, startX, bottom, p);
+		c.drawLine(endX, y + padding / 2, endX, bottom, p);
 		
 		y += padding;
 		
-		int bottom = y + 2 * padding;
 		int radius = padding;
 		p.setStyle(Style.FILL);
 		p.setColor(Color.LTGRAY);

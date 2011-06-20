@@ -112,12 +112,7 @@ public class CustomTimeSpanPicker2 extends FrameLayout implements OnClickListene
 		startLabel.setText(String.format("%02d:%02d", currentTimeStart / 60, currentTimeStart % 60));
 		endLabel.setText(String.format("%02d:%02d", currentTimeEnd / 60, currentTimeEnd % 60));
 
-		Calendar start = (Calendar)currentDay.clone();
-		start.add(Calendar.MINUTE, minimumTime);
-
-		Calendar end = (Calendar)currentDay.clone();
-		end.add(Calendar.MINUTE, maximumTime);
-		timeBar.setTimeLimits(new TimeSpan(start, end));
+		timeBar.setTimeLimits(new TimeSpan(getMinimumTime(), getMaximumTime()));
 		timeBar.setSpan(new TimeSpan(getStartTime(), getEndTime()));
 	}
 
@@ -131,10 +126,10 @@ public class CustomTimeSpanPicker2 extends FrameLayout implements OnClickListene
 
 
 	public void setMinimumTime(Calendar cal) {
+		
 		int min = cal.get(Calendar.HOUR_OF_DAY)*60+cal.get(Calendar.MINUTE);
 		if (min > maximumTime)
 			throw new IllegalArgumentException("setting minimumTime to be after the maximum");
-
 		minimumTime = min;
 		if (currentTimeStart < minimumTime) {
 			currentTimeStart = minimumTime;
@@ -174,7 +169,7 @@ public class CustomTimeSpanPicker2 extends FrameLayout implements OnClickListene
 		if (tomorrow) {
 			currentDay.add(Calendar.DAY_OF_YEAR, -1);
 		}
-
+		
 		refreshLabels();
 	}
 
@@ -248,6 +243,28 @@ public class CustomTimeSpanPicker2 extends FrameLayout implements OnClickListene
 		ret.set(Calendar.MILLISECOND, 0);
 
 		return ret;
+	}
+	private Calendar getMaximumTime(){
+		Calendar ret = (Calendar) currentDay.clone();
+
+		ret.set(Calendar.HOUR_OF_DAY, maximumTime / 60);
+		ret.set(Calendar.MINUTE, maximumTime % 60);
+		ret.set(Calendar.SECOND, 0);
+		ret.set(Calendar.MILLISECOND, 0);
+
+		return ret;
+
+	}
+	private Calendar getMinimumTime(){
+		Calendar ret = (Calendar) currentDay.clone();
+
+		ret.set(Calendar.HOUR_OF_DAY, minimumTime / 60);
+		ret.set(Calendar.MINUTE, minimumTime % 60);
+		ret.set(Calendar.SECOND, 0);
+		ret.set(Calendar.MILLISECOND, 0);
+
+		return ret;
+
 	}
 
 }
