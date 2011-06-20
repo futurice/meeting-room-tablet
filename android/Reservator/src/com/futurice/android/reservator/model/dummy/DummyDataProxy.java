@@ -21,14 +21,14 @@ public class DummyDataProxy implements DataProxy {
 		this.rooms = new ArrayList<Room>();
 		this.reservations = new ArrayList<Reservation>();
 
-		rooms.add(new Room("Project-Kino-406", "406-Kino@futu.com", this));
-		rooms.add(new Room("Project-Metkula-408", "406-Metkula@futu.com", this));
-		rooms.add(new Room("Project-Regatta-405", "406-Regatta@futu.com", this));
-		rooms.add(new Room("Project-Vekkula-407", "406-Vekkula@futu.com", this));
-		rooms.add(new Room("Room-Panorama-401", "406-Panorama@futu.com", this));
+		rooms.add(new Room("Room-Panorama-401", "401-Panorama@futu.com", this));
 		rooms.add(new Room("Room-Pilotti-402", "402-Pilotti@futu.com", this));
-		rooms.add(new Room("Room-Space Shot-404", "404-Spaceshot@futu.com", this));
 		rooms.add(new Room("Room-Vauhtimato-403", "403-vauhtimato@futu.com", this));
+		rooms.add(new Room("Room-Space Shot-404", "404-Spaceshot@futu.com", this));
+		rooms.add(new Room("Project-Regatta-405", "405-Regatta@futu.com", this));
+		rooms.add(new Room("Project-Kino-406", "406-Kino@futu.com", this));
+		rooms.add(new Room("Project-Vekkula-407", "407-Vekkula@futu.com", this));
+		rooms.add(new Room("Project-Metkula-408", "408-Metkula@futu.com", this));
 
 		rooms.add(new Room("Project-Verstas-506", "506-Verstas@futu.com", this));
 		rooms.add(new Room("Room-Kenkäkauppa-503", "503-Kenkakauppa@futu.com", this));
