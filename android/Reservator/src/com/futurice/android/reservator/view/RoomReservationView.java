@@ -28,7 +28,7 @@ public class RoomReservationView extends FrameLayout implements
 		OnClickListener, OnItemClickListener {
 
 	View cancelButton, bookNowButton, reserveButton, calendarButton,
-			bookingMode, normalMode;
+			bookingMode, normalMode, titleView;
 	AutoCompleteTextView nameField;
 	CustomTimeSpanPicker timePicker;
 	private Calendar maxTime, minTime;
@@ -58,6 +58,8 @@ public class RoomReservationView extends FrameLayout implements
 		cancelButton.setOnClickListener(this);
 		bookNowButton = findViewById(R.id.bookNowButton);
 		bookNowButton.setOnClickListener(this);
+		titleView = findViewById(R.id.titleLayout);
+		titleView.setOnClickListener(this);
 		reserveButton = findViewById(R.id.reserveButton);
 		reserveButton.setOnClickListener(this);
 		calendarButton = findViewById(R.id.calendarButton);
@@ -96,7 +98,7 @@ public class RoomReservationView extends FrameLayout implements
 			makeReservation();
 
 		}
-		if (v == calendarButton) {
+		if (v == calendarButton || v == titleView) {
 			showRoomInCalendar();
 		}
 	}
@@ -119,12 +121,14 @@ public class RoomReservationView extends FrameLayout implements
 	}
 
 	protected void setNormalMode() {
+		this.setBackgroundColor(getResources().getColor(R.color.Transparent));
 		bookingMode.setVisibility(View.GONE);
 		normalMode.setVisibility(View.VISIBLE);
 	}
 
 	protected void setReserveMode() {
 		refreshData();
+		this.setBackgroundColor(getResources().getColor(R.color.FutuLightGreen));
 		reserveButton.setEnabled(false);
 		bookingMode.setVisibility(View.VISIBLE);
 		normalMode.setVisibility(View.GONE);

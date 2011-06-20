@@ -17,4 +17,12 @@
     	<!-- <item name="android:windowIsFloating">true</item> -->
     	<item name="android:backgroundDimEnabled">true</item>
   </style>
+    <color name="TextColor">#333</color>
+    <color name="TimeSpanTextColor">#529200</color>
+    <style name="TimeSpanTimeStyle">
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/TimeSpanTextColor</item>
+        <item name="android:textSize">22sp</item>
+    </style>
+    <color name="FutuLightGreen">#cbdeb2</color>
 </resources>

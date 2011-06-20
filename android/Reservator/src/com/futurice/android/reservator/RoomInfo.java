@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.futurice.android.reservator.model.ReservatorException;
 import com.futurice.android.reservator.model.Room;
+import com.futurice.android.reservator.model.rooms.RoomsInfo;
 import com.futurice.android.reservator.view.WeekView;
 
 import android.app.Activity;
@@ -25,12 +26,12 @@ import android.widget.TextView;
 public class RoomInfo extends Activity implements OnItemSelectedListener, OnMenuItemClickListener{
 	/** Called when the activity is first created. */
 	public static final String ROOM_EMAIL_EXTRA = "roomEmail";
-	
+
 	WeekView weekView;
 	List<Room> rooms;
 	ArrayAdapter<Room> roomAdapter;
 	TextView roomNameLabel;
-	
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -44,7 +45,7 @@ public class RoomInfo extends Activity implements OnItemSelectedListener, OnMenu
 		super.onResume();
 		try {
 			rooms = ((ReservatorApplication)getApplication()).getDataProxy().getRooms();
-			
+
 			SharedPreferences settings = getSharedPreferences(getString(R.string.PREFERENCES_NAME), 0);
 			String roomEmail = getIntent().getStringExtra(ROOM_EMAIL_EXTRA);
 			if(roomEmail == null){
@@ -67,7 +68,7 @@ public class RoomInfo extends Activity implements OnItemSelectedListener, OnMenu
 		}
 	}
 	private void setRoom(Room r){
-		roomNameLabel.setText(r.getName());
+		roomNameLabel.setText(RoomsInfo.getRoomsInfo(r).getRoomName());
 		weekView.setRoom(r);
 	}
 	@Override
@@ -78,7 +79,7 @@ public class RoomInfo extends Activity implements OnItemSelectedListener, OnMenu
 	}
 	@Override
 	public void onNothingSelected(AdapterView<?> arg0) {
-		
+
 	}
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
