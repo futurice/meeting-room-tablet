@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
  <RelativeLayout android:id="@+id/relativeLayout1" android:layout_height="fill_parent" xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="wrap_content" android:paddingBottom="40dp">
      <Button android:layout_alignParentLeft="true" android:id="@+id/startMinus" android:text="-" android:layout_height="40sp" android:layout_width="40sp" android:layout_below="@+id/startInfoLabel"></Button>
-     <FrameLayout android:id="@+id/frameLayout1" android:layout_below="@+id/startMinus" android:layout_alignLeft="@+id/startMinus" android:layout_height="50dp" android:layout_marginTop="5dp" android:layout_marginBottom="5dp" android:layout_alignRight="@+id/stopPlus" android:layout_width="fill_parent">
-     </FrameLayout>
+     <com.futurice.android.reservator.view.TimeBarView android:id="@+id/timeBarView" android:layout_below="@+id/startMinus" android:layout_alignLeft="@+id/startMinus" android:layout_height="50dp" android:layout_marginTop="5dp" android:layout_marginBottom="5dp" android:layout_width="10dp" android:layout_alignRight="@+id/endPlus">
+     </com.futurice.android.reservator.view.TimeBarView>
      <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_alignRight="@+id/startTimeLabel" android:text="@string/start" android:layout_centerVertical="false" android:gravity="center" android:id="@+id/startInfoLabel" android:layout_alignLeft="@+id/startTimeLabel"></TextView> -->
      <TextView android:id="@+id/startTimeLabel" android:layout_height="wrap_content" android:gravity="center" android:layout_toRightOf="@+id/startMinus" android:layout_alignTop="@+id/startMinus" android:layout_alignBottom="@+id/startMinus" android:text="12:00" android:textAppearance="@style/TimeSpanTimeStyle" android:layout_width="70sp"></TextView>
      

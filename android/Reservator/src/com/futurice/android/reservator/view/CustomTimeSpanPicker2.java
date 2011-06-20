@@ -3,17 +3,11 @@ package com.futurice.android.reservator.view;
 import java.util.Calendar;
 
 import com.futurice.android.reservator.R;
+import com.futurice.android.reservator.model.TimeSpan;
 
 import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.content.Context;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.Paint.Align;
-import android.graphics.Rect;
-import android.graphics.Paint.Style;
-import android.graphics.RectF;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -21,7 +15,7 @@ import android.view.View.OnClickListener;
 public class CustomTimeSpanPicker2 extends FrameLayout implements OnClickListener {
 	View startMinus, startPlus, endMinus, endPlus;
 	TextView startLabel, endLabel;
-
+	TimeBarView timeBar;
 	Calendar currentDay;
 
 	int currentTimeStart;
@@ -62,12 +56,14 @@ public class CustomTimeSpanPicker2 extends FrameLayout implements OnClickListene
 
 		startLabel = (TextView) findViewById(R.id.startTimeLabel);
 		endLabel = (TextView) findViewById(R.id.endTimeLabel);
-
+		timeBar = (TimeBarView)findViewById(R.id.timeBarView);
+		
 		minimumDuration = 15;
 		timeStep = 15;
-
+		
+		
+		
 		reset();
-		refreshLabels();
 	}
 
 	public void reset() {
@@ -77,6 +73,7 @@ public class CustomTimeSpanPicker2 extends FrameLayout implements OnClickListene
 		currentDay = Calendar.getInstance();
 		currentTimeStart = minimumTime;
 		currentTimeEnd = maximumTime;
+		refreshLabels();
 	}
 
 	protected int quantize(int m) {
@@ -111,65 +108,17 @@ public class CustomTimeSpanPicker2 extends FrameLayout implements OnClickListene
 		}
 	}
 
-	@Override
-	public void dispatchDraw(Canvas c){
-		super.dispatchDraw(c);
-		View frameLayout = findViewById(R.id.frameLayout1);
-		Paint p = new Paint();
-		p.setColor(Color.argb(255, 0, 128, 0)); 
-		final int padding = 5;
-		int y = frameLayout.getTop();
-		c.drawLine(startMinus.getLeft(), y, startPlus.getRight(), y, p);
-		c.drawLine(endMinus.getLeft(), y, endPlus.getRight(), y, p);
-		int startCenter = startMinus.getLeft() + (startPlus.getRight() - startMinus.getLeft()) / 2;
-		c.drawLine(startCenter , y, startCenter, y + padding, p);
-		int stopCenter = endMinus.getLeft() + (endPlus.getRight() - endMinus.getLeft()) / 2;
-		c.drawLine(stopCenter, y, stopCenter, y + padding, p);
-		y += padding;
-		
-		double fullTime = Math.max(maximumTime - minimumTime, 120);
-		int width = endPlus.getRight() - startMinus.getLeft(); 
-		int startX = (int)(startMinus.getLeft() + width * (currentTimeStart - minimumTime) / fullTime);
-		int endX = (int)(startMinus.getLeft() + width * (currentTimeEnd - minimumTime) / fullTime);
-		c.drawLine(startCenter, y, startX, y, p);
-		c.drawLine(stopCenter, y, endX, y, p);
-		c.drawLine(startX, y, startX, y + padding, p);
-		c.drawLine(endX, y, endX, y + padding, p);
-		
-		y += padding;
-		
-		int bottom = frameLayout.getBottom();
-		int radius = 2 * padding;
-		p.setStyle(Style.FILL);
-		p.setColor(Color.LTGRAY);
-		c.drawRoundRect(new RectF(startMinus.getLeft(), y, endPlus.getRight(), bottom), radius, radius, p);
-		p.setColor(getResources().getColor(R.color.TimeSpanTextColor));
-		c.drawRoundRect(new RectF(startX, y, endX, bottom), radius, radius, p);
-		p.setColor(Color.GRAY);
-		c.drawRoundRect(new RectF(startMinus.getLeft(), y, startX, bottom), radius, radius, p);
-		c.drawRoundRect(new RectF(endX, y, endPlus.getRight(), bottom), radius, radius, p);
-		p.setStyle(Style.STROKE);
-		p.setColor(Color.argb(255, 40, 40, 40));
-		int time = minimumTime;
-		while(time < minimumTime + fullTime){
-			if(time % 30 != 0){
-				time += 30 - time % 30;
-			}
-			int x = (int)(width * (time - minimumTime) / fullTime);
-			c.drawLine(x, y, x, bottom, p);
-			time += 30;
-		}
-		p.setColor(getResources().getColor(R.color.TimeSpanTextColor));
-		String durationText = currentTimeEnd - currentTimeStart + " minutes"; 
-		int textWidth = (int) p.measureText(durationText);
-		int textX = startX + (endX - startX - textWidth ) / 2;
-		
-		c.drawText( durationText, textX > startX ? textX : startX, bottom + padding + p.getTextSize(), p);
-	}
 	protected void refreshLabels() {
 		startLabel.setText(String.format("%02d:%02d", currentTimeStart / 60, currentTimeStart % 60));
 		endLabel.setText(String.format("%02d:%02d", currentTimeEnd / 60, currentTimeEnd % 60));
-		invalidate();
+		
+		Calendar start = (Calendar)currentDay.clone();
+		start.add(Calendar.MINUTE, minimumTime);
+		
+		Calendar end = (Calendar)currentDay.clone();
+		end.add(Calendar.MINUTE, maximumTime);
+		timeBar.setTimeLimits(new TimeSpan(start, end));
+		timeBar.setSpan(new TimeSpan(getStartTime(), getEndTime()));
 	}
 
 	public void setMinimumDuration(int minimumDuration) {
