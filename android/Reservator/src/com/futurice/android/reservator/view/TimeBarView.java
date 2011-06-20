@@ -15,9 +15,10 @@ import android.graphics.RectF;
 import android.graphics.Paint.Style;
 import android.util.AttributeSet;
 import android.widget.FrameLayout;
+import android.widget.TextView;
 
 public class TimeBarView extends FrameLayout{
-	
+	TextView durationLabel;
 	TimeSpan limits, span;
 	List<TimeSpan> reservations = new ArrayList<TimeSpan>();
 	public TimeBarView(Context context) {
@@ -25,8 +26,9 @@ public class TimeBarView extends FrameLayout{
 	}
 	public TimeBarView(Context context, AttributeSet attrs){
 		super(context, attrs);
+		inflate(context, R.layout.time_bar, this);
+		durationLabel = (TextView)findViewById(R.id.textView1);
 		this.setTimeLimits(new TimeSpan(null,Calendar.HOUR, 2));
-		
 		this.setSpan(new TimeSpan(null,Calendar.MINUTE, 90));
 		span.getStart().add(Calendar.MINUTE, 30);
 	}
@@ -63,7 +65,7 @@ public class TimeBarView extends FrameLayout{
 		int y = 0;
 		
 		 
-		final int padding = getHeight() / 5;;
+		final int padding = durationLabel.getTop() / 5;;
 
 		//The static lines
 		c.drawLine(startCenterX - w, y, startCenterX + w, y, p);
@@ -86,15 +88,18 @@ public class TimeBarView extends FrameLayout{
 		y += padding;
 		
 		int bottom = y + 2 * padding;
-		int radius = 2 * padding;
+		int radius = padding;
 		p.setStyle(Style.FILL);
 		p.setColor(Color.LTGRAY);
 		c.drawRoundRect(new RectF(left, y, right, bottom), radius, radius, p);
 		p.setColor(getResources().getColor(R.color.TimeSpanTextColor));
 		c.drawRoundRect(new RectF(startX, y, endX, bottom), radius, radius, p);
 		p.setColor(Color.GRAY);
-		c.drawRoundRect(new RectF(left, y, startX, bottom), radius, radius, p);
-		c.drawRoundRect(new RectF(endX, y, right, bottom), radius, radius, p);
+		for(TimeSpan s : reservations){
+			c.drawRoundRect(new RectF(width * getProportional(s.getStart()), y, width * getProportional(s.getEnd()), bottom), radius, radius, p);
+		}
+		
+		
 		p.setStyle(Style.STROKE);
 		p.setColor(Color.argb(255, 40, 40, 40));
 		Calendar time = (Calendar)limits.getStart().clone();
@@ -107,14 +112,15 @@ public class TimeBarView extends FrameLayout{
 			c.drawLine(x, y, x, bottom, p);
 			time.add(Calendar.MINUTE, 30);
 		}
-		p.setColor(getResources().getColor(R.color.TimeSpanTextColor));
+		durationLabel.setText(span.getLength() / 60000 + " minutes");
+		/*p.setColor(getResources().getColor(R.color.TimeSpanTextColor));
 		String durationText = span.getLength() / 60000 + " minutes"; 
 		int textWidth = (int) p.measureText(durationText);
 		int textX = startX + (endX - startX - textWidth ) / 2;
 		
-		c.drawText( durationText, textX > startX ? textX : startX, bottom + padding + p.getTextSize(), p);
+		c.drawText( durationText, textX > startX ? textX : startX, bottom + padding + p.getTextSize(), p);*/
 	}
-	private double getProportional(Calendar time){
-		return (time.getTimeInMillis() - limits.getStart().getTimeInMillis()) / (double)limits.getLength();
+	private float getProportional(Calendar time){
+		return (time.getTimeInMillis() - limits.getStart().getTimeInMillis()) / (float)limits.getLength();
 	}
 }
