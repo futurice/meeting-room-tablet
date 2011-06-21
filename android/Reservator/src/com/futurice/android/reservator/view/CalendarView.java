@@ -136,7 +136,7 @@ public class CalendarView extends LinearLayout implements OnClickListener {
 		CalendarMarker v = new CalendarMarker(this.getContext());
 		LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
 				LayoutParams.MATCH_PARENT, 1,
-				(float) (endTime.getTimeInMillis() - begin.getTimeInMillis()));
+				(endTime.getTimeInMillis() - begin.getTimeInMillis()));
 		v.setLayoutParams(lp);
 		return v;
 	}

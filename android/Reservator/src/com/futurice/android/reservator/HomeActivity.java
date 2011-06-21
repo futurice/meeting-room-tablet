@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.futurice.android.reservator.model.ReservatorException;
 import com.futurice.android.reservator.model.Room;
+import com.futurice.android.reservator.view.Callback;
 import com.futurice.android.reservator.view.RoomReservationView;
 
 import android.app.Activity;
@@ -60,6 +61,12 @@ public class HomeActivity extends Activity implements OnMenuItemClickListener {
 							public void run() {
 								RoomReservationView v = new RoomReservationView(HomeActivity.this);
 								v.setRoom(r);
+								v.setOnReserveCallback(new Callback() {
+									@Override
+									public void call(RoomReservationView v) {
+										refreshRoomInfo();
+									}
+								});
 
 								// This is ugly, adding views in order.
 

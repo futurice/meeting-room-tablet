@@ -36,6 +36,8 @@ public class RoomReservationView extends FrameLayout implements
 	TextView roomNameView, roomInfoView, roomStatusView;
 	ReservatorApplication application;
 
+	Callback onReserveCallback = null;
+
 	private Room room;
 
 	public RoomReservationView(Context context) {
@@ -99,6 +101,9 @@ public class RoomReservationView extends FrameLayout implements
 		}
 		if (v == reserveButton) {
 			makeReservation();
+			if (onReserveCallback != null) {
+				onReserveCallback.call(this);
+			}
 			setNormalMode();
 		}
 		if (v == calendarButton || v == titleView) {
@@ -146,7 +151,6 @@ public class RoomReservationView extends FrameLayout implements
 	}
 
 	protected void setReserveMode() {
-		// refreshData(); // no need?
 		this.setBackgroundColor(getResources().getColor(R.color.FutuLightGreen));
 		reserveButton.setEnabled(false);
 		bookingMode.setVisibility(View.VISIBLE);
@@ -210,6 +214,10 @@ public class RoomReservationView extends FrameLayout implements
 
 	public void setEndTimeRelatively(int minutes) {
 		timePicker2.setEndTimeRelatively(minutes);
+	}
+
+	public void setOnReserveCallback(Callback onReserveCallback) {
+		this.onReserveCallback = onReserveCallback;
 	}
 
 	private void showRoomInCalendar() {

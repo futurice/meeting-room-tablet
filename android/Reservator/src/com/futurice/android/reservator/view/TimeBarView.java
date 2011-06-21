@@ -64,9 +64,9 @@ public class TimeBarView extends FrameLayout{
 		startDelta = span.getStart().getTimeInMillis() - this.span.getStart().getTimeInMillis();
 		endDelta = span.getEnd().getTimeInMillis() - this.span.getEnd().getTimeInMillis() ;
 		animStep = (int)Math.max(Math.max(Math.abs(endDelta), Math.abs(startDelta)) / 10, 60000);
-		
-		
-		if(animatorThread == null){
+
+
+		if (animatorThread == null){
 			animatorThread = new Thread(){
 				public void run(){
 					while(Math.abs(startDelta) <  animStep || Math.abs(endDelta) < animStep){
@@ -90,20 +90,20 @@ public class TimeBarView extends FrameLayout{
 		}
 		invalidate();
 	}
-	
+
 	public void addReservation(TimeSpan span){
 		reservations.add(span);
 		invalidate();
 	}
 	@Override
 	public void dispatchDraw(Canvas c){
-		
-		
-		
+
+
+
 		super.dispatchDraw(c);
 		Paint p = new Paint();
 		p.setColor(Color.argb(255, 0, 128, 0));
-		
+
 		int startCenterX = getWidth() / 4;
 		int endCenterX = getWidth() / 4 * 3;
 		int w = 10;
@@ -111,7 +111,7 @@ public class TimeBarView extends FrameLayout{
 		int bottom = durationLabel.getTop();
 		int right = getWidth();
 		int y = 0;
-		 
+
 		final int padding = durationLabel.getTop() / 5;;
 
 		//The horizontal lines
@@ -121,8 +121,8 @@ public class TimeBarView extends FrameLayout{
 		c.drawLine(startCenterX , y, startCenterX, y + padding + 1, p);
 		c.drawLine(endCenterX, y, endCenterX, y + padding * 3 / 2 + 1, p); //3 / 2 to shift the other line to bit lower
 		y += padding;
-		
-		int width = getWidth(); 
+
+		int width = getWidth();
 		int startX = (int)(width * getProportional(span.getStart()));
 		int endX = (int)(width * getProportional(span.getEnd()));
 		//dynamic horizontal lines
@@ -131,9 +131,9 @@ public class TimeBarView extends FrameLayout{
 		//and the vertical ones
 		c.drawLine(startX, y, startX, bottom, p);
 		c.drawLine(endX, y + padding / 2, endX, bottom, p);
-		
+
 		y += padding;
-		
+
 		int radius = padding;
 		p.setStyle(Style.FILL);
 		p.setColor(Color.LTGRAY);
@@ -144,12 +144,12 @@ public class TimeBarView extends FrameLayout{
 		for(TimeSpan s : reservations){
 			c.drawRoundRect(new RectF(width * getProportional(s.getStart()), y, width * getProportional(s.getEnd()), bottom), radius, radius, p);
 		}
-		
-		
+
+
 		p.setStyle(Style.STROKE);
 		p.setColor(Color.argb(255, 40, 40, 40));
 		Calendar time = (Calendar)limits.getStart().clone();
-		
+
 		while(time.before(limits.getEnd())){
 			if(time.get(Calendar.MINUTE) % 30 != 0){
 				time.add(Calendar.MINUTE, 30 - time.get(Calendar.MINUTE) % 30);
@@ -160,10 +160,10 @@ public class TimeBarView extends FrameLayout{
 		}
 		durationLabel.setText(span.getLength() / 60000 + " minutes");
 		/*p.setColor(getResources().getColor(R.color.TimeSpanTextColor));
-		String durationText = span.getLength() / 60000 + " minutes"; 
+		String durationText = span.getLength() / 60000 + " minutes";
 		int textWidth = (int) p.measureText(durationText);
 		int textX = startX + (endX - startX - textWidth ) / 2;
-		
+
 		c.drawText( durationText, textX > startX ? textX : startX, bottom + padding + p.getTextSize(), p);*/
 	}
 	private float getProportional(Calendar time){

@@ -88,9 +88,9 @@ public class DummyDataProxy implements DataProxy {
 		Random rand = new Random();
 		Calendar cal = Calendar.getInstance();
 		cal.set(Calendar.HOUR_OF_DAY, 8);
-		cal.set(Calendar.MILLISECOND, 0);
 		cal.set(Calendar.MINUTE, 0);
 		cal.set(Calendar.SECOND, 0);
+		cal.set(Calendar.MILLISECOND, 0);
 
 		int reservationCount = rand.nextInt(5) + 5;
 		for (int i = 0; i < reservationCount; i++) {

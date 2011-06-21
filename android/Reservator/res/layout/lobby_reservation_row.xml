@@ -3,8 +3,8 @@
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	android:gravity="center_vertical" android:layout_height="wrap_content"
 	android:layout_gravity="center" android:paddingLeft="80dp" android:paddingRight="80dp">
-	<LinearLayout android:layout_width="200px" android:layout_height="wrap_content" android:orientation="vertical" android:layout_marginRight="20dp"
-		android:layout_centerVertical="true" android:id="@+id/titleLayout">
+	<LinearLayout android:layout_height="wrap_content" android:orientation="vertical" android:layout_marginRight="20dp"
+		android:layout_centerVertical="true" android:id="@+id/titleLayout" android:layout_width="150dp">
 		<TextView android:id="@+id/roomNameLabel"
 			android:layout_width="wrap_content" android:layout_height="wrap_content"
 			android:text="Room name XXX" android:textStyle="bold" android:textColor="@color/TextColor"></TextView>
@@ -18,16 +18,12 @@
 		<com.futurice.android.reservator.view.CustomTimeSpanPicker2
 			android:id="@+id/timeSpanPicker2" android:layout_height="wrap_content" android:layout_gravity="center" android:layout_width="wrap_content"/>
 		<AutoCompleteTextView android:id="@+id/autoCompleteTextView1" android:layout_height="wrap_content"
-			android:layout_toRightOf="@+id/timeSpanPicker1" android:lines="1"
-			android:layout_centerVertical="true"
-			android:hint="Your name" android:completionHint="Your name" android:inputType="textFilter" android:maxLines="1" android:imeOptions="actionDone" android:completionThreshold="1" android:layout_width="230dp"></AutoCompleteTextView>
+			android:lines="1"
+			android:hint="Your name" android:completionHint="Your name" android:inputType="textFilter" android:maxLines="1" android:imeOptions="actionDone" android:layout_width="230dp" android:layout_gravity="center" android:completionThreshold="2"></AutoCompleteTextView>
 		<Button android:layout_height="wrap_content"
-			android:layout_width="wrap_content" android:text="OK"
-			android:minWidth="40sp" android:id="@+id/reserveButton" android:focusable="true"></Button>
+			android:layout_width="wrap_content" android:minWidth="40sp" android:id="@+id/reserveButton" android:focusable="true" android:text="Reserve"></Button>
 		<FrameLayout android:layout_width="1dp" android:layout_weight="1" android:layout_height="match_parent" />
-		<Button android:layout_width="wrap_content"
-			android:layout_height="wrap_content" android:text="X"
-			android:minWidth="40sp" android:id="@+id/cancelButton" android:focusable="true" android:layout_gravity="top|right"></Button>
+		<ImageButton android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/cancelButton" android:layout_gravity="top" android:background="@drawable/icon"></ImageButton>
 	</LinearLayout>
 	<LinearLayout android:id="@+id/normalMode"
 		android:layout_height="wrap_content" android:layout_marginTop="10dp" android:layout_marginBottom="10dp" android:layout_width="fill_parent" android:layout_marginRight="0dp" android:visibility="visible">
