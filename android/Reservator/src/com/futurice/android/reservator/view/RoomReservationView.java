@@ -161,8 +161,10 @@ public class RoomReservationView extends FrameLayout implements
 		TimeSpan nextFreeTime = room.getNextFreeTime();
 
 		timePicker2.reset();
-		timePicker2.setMinimumTime(nextFreeTime.getStart());
-		timePicker2.setMaximumTime(nextFreeTime.getEnd());
+		if (nextFreeTime != null) {
+			timePicker2.setMinimumTime(nextFreeTime.getStart());
+			timePicker2.setMaximumTime(nextFreeTime.getEnd());
+		}
 		timePicker2.setEndTimeRelatively(60); // let book the room for an hour
 
 		RoomsInfo info = RoomsInfo.getRoomsInfo(room);
