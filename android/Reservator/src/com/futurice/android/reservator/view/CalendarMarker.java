@@ -13,6 +13,7 @@ import android.view.View;
 
 public class CalendarMarker extends LinearLayout {
 	private Reservation reservation = null;
+	private boolean reserved = false;
 	View reserveView = null;
 	static String infoTextTemplate = null;
 	TextView label = null;
@@ -24,7 +25,11 @@ public class CalendarMarker extends LinearLayout {
 		}
 	}
 
+	public boolean isReserved(){
+		return this.reserved;
+	}
 	public void setReservation(Reservation reservation, boolean isReserved) {
+		this.reserved = isReserved;
 		if (isReserved) {
 			this.setText(TextUtils.expandTemplate(infoTextTemplate, reservation.getSubject()).toString());
 			this.setBackgroundResource(R.color.CalendarMarkerColor);

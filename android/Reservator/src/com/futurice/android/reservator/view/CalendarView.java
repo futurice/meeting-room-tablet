@@ -8,7 +8,6 @@ import java.util.Map;
 
 import com.futurice.android.reservator.R;
 
-
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -29,9 +28,8 @@ import android.view.View.OnClickListener;
 public class CalendarView extends LinearLayout implements OnClickListener {
 	private static final int THICK_DELIM = 3, THIN_DELIM = 1,
 			BOTTOM_PADDING = 65;
-	private SimpleDateFormat dayLabelFormatter = new SimpleDateFormat("E M.d.");
+	private SimpleDateFormat dayLabelFormatter = new SimpleDateFormat("E d.M.");
 	private LinearLayout scrollView;
-	private boolean skipWeekend = true;
 	Map<Integer, ViewGroup> columns = new HashMap<Integer, ViewGroup>();
 	Paint gridPaint;
 
@@ -49,7 +47,6 @@ public class CalendarView extends LinearLayout implements OnClickListener {
 		gridPaint = new Paint();
 		gridPaint.setColor(Color.argb(255, 209, 211, 212));
 
-		
 		hourColumn = new LinearLayout(getContext());
 		hourColumn.setPadding(0, 0, 0, BOTTOM_PADDING);
 		hourColumn.setOrientation(LinearLayout.VERTICAL);
@@ -62,7 +59,8 @@ public class CalendarView extends LinearLayout implements OnClickListener {
 			tv.setText(Html.fromHtml(i + "<small>00</small>"));
 			tv.setGravity(Gravity.TOP | Gravity.RIGHT);
 
-			LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LayoutParams.FILL_PARENT, 1, 1);
+			LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+					LayoutParams.FILL_PARENT, 1, 1);
 			lp.weight = 1;
 			hourColumn.addView(tv, lp);
 		}
@@ -83,8 +81,7 @@ public class CalendarView extends LinearLayout implements OnClickListener {
 
 	private void addVerticalDelimeter(int width, LinearLayout parent) {
 		View v = new View(getContext());
-		LayoutParams lp = new LayoutParams(width,
-				LayoutParams.FILL_PARENT);
+		LayoutParams lp = new LayoutParams(width, LayoutParams.FILL_PARENT);
 		lp.bottomMargin = BOTTOM_PADDING;
 		v.setLayoutParams(lp);
 		v.setBackgroundColor(gridPaint.getColor());
@@ -100,17 +97,12 @@ public class CalendarView extends LinearLayout implements OnClickListener {
 		column.setWeightSum(endHour.getTimeInMillis()
 				- startHour.getTimeInMillis());
 		column.setOrientation(LinearLayout.VERTICAL);
-		
-		
+
 		final int dayOfWeek = day.get(Calendar.DAY_OF_WEEK);
-		//Hide weekend days..
-		if(skipWeekend && dayOfWeek == Calendar.SATURDAY || dayOfWeek == Calendar.SUNDAY){
-			container.setVisibility(View.GONE);
-		}
-		
 		if (dayOfWeek == Calendar.MONDAY) {
 			((TextView) column.findViewById(R.id.weekLabel)).setText("Week "
 					+ day.get(Calendar.WEEK_OF_YEAR));
+			addVerticalDelimeter(THICK_DELIM, scrollView);
 		}
 		((TextView) column.findViewById(R.id.dayLabel))
 				.setText(dayLabelFormatter.format(day.getTime()));
@@ -120,22 +112,7 @@ public class CalendarView extends LinearLayout implements OnClickListener {
 
 		columns.put(getDayIdentifier(day), column);
 
-		addVerticalDelimeter(isLastDayOfWeek(day) ? THICK_DELIM : THIN_DELIM,
-				scrollView);
-	}
-
-	public void setSkipWeekend(boolean skip) {
-		this.skipWeekend = skip;
-	}
-
-	private boolean isLastDayOfWeek(Calendar day) {
-		int dayOfWeek = day.get(Calendar.DAY_OF_WEEK);
-
-		if (skipWeekend) {
-			return dayOfWeek == Calendar.FRIDAY;
-		} else {
-			return dayOfWeek == Calendar.SUNDAY;
-		}
+		addVerticalDelimeter(THIN_DELIM, scrollView);
 	}
 
 	public CalendarMarker addMarker(Calendar begin, Calendar end) {
@@ -170,19 +147,27 @@ public class CalendarView extends LinearLayout implements OnClickListener {
 
 	@Override
 	public void onClick(final View v) {
-		
-		if(v instanceof CalendarMarker){
-			final CalendarMarker marker = (CalendarMarker)v;
-			Dialog d = new RoomReservationPopup(getContext(), marker);
-			d.show();
-			d.setOnCancelListener(new OnCancelListener() {
-				
-				@Override
-				public void onCancel(DialogInterface dialog) {
-					((WeekView)getParent()).setRoom(marker.getReservation().getRoom());
-				}
-			});
-			
+
+		if (v instanceof CalendarMarker) {
+			final CalendarMarker marker = (CalendarMarker) v;
+			if (marker.isReserved()) {
+				return;
+			} else {
+				Dialog d = new RoomReservationPopup(getContext(), marker);
+				d.show();
+				d.setOnCancelListener(new OnCancelListener() {
+
+					@Override
+					public void onCancel(DialogInterface dialog) {
+						((WeekView) getParent()).setRoom(marker
+								.getReservation().getRoom());
+					}
+				});
+			}
+
 		}
+	}
+	public void clear(){
+		scrollView.removeAllViews();
 	}
 }

@@ -82,6 +82,9 @@ public class CustomTimeSpanPicker2 extends FrameLayout implements OnClickListene
 
 	@Override
 	public void onClick(View v) {
+		//start doing the animations 
+		timeBar.enableAnimation();
+		
 		if (v == startMinus) {
 			int start = quantize(currentTimeStart - timeStep);
 

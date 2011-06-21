@@ -22,6 +22,7 @@ public class TimeBarView extends FrameLayout{
 	private long startDelta = 0, endDelta = 0;
 	private TimeSpan targetTimeSpan = null;
 	TextView durationLabel;
+	boolean animationEnabled = false;
 	Thread animatorThread = null;
 	TimeSpan limits, span;
 	List<TimeSpan> reservations = new ArrayList<TimeSpan>();
@@ -47,9 +48,16 @@ public class TimeBarView extends FrameLayout{
 		this.limits = span.clone();
 		invalidate();
 	}
+	public void enableAnimation(){
+		animationEnabled = true;
+	}
+	public void disableAnimation(){
+		animationEnabled = false;
+	}
 	public void setSpan(TimeSpan span){
-		if(this.span == null){
+		if(this.span == null || !animationEnabled){
 			this.span = span;
+			this.targetTimeSpan = span;
 			return;
 		}
 		targetTimeSpan = span;
