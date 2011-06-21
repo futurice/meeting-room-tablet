@@ -36,34 +36,10 @@ import com.futurice.android.reservator.model.soap.UnsafeSSLSocketFactory;
  *
  */
 
-public class FumAddressBook implements AddressBook {
-	List<AddressBookEntry> entries = null;
-
+public class FumAddressBook extends AddressBook {
 	@Override
-	public List<AddressBookEntry> getEntries() throws ReservatorException {
-		if (entries == null) fetchEntries();
-		return entries;
-	}
-
-	/**
-	 *
-	 * @param name
-	 * @return corresponding email or null if not found
-	 */
-	@Override
-	public String getEmailByName(String name) {
-		if (entries == null) return null; // no entries, no win
-
-		for (AddressBookEntry entry : entries) {
-			if (entry.getName().equals(name)) {
-				return entry.getEmail();
-			}
-		}
-		return null;
-	}
-
-	private void fetchEntries() throws ReservatorException {
-		entries = new ArrayList<AddressBookEntry>();
+	protected List<AddressBookEntry> fetchEntries() throws ReservatorException {
+		List<AddressBookEntry> entries = new ArrayList<AddressBookEntry>();
 
 		String result = "";
 
@@ -101,11 +77,11 @@ public class FumAddressBook implements AddressBook {
 
 			result = Helpers.readFromInputStream(response.getEntity().getContent(), (int) response.getEntity().getContentLength());
 		} catch (ClientProtocolException e) {
-			Log.w("SOAP", "Exception", e);
-			throw new ReservatorException("Internal error - " + e.getMessage(), e);
+			Log.w("FUM3", "Exception", e);
+			throw new ReservatorException("Error fetching FUM addressbook -- " + e.getMessage(), e);
 		} catch (IOException e) {
-			Log.w("SOAP", "Exception", e);
-			throw new ReservatorException("Internal error - " + e.getMessage(), e);
+			Log.w("FUM3", "Exception", e);
+			throw new ReservatorException("Error fetching FUM addressbook -- " + e.getMessage(), e);
 		}
 
 		Log.v("FUM3", result);
@@ -119,6 +95,7 @@ public class FumAddressBook implements AddressBook {
 						member.getString("display"),
 						member.getString("rdn_value")+"@futurice.com"));
 			}
+			return entries;
 		} catch (JSONException e) {
 			Log.e("FUM3", "Json error", e);
 			throw new ReservatorException(e);

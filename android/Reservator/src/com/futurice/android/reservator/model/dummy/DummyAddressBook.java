@@ -6,10 +6,9 @@ import java.util.List;
 import com.futurice.android.reservator.model.AddressBookEntry;
 import com.futurice.android.reservator.model.AddressBook;
 
-public class DummyAddressBook implements AddressBook {
-
+public class DummyAddressBook extends AddressBook {
 	@Override
-	public List<AddressBookEntry> getEntries() {
+	protected List<AddressBookEntry> fetchEntries() {
 		List<AddressBookEntry> entries = new ArrayList<AddressBookEntry>();
 
 		entries.add(new AddressBookEntry("Oleg Grenrus", "oleg.grenrus@futurice.com"));
@@ -17,15 +16,4 @@ public class DummyAddressBook implements AddressBook {
 
 		return entries;
 	}
-
-	@Override
-	public String getEmailByName(String name) {
-		for (AddressBookEntry entry : getEntries()) {
-			if (entry.getName().equals(name)) {
-				return entry.getEmail();
-			}
-		}
-		return null;
-	}
-
 }
