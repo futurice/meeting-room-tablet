@@ -35,6 +35,7 @@ import com.futurice.android.reservator.model.DataProxy;
 import com.futurice.android.reservator.model.Reservation;
 import com.futurice.android.reservator.model.ReservatorException;
 import com.futurice.android.reservator.model.Room;
+import com.futurice.android.reservator.model.TimeSpan;
 
 import com.futurice.android.reservator.model.soap.EWS.MicrosoftStyle;
 import com.futurice.android.reservator.model.soap.SoapEWS.Envelope;
@@ -196,13 +197,8 @@ public class SoapDataProxy implements DataProxy{
 	}
 
 	@Override
-	public boolean reserve(Reservation r) throws ReservatorException {
+	public void reserve(Room room, TimeSpan timeSpan, String ownerEmail) throws ReservatorException {
 		throw new ReservatorException("not implemented");
-	}
-
-	public boolean reserve(Calendar beginTime, Calendar endTime, String subject, String ownerEmail, Room room) throws ReservatorException {
-
-		return true;
 	}
 
 	@Override
@@ -238,4 +234,5 @@ public class SoapDataProxy implements DataProxy{
 			throw new ReservatorException(e);
 		}
 	}
+
 }

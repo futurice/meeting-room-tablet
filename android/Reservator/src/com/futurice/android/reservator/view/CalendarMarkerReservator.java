@@ -3,7 +3,6 @@ package com.futurice.android.reservator.view;
 import com.futurice.android.reservator.R;
 
 import android.content.Context;
-import android.speech.tts.TextToSpeech.OnUtteranceCompletedListener;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
@@ -18,7 +17,7 @@ public class CalendarMarkerReservator extends FrameLayout implements
 	public CalendarMarkerReservator(Context ctx) {
 		this(ctx, null);
 	}
-	
+
 	public CalendarMarkerReservator(Context context, AttributeSet attrs) {
 		super(context, attrs);
 		innerLayout = inflate(context, R.layout.calendar_marker_reservation,
@@ -35,7 +34,7 @@ public class CalendarMarkerReservator extends FrameLayout implements
 	protected void onSizeChanged(int w, int h, int ow, int oh){
 		//setLimits(topLimit, bottomLimit);
 	}
-	
+
 	public void setLimits(int topLimit, int bottomLimit) {
 		this.topLimit = topLimit;
 		this.bottomLimit = bottomLimit;

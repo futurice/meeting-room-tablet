@@ -129,7 +129,7 @@ public class CustomTimeSpanPicker2 extends FrameLayout implements OnClickListene
 
 
 	public void setMinimumTime(Calendar cal) {
-		
+
 		int min = cal.get(Calendar.HOUR_OF_DAY)*60+cal.get(Calendar.MINUTE);
 		if (min > maximumTime)
 			throw new IllegalArgumentException("setting minimumTime to be after the maximum");
@@ -172,7 +172,7 @@ public class CustomTimeSpanPicker2 extends FrameLayout implements OnClickListene
 		if (tomorrow) {
 			currentDay.add(Calendar.DAY_OF_YEAR, -1);
 		}
-		
+
 		refreshLabels();
 	}
 
@@ -268,6 +268,10 @@ public class CustomTimeSpanPicker2 extends FrameLayout implements OnClickListene
 
 		return ret;
 
+	}
+
+	public TimeSpan getTimeSpan() {
+		return new TimeSpan(getStartTime(), getEndTime());
 	}
 
 }

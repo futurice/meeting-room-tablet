@@ -7,7 +7,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.view.View;
 
-public class RoomReservationPopup extends Dialog{
+public class RoomReservationPopup extends Dialog {
 	RoomReservationView reservationView;
 	CalendarMarker marker;
 
@@ -29,8 +29,6 @@ public class RoomReservationPopup extends Dialog{
 		reservationView.findViewById(R.id.cancelButton).setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				CalendarMarker m = RoomReservationPopup.this.marker;
-				m.setReservation(m.getReservation(), false);
 				cancel();
 			}
 		});
@@ -38,6 +36,7 @@ public class RoomReservationPopup extends Dialog{
 
 			@Override
 			public void onClick(View v) {
+				hide(); // XXX: kludgy, as dialog goes right away
 				reservationView.onClick(v);
 				cancel();
 			}

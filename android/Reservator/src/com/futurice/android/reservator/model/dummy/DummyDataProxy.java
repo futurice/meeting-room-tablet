@@ -12,7 +12,9 @@ import java.util.Random;
 
 import com.futurice.android.reservator.model.DataProxy;
 import com.futurice.android.reservator.model.Reservation;
+import com.futurice.android.reservator.model.ReservatorException;
 import com.futurice.android.reservator.model.Room;
+import com.futurice.android.reservator.model.TimeSpan;
 
 public class DummyDataProxy implements DataProxy {
 	List<Room> rooms = null;
@@ -57,8 +59,15 @@ public class DummyDataProxy implements DataProxy {
 	}
 
 	@Override
-	public boolean reserve(Reservation r) {
-		return true;
+	public void reserve(Room room, TimeSpan timeSpan, String ownerEmail) throws ReservatorException {
+		// TODO: check for availability
+
+		Reservation reservation = new Reservation(room, "reserved with FutuReservator5000", timeSpan.getStart(), timeSpan.getEnd());
+		List<Reservation> roomReservations = reservations.get(room.getEmail());
+		if (roomReservations == null) {
+			throw new ReservatorException("unknown room");
+		}
+		roomReservations.add(reservation);
 	}
 
 	@Override

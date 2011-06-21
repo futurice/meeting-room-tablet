@@ -2,10 +2,6 @@ package com.futurice.android.reservator.model;
 
 import java.util.Calendar;
 
-import android.text.Editable;
-
-
-
 public class Reservation implements Comparable<Reservation> {
 	private Calendar beginTime, endTime;
 	private Room room;
@@ -17,7 +13,7 @@ public class Reservation implements Comparable<Reservation> {
 		this.endTime = endTime;
 		this.subject = subject;
 	}
-	
+
 	public String getSubject(){
 		return this.subject;
 	}
@@ -44,6 +40,6 @@ public class Reservation implements Comparable<Reservation> {
 
 	public void setSubject(String text) {
 		this.subject = text;
-		
+
 	}
 }

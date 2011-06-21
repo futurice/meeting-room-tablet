@@ -16,7 +16,7 @@ public class ReservatorApplication extends Application {
 		return proxy;
 	}
 
-	public AddressBook getAddressBookProxy() {
+	public AddressBook getAddressBook() {
 		return addressBook;
 	}
 

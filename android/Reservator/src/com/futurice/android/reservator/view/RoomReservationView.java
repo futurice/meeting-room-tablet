@@ -3,12 +3,13 @@ package com.futurice.android.reservator.view;
 import java.util.Calendar;
 
 import com.futurice.android.reservator.R;
+import com.futurice.android.reservator.ReservatorApplication;
 import com.futurice.android.reservator.RoomInfo;
 import com.futurice.android.reservator.common.Helpers;
-import com.futurice.android.reservator.model.Reservation;
+import com.futurice.android.reservator.model.AddressBookAdapter;
+import com.futurice.android.reservator.model.ReservatorException;
 import com.futurice.android.reservator.model.Room;
 import com.futurice.android.reservator.model.TimeSpan;
-import com.futurice.android.reservator.model.fum3.FumAddressBookAdapter;
 import com.futurice.android.reservator.model.rooms.RoomsInfo;
 
 import android.content.Context;
@@ -33,6 +34,7 @@ public class RoomReservationView extends FrameLayout implements
 	AutoCompleteTextView nameField;
 	CustomTimeSpanPicker2 timePicker2;
 	TextView roomNameView, roomInfoView, roomStatusView;
+	ReservatorApplication application;
 
 	private Room room;
 
@@ -41,7 +43,6 @@ public class RoomReservationView extends FrameLayout implements
 	}
 
 	private OnFocusChangeListener userNameFocusChangeListener = new OnFocusChangeListener() {
-
 		@Override
 		public void onFocusChange(View v, boolean hasFocus) {
 			if (hasFocus) {
@@ -67,13 +68,15 @@ public class RoomReservationView extends FrameLayout implements
 		bookingMode = findViewById(R.id.bookingMode);
 		normalMode = findViewById(R.id.normalMode);
 		nameField = (AutoCompleteTextView) findViewById(R.id.autoCompleteTextView1);
-		nameField.setOnItemClickListener(this);
-		nameField.setAdapter(new FumAddressBookAdapter(context));
 		nameField.setOnFocusChangeListener(userNameFocusChangeListener);
 		timePicker2 = (CustomTimeSpanPicker2) findViewById(R.id.timeSpanPicker2);
 		roomNameView = (TextView) findViewById(R.id.roomNameLabel);
 		roomInfoView = (TextView) findViewById(R.id.roomInfoLabel);
 		roomStatusView = (TextView) findViewById(R.id.roomStatusLabel);
+
+		application = (ReservatorApplication) this.getContext().getApplicationContext();
+		nameField.setOnItemClickListener(this);
+		nameField.setAdapter(new AddressBookAdapter(this.getContext(), application.getAddressBook()));
 	}
 
 	public void setRoom(Room room) {
@@ -96,7 +99,7 @@ public class RoomReservationView extends FrameLayout implements
 		}
 		if (v == reserveButton) {
 			makeReservation();
-
+			setNormalMode();
 		}
 		if (v == calendarButton || v == titleView) {
 			showRoomInCalendar();
@@ -113,9 +116,25 @@ public class RoomReservationView extends FrameLayout implements
 	}
 
 	private void makeReservation() {
+		String email = application.getAddressBook().getEmailByName(nameField.getText().toString());
+
+		if (email == null) {
+			Toast t = Toast.makeText(getContext(), "No such user, try again", Toast.LENGTH_LONG);
+			t.show();
+		}
+
+		try {
+			application.getDataProxy().reserve(room, timePicker2.getTimeSpan(), email);
+		} catch (ReservatorException e) {
+			// TODO Auto-generated catch block
+			Toast t = Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_LONG);
+			t.show();
+		}
+
 		Toast t = Toast.makeText(getContext(),
-				DateFormat.format("kk:mm", timePicker2.getStartTime()) + "-"
-						+ DateFormat.format("kk:mm", timePicker2.getEndTime()),
+				DateFormat.format("E dd.MM.yyyy kk:mm", timePicker2.getStartTime()) + " - "
+						+ DateFormat.format("E dd.MM.yyyy kk:mm", timePicker2.getEndTime()) + " - "
+						+ email,
 				Toast.LENGTH_LONG);
 		t.show();
 	}
