@@ -24,13 +24,14 @@ import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.TextView;
 
 public class RoomInfo extends Activity implements OnItemSelectedListener, OnMenuItemClickListener{
-	/** Called when the activity is first created. */
 	public static final String ROOM_EMAIL_EXTRA = "roomEmail";
 
 	WeekView weekView;
 	List<Room> rooms;
 	ArrayAdapter<Room> roomAdapter;
 	TextView roomNameLabel;
+
+	MenuItem settingsMenu, refreshMenu;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -83,14 +84,21 @@ public class RoomInfo extends Activity implements OnItemSelectedListener, OnMenu
 	}
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-	    menu.add("Settings").setOnMenuItemClickListener(this);
+	    refreshMenu = menu.add("Refresh").setOnMenuItemClickListener(this);
+	    refreshMenu.setIcon(android.R.drawable.ic_popup_sync);
+	    settingsMenu = menu.add("Settings").setOnMenuItemClickListener(this);
+	    settingsMenu.setIcon(android.R.drawable.ic_menu_preferences);
 		return true;
 	}
 
 	@Override
 	public boolean onMenuItemClick(MenuItem item) {
-		Intent i = new Intent(this, SettingsActivity.class);
-		startActivity(i);
+		if (item == settingsMenu) {
+			Intent i = new Intent(this, SettingsActivity.class);
+			startActivity(i);
+		} else if (item == refreshMenu) {
+			weekView.refreshData();
+		}
 		return true;
 	}
 }
