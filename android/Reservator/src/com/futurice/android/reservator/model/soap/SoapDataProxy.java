@@ -113,10 +113,10 @@ public class SoapDataProxy implements DataProxy{
 
 			result = Helpers.readFromInputStream(response.getEntity().getContent(), (int) response.getEntity().getContentLength());
 		} catch (ClientProtocolException e) {
-			Log.w("SOAP", "Exception", e);
+			Log.e("SOAP", "httpPost", e);
 			throw new ReservatorException("Internal error - " + e.getMessage(), e);
 		} catch (IOException e) {
-			Log.w("SOAP", "Exception", e);
+			Log.e("SOAP", "httpPost", e);
 			throw new ReservatorException("Internal error - " + e.getMessage(), e);
 		}
 
@@ -135,17 +135,14 @@ public class SoapDataProxy implements DataProxy{
 		Serializer serializer = new Persister(new Format(new MicrosoftStyle()));
 
 		try {
-			//StringWriter writer = new StringWriter();
-			//Envelope env = new Envelope();
-			//serializer.write(env, writer);
-			// Log.v("SimpleXML", writer.toString());
-
-			// why nonstrictness doesn't work with the attributes?
+			// why non/strictness doesn't work with the attributes?
 			Envelope envelope = serializer.read(Envelope.class, result, false);
-			Log.v("SimpleXML", envelope.toString());
+			Log.d("SOAP", envelope.toString());
 			roomLists = envelope.getRoomLists();
+		} catch (ReservatorException e) {
+			throw e;
 		} catch (Exception e) {
-			Log.e("SimpleXML", "fu-", e);
+			Log.e("SOAP", "fetchRoomLists XML-parsing failed", e);
 			throw new ReservatorException(e);
 		}
 	}
@@ -161,10 +158,12 @@ public class SoapDataProxy implements DataProxy{
 
 		try {
 			Envelope envelope = serializer.read(Envelope.class, result, false);
-			Log.v("SimpleXML", envelope.toString());
+			Log.d("SOAP", envelope.toString());
 			return envelope.getRooms(this);
+		} catch (ReservatorException e) {
+			throw e;
 		} catch (Exception e) {
-			Log.e("SimpleXML", "fu-", e);
+			Log.e("SOAP", "fetchRooms XML-parsing failed", e);
 			throw new ReservatorException(e);
 		}
 	}
@@ -211,6 +210,19 @@ public class SoapDataProxy implements DataProxy{
 
 		String result = httpPost(xml);
 		Log.v("SOAP", result);
+
+		Serializer serializer = new Persister(new Format(new MicrosoftStyle()));
+
+		try {
+			Envelope envelope = serializer.read(Envelope.class, result, false);
+			Log.d("SOAP", envelope.toString());
+			envelope.checkCreateItemSuccessful();
+		} catch (ReservatorException e) {
+			throw e;
+		} catch (Exception e) {
+			Log.e("SOAP", "reserve XML-parsing failed", e);
+			throw new ReservatorException(e);
+		}
 	}
 
 	@Override
@@ -239,10 +251,12 @@ public class SoapDataProxy implements DataProxy{
 
 		try {
 			Envelope envelope = serializer.read(Envelope.class, result, false);
-			Log.v("SimpleXML", envelope.toString());
+			Log.d("SOAP", envelope.toString());
 			return envelope.getReservations(room);
+		} catch (ReservatorException e) {
+			throw e;
 		} catch (Exception e) {
-			Log.e("SimpleXML", "unserialization error", e);
+			Log.e("SOAP", "getRoomReservations XML-parsing failed", e);
 			throw new ReservatorException(e);
 		}
 	}

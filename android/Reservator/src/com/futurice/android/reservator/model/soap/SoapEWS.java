@@ -74,6 +74,13 @@ public class SoapEWS {
 
 			return reservations;
 		}
+
+		public void checkCreateItemSuccessful() throws ReservatorException {
+			CreateItemResponse response = body.getCreateItemResponse();
+			if (response == null || !response.getResponseCode().equals("NoError") || !response.getResponseClass().equals("Success")) {
+				throw new ReservatorException("Error in SOAP answer");
+			}
+		}
 	}
 
 	@Namespace(prefix="s")
@@ -87,6 +94,10 @@ public class SoapEWS {
 		@Element(required=false)
 		private GetUserAvailabilityResponse getUserAvailabilityResponse;
 
+		@Element(required=false)
+		@Namespace(prefix="m")
+		private CreateItemResponse createItemResponse;
+
 		public Body() {}
 
 		public GetRoomListsResponse getGetRoomListsResponse() {
@@ -99,6 +110,10 @@ public class SoapEWS {
 
 		public GetUserAvailabilityResponse getGetUserAvailabilityResponse() {
 			return getUserAvailabilityResponse;
+		}
+
+		public CreateItemResponse getCreateItemResponse() {
+			return createItemResponse;
 		}
 	}
 
@@ -186,6 +201,43 @@ public class SoapEWS {
 		}
 	}
 
+	public static class CreateItemResponse{
+		@ElementList
+		@Namespace(prefix="m")
+		List<CreateItemResponseMessage> responseMessages;
+
+		public CreateItemResponse() {}
+
+		protected CreateItemResponseMessage getMessage() {
+			if (responseMessages.size() != 1) {
+				return null;
+			}
+
+			return responseMessages.get(0);
+		}
+
+		public String getResponseCode() {
+			CreateItemResponseMessage message = getMessage();
+			if (message == null) {
+				return "Error";
+			}
+			else {
+				return message.getResponseCode();
+			}
+		}
+
+		public String getResponseClass() {
+			CreateItemResponseMessage message = getMessage();
+			if (message == null) {
+				return "Error";
+			}
+			else {
+				return message.getResponseClass();
+			}
+		}
+	}
+
+
 	public static class ResponseMessage {
 		@Element
 		private String responseCode;
@@ -203,6 +255,10 @@ public class SoapEWS {
 		public String getResponseCode() {
 			return responseCode;
 		}
+	}
+
+	public static class CreateItemResponseMessage extends ResponseMessage {
+		public CreateItemResponseMessage() {}
 	}
 
 	public static class Address {
