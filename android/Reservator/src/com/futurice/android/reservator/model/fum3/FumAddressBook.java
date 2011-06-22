@@ -3,6 +3,8 @@ package com.futurice.android.reservator.model.fum3;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.auth.AuthScope;
@@ -37,6 +39,9 @@ import com.futurice.android.reservator.model.soap.UnsafeSSLSocketFactory;
  */
 
 public class FumAddressBook extends AddressBook {
+	// ^\s*(.*)\((\S+)\)\s*$
+	private Pattern namePattern = Pattern.compile("^\\s*(.*)\\((\\S+)\\)\\s*$");
+
 	@Override
 	protected List<AddressBookEntry> fetchEntries() throws ReservatorException {
 		List<AddressBookEntry> entries = new ArrayList<AddressBookEntry>();
@@ -91,9 +96,19 @@ public class FumAddressBook extends AddressBook {
 			JSONArray locations = object.getJSONArray("uniqueMember");
 			for (int i = 0; i < locations.length(); ++i) {
 				JSONObject member = locations.getJSONObject(i);
-				entries.add(new AddressBookEntry(
-						member.getString("display"),
-						member.getString("rdn_value")+"@futurice.com"));
+
+				String email = member.getString("rdn_value")+"@futurice.com";
+
+				Matcher m = namePattern.matcher(member.getString("display"));
+				if (m.matches()) {
+					entries.add(new AddressBookEntry(
+							m.group(1).trim() + ", " + m.group(2),
+							email));
+				} else {
+					entries.add(new AddressBookEntry(
+							member.getString("display"),
+							email));
+				}
 			}
 			return entries;
 		} catch (JSONException e) {
