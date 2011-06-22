@@ -61,7 +61,6 @@ public class SoapEWS {
 
 			Calendar startTime = Calendar.getInstance();
 			Calendar endTime = Calendar.getInstance();
-
 			for (CalendarEvent event : response.getCalendarEventArray()) {
 				try {
 					startTime.setTime(SoapDataProxy.dateFormat.parse(event.getStartTime()));
@@ -70,7 +69,7 @@ public class SoapEWS {
 					throw new ReservatorException(e);
 				}
 
-				reservations.add(new com.futurice.android.reservator.model.Reservation(room, event.subject, startTime, endTime));
+				reservations.add(new com.futurice.android.reservator.model.Reservation(room, event.subject, (Calendar) startTime.clone(), (Calendar) endTime.clone()));
 			}
 
 			return reservations;
