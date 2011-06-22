@@ -1,8 +1,6 @@
 package com.futurice.android.reservator.view;
 
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
 
 import com.futurice.android.reservator.R;
 import com.futurice.android.reservator.model.TimeSpan;
@@ -25,7 +23,7 @@ public class TimeBarView extends FrameLayout{
 	boolean animationEnabled = false;
 	Thread animatorThread = null;
 	TimeSpan limits, span;
-	List<TimeSpan> reservations = new ArrayList<TimeSpan>();
+	private static final int MIN_SPAN_LENGTH = 60*120*1000;
 	public TimeBarView(Context context) {
 		this(context, null);
 	}
@@ -38,13 +36,6 @@ public class TimeBarView extends FrameLayout{
 		span.getStart().add(Calendar.MINUTE, 30);
 	}
 	public void setTimeLimits(TimeSpan span){
-		int minSpanLength = 60*120*1000;
-		if(span.getLength() < minSpanLength){
-			Calendar end = (Calendar)span.getStart().clone();
-			end.add(Calendar.MILLISECOND, minSpanLength);
-			this.limits = new TimeSpan(span.getStart(), end);
-			return;
-		}
 		this.limits = span.clone();
 		invalidate();
 	}
@@ -88,11 +79,6 @@ public class TimeBarView extends FrameLayout{
 			};
 			animatorThread.start();
 		}
-		invalidate();
-	}
-
-	public void addReservation(TimeSpan span){
-		reservations.add(span);
 		invalidate();
 	}
 	@Override
@@ -140,12 +126,10 @@ public class TimeBarView extends FrameLayout{
 		c.drawRoundRect(new RectF(left, y, right, bottom), radius, radius, p);
 		p.setColor(getResources().getColor(R.color.TimeSpanTextColor));
 		c.drawRoundRect(new RectF(startX, y, endX, bottom), radius, radius, p);
-		p.setColor(Color.GRAY);
-		for(TimeSpan s : reservations){
-			c.drawRoundRect(new RectF(width * getProportional(s.getStart()), y, width * getProportional(s.getEnd()), bottom), radius, radius, p);
+		p.setColor(Color.RED);
+		if(span.getLength() < MIN_SPAN_LENGTH){
+			c.drawRoundRect(new RectF(width * getProportional(limits.getEnd()), y, width, bottom), radius, radius, p);
 		}
-
-
 		p.setStyle(Style.STROKE);
 		p.setColor(Color.argb(255, 40, 40, 40));
 		Calendar time = (Calendar)limits.getStart().clone();
@@ -167,6 +151,6 @@ public class TimeBarView extends FrameLayout{
 		c.drawText( durationText, textX > startX ? textX : startX, bottom + padding + p.getTextSize(), p);*/
 	}
 	private float getProportional(Calendar time){
-		return (time.getTimeInMillis() - limits.getStart().getTimeInMillis()) / (float)limits.getLength();
+		return (time.getTimeInMillis() - limits.getStart().getTimeInMillis()) / (float)(limits.getLength() >  MIN_SPAN_LENGTH ? limits.getLength() : MIN_SPAN_LENGTH);
 	}
 }

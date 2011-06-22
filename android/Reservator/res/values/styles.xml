@@ -9,6 +9,8 @@
     <color name="StatusFreeColor">#529200</color>
     <color name="StatusReservedColor">#b24c4c</color>
     <color name="Transparent">#0000</color>
+    <color name="CalendarMarkerReservedColor">#FF00</color>
+    <color name="CalendarMarkerFreeColor">#F00A</color>
     <style name="Theme.Transparent" parent="android:Theme">
     	<item name="android:windowIsTranslucent">true</item>
     	<item name="android:windowBackground">@color/Transparent</item>

@@ -1,9 +1,11 @@
 
-<HorizontalScrollView android:id="@+id/horizontalScrollView1"
-	xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	android:layout_height="fill_parent" android:layout_width="fill_parent">
-	<LinearLayout android:id="@+id/linearLayout1"
-		android:layout_height="fill_parent" android:layout_width="wrap_content"
-		android:minHeight="200dp" android:minWidth="200dp">
-	</LinearLayout>
-</HorizontalScrollView>
+    <FrameLayout android:layout_alignParentTop="true" android:id="@+id/topLeftEmptyBox" android:layout_alignParentLeft="true" android:layout_alignRight="@+id/hourColumn" android:layout_height="50dp" android:layout_width="wrap_content" android:minWidth="50dp">
+    </FrameLayout>
+    <LinearLayout android:orientation="vertical" android:layout_width="wrap_content" android:layout_alignParentLeft="true" android:minWidth="20dp" android:layout_below="@+id/topLeftEmptyBox" android:layout_alignParentBottom="true" android:layout_height="wrap_content" android:id="@+id/hourColumn"></LinearLayout>
+    <HorizontalScrollView android:id="@+id/horizontalScrollView1" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_alignTop="@+id/topLeftEmptyBox" android:layout_alignParentRight="true" android:layout_alignBottom="@+id/hourColumn" android:layout_toRightOf="@+id/hourColumn">
+        <RelativeLayout android:id="@+id/relativeLayout1" android:layout_width="match_parent" android:layout_height="match_parent"></RelativeLayout>
+    </HorizontalScrollView>
+    
+</RelativeLayout>

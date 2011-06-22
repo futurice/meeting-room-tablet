@@ -83,7 +83,8 @@ public class RoomReservationView extends FrameLayout implements
 
 		application = (ReservatorApplication) this.getContext().getApplicationContext();
 		nameField.setOnItemClickListener(this);
-		nameField.setAdapter(new AddressBookAdapter(this.getContext(), application.getAddressBook()));
+		nameField.setOnClickListener(this);
+		
 	}
 
 	public void setRoom(Room room) {
@@ -109,6 +110,9 @@ public class RoomReservationView extends FrameLayout implements
 		}
 		if (v == calendarButton || v == titleView) {
 			showRoomInCalendar();
+		}
+		if(nameField.getAdapter() == null){
+			nameField.setAdapter(new AddressBookAdapter(this.getContext(), application.getAddressBook()));
 		}
 	}
 

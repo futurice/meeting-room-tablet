@@ -1,7 +1,8 @@
 package com.futurice.android.reservator.view;
 
 import com.futurice.android.reservator.R;
-import com.futurice.android.reservator.model.Reservation;
+import com.futurice.android.reservator.model.Room;
+import com.futurice.android.reservator.model.TimeSpan;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -11,19 +12,17 @@ public class RoomReservationPopup extends Dialog {
 	RoomReservationView reservationView;
 	CalendarMarker marker;
 
-	protected RoomReservationPopup(Context context, CalendarMarker marker) {
+	protected RoomReservationPopup(Context context, TimeSpan timeLimits, Room room) {
 		super(context, R.style.Theme_Transparent);
 		setCancelable(true);
-		this.marker = marker;
 
 		setContentView(R.layout.reservation_popup);
 		reservationView = (RoomReservationView)findViewById(R.id.roomReservationView1);
 
-		Reservation r = marker.getReservation();
-		reservationView.setRoom(r.getRoom());
+		reservationView.setRoom(room);
 		reservationView.resetTimeSpan();
-		reservationView.setMinTime(r.getBeginTime());
-		reservationView.setMaxTime(r.getEndTime());
+		reservationView.setMinTime(timeLimits.getStart());
+		reservationView.setMaxTime(timeLimits.getEnd());
 		reservationView.setEndTimeRelatively(60);
 
 		reservationView.findViewById(R.id.cancelButton).setOnClickListener(new View.OnClickListener() {

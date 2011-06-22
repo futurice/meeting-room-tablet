@@ -3,11 +3,15 @@ package com.futurice.android.reservator.view;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-import java.util.Set;
 
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnCancelListener;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.RelativeLayout;
 
 import com.futurice.android.reservator.R;
@@ -15,7 +19,7 @@ import com.futurice.android.reservator.model.Reservation;
 import com.futurice.android.reservator.model.ReservatorException;
 import com.futurice.android.reservator.model.Room;
 
-public class WeekView extends RelativeLayout {
+public class WeekView extends RelativeLayout implements OnClickListener {
 
 	public static final int NUMBER_OF_DAYS_TO_SHOW = 10;
 	private Room currentRoom = null;
@@ -64,44 +68,35 @@ public class WeekView extends RelativeLayout {
 		}
 
 		for (int i = 0; i < NUMBER_OF_DAYS_TO_SHOW; i++) {
+			// Skip weekend days
+			if (day.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY) {
+				day.add(Calendar.DAY_OF_YEAR, 2);
+			} else if (day.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) {
+				day.add(Calendar.DAY_OF_WEEK, 1);
+			}
+			Calendar endOfDay = (Calendar) day.clone();
+			endOfDay.set(Calendar.HOUR_OF_DAY, 18);
+			calendar.addDay((Calendar) day.clone());
+			List<Reservation> daysReservations;
 
-			if (day.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY
-					|| day.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) {
-				i--;
+			daysReservations = getReservationsForDay(reservations, day);
+
+			if (daysReservations.isEmpty()) {
+				addFreeMarker(day, endOfDay);
 			} else {
-				Calendar endOfDay = (Calendar) day.clone();
-				endOfDay.set(Calendar.HOUR_OF_DAY, 18);
-				calendar.addDay((Calendar) day.clone());
-				List<Reservation> daysReservations;
+				Reservation first = daysReservations.get(0);
+				if (first.getBeginTime().after(day)) {
+					addFreeMarker(day, first.getBeginTime());
+				}
+				for (int j = 0; j < daysReservations.size(); j++) {
+					Reservation current = daysReservations.get(j);
+					addReseredMarker(current);
 
-				daysReservations = getReservationsForDay(reservations, day);
-
-				if (daysReservations.isEmpty()) {
-					calendar.addMarker(day, endOfDay).setReservation(
-							new Reservation(currentRoom, null, day, endOfDay),
-							false);
-				} else {
-					Reservation first = daysReservations.get(0);
-					if (first.getBeginTime().after(day)) {
-						calendar.addMarker(day, first.getBeginTime())
-								.setReservation(
-										new Reservation(currentRoom, null, day,
-												first.getBeginTime()), false);
-					}
-					for (int j = 0; j < daysReservations.size(); j++) {
-						Reservation current = daysReservations.get(j);
-						calendar.addMarker(current.getBeginTime(),
-								current.getEndTime()).setReservation(current,
-								true);
-
-						if (j < daysReservations.size() - 1) {
-							Reservation next = daysReservations.get(j + 1);
-							Reservation free = new Reservation(currentRoom,
-									null, current.getEndTime(),
-									next.getBeginTime());
-							calendar.addMarker(current.getEndTime(),
-									next.getBeginTime()).setReservation(free,
-									false);
+					if (j < daysReservations.size() - 1) {
+						
+						Reservation next = daysReservations.get(j + 1);
+						if(next.getBeginTime().after(current.getEndTime())){
+							addFreeMarker(current.getEndTime(), next.getBeginTime());
 						}
 					}
 				}
@@ -124,5 +119,43 @@ public class WeekView extends RelativeLayout {
 			}
 		}
 		return daysReservations;
+	}
+
+	@Override
+	public void onClick(final View v) {
+
+		if (v instanceof CalendarMarker) {
+			final CalendarMarker marker = (CalendarMarker) v;
+			if (marker.isReserved()) {
+				return;
+			} else {
+				Dialog d = new RoomReservationPopup(getContext(), marker.getTimeSpan(), currentRoom);
+				d.show();
+				d.setOnCancelListener(new OnCancelListener() {
+
+					@Override
+					public void onCancel(DialogInterface dialog) {
+						refreshData();
+					}
+				});
+			}
+
+		}
+	}
+
+	public void refreshData(){
+		setRoom(currentRoom);
+	}
+	private void addFreeMarker(Calendar startTime, Calendar endTime) {
+		CalendarMarker marker = calendar.addMarker(startTime, endTime);
+		marker.setOnClickListener(this);
+		marker.setReserved(false);
+	}
+
+	private void addReseredMarker(Reservation r) {
+		CalendarMarker marker = calendar.addMarker(r.getBeginTime(),
+				r.getEndTime());
+		marker.setText(r.getSubject());
+		marker.setReserved(true);
 	}
 }

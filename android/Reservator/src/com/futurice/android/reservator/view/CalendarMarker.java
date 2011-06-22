@@ -1,46 +1,42 @@
 package com.futurice.android.reservator.view;
 
+
 import com.futurice.android.reservator.R;
 import com.futurice.android.reservator.model.Reservation;
+import com.futurice.android.reservator.model.TimeSpan;
 
 import android.content.Context;
-import android.graphics.Color;
-import android.text.TextUtils;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.view.MotionEvent;
-import android.view.View;
 
 public class CalendarMarker extends LinearLayout {
 	private Reservation reservation = null;
 	private boolean reserved = false;
-	View reserveView = null;
-	static String infoTextTemplate = null;
+	private TimeSpan timeSpan;
 	TextView label = null;
-	boolean reservationModeEnabled = false;
-	public CalendarMarker(Context context) {
+	public CalendarMarker(Context context, TimeSpan timeSpan) {
 		super(context);
-		if(infoTextTemplate == null){
-			infoTextTemplate = context.getString(R.string.reservationTextTemplate);
-		}
+		this.timeSpan = timeSpan;
+		this.setPadding(0,0,0,0);
 	}
 
+	public void setTimeSpan(TimeSpan span){
+		this.timeSpan = span.clone();
+	}
+	public TimeSpan getTimeSpan(){
+		return this.timeSpan;
+	}
+	
 	public boolean isReserved(){
 		return this.reserved;
 	}
-	public void setReservation(Reservation reservation, boolean isReserved) {
+	public void setReserved(boolean isReserved) {
 		this.reserved = isReserved;
 		if (isReserved) {
-			this.setText(TextUtils.expandTemplate(infoTextTemplate, reservation.getSubject()).toString());
-			this.setBackgroundResource(R.color.CalendarMarkerColor);
+			this.setBackgroundResource(R.color.CalendarMarkerReservedColor);
 		} else {
-			this.setBackgroundColor(Color.TRANSPARENT);
+			this.setBackgroundResource(R.color.CalendarMarkerFreeColor);
 		}
-		this.reservation = reservation;
-	}
-
-	public Reservation getReservation() {
-		return this.reservation;
 	}
 
 	@Override
