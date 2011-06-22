@@ -24,7 +24,7 @@ public class Room {
 		if (reservations == null) {
 			reservations = new ArrayList<Reservation>();
 		}
-		Collections.sort(reservations);
+		Collections.sort(reservations); // TODO: do we need to sort?
 		return this.reservations;
 	}
 

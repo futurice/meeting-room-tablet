@@ -57,6 +57,7 @@ public class SoapDataProxy implements DataProxy{
 	private static final String getRoomListsXml = getResourceAsString("GetRoomLists.xml");
 	private static final String getRoomsXmlTemplate = getResourceAsString("GetRooms.xml");
 	private static final String getUserAvailabilityXmlTemplate = getResourceAsString("GetUserAvailability.xml");
+	private static final String createItemCalendarXmlTemplate = getResourceAsString("CreateItemCalendar.xml");
 
 	public static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
 
@@ -198,12 +199,23 @@ public class SoapDataProxy implements DataProxy{
 
 	@Override
 	public void reserve(Room room, TimeSpan timeSpan, String ownerEmail) throws ReservatorException {
-		throw new ReservatorException("not implemented");
+		Log.v("SOAP", "reserve");
+
+		String xml = createItemCalendarXmlTemplate;
+		xml = xml.replace("{RoomName}", room.getName());
+		xml = xml.replace("{RoomAddress}", room.getEmail());
+		xml = xml.replace("{UserAddress}", ownerEmail);
+		xml = xml.replace("{StartTime}", dateFormat.format(timeSpan.getStart().getTime()));
+		xml = xml.replace("{EndTime}", dateFormat.format(timeSpan.getEnd().getTime()));
+		xml = xml.replace("{Subject}", "Reserved with FutuReservator5000");
+
+		String result = httpPost(xml);
+		Log.v("SOAP", result);
 	}
 
 	@Override
 	public List<Reservation> getRoomReservations(Room room) throws ReservatorException {
-		Log.v("getRoomReservations", room.toString());
+		Log.v("SOAP", "getRoomReservations: "+  room.toString());
 
 		Calendar now = Calendar.getInstance();
 		now.setTimeInMillis(System.currentTimeMillis());
@@ -221,7 +233,7 @@ public class SoapDataProxy implements DataProxy{
 		xml = xml.replace("{EndTime}", dateFormat.format(fromNow.getTime()));
 
 		String result = httpPost(xml);
-		Log.v("getRoomReservations", result);
+		Log.v("SOAP", result);
 
 		Serializer serializer = new Persister(new Format(new MicrosoftStyle()));
 

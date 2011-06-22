@@ -12,8 +12,13 @@ import com.futurice.android.reservator.model.Room;
 import com.futurice.android.reservator.model.TimeSpan;
 import com.futurice.android.reservator.model.rooms.RoomsInfo;
 
+import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.DialogInterface.OnCancelListener;
+import android.content.DialogInterface.OnDismissListener;
 import android.text.format.DateFormat;
 import android.util.AttributeSet;
 import android.view.View;
@@ -101,10 +106,6 @@ public class RoomReservationView extends FrameLayout implements
 		}
 		if (v == reserveButton) {
 			makeReservation();
-			if (onReserveCallback != null) {
-				onReserveCallback.call(this);
-			}
-			setNormalMode();
 		}
 		if (v == calendarButton || v == titleView) {
 			showRoomInCalendar();
@@ -131,17 +132,27 @@ public class RoomReservationView extends FrameLayout implements
 		try {
 			application.getDataProxy().reserve(room, timePicker2.getTimeSpan(), email);
 		} catch (ReservatorException e) {
-			// TODO Auto-generated catch block
-			Toast t = Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_LONG);
-			t.show();
+			final RoomReservationView thisv = this;
+			Builder alertBuilder = new AlertDialog.Builder(getContext());
+			alertBuilder.setTitle("Failed to put reservation")
+				.setMessage(e.getMessage());
+			alertBuilder.setOnCancelListener(new OnCancelListener() {
+					public void onCancel(DialogInterface dialog) {
+						if (onReserveCallback != null) {
+							onReserveCallback.call(thisv);
+						}
+					}
+				});
+
+		alertBuilder.show();
+
+				return;
 		}
 
-		Toast t = Toast.makeText(getContext(),
-				DateFormat.format("E dd.MM.yyyy kk:mm", timePicker2.getStartTime()) + " - "
-						+ DateFormat.format("E dd.MM.yyyy kk:mm", timePicker2.getEndTime()) + " - "
-						+ email,
-				Toast.LENGTH_LONG);
-		t.show();
+		if (onReserveCallback != null) {
+			onReserveCallback.call(this);
+		}
+
 	}
 
 	protected void setNormalMode() {
@@ -164,6 +175,8 @@ public class RoomReservationView extends FrameLayout implements
 		if (nextFreeTime != null) {
 			timePicker2.setMinimumTime(nextFreeTime.getStart());
 			timePicker2.setMaximumTime(nextFreeTime.getEnd());
+		} else {
+			timePicker2.setMinimumTime(Calendar.getInstance());
 		}
 		timePicker2.setEndTimeRelatively(60); // let book the room for an hour
 

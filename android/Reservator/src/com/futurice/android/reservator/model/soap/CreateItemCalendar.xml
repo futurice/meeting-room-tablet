@@ -12,7 +12,7 @@
       <Items>
         <t:CalendarItem xmlns="http://schemas.microsoft.com/exchange/services/2006/types">
           <Subject>{Subject}</Subject>
-          <ReminderIsSet>false</ReminderIsSet>`
+          <ReminderIsSet>false</ReminderIsSet>
           <Start>{StartTime}</Start>
           <End>{EndTime}</End>
           <IsAllDayEvent>false</IsAllDayEvent>
