@@ -17,13 +17,15 @@ public class RoomsInfo {
 	private int roomSize;
 	private int roomNumber;
 	private String roomName;
+	private String roomType;
 
 	private static Map<String, RoomsInfo> rooms = null;
 
-	private RoomsInfo(String roomName, int roomNumber, int roomSize) {
+	private RoomsInfo(String roomName, int roomNumber, int roomSize, String roomType) {
 		this.roomSize = roomSize;
 		this.roomNumber = roomNumber;
 		this.roomName = roomName;
+		this.roomType = roomType;
 	}
 
 	public String getRoomName() {
@@ -36,6 +38,14 @@ public class RoomsInfo {
 
 	public int getRoomSize() {
 		return roomSize;
+	}
+
+	public String getRoomType() {
+		return roomType;
+	}
+
+	public boolean isProjectRoom() {
+		return getRoomType().equals("project");
 	}
 
 	@SuppressWarnings("unchecked")
@@ -51,7 +61,7 @@ public class RoomsInfo {
 					JSONObject room = object.getJSONObject(key);
 
 					// default size of six is better than nothing
-					rooms.put(key.toLowerCase(), new RoomsInfo(room.getString("name"), room.optInt("number"), room.optInt("size", 6)));
+					rooms.put(key.toLowerCase(), new RoomsInfo(room.getString("name"), room.optInt("number"), room.optInt("size", 6), room.optString("type", "room")));
 				} catch (JSONException e) {
 					// do nothing
 				}
@@ -73,7 +83,7 @@ public class RoomsInfo {
 		Log.v("roomsinfo", email.substring(0, atindex));
 
 		if (atindex == -1 || (info = rooms.get(email.substring(0, atindex).toLowerCase())) == null) {
-			return new RoomsInfo(room.getName(), 0, 6);
+			return new RoomsInfo(room.getName(), 0, 6, "unknown");
 		} else {
 			return info;
 		}

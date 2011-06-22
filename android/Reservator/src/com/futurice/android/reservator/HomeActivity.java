@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.futurice.android.reservator.model.ReservatorException;
 import com.futurice.android.reservator.model.Room;
+import com.futurice.android.reservator.model.rooms.RoomsInfo;
 import com.futurice.android.reservator.view.Callback;
 import com.futurice.android.reservator.view.RoomReservationView;
 
@@ -56,6 +57,13 @@ public class HomeActivity extends Activity implements OnMenuItemClickListener {
 				try {
 					List<Room> rooms = ((ReservatorApplication)getApplication()).getDataProxy().getRooms();
 					for(final Room r : rooms){
+						// Skip project rooms
+						RoomsInfo info = RoomsInfo.getRoomsInfo(r);
+						if (info.isProjectRoom()) {
+							continue;
+						}
+
+						// Get room reservations and add the room row to the lobby view
 						r.getReservations(true);
 						container.post(new Runnable() {
 							public void run() {
@@ -94,7 +102,7 @@ public class HomeActivity extends Activity implements OnMenuItemClickListener {
 								boolean added = false;
 								for (int index = 0; index < roomCount; index++) {
 									Room r2 =  ((RoomReservationView) container.getChildAt(index)).getRoom();
-									Log.v("activity", r.toString() + " -- " + Integer.toString(r2.minutesFreeFromNow()));
+									// Log.v("activity", r.toString() + " -- " + Integer.toString(r2.minutesFreeFromNow()));
 									if (roomCmp.compare(r, r2) < 0) {
 										container.addView(v, index);
 										added = true;

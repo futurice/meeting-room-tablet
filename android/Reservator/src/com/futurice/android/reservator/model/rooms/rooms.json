@@ -2,66 +2,79 @@
 	"401-panorama": {
 		"name": "Panorama",
 		"number": 401,
+		"type": "room",
 		"size": 6
 	},
 	"402-pilotti": {
 		"name": "Pilotti",
 		"number": 402,
+		"type": "room",
 		"size": 7
 	},
 	"403-vauhtimato": {
 		"name": "Vauhtimato",
 		"number": 403,
+		"type": "room",
 		"size": 8
 	},
 	"404-spaceshot": {
 		"name": "Spaceshot",
 		"number": 404,
+		"type": "room",
 		"size": 42
 	},
 	"405-regatta": {
 		"name": "Regatta",
 		"number": 405,
+		"type": "project",
 		"size": 11
 	},
 	"406-kino": {
 		"name": "Kino",
 		"number": 406,
+		"type": "project",
 		"size": 5
 	},
 	"407-vekkula": {
 		"name": "Vekkula",
 		"number": 407,
+		"type": "project",
 		"size": 6
 	},
 	"408-metkula": {
 		"name": "Metkula",
 		"number": 408,
+		"type": "project",
 		"size": 3
 	},
 	"501-pikkuneukkari": {
 		"name": "Pikkuneukkari",
 		"number": 501,
+		"type": "room",
 		"size": 10
 	},
 	"502-merineukkari": {
 		"name": "Merineukkari",
 		"number": 502,
+		"type": "room",
 		"size": 5
 	},
 	"503-kenkakauppa": {
 		"name": "Kenkäkauppa",
 		"number": 503,
+		"type": "room",
 		"size": 6
 	},
 	"504-koivumetsa": {
 		"name": "Koivumetsä",
 		"number": 504,
+		"type": "room",
 		"size": 123
 	},
 	"506-verstas": {
 		"name": "Verstas",
 		"number": 506,
+		"type": "project",
 		"size": 4
 	}
 }
