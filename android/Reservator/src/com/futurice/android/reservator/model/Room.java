@@ -28,14 +28,6 @@ public class Room {
 		return this.reservations;
 	}
 
-	public void addReservation(Reservation r) {
-		// TODO: tell data proxy
-		// should this take start, begin time and reservator's name as parameters?
-
-		this.reservations.add(r);
-		Collections.sort(this.reservations);
-	}
-
 	public String getName() {
 		return name;
 	}
