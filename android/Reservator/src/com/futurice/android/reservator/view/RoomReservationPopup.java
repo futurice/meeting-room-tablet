@@ -35,7 +35,6 @@ public class RoomReservationPopup extends Dialog {
 
 			@Override
 			public void onClick(View v) {
-				hide(); // XXX: kludgy, as dialog goes right away
 				reservationView.onClick(v);
 				cancel();
 			}
