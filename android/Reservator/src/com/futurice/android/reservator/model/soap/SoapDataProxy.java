@@ -8,6 +8,7 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.TimeZone;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.auth.AuthScope;
@@ -56,10 +57,15 @@ public class SoapDataProxy implements DataProxy{
 
 	private static final String getRoomListsXml = getResourceAsString("GetRoomLists.xml");
 	private static final String getRoomsXmlTemplate = getResourceAsString("GetRooms.xml");
-	private static final String getUserAvailabilityXmlTemplate = getResourceAsString("GetUserAvailability.xml");
+	// private static final String getUserAvailabilityXmlTemplate = getResourceAsString("GetUserAvailability.xml");
 	private static final String createItemCalendarXmlTemplate = getResourceAsString("CreateItemCalendar.xml");
+	private static final String findItemCalendarXmlTemplate = getResourceAsString("FindItemCalendar.xml");
 
 	public static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+	public static final SimpleDateFormat dateFormatUTC = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
+	static {
+		dateFormatUTC.setTimeZone(TimeZone.getTimeZone("UTC"));
+	}
 
 	List<String> roomLists = null;
 	List<Room> rooms = null;
@@ -239,10 +245,10 @@ public class SoapDataProxy implements DataProxy{
 		Calendar fromNow = (Calendar) now.clone();
 		fromNow.add(Calendar.MONTH, 1);
 
-		String xml = getUserAvailabilityXmlTemplate;
-		xml = xml.replace("{UserAddress}", room.getEmail());
-		xml = xml.replace("{StartTime}", dateFormat.format(now.getTime()));
-		xml = xml.replace("{EndTime}", dateFormat.format(fromNow.getTime()));
+		String xml = findItemCalendarXmlTemplate;
+		xml = xml.replace("{RoomAddress}", room.getEmail());
+		xml = xml.replace("{StartTime}", dateFormatUTC.format(now.getTime()));
+		xml = xml.replace("{EndTime}", dateFormatUTC.format(fromNow.getTime()));
 
 		String result = httpPost(xml);
 		Log.v("SOAP", result);

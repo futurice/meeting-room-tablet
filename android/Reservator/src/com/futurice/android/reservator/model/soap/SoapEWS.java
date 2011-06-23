@@ -51,25 +51,27 @@ public class SoapEWS {
 		}
 
 		public List<com.futurice.android.reservator.model.Reservation> getReservations(com.futurice.android.reservator.model.Room room) throws ReservatorException  {
-			GetUserAvailabilityResponse response = body.getGetUserAvailabilityResponse();
+			FindItemResponse response = body.getFindItemResponse();
 			if (response == null || !response.getResponseCode().equals("NoError") || !response.getResponseClass().equals("Success")) {
 				throw new ReservatorException("Error in SOAP answer");
 			}
 
 			List<com.futurice.android.reservator.model.Reservation> reservations = new ArrayList<com.futurice.android.reservator.model.Reservation>();
-			if (response.getCalendarEventArray() == null) return reservations; // no reservations
+			if (response.getItems() == null) return reservations; // no reservations
 
 			Calendar startTime = Calendar.getInstance();
+
 			Calendar endTime = Calendar.getInstance();
-			for (CalendarEvent event : response.getCalendarEventArray()) {
+
+			for (CalendarItem item : response.getItems()) {
 				try {
-					startTime.setTime(SoapDataProxy.dateFormat.parse(event.getStartTime()));
-					endTime.setTime(SoapDataProxy.dateFormat.parse(event.getEndTime()));
+					startTime.setTime(SoapDataProxy.dateFormatUTC.parse(item.getStart()));
+					endTime.setTime(SoapDataProxy.dateFormatUTC.parse(item.getEnd()));
 				} catch (ParseException e) {
 					throw new ReservatorException(e);
 				}
 
-				reservations.add(new com.futurice.android.reservator.model.Reservation(room, event.subject, (Calendar) startTime.clone(), (Calendar) endTime.clone()));
+				reservations.add(new com.futurice.android.reservator.model.Reservation(room, item.getSubject(), (Calendar) startTime.clone(), (Calendar) endTime.clone()));
 			}
 
 			return reservations;
@@ -92,11 +94,12 @@ public class SoapEWS {
 		private GetRoomsResponse getRoomsResponse;
 
 		@Element(required=false)
-		private GetUserAvailabilityResponse getUserAvailabilityResponse;
+		@Namespace(prefix="m")
+		private CreateItemResponse createItemResponse;
 
 		@Element(required=false)
 		@Namespace(prefix="m")
-		private CreateItemResponse createItemResponse;
+		private FindItemResponse findItemResponse;
 
 		public Body() {}
 
@@ -108,12 +111,12 @@ public class SoapEWS {
 			return getRoomsResponse;
 		}
 
-		public GetUserAvailabilityResponse getGetUserAvailabilityResponse() {
-			return getUserAvailabilityResponse;
-		}
-
 		public CreateItemResponse getCreateItemResponse() {
 			return createItemResponse;
+		}
+
+		public FindItemResponse getFindItemResponse() {
+			return findItemResponse;
 		}
 	}
 
@@ -169,39 +172,7 @@ public class SoapEWS {
 		}
 	}
 
-	public static class GetUserAvailabilityResponse {
-		@Element
-		@Path("FreeBusyResponseArray/FreeBusyResponse")
-		private ResponseMessage responseMessage;
-
-		@Element
-		@Path("FreeBusyResponseArray/FreeBusyResponse/FreeBusyView")
-		private String freeBusyViewType;
-
-		@ElementList(required=false)
-		@Path("FreeBusyResponseArray/FreeBusyResponse/FreeBusyView")
-		private List<CalendarEvent> calendarEventArray;
-
-		public GetUserAvailabilityResponse() {}
-
-		public String getResponseClass() {
-			return responseMessage.getResponseClass();
-		}
-
-		public String getResponseCode() {
-			return responseMessage.getResponseCode();
-		}
-
-		public String getFreeBusyViewType() {
-			return freeBusyViewType;
-		}
-
-		public List<CalendarEvent> getCalendarEventArray() {
-			return calendarEventArray;
-		}
-	}
-
-	public static class CreateItemResponse{
+	public static class CreateItemResponse {
 		@ElementList
 		@Namespace(prefix="m")
 		List<CreateItemResponseMessage> responseMessages;
@@ -237,6 +208,52 @@ public class SoapEWS {
 		}
 	}
 
+	public static class FindItemResponse {
+		@ElementList
+		@Namespace(prefix="m")
+		private List<FindItemResponseMessage> responseMessages;
+
+		public FindItemResponse() {}
+
+		protected FindItemResponseMessage getMessage() {
+			if (responseMessages.size() != 1) {
+				return null;
+			}
+
+			return responseMessages.get(0);
+		}
+
+		public String getResponseCode() {
+			FindItemResponseMessage message = getMessage();
+			if (message == null) {
+				return "Error";
+			}
+			else {
+				return message.getResponseCode();
+			}
+		}
+
+		public String getResponseClass() {
+			FindItemResponseMessage message = getMessage();
+			if (message == null) {
+				return "Error";
+			}
+			else {
+				return message.getResponseClass();
+			}
+		}
+
+		public List<CalendarItem> getItems() {
+			FindItemResponseMessage message = getMessage();
+			if (message == null) {
+				return null;
+			}
+			else {
+				return message.getItems();
+			}
+		}
+	}
+
 
 	public static class ResponseMessage {
 		@Element
@@ -259,6 +276,18 @@ public class SoapEWS {
 
 	public static class CreateItemResponseMessage extends ResponseMessage {
 		public CreateItemResponseMessage() {}
+	}
+
+	public static class FindItemResponseMessage extends ResponseMessage {
+		@ElementList
+		@Path("m:RootFolder")
+		private List<CalendarItem> items;
+
+		public FindItemResponseMessage() {}
+
+		public List<CalendarItem> getItems() {
+			return items;
+		}
 	}
 
 	public static class Address {
@@ -303,29 +332,28 @@ public class SoapEWS {
 		}
 	}
 
-	public static class CalendarEvent {
+	public static class CalendarItem {
 		@Element
-		private String startTime;
+		private String start;
 
 		@Element
-		private String endTime;
+		private String end;
 
 		@Element
-		@Path("CalendarEventDetails")
 		private String subject;
 
-		public CalendarEvent() {}
+		public CalendarItem() {}
+
+		public String getStart() {
+			return start;
+		}
+
+		public String getEnd() {
+			return end;
+		}
 
 		public String getSubject() {
 			return subject;
-		}
-
-		public String getStartTime() {
-			return startTime;
-		}
-
-		public String getEndTime() {
-			return endTime;
 		}
 	}
 }
