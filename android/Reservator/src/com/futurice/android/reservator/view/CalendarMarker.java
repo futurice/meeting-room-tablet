@@ -2,16 +2,13 @@ package com.futurice.android.reservator.view;
 
 
 import java.util.Calendar;
-import java.util.GregorianCalendar;
 
 import com.futurice.android.reservator.R;
-import com.futurice.android.reservator.R.color;
 import com.futurice.android.reservator.model.Reservation;
 import com.futurice.android.reservator.model.TimeSpan;
 
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -24,10 +21,10 @@ public class CalendarMarker extends FrameLayout{
 	View content = null;
 	private float proportionalTouchYCoordinate = 0.0f;
 	OnTouchListener onTouchListener = new OnTouchListener() {
-		
+
 		@Override
 		public boolean onTouch(View v, MotionEvent event) {
-			proportionalTouchYCoordinate = event.getY() / getHeight(); 
+			proportionalTouchYCoordinate = event.getY() / getHeight();
 			return false;
 		}
 	};

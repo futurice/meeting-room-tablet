@@ -38,7 +38,7 @@ public class WeekView extends RelativeLayout implements OnClickListener {
 
 	public WeekView(Context context, AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);
-		
+
 	}
 
 	public void setRoom(Room room) {
@@ -46,7 +46,7 @@ public class WeekView extends RelativeLayout implements OnClickListener {
 		calendarFrame.removeAllViews();
 		calendar = new CalendarView(getContext());
 
-		
+
 		currentRoom = room;
 		Calendar today = Calendar.getInstance();
 		today.set(Calendar.HOUR_OF_DAY, 8);
@@ -72,7 +72,7 @@ public class WeekView extends RelativeLayout implements OnClickListener {
 			}
 			Calendar endOfDay = (Calendar) day.clone();
 			endOfDay.set(Calendar.HOUR_OF_DAY, 18);
-			
+
 			calendar.addDay((Calendar) day.clone());
 			List<Reservation> daysReservations;
 
@@ -95,7 +95,7 @@ public class WeekView extends RelativeLayout implements OnClickListener {
 						}
 					}
 				}
-				Reservation last = daysReservations.get(daysReservations.size() - 1); 
+				Reservation last = daysReservations.get(daysReservations.size() - 1);
 				if(last.getEndTime().before(endOfDay)){
 					addFreeMarker(last.getEndTime(), endOfDay);
 				}
@@ -128,16 +128,43 @@ public class WeekView extends RelativeLayout implements OnClickListener {
 			if (marker.isReserved()) {
 				return;
 			} else {
-				
-				Calendar start = marker.getTouchedTime();
-				Calendar end = marker.getTimeSpan().getEnd();
-				TimeSpan presetTimeSpan = new TimeSpan(start, end);
-				if(presetTimeSpan.getLength() < 60*60000){
-					presetTimeSpan.getStart().setTimeInMillis(presetTimeSpan.getEnd().getTimeInMillis() - 60*60000);
-				}
-				RoomReservationPopup d = new RoomReservationPopup(getContext(),marker.getTimeSpan(), presetTimeSpan, currentRoom);
 
-				
+				RoomReservationPopup d;
+
+				Calendar start = marker.getTimeSpan().getStart();
+				Calendar end = marker.getTimeSpan().getEnd();
+
+				// if time span is less than hour, select it all
+				if (marker.getTimeSpan().getLength() <= 60*60000) {
+					d = new RoomReservationPopup(getContext(),marker.getTimeSpan(), marker.getTimeSpan(), currentRoom);
+				} else {
+					Calendar touch = marker.getTouchedTime();
+					Calendar now = Calendar.getInstance();
+
+					touch.set(Calendar.MINUTE, 0);
+					touch.set(Calendar.SECOND, 0);
+					touch.set(Calendar.MILLISECOND, 0);
+
+					if (touch.before(start)) {
+						touch = start;
+					}
+					if (touch.before(now) && now.before(end)) {
+						touch = now;
+					}
+
+					TimeSpan presetTimeSpan = new TimeSpan(touch, Calendar.HOUR, 1);
+					Calendar touchend = presetTimeSpan.getEnd();
+
+					// quantize end to 15min steps
+					touchend.set(Calendar.MINUTE, (touchend.get(Calendar.MINUTE) / 15) * 15);
+
+					if (touchend.after(end)) {
+						presetTimeSpan.setEnd((Calendar)end.clone()); // TODO: i really dislike this cloning
+					}
+
+					d = new RoomReservationPopup(getContext(),marker.getTimeSpan(), presetTimeSpan, currentRoom);
+				}
+
 				d.show();
 				d.setOnCancelListener(new OnCancelListener() {
 
