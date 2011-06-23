@@ -39,7 +39,7 @@ public class CalendarView extends RelativeLayout{
 	public CalendarView(Context context) {
 		this(context, null);
 	}
-	
+
 	public CalendarView(Context context, AttributeSet attrs) {
 		super(context, attrs);
 		textColor = getResources().getColor(R.color.CalendarTextColor);
@@ -48,14 +48,14 @@ public class CalendarView extends RelativeLayout{
 		gridPaint.setColor(gridColor);
 		inflate(getContext(),R.layout.calendar_view, this);
 		hourColumn = (CalendarDayLayout)findViewById(R.id.hourColumn);
-		
+
 		for (int i = startHour.get(Calendar.HOUR_OF_DAY); i < endHour.get(Calendar.HOUR_OF_DAY); i++) {
 			CalendarMarker marker = new CalendarMarker(getContext(), new TimeSpan(new GregorianCalendar(2011, 6, 22, i, 0), Calendar.HOUR, 1));
 			TextView label = new TextView(getContext());
 			label.setSingleLine();
 			label.setText(Html.fromHtml(i + "<small>00</small>"));
 			label.setGravity(Gravity.TOP | Gravity.RIGHT);
-			label.setTextColor(gridColor);
+			label.setTextColor(textColor);
 			label.setPadding(0,0,5,0);
 			label.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT));
 			marker.setContent(label);
@@ -93,7 +93,7 @@ public class CalendarView extends RelativeLayout{
 		headerDelim.setBackgroundColor(gridColor);
 		scrollView.addView(headerDelim, lp);
 		rightmostHeader = headerDelim;
-		
+
 		View columnDelim = new View(getContext());
 		columnDelim.setId(++idRunner);
 		lp = new LayoutParams(width, 0);
@@ -105,7 +105,7 @@ public class CalendarView extends RelativeLayout{
 		rightmostColumn = columnDelim;
 	}
 
-	
+
 	public void addDay(Calendar day) {
 		final int dayOfWeek = day.get(Calendar.DAY_OF_WEEK);
 		if( dayOfWeek == Calendar.MONDAY){
@@ -130,16 +130,16 @@ public class CalendarView extends RelativeLayout{
 		columnHeader.setId(++idRunner);
 		scrollView.addView(columnHeader, headerLayoutParams);
 		rightmostHeader = scrollView;
-		
+
 		if (dayOfWeek == Calendar.MONDAY) {
 			((TextView) columnHeader.findViewById(R.id.weekLabel)).setText("Week "
 					+ day.get(Calendar.WEEK_OF_YEAR));
 		}
 		((TextView) columnHeader.findViewById(R.id.dayLabel))
 				.setText(dayLabelFormatter.format(day.getTime()));
-		
-		
-		
+
+
+
 		addVerticalDelimeter(THIN_DELIM);
 	}
 
@@ -166,12 +166,12 @@ public class CalendarView extends RelativeLayout{
 		}
 		return v;
 	}
-	
+
 	//hash function for matching columns and specific days
 	private int getDayIdentifier(Calendar day) {
 		return day.get(Calendar.YEAR) * 1000 + day.get(Calendar.DAY_OF_YEAR);
 	}
-	
+
 	@Override
 	protected void onLayout(boolean changed, int l, int t, int r, int b){
 		//make these two same height.. they are in different layouts
@@ -180,9 +180,9 @@ public class CalendarView extends RelativeLayout{
 		leftmostHeader.setLayoutParams(lp);
 		super.onLayout(changed, l, t, r, b);
 	}
-	
+
 	public void clear(){
-		
+
 		scrollView.removeAllViews();
 		idRunner = 42;
 		leftmostHeader = new View(getContext());
@@ -191,7 +191,7 @@ public class CalendarView extends RelativeLayout{
 		lp.addRule(ALIGN_PARENT_TOP);
 		lp.addRule(ALIGN_PARENT_LEFT);
 		scrollView.addView(leftmostHeader, lp);
-		
+
 		leftmostColumn = new View(getContext());
 		leftmostColumn.setId(++idRunner);
 		lp = new LayoutParams(0, 0);
@@ -199,7 +199,7 @@ public class CalendarView extends RelativeLayout{
 		lp.addRule(ALIGN_PARENT_LEFT);
 		lp.addRule(ALIGN_PARENT_BOTTOM);
 		scrollView.addView(leftmostColumn, lp);
-		
+
 		rightmostHeader = leftmostHeader;
 		rightmostColumn = leftmostColumn;
 		rightmostColumn.setBackgroundColor(Color.MAGENTA);//setVisibility(INVISIBLE);
