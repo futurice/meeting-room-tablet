@@ -152,10 +152,10 @@ public class CalendarView extends RelativeLayout{
 	}
 
 	private CalendarMarker getViewForTimeSpan(Calendar begin, Calendar end) {
-		if (end.get(Calendar.HOUR_OF_DAY) >= endHour.get(Calendar.HOUR_OF_DAY)){
+		/*if (end.get(Calendar.HOUR_OF_DAY) >= endHour.get(Calendar.HOUR_OF_DAY)){
 			end.set(Calendar.HOUR_OF_DAY, endHour.get(Calendar.HOUR_OF_DAY));
 			end.set(Calendar.MINUTE, endHour.get(Calendar.MINUTE));
-		}
+		}*/
 		CalendarMarker v = new CalendarMarker(this.getContext(), new TimeSpan(begin, end));
 		LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
 				LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT,

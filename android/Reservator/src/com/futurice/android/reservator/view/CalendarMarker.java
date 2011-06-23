@@ -1,6 +1,9 @@
 package com.futurice.android.reservator.view;
 
 
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+
 import com.futurice.android.reservator.R;
 import com.futurice.android.reservator.R.color;
 import com.futurice.android.reservator.model.Reservation;
@@ -9,19 +12,30 @@ import com.futurice.android.reservator.model.TimeSpan;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
-public class CalendarMarker extends FrameLayout {
+public class CalendarMarker extends FrameLayout{
 	private Reservation reservation = null;
 	private boolean reserved = false;
 	private TimeSpan timeSpan;
 	View content = null;
+	private float proportionalTouchYCoordinate = 0.0f;
+	OnTouchListener onTouchListener = new OnTouchListener() {
+		
+		@Override
+		public boolean onTouch(View v, MotionEvent event) {
+			proportionalTouchYCoordinate = event.getY() / getHeight(); 
+			return false;
+		}
+	};
 	public CalendarMarker(Context context, TimeSpan timeSpan) {
 		super(context);
 		this.timeSpan = timeSpan;
 		this.setPadding(0,0,0,0);
+		this.setOnTouchListener(onTouchListener);
 	}
 	@Override
 	protected void dispatchDraw(Canvas c){
@@ -68,5 +82,11 @@ public class CalendarMarker extends FrameLayout {
 		this.removeView(content);
 		content = v;
 		addView(v);
+	}
+	public Calendar getTouchedTime(){
+		Calendar time = Calendar.getInstance();
+		float length = proportionalTouchYCoordinate  * timeSpan.getLength();
+		time.setTimeInMillis((long)(timeSpan.getStart().getTimeInMillis() + length));
+		return time;
 	}
 }

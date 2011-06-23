@@ -12,7 +12,7 @@ public class RoomReservationPopup extends Dialog {
 	RoomReservationView reservationView;
 	CalendarMarker marker;
 
-	protected RoomReservationPopup(Context context, TimeSpan timeLimits, Room room) {
+	protected RoomReservationPopup(Context context, TimeSpan timeLimits, TimeSpan presetTime, Room room) {
 		super(context, R.style.Theme_Transparent);
 		setCancelable(true);
 
@@ -23,6 +23,8 @@ public class RoomReservationPopup extends Dialog {
 		reservationView.resetTimeSpan();
 		reservationView.setMinTime(timeLimits.getStart());
 		reservationView.setMaxTime(timeLimits.getEnd());
+		reservationView.timePicker2.setStartTime(presetTime.getStart());
+		reservationView.timePicker2.setEndTime(presetTime.getEnd());
 		reservationView.setEndTimeRelatively(60);
 
 		reservationView.findViewById(R.id.cancelButton).setOnClickListener(new View.OnClickListener() {
@@ -41,6 +43,4 @@ public class RoomReservationPopup extends Dialog {
 		});
 		reservationView.setReserveMode();
 	}
-
-
 }
