@@ -24,12 +24,14 @@
                 <EmailAddress>{UserAddress}</EmailAddress>
               </Mailbox>
             </Attendee>
+          </RequiredAttendees>
+          <Resources>            
             <Attendee>
               <Mailbox>
                 <EmailAddress>{RoomAddress}</EmailAddress>
               </Mailbox>
             </Attendee>
-          </RequiredAttendees>
+          </Resources>
         </t:CalendarItem>
       </Items>
     </CreateItem>
