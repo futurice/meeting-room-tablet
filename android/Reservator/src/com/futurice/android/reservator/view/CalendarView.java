@@ -64,7 +64,7 @@ public class CalendarView extends RelativeLayout{
 		scrollView = (RelativeLayout) findViewById(R.id.relativeLayout1);
 		clear();
 	}
-
+	
 	@Override
 	protected void dispatchDraw(Canvas c) {
 		/*int topLeftHeight = findViewById(R.id.topLeftEmptyBox).getHeight();

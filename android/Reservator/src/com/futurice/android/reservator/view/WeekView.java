@@ -15,6 +15,7 @@ import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 
 import com.futurice.android.reservator.R;
+import com.futurice.android.reservator.ReservatorApplication;
 import com.futurice.android.reservator.model.Reservation;
 import com.futurice.android.reservator.model.ReservatorException;
 import com.futurice.android.reservator.model.Room;
@@ -28,17 +29,14 @@ public class WeekView extends RelativeLayout implements OnClickListener {
 	private FrameLayout calendarFrame = null;
 	public WeekView(Context context) {
 		this(context, null);
-
 	}
 
 	public WeekView(Context context, AttributeSet attrs) {
 		this(context, attrs, 0);
-
 	}
 
 	public WeekView(Context context, AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);
-
 	}
 
 	public void setRoom(Room room) {
@@ -56,7 +54,7 @@ public class WeekView extends RelativeLayout implements OnClickListener {
 		
 		List<Reservation> reservations;
 		try {
-			reservations = currentRoom.getReservations(true);
+			reservations = currentRoom.getReservations(false);
 		} catch (ReservatorException e) {
 			// TODO: XXX
 			Log.e("DataProxy", "getReservations", e);
@@ -170,7 +168,7 @@ public class WeekView extends RelativeLayout implements OnClickListener {
 
 					@Override
 					public void onCancel(DialogInterface dialog) {
-						refreshData();
+						((ReservatorApplication)getContext().getApplicationContext()).getDataProxy().refreshRoomReservations(currentRoom);
 					}
 				});
 			}
@@ -179,7 +177,13 @@ public class WeekView extends RelativeLayout implements OnClickListener {
 	}
 
 	public void refreshData(){
-		setRoom(currentRoom);
+		post(new Runnable() {
+			@Override
+			public void run() {
+				setRoom(currentRoom);
+			}
+		});
+		
 	}
 	private void addFreeMarker(Calendar startTime, Calendar endTime) {
 		if(startTime.after(endTime)){
@@ -194,6 +198,7 @@ public class WeekView extends RelativeLayout implements OnClickListener {
 			throw new IllegalArgumentException("starTime must be before endTime");
 		}
 		CalendarMarker marker = calendar.addMarker(startTime, endTime);
+		marker.setClickable(true); //blocks clicks from views it covers
 		marker.setReserved(true);
 		marker.setBackgroundColor(getResources().getColor(R.color.CalendarDisabledColor));
 	}

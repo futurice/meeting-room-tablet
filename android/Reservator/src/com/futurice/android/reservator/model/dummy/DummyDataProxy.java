@@ -5,21 +5,24 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.Set;
 
 
 import com.futurice.android.reservator.model.DataProxy;
+import com.futurice.android.reservator.model.DataUpdatedListener;
 import com.futurice.android.reservator.model.Reservation;
 import com.futurice.android.reservator.model.ReservatorException;
 import com.futurice.android.reservator.model.Room;
 import com.futurice.android.reservator.model.TimeSpan;
 
-public class DummyDataProxy implements DataProxy {
+public class DummyDataProxy extends DataProxy {
 	List<Room> rooms = null;
 	Map<String,List<Reservation>> reservations;
-
+	Set<DataUpdatedListener> listeners = new HashSet<DataUpdatedListener>();
 	public DummyDataProxy() {
 		this.rooms = new ArrayList<Room>();
 		this.reservations = new HashMap<String,List<Reservation>>();
@@ -117,5 +120,15 @@ public class DummyDataProxy implements DataProxy {
 		reservations.put(room.getEmail(), ret); // put into the cache
 
 		return ret;
+	}
+
+	@Override
+	public void addDataUpdatedListener(DataUpdatedListener listener) {
+		listeners.add(listener);
+		
+	}
+	@Override
+	public void removeDataUpdatedListener(DataUpdatedListener listener) {
+		listeners.remove(listener);
 	}
 }

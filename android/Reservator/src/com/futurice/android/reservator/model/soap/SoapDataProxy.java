@@ -41,7 +41,7 @@ import com.futurice.android.reservator.model.TimeSpan;
 import com.futurice.android.reservator.model.soap.EWS.MicrosoftStyle;
 import com.futurice.android.reservator.model.soap.SoapEWS.Envelope;
 
-public class SoapDataProxy implements DataProxy{
+public class SoapDataProxy extends DataProxy{
 	private String user = null;
 	private String password = null;
 
@@ -152,7 +152,7 @@ public class SoapDataProxy implements DataProxy{
 			throw new ReservatorException(e);
 		}
 	}
-
+	
 	protected List<Room> fetchRooms(String roomAddress) throws ReservatorException {
 		Log.v("fetchRooms", roomAddress);
 
@@ -178,7 +178,7 @@ public class SoapDataProxy implements DataProxy{
 	public void deinit() {
 		this.rooms = null;
 	}
-
+	
 	@Override
 	public List<Room> getRooms() throws ReservatorException {
 		// cache
@@ -266,5 +266,4 @@ public class SoapDataProxy implements DataProxy{
 			throw new ReservatorException(e);
 		}
 	}
-
 }
