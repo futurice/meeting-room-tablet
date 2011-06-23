@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"
+               xmlns:t="http://schemas.microsoft.com/exchange/services/2006/types">
+  <soap:Body>
+    <FindItem xmlns="http://schemas.microsoft.com/exchange/services/2006/messages"
+               xmlns:t="http://schemas.microsoft.com/exchange/services/2006/types"
+              Traversal="Shallow">
+      <ItemShape>
+        <t:BaseShape>AllProperties</t:BaseShape>
+      </ItemShape>
+	  <Restriction>
+		  <And xmlns="http://schemas.microsoft.com/exchange/services/2006/types">
+			<IsGreaterThanOrEqualTo>
+				<FieldURI FieldURI="calendar:Start" />
+				<FieldURIOrConstant>
+					<Constant Value="{StartTime}"/>
+				</FieldURIOrConstant>
+			</IsGreaterThanOrEqualTo>
+			<IsLessThanOrEqualTo>
+				<FieldURI FieldURI="calendar:End" />
+				<FieldURIOrConstant>
+					<Constant Value="{EndTime}"/>
+				</FieldURIOrConstant>
+			</IsLessThanOrEqualTo>
+		</And>
+      </Restriction>
+      <ParentFolderIds>
+		  <t:DistinguishedFolderId Id="calendar">
+		  	<t:Mailbox>
+				<t:EmailAddress>{RoomAddress}</t:EmailAddress>
+			</t:Mailbox>
+		  </t:DistinguishedFolderId>
+      </ParentFolderIds>
+    </FindItem>
+  </soap:Body>
+</soap:Envelope>
