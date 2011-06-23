@@ -124,4 +124,8 @@ public class Room {
 
 		return null;
 	}
+
+	public boolean equals(Room room) {
+		return email.equals(room.getEmail());
+	}
 }
