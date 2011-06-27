@@ -1,6 +1,6 @@
 package com.futurice.android.reservator;
 
-import java.util.List;
+import java.util.Vector;
 
 import com.futurice.android.reservator.model.DataProxy;
 import com.futurice.android.reservator.model.DataUpdatedListener;
@@ -87,7 +87,7 @@ public class RoomInfo extends Activity implements OnMenuItemClickListener, DataU
 	}
 
 	@Override
-	public void roomListUpdated(List<Room> rooms) {
+	public void roomListUpdated(Vector<Room> rooms) {
 		for (Room r : rooms) {
 			if (r.getEmail().equals(roomEmail)) {
 			final Room theRoom = r;
@@ -106,7 +106,7 @@ public class RoomInfo extends Activity implements OnMenuItemClickListener, DataU
 
 	@Override
 	public void roomReservationsUpdated(Room room,
-			List<Reservation> reservations) {
+			Vector<Reservation> reservations) {
 		if (currentRoom != null && room.getEmail().equals(roomEmail)) {
 			if (room.getEmail().equals(roomEmail)) {
 				weekView.refreshData();

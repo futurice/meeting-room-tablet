@@ -1,14 +1,14 @@
 package com.futurice.android.reservator.model;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
+import java.util.Vector;
 
 public abstract class DataProxy {
 	public abstract void setCredentials(String user, String password);
 	public abstract void deinit(); // TODO: do we need this?
 	abstract public void reserve(Room room, TimeSpan timeSpan, String ownerEmail) throws ReservatorException;
-	abstract public List<Room> getRooms() throws ReservatorException;
+	abstract public Vector<Room> getRooms() throws ReservatorException;
 	
 	private Set<DataUpdatedListener> listeners = new HashSet<DataUpdatedListener>();
 	public void refreshRooms(){
@@ -23,7 +23,7 @@ public abstract class DataProxy {
 			}
 		}.start();
 	}
-	abstract protected List<Reservation> getRoomReservations(Room room) throws ReservatorException;
+	abstract protected Vector<Reservation> getRoomReservations(Room room) throws ReservatorException;
 	public void refreshRoomReservations(final Room room){
 		new Thread(){
 			public void run(){
@@ -43,12 +43,12 @@ public abstract class DataProxy {
 	public void removeDataUpdatedListener(DataUpdatedListener listener){
 		listeners.remove(listener);
 	}
-	private void notifyRoomsUpdated(List<Room> rooms){
+	private void notifyRoomsUpdated(Vector<Room> rooms){
 		for(DataUpdatedListener l : listeners){
 			l.roomListUpdated(rooms);
 		}
 	}
-	private void notifyRoomReservationsUpdated(Room room, List<Reservation> reservations){
+	private void notifyRoomReservationsUpdated(Room room, Vector<Reservation> reservations){
 		for(DataUpdatedListener l : listeners){
 			l.roomReservationsUpdated(room, reservations);
 		}

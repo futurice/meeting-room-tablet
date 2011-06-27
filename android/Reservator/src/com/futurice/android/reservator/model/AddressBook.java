@@ -1,13 +1,13 @@
 package com.futurice.android.reservator.model;
 
-import java.util.List;
+import java.util.Vector;
 
 public abstract class AddressBook {
-	private List<AddressBookEntry> entries;
+	private Vector<AddressBookEntry> entries;
 
-	protected abstract List<AddressBookEntry> fetchEntries() throws ReservatorException;
+	protected abstract Vector<AddressBookEntry> fetchEntries() throws ReservatorException;
 
-	public List<AddressBookEntry> getEntries() throws ReservatorException {
+	public Vector<AddressBookEntry> getEntries() throws ReservatorException {
 		prefetchEntries();
 		return entries;
 	}

@@ -1,28 +1,27 @@
 package com.futurice.android.reservator.model;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
-import java.util.List;
+import java.util.Vector;
 
 public class Room {
 	private String name, email;
-	private List<Reservation> reservations;
+	private Vector<Reservation> reservations;
 	private DataProxy dataProxy;
 
 	public Room(String name, String email, DataProxy dataProxy) {
 		this.name = name;
 		this.email = email;
 		this.dataProxy = dataProxy;
-		this.reservations = new ArrayList<Reservation>();
+		this.reservations = new Vector<Reservation>();
 	}
 
-	public List<Reservation> getReservations(boolean forceRefresh) throws ReservatorException {
+	public Vector<Reservation> getReservations(boolean forceRefresh) throws ReservatorException {
 		if (forceRefresh || this.reservations == null) {
 			reservations = dataProxy.getRoomReservations(this);
 		}
 		if (reservations == null) {
-			reservations = new ArrayList<Reservation>();
+			reservations = new Vector<Reservation>();
 		}
 		Collections.sort(reservations); // TODO: do we need to sort?
 		return this.reservations;

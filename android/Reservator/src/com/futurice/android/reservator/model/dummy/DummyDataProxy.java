@@ -1,31 +1,26 @@
 package com.futurice.android.reservator.model.dummy;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Random;
-import java.util.Set;
+import java.util.Vector;
 
 
 import com.futurice.android.reservator.model.DataProxy;
-import com.futurice.android.reservator.model.DataUpdatedListener;
 import com.futurice.android.reservator.model.Reservation;
 import com.futurice.android.reservator.model.ReservatorException;
 import com.futurice.android.reservator.model.Room;
 import com.futurice.android.reservator.model.TimeSpan;
 
 public class DummyDataProxy extends DataProxy {
-	List<Room> rooms = null;
-	Map<String,List<Reservation>> reservations;
-	Set<DataUpdatedListener> listeners = new HashSet<DataUpdatedListener>();
+	Vector<Room> rooms = null;
+	Map<String,Vector<Reservation>> reservations;
 	public DummyDataProxy() {
-		this.rooms = new ArrayList<Room>();
-		this.reservations = new HashMap<String,List<Reservation>>();
+		this.rooms = new Vector<Room>();
+		this.reservations = Collections.synchronizedMap(new HashMap<String,Vector<Reservation>>());
 
 		rooms.add(new Room("Room-Panorama-401", "401-Panorama@futu.com", this));
 		rooms.add(new Room("Room-Pilotti-402", "402-Pilotti@futu.com", this));
@@ -37,8 +32,8 @@ public class DummyDataProxy extends DataProxy {
 		rooms.add(new Room("Project-Metkula-408", "408-Metkula@futu.com", this));
 
 		rooms.add(new Room("Project-Verstas-506", "506-Verstas@futu.com", this));
-		rooms.add(new Room("Room-Kenk√§kauppa-503", "503-Kenkakauppa@futu.com", this));
-		rooms.add(new Room("Room-Koivumets√§-504", "504-Koivumetsa@futu.com", this));
+		rooms.add(new Room("Room-Kenk‰kauppa-503", "503-Kenkakauppa@futu.com", this));
+		rooms.add(new Room("Room-Koivumets‰-504", "504-Koivumetsa@futu.com", this));
 		rooms.add(new Room("Room-Merineukkari-502", "502-Merineukkari@futu.com", this));
 		rooms.add(new Room("Room-Pikku Neukkari-501", "501-pikkuneukkari@futu.com", this));
 
@@ -57,7 +52,7 @@ public class DummyDataProxy extends DataProxy {
 	}
 
 	@Override
-	public List<Room> getRooms() {
+	public Vector<Room> getRooms() {
 		return rooms;
 	}
 
@@ -66,7 +61,7 @@ public class DummyDataProxy extends DataProxy {
 		// TODO: check for availability
 
 		Reservation reservation = new Reservation(room, "reserved with FutuReservator5000", timeSpan.getStart(), timeSpan.getEnd());
-		List<Reservation> roomReservations = reservations.get(room.getEmail());
+		Vector<Reservation> roomReservations = reservations.get(room.getEmail());
 		if (roomReservations == null) {
 			throw new ReservatorException("unknown room");
 		}
@@ -79,15 +74,15 @@ public class DummyDataProxy extends DataProxy {
 	}
 
 	@Override
-	public List<Reservation> getRoomReservations(Room room) {
+	public Vector<Reservation> getRoomReservations(Room room) {
 		try {
 			Thread.sleep((int)(Math.random()*10));
 		} catch (InterruptedException e1) {}
 
-		List<Reservation> ret = reservations.get(room.getEmail());
+		Vector<Reservation> ret = reservations.get(room.getEmail());
 		if (ret != null) return ret; // found in cache
 
-		ret = new ArrayList<Reservation>();
+		ret = new Vector<Reservation>();
 		Random rand = new Random();
 		Calendar cal = Calendar.getInstance();
 		cal.set(Calendar.HOUR_OF_DAY, 8);
@@ -120,15 +115,5 @@ public class DummyDataProxy extends DataProxy {
 		reservations.put(room.getEmail(), ret); // put into the cache
 
 		return ret;
-	}
-
-	@Override
-	public void addDataUpdatedListener(DataUpdatedListener listener) {
-		listeners.add(listener);
-		
-	}
-	@Override
-	public void removeDataUpdatedListener(DataUpdatedListener listener) {
-		listeners.remove(listener);
 	}
 }

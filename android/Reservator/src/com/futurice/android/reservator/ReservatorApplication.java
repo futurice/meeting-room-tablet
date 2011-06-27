@@ -3,8 +3,6 @@ package com.futurice.android.reservator;
 import com.futurice.android.reservator.model.AddressBook;
 import com.futurice.android.reservator.model.DataProxy;
 import com.futurice.android.reservator.model.ReservatorException;
-import com.futurice.android.reservator.model.dummy.DummyAddressBook;
-import com.futurice.android.reservator.model.dummy.DummyDataProxy;
 import com.futurice.android.reservator.model.fum3.FumAddressBook;
 import com.futurice.android.reservator.model.soap.SoapDataProxy;
 

@@ -2,7 +2,7 @@ package com.futurice.android.reservator;
 
 import java.util.Calendar;
 import java.util.Comparator;
-import java.util.List;
+import java.util.Vector;
 
 import com.futurice.android.reservator.model.DataProxy;
 import com.futurice.android.reservator.model.DataUpdatedListener;
@@ -107,7 +107,7 @@ public class HomeActivity extends Activity implements OnMenuItemClickListener,
 	}
 
 	@Override
-	public void roomListUpdated(List<Room> rooms) {
+	public void roomListUpdated(Vector<Room> rooms) {
 		//proceed to requesting room reservation data
 		for (Room r : rooms) {
 			RoomsInfo info = RoomsInfo.getRoomsInfo(r);
@@ -122,7 +122,7 @@ public class HomeActivity extends Activity implements OnMenuItemClickListener,
 
 	@Override
 	public void roomReservationsUpdated(final Room room,
-			List<Reservation> reservations) {
+			Vector<Reservation> reservations) {
 		//RUN THE WHOLE THING IN UI THREAD now that we have all the reservation data for this room
 		container.post(new Runnable() {
 			

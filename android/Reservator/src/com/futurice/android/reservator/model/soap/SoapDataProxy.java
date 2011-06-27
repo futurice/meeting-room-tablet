@@ -3,12 +3,11 @@ package com.futurice.android.reservator.model.soap;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.List;
 import java.util.TimeZone;
+import java.util.Vector;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.auth.AuthScope;
@@ -67,8 +66,8 @@ public class SoapDataProxy extends DataProxy{
 		dateFormatUTC.setTimeZone(TimeZone.getTimeZone("UTC"));
 	}
 
-	List<String> roomLists = null;
-	List<Room> rooms = null;
+	Vector<String> roomLists = null;
+	Vector<Room> rooms = null;
 
 	@Override
 	public void setCredentials(String user, String password) {
@@ -153,7 +152,7 @@ public class SoapDataProxy extends DataProxy{
 		}
 	}
 	
-	protected List<Room> fetchRooms(String roomAddress) throws ReservatorException {
+	protected Vector<Room> fetchRooms(String roomAddress) throws ReservatorException {
 		Log.v("fetchRooms", roomAddress);
 
 		String xml = getRoomsXmlTemplate.replace("{RoomListAddress}", roomAddress);
@@ -180,13 +179,13 @@ public class SoapDataProxy extends DataProxy{
 	}
 	
 	@Override
-	public List<Room> getRooms() throws ReservatorException {
+	public Vector<Room> getRooms() throws ReservatorException {
 		// cache
 		if (rooms != null) return rooms;
 
 		fetchRoomLists();
 
-		rooms = new ArrayList<Room>();
+		rooms = new Vector<Room>();
 
 		for (String roomAddress : roomLists) {
 			rooms.addAll(fetchRooms(roomAddress));
@@ -232,7 +231,7 @@ public class SoapDataProxy extends DataProxy{
 	}
 
 	@Override
-	public List<Reservation> getRoomReservations(Room room) throws ReservatorException {
+	public Vector<Reservation> getRoomReservations(Room room) throws ReservatorException {
 		Log.v("SOAP", "getRoomReservations: "+  room.toString());
 
 		Calendar now = Calendar.getInstance();

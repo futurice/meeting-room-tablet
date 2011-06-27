@@ -1,18 +1,17 @@
 package com.futurice.android.reservator.model.dummy;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Vector;
 
 import com.futurice.android.reservator.model.AddressBookEntry;
 import com.futurice.android.reservator.model.AddressBook;
 
 public class DummyAddressBook extends AddressBook {
 	@Override
-	protected List<AddressBookEntry> fetchEntries() {
-		List<AddressBookEntry> entries = new ArrayList<AddressBookEntry>();
+	protected Vector<AddressBookEntry> fetchEntries() {
+		Vector<AddressBookEntry> entries = new Vector<AddressBookEntry>();
 
 		entries.add(new AddressBookEntry("Oleg Grenrus", "oleg.grenrus@futurice.com"));
-		entries.add(new AddressBookEntry("Vihtori M√§ntyl√§", "vihtori.mantyla@futurice.com"));
+		entries.add(new AddressBookEntry("Vihtori M‰ntyl‰", "vihtori.mantyla@futurice.com"));
 
 		return entries;
 	}

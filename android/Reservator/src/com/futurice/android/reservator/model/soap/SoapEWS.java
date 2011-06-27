@@ -1,9 +1,8 @@
 package com.futurice.android.reservator.model.soap;
 
 import java.text.ParseException;
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
+import java.util.Vector;
 
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Element;
@@ -24,39 +23,39 @@ public class SoapEWS {
 
 		public Envelope() {}
 
-		public List<String> getRoomLists() throws ReservatorException {
+		public Vector<String> getRoomLists() throws ReservatorException {
 			GetRoomListsResponse response = body.getGetRoomListsResponse();
 			if (response == null || !response.getResponseCode().equals("NoError") || !response.getResponseClass().equals("Success")) {
 				throw new ReservatorException("Error in SOAP answer");
 			}
 
-			List<String> lists = new ArrayList<String>();
+			Vector<String> lists = new Vector<String>();
 			for (Address address : response.getRoomLists()) {
 				lists.add(address.getEmailAddress());
 			}
 			return lists;
 		}
 
-		public List<com.futurice.android.reservator.model.Room> getRooms(DataProxy dataProxy) throws ReservatorException {
+		public Vector<com.futurice.android.reservator.model.Room> getRooms(DataProxy dataProxy) throws ReservatorException {
 			GetRoomsResponse response = body.getGetRoomsResponse();
 			if (response == null || !response.getResponseCode().equals("NoError") || !response.getResponseClass().equals("Success")) {
 				throw new ReservatorException("Error in SOAP answer");
 			}
 
-			List<com.futurice.android.reservator.model.Room> lists = new ArrayList<com.futurice.android.reservator.model.Room>();
+			Vector<com.futurice.android.reservator.model.Room> lists = new Vector<com.futurice.android.reservator.model.Room>();
 			for (Room room : response.getRooms()) {
 				lists.add(new com.futurice.android.reservator.model.Room(room.getName(), room.getEmailAddress(), dataProxy));
 			}
 			return lists;
 		}
 
-		public List<com.futurice.android.reservator.model.Reservation> getReservations(com.futurice.android.reservator.model.Room room) throws ReservatorException  {
+		public Vector<com.futurice.android.reservator.model.Reservation> getReservations(com.futurice.android.reservator.model.Room room) throws ReservatorException  {
 			FindItemResponse response = body.getFindItemResponse();
 			if (response == null || !response.getResponseCode().equals("NoError") || !response.getResponseClass().equals("Success")) {
 				throw new ReservatorException("Error in SOAP answer");
 			}
 
-			List<com.futurice.android.reservator.model.Reservation> reservations = new ArrayList<com.futurice.android.reservator.model.Reservation>();
+			Vector<com.futurice.android.reservator.model.Reservation> reservations = new Vector<com.futurice.android.reservator.model.Reservation>();
 			if (response.getItems() == null) return reservations; // no reservations
 
 			Calendar startTime = Calendar.getInstance();
@@ -129,7 +128,7 @@ public class SoapEWS {
 
 		@ElementList
 		@Namespace(prefix="m")
-		private List<Room> rooms;
+		private Vector<Room> rooms;
 
 		public GetRoomsResponse() {}
 
@@ -141,7 +140,7 @@ public class SoapEWS {
 			return responseCode;
 		}
 
-		public List<Room> getRooms() {
+		public Vector<Room> getRooms() {
 			return rooms;
 		}
 	}
@@ -155,7 +154,7 @@ public class SoapEWS {
 
 		@ElementList
 		@Namespace(prefix="m")
-		private List<Address> roomLists;
+		private Vector<Address> roomLists;
 
 		public GetRoomListsResponse() {}
 
@@ -167,7 +166,7 @@ public class SoapEWS {
 			return responseCode;
 		}
 
-		public List<Address> getRoomLists() {
+		public Vector<Address> getRoomLists() {
 			return roomLists;
 		}
 	}
@@ -175,7 +174,7 @@ public class SoapEWS {
 	public static class CreateItemResponse {
 		@ElementList
 		@Namespace(prefix="m")
-		List<CreateItemResponseMessage> responseMessages;
+		Vector<CreateItemResponseMessage> responseMessages;
 
 		public CreateItemResponse() {}
 
@@ -211,7 +210,7 @@ public class SoapEWS {
 	public static class FindItemResponse {
 		@ElementList
 		@Namespace(prefix="m")
-		private List<FindItemResponseMessage> responseMessages;
+		private Vector<FindItemResponseMessage> responseMessages;
 
 		public FindItemResponse() {}
 
@@ -243,7 +242,7 @@ public class SoapEWS {
 			}
 		}
 
-		public List<CalendarItem> getItems() {
+		public Vector<CalendarItem> getItems() {
 			FindItemResponseMessage message = getMessage();
 			if (message == null) {
 				return null;
@@ -281,11 +280,11 @@ public class SoapEWS {
 	public static class FindItemResponseMessage extends ResponseMessage {
 		@ElementList
 		@Path("m:RootFolder")
-		private List<CalendarItem> items;
+		private Vector<CalendarItem> items;
 
 		public FindItemResponseMessage() {}
 
-		public List<CalendarItem> getItems() {
+		public Vector<CalendarItem> getItems() {
 			return items;
 		}
 	}

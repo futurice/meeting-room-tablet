@@ -1,8 +1,7 @@
 package com.futurice.android.reservator.model.fum3;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Vector;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -43,8 +42,8 @@ public class FumAddressBook extends AddressBook {
 	private Pattern namePattern = Pattern.compile("^\\s*(.*)\\((\\S+)\\)\\s*$");
 
 	@Override
-	protected List<AddressBookEntry> fetchEntries() throws ReservatorException {
-		List<AddressBookEntry> entries = new ArrayList<AddressBookEntry>();
+	protected Vector<AddressBookEntry> fetchEntries() throws ReservatorException {
+		Vector<AddressBookEntry> entries = new Vector<AddressBookEntry>();
 
 		String result = "";
 
