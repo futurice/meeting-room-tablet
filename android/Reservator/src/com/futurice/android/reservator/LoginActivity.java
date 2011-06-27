@@ -17,7 +17,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class Reservator extends Activity implements OnClickListener, OnMenuItemClickListener {
+public class LoginActivity extends Activity implements OnClickListener, OnMenuItemClickListener {
 	MenuItem settingsMenu;
 
 	/** Called when the activity is first created. */
@@ -33,7 +33,7 @@ public class Reservator extends Activity implements OnClickListener, OnMenuItemC
 				&& login(preferences.getString("username", null), preferences.getString("password", null))) {
 			// do nothing, activity is changed in login
 		} else {
-			setContentView(R.layout.login);
+			setContentView(R.layout.login_activity);
 			((Button) findViewById(R.id.loginButton)).setOnClickListener(this);
 		}
 	}
@@ -61,7 +61,7 @@ public class Reservator extends Activity implements OnClickListener, OnMenuItemC
 			editor.putString("password", password);
 			editor.commit();
 
-			Intent i = new Intent(this, HomeActivity.class);
+			Intent i = new Intent(this, LobbyActivity.class);
 			startActivityForResult(i, 0);
 			return true;
 		} catch (ReservatorException ex) {

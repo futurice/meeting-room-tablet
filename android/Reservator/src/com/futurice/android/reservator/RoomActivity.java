@@ -22,7 +22,7 @@ import android.view.Window;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-public class RoomInfo extends Activity implements OnMenuItemClickListener,
+public class RoomActivity extends Activity implements OnMenuItemClickListener,
 		DataUpdatedListener {
 	public static final String ROOM_EMAIL_EXTRA = "roomEmail";
 	Room currentRoom;
@@ -38,7 +38,7 @@ public class RoomInfo extends Activity implements OnMenuItemClickListener,
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
-		setContentView(R.layout.room_browse_view);
+		setContentView(R.layout.room_activity);
 		this.weekView = (WeekView) findViewById(R.id.weekView1);
 		this.roomNameLabel = (TextView) findViewById(R.id.roomNameLabel);
 		roomEmail = getIntent().getStringExtra(ROOM_EMAIL_EXTRA);
@@ -50,7 +50,7 @@ public class RoomInfo extends Activity implements OnMenuItemClickListener,
 				new OnClickListener() {
 					@Override
 					public void onClick(View v) {
-						RoomInfo.this.finish();
+						RoomActivity.this.finish();
 					}
 				});
 	}

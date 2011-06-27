@@ -4,7 +4,7 @@ import java.util.Calendar;
 
 import com.futurice.android.reservator.R;
 import com.futurice.android.reservator.ReservatorApplication;
-import com.futurice.android.reservator.RoomInfo;
+import com.futurice.android.reservator.RoomActivity;
 import com.futurice.android.reservator.common.Helpers;
 import com.futurice.android.reservator.model.AddressBookAdapter;
 import com.futurice.android.reservator.model.ReservatorException;
@@ -238,8 +238,8 @@ public class RoomReservationView extends FrameLayout implements
 	}
 
 	private void showRoomInCalendar() {
-		Intent i = new Intent(getContext(), RoomInfo.class);
-		i.putExtra(RoomInfo.ROOM_EMAIL_EXTRA, room.getEmail());
+		Intent i = new Intent(getContext(), RoomActivity.class);
+		i.putExtra(RoomActivity.ROOM_EMAIL_EXTRA, room.getEmail());
 		getContext().startActivity(i);
 	}
 }

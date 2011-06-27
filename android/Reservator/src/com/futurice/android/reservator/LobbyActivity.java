@@ -23,7 +23,7 @@ import android.view.MenuItem.OnMenuItemClickListener;
 import android.view.Window;
 import android.widget.LinearLayout;
 
-public class HomeActivity extends Activity implements OnMenuItemClickListener,
+public class LobbyActivity extends Activity implements OnMenuItemClickListener,
 		DataUpdatedListener {
 	MenuItem settingsMenu, refreshMenu;
 	LinearLayout container = null;
@@ -36,7 +36,7 @@ public class HomeActivity extends Activity implements OnMenuItemClickListener,
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
-		this.setContentView(R.layout.lobby_view);
+		this.setContentView(R.layout.lobby_activity);
 		proxy = ((ReservatorApplication) getApplication()).getDataProxy();
 	}
 
@@ -53,7 +53,7 @@ public class HomeActivity extends Activity implements OnMenuItemClickListener,
 
 		refreshRoomInfo();
 	}
-	@Override 
+	@Override
 	public void onPause() {
 		super.onPause();
 		proxy.removeDataUpdatedListener(this);
@@ -134,7 +134,7 @@ public class HomeActivity extends Activity implements OnMenuItemClickListener,
 	}
 
 	private void processRoom(Room r) {
-		RoomReservationView v = new RoomReservationView(HomeActivity.this);
+		RoomReservationView v = new RoomReservationView(LobbyActivity.this);
 		v.setRoom(r);
 		v.setOnReserveCallback(new Callback() {
 			@Override
