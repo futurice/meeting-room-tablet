@@ -4,37 +4,22 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.Vector;
 
+import android.os.AsyncTask;
+
 public abstract class DataProxy {
 	public abstract void setCredentials(String user, String password);
 	public abstract void deinit(); // TODO: do we need this?
 	abstract public void reserve(Room room, TimeSpan timeSpan, String ownerEmail) throws ReservatorException;
 	abstract public Vector<Room> getRooms() throws ReservatorException;
-	
+	abstract public Vector<Reservation> getRoomReservations(Room r) throws ReservatorException;
 	private Set<DataUpdatedListener> listeners = new HashSet<DataUpdatedListener>();
+	
 	public void refreshRooms(){
-		new Thread(){
-			public void run(){
-				try {
-					notifyRoomsUpdated(getRooms());
-				} catch (ReservatorException e) {
-					//TODO errortoast or something, maybe tell listener about error?
-					e.printStackTrace();
-				}
-			}
-		}.start();
+		new RoomListRefreshTask().execute();
 	}
-	abstract protected Vector<Reservation> getRoomReservations(Room room) throws ReservatorException;
+	
 	public void refreshRoomReservations(final Room room){
-		new Thread(){
-			public void run(){
-				try {
-					notifyRoomReservationsUpdated(room, room.getReservations(true));
-				} catch (ReservatorException e) {
-					//TODO errortoast or something, maybe tell listener about error?
-					e.printStackTrace();
-				}
-			}
-		}.start();
+		new RoomReservationRefreshTask().execute(room);
 	}
 	
 	public void addDataUpdatedListener(DataUpdatedListener listener){
@@ -53,6 +38,53 @@ public abstract class DataProxy {
 			l.roomReservationsUpdated(room, reservations);
 		}
 	}
+	private void notifyRefreshFailed(ReservatorException e){
+		for(DataUpdatedListener l : listeners){
+			l.refreshFailed(e);
+		}
+	}
 	
+	private class RoomListRefreshTask extends AsyncTask<Void, Void, Vector<Room>>{
+		ReservatorException e = null;
+		@Override
+		protected Vector<Room> doInBackground(Void... params) {
+			try {
+				return getRooms();
+			} catch (ReservatorException e) {
+				this.e = e;
+				return null;
+			}
+		}
+		@Override
+		protected void onPostExecute(Vector<Room> rooms){
+			if(rooms == null){
+				notifyRefreshFailed(e);
+			}else{
+				notifyRoomsUpdated(rooms);
+			}
+		}
+	}
 	
+	private class RoomReservationRefreshTask extends AsyncTask<Room, Void, Room>{
+		ReservatorException e;
+		@Override
+		protected Room doInBackground(Room... rooms) {
+			Room room = rooms[0];
+			try {
+				room.setReservations(getRoomReservations(room));
+				return room;
+			} catch (ReservatorException e) {
+				this.e = e;
+				return null;
+			}
+		}
+		@Override
+		protected void onPostExecute(Room room){
+			if(room == null){
+				notifyRefreshFailed(e);
+			}else{
+				notifyRoomReservationsUpdated(room, room.getReservations());
+			}
+		}
+	}
 }

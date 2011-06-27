@@ -44,7 +44,7 @@ public class SoapEWS {
 
 			Vector<com.futurice.android.reservator.model.Room> lists = new Vector<com.futurice.android.reservator.model.Room>();
 			for (Room room : response.getRooms()) {
-				lists.add(new com.futurice.android.reservator.model.Room(room.getName(), room.getEmailAddress(), dataProxy));
+				lists.add(new com.futurice.android.reservator.model.Room(room.getName(), room.getEmailAddress()));
 			}
 			return lists;
 		}

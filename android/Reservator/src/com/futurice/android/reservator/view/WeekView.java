@@ -3,12 +3,12 @@ package com.futurice.android.reservator.view;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Vector;
 
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.FrameLayout;
@@ -17,7 +17,6 @@ import android.widget.RelativeLayout;
 import com.futurice.android.reservator.R;
 import com.futurice.android.reservator.ReservatorApplication;
 import com.futurice.android.reservator.model.Reservation;
-import com.futurice.android.reservator.model.ReservatorException;
 import com.futurice.android.reservator.model.Room;
 import com.futurice.android.reservator.model.TimeSpan;
 
@@ -52,14 +51,7 @@ public class WeekView extends RelativeLayout implements OnClickListener {
 		today.set(Calendar.SECOND, 0);
 		today.set(Calendar.MILLISECOND, 0);
 		
-		List<Reservation> reservations;
-		try {
-			reservations = currentRoom.getReservations(false);
-		} catch (ReservatorException e) {
-			// TODO: XXX
-			Log.e("DataProxy", "getReservations", e);
-			return;
-		}
+		Vector<Reservation> reservations = currentRoom.getReservations();
 		Calendar day = (Calendar)today.clone();
 		for (int i = 0; i < NUMBER_OF_DAYS_TO_SHOW; i++) {
 			// Skip weekend days

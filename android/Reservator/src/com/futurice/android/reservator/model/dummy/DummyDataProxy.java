@@ -22,20 +22,19 @@ public class DummyDataProxy extends DataProxy {
 		this.rooms = new Vector<Room>();
 		this.reservations = Collections.synchronizedMap(new HashMap<String,Vector<Reservation>>());
 
-		rooms.add(new Room("Room-Panorama-401", "401-Panorama@futu.com", this));
-		rooms.add(new Room("Room-Pilotti-402", "402-Pilotti@futu.com", this));
-		rooms.add(new Room("Room-Vauhtimato-403", "403-vauhtimato@futu.com", this));
-		rooms.add(new Room("Room-Space Shot-404", "404-Spaceshot@futu.com", this));
-		rooms.add(new Room("Project-Regatta-405", "405-Regatta@futu.com", this));
-		rooms.add(new Room("Project-Kino-406", "406-Kino@futu.com", this));
-		rooms.add(new Room("Project-Vekkula-407", "407-Vekkula@futu.com", this));
-		rooms.add(new Room("Project-Metkula-408", "408-Metkula@futu.com", this));
-
-		rooms.add(new Room("Project-Verstas-506", "506-Verstas@futu.com", this));
-		rooms.add(new Room("Room-Kenkäkauppa-503", "503-Kenkakauppa@futu.com", this));
-		rooms.add(new Room("Room-Koivumetsä-504", "504-Koivumetsa@futu.com", this));
-		rooms.add(new Room("Room-Merineukkari-502", "502-Merineukkari@futu.com", this));
-		rooms.add(new Room("Room-Pikku Neukkari-501", "501-pikkuneukkari@futu.com", this));
+		rooms.add(new Room("Room-Panorama-401", "401-Panorama@futu.com"));
+		rooms.add(new Room("Room-Pilotti-402", "402-Pilotti@futu.com"));
+		rooms.add(new Room("Room-Vauhtimato-403", "403-vauhtimato@futu.com"));
+		rooms.add(new Room("Room-Space Shot-404", "404-Spaceshot@futu.com"));
+		rooms.add(new Room("Project-Regatta-405", "405-Regatta@futu.com"));
+		rooms.add(new Room("Project-Kino-406", "406-Kino@futu.com"));
+		rooms.add(new Room("Project-Vekkula-407", "407-Vekkula@futu.com"));
+		rooms.add(new Room("Project-Metkula-408", "408-Metkula@futu.com"));
+		rooms.add(new Room("Project-Verstas-506", "506-Verstas@futu.com"));
+		rooms.add(new Room("Room-Kenkäkauppa-503", "503-Kenkakauppa@futu.com"));
+		rooms.add(new Room("Room-Koivumetsä-504", "504-Koivumetsa@futu.com"));
+		rooms.add(new Room("Room-Merineukkari-502", "502-Merineukkari@futu.com"));
+		rooms.add(new Room("Room-Pikku Neukkari-501", "501-pikkuneukkari@futu.com"));
 
 		Collections.sort(rooms, new Comparator<Room>() {
 			@Override

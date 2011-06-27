@@ -7,22 +7,14 @@ import java.util.Vector;
 public class Room {
 	private String name, email;
 	private Vector<Reservation> reservations;
-	private DataProxy dataProxy;
 
-	public Room(String name, String email, DataProxy dataProxy) {
+	public Room(String name, String email) {
 		this.name = name;
 		this.email = email;
-		this.dataProxy = dataProxy;
 		this.reservations = new Vector<Reservation>();
 	}
 
-	public Vector<Reservation> getReservations(boolean forceRefresh) throws ReservatorException {
-		if (forceRefresh || this.reservations == null) {
-			reservations = dataProxy.getRoomReservations(this);
-		}
-		if (reservations == null) {
-			reservations = new Vector<Reservation>();
-		}
+	public Vector<Reservation> getReservations(){
 		Collections.sort(reservations); // TODO: do we need to sort?
 		return this.reservations;
 	}
@@ -35,6 +27,10 @@ public class Room {
 		return email;
 	}
 
+	public void setReservations(Vector<Reservation> reservations){
+		this.reservations = reservations;
+	}
+	
 	@Override
 	public String toString() {
 		return name; // + " " + (isFree() ? "(free)" : "(reserved)");
