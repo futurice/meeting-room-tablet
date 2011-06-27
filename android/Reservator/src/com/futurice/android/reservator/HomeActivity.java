@@ -123,15 +123,8 @@ public class HomeActivity extends Activity implements OnMenuItemClickListener,
 	@Override
 	public void roomReservationsUpdated(final Room room,
 			Vector<Reservation> reservations) {
-		//RUN THE WHOLE THING IN UI THREAD now that we have all the reservation data for this room
-		container.post(new Runnable() {
-			
-			@Override
-			public void run() {
 				processRoom(room);
 				hideLoading();
-			}
-		});
 	}
 
 	@Override

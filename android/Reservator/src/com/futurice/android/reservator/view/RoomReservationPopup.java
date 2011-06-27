@@ -15,10 +15,16 @@ public class RoomReservationPopup extends Dialog {
 	protected RoomReservationPopup(Context context, TimeSpan timeLimits, TimeSpan presetTime, Room room) {
 		super(context, R.style.Theme_Transparent);
 		setCancelable(true);
-
+		
 		setContentView(R.layout.reservation_popup);
+		findViewById(R.id.relativeLayout1).setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				cancel();
+			}
+		});
 		reservationView = (RoomReservationView)findViewById(R.id.roomReservationView1);
-
+		reservationView.setClickable(true);
 		reservationView.setRoom(room);
 		reservationView.resetTimeSpan();
 		reservationView.setMinTime(timeLimits.getStart());

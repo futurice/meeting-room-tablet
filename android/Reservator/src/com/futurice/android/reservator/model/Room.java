@@ -15,7 +15,6 @@ public class Room {
 	}
 
 	public Vector<Reservation> getReservations(){
-		Collections.sort(reservations); // TODO: do we need to sort?
 		return this.reservations;
 	}
 
@@ -29,6 +28,7 @@ public class Room {
 
 	public void setReservations(Vector<Reservation> reservations){
 		this.reservations = reservations;
+		Collections.sort(reservations);
 	}
 	
 	@Override

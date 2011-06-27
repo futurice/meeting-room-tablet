@@ -16,6 +16,7 @@
     <string name="weekLabelTemplate">Week ^1</string>
     <string name="from">From </string>
     <string name="to">To </string>
+    <string name="seeAllRooms">See all rooms</string>
     <string name="exchange_server_address">Exchange server address</string>
     <string name="PREFERENCES_SERVER_ADDRESS">serverAddress</string>
 </resources>

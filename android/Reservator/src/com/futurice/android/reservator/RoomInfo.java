@@ -16,11 +16,14 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MenuItem.OnMenuItemClickListener;
+import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.Window;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-public class RoomInfo extends Activity implements OnMenuItemClickListener, DataUpdatedListener {
+public class RoomInfo extends Activity implements OnMenuItemClickListener,
+		DataUpdatedListener {
 	public static final String ROOM_EMAIL_EXTRA = "roomEmail";
 	Room currentRoom;
 	WeekView weekView;
@@ -43,6 +46,13 @@ public class RoomInfo extends Activity implements OnMenuItemClickListener, DataU
 			throw new IllegalArgumentException(
 					"No room identifying e-mail address found as string extra 'roomEmail'");
 		}
+		findViewById(R.id.seeAllRoomsButton).setOnClickListener(
+				new OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						RoomInfo.this.finish();
+					}
+				});
 	}
 
 	@Override
@@ -61,9 +71,10 @@ public class RoomInfo extends Activity implements OnMenuItemClickListener, DataU
 	}
 
 	private void setRoom(Room r) {
-			currentRoom = r;
-			roomNameLabel.setText(RoomsInfo.getRoomsInfo(currentRoom).getRoomName());
-			weekView.setRoom(currentRoom);
+		currentRoom = r;
+		roomNameLabel
+				.setText(RoomsInfo.getRoomsInfo(currentRoom).getRoomName());
+		weekView.setRoom(currentRoom);
 	}
 
 	@Override
@@ -90,17 +101,17 @@ public class RoomInfo extends Activity implements OnMenuItemClickListener, DataU
 	public void roomListUpdated(Vector<Room> rooms) {
 		for (Room r : rooms) {
 			if (r.getEmail().equals(roomEmail)) {
-			final Room theRoom = r;
+				final Room theRoom = r;
 				runOnUiThread(new Runnable() {
 					@Override
 					public void run() {
-						setRoom(theRoom );						
+						setRoom(theRoom);
 					}
 				});
 				return;
 			}
 		}
-		//TODO what if the room is not in the list?
+		// TODO what if the room is not in the list?
 		throw new RuntimeException("Requested room not in the list.");
 	}
 

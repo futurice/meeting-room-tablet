@@ -179,11 +179,6 @@ public class SoapDataProxy extends DataProxy{
 	}
 
 	@Override
-	public void deinit() {
-		this.rooms = null;
-	}
-
-	@Override
 	public Vector<Room> getRooms() throws ReservatorException {
 		// cache
 		if (rooms != null) return rooms;

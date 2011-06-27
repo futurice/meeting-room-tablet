@@ -169,13 +169,7 @@ public class WeekView extends RelativeLayout implements OnClickListener {
 	}
 
 	public void refreshData(){
-		post(new Runnable() {
-			@Override
-			public void run() {
-				setRoom(currentRoom);
-			}
-		});
-		
+		setRoom(currentRoom);
 	}
 	private void addFreeMarker(Calendar startTime, Calendar endTime) {
 		if(startTime.after(endTime)){

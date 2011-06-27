@@ -46,12 +46,6 @@ public class DummyDataProxy extends DataProxy {
 	}
 
 	@Override
-	public void deinit() {
-		this.rooms = null;
-		this.reservations = null;
-	}
-
-	@Override
 	public Vector<Room> getRooms() {
 		return rooms;
 	}

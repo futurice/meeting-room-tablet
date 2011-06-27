@@ -20,11 +20,6 @@ public class FailingDataProxy extends DataProxy {
 	}
 
 	@Override
-	public void deinit() {
-		dataProxy.deinit();
-	}
-
-	@Override
 	public Vector<Reservation> getRoomReservations(Room r)
 			throws ReservatorException {
 
