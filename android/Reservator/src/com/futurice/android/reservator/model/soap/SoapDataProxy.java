@@ -54,6 +54,11 @@ public class SoapDataProxy extends DataProxy{
 		return Helpers.readFromInputStream(SoapDataProxy.class.getResourceAsStream(resource), -1);
 	}
 
+	@Override
+	public void setServer(String server) {
+		this.server = server;
+	}
+
 	private static final String getRoomListsXml = getResourceAsString("GetRoomLists.xml");
 	private static final String getRoomsXmlTemplate = getResourceAsString("GetRooms.xml");
 	// private static final String getUserAvailabilityXmlTemplate = getResourceAsString("GetUserAvailability.xml");
@@ -151,7 +156,7 @@ public class SoapDataProxy extends DataProxy{
 			throw new ReservatorException(e);
 		}
 	}
-	
+
 	protected Vector<Room> fetchRooms(String roomAddress) throws ReservatorException {
 		Log.v("fetchRooms", roomAddress);
 
@@ -177,7 +182,7 @@ public class SoapDataProxy extends DataProxy{
 	public void deinit() {
 		this.rooms = null;
 	}
-	
+
 	@Override
 	public Vector<Room> getRooms() throws ReservatorException {
 		// cache

@@ -8,13 +8,18 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.view.MenuItem.OnMenuItemClickListener;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class Reservator extends Activity implements OnClickListener {
+public class Reservator extends Activity implements OnClickListener, OnMenuItemClickListener {
+	MenuItem settingsMenu;
+
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -71,6 +76,23 @@ public class Reservator extends Activity implements OnClickListener {
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		finish();
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		settingsMenu = menu.add("Settings").setOnMenuItemClickListener(this);
+		settingsMenu.setIcon(android.R.drawable.ic_menu_preferences);
+		return true;
+	}
+
+
+	@Override
+	public boolean onMenuItemClick(MenuItem item) {
+		if (item == settingsMenu) {
+			Intent i = new Intent(this, SettingsActivity.class);
+			startActivity(i);
+		}
+		return true;
 	}
 
 }

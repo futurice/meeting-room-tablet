@@ -10,12 +10,12 @@
     <string name="login">Login</string>
     <string name="username">Username:</string>
     <string name="password">Password:</string>
-    <string name="default_room">Default room to show in calendar view</string>
-    <string name="PREFERENCES_SHOW_ROOM">showRoom</string>
     <string name="reservationTextTemplate">Reserved: ^1</string>
     <string name="book_now">Book now!</string>
     <string name="dateLabelFormat">E d.M.</string>
     <string name="weekLabelTemplate">Week ^1</string>
     <string name="from">From </string>
     <string name="to">To </string>
+    <string name="exchange_server_address">Exchange server address</string>
+    <string name="PREFERENCES_SERVER_ADDRESS">serverAddress</string>
 </resources>

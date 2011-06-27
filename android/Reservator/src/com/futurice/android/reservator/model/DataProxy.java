@@ -8,20 +8,22 @@ import android.os.AsyncTask;
 
 public abstract class DataProxy {
 	public abstract void setCredentials(String user, String password);
+	public abstract void setServer(String server);
 	public abstract void deinit(); // TODO: do we need this?
 	abstract public void reserve(Room room, TimeSpan timeSpan, String ownerEmail) throws ReservatorException;
 	abstract public Vector<Room> getRooms() throws ReservatorException;
 	abstract public Vector<Reservation> getRoomReservations(Room r) throws ReservatorException;
+
 	private Set<DataUpdatedListener> listeners = new HashSet<DataUpdatedListener>();
-	
+
 	public void refreshRooms(){
 		new RoomListRefreshTask().execute();
 	}
-	
+
 	public void refreshRoomReservations(final Room room){
 		new RoomReservationRefreshTask().execute(room);
 	}
-	
+
 	public void addDataUpdatedListener(DataUpdatedListener listener){
 		listeners.add(listener);
 	}
@@ -38,12 +40,13 @@ public abstract class DataProxy {
 			l.roomReservationsUpdated(room, reservations);
 		}
 	}
+
 	private void notifyRefreshFailed(ReservatorException e){
 		for(DataUpdatedListener l : listeners){
 			l.refreshFailed(e);
 		}
 	}
-	
+
 	private class RoomListRefreshTask extends AsyncTask<Void, Void, Vector<Room>>{
 		ReservatorException e = null;
 		@Override
@@ -64,7 +67,7 @@ public abstract class DataProxy {
 			}
 		}
 	}
-	
+
 	private class RoomReservationRefreshTask extends AsyncTask<Room, Void, Room>{
 		ReservatorException e;
 		@Override

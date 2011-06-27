@@ -7,6 +7,7 @@ import com.futurice.android.reservator.model.fum3.FumAddressBook;
 import com.futurice.android.reservator.model.soap.SoapDataProxy;
 
 import android.app.Application;
+import android.content.SharedPreferences;
 
 public class ReservatorApplication extends Application {
 	private DataProxy proxy;
@@ -23,7 +24,8 @@ public class ReservatorApplication extends Application {
 	@Override
 	public void onCreate(){
 		//proxy = new DummyDataProxy();
-		proxy = new SoapDataProxy("10.4.2.214"); // TODO: preference, prod: mail.futurice.com
+		SharedPreferences settings = getSharedPreferences(getString(R.string.PREFERENCES_NAME), 0);
+		proxy = new SoapDataProxy(settings.getString(getString(R.string.PREFERENCES_SERVER_ADDRESS), "127.0.0.1")); // TODO: change to mail.futurice.com before delivery
 		addressBook  = new FumAddressBook();
 		try {
 			addressBook.prefetchEntries();

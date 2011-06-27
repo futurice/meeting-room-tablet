@@ -30,6 +30,7 @@ public class DummyDataProxy extends DataProxy {
 		rooms.add(new Room("Project-Kino-406", "406-Kino@futu.com"));
 		rooms.add(new Room("Project-Vekkula-407", "407-Vekkula@futu.com"));
 		rooms.add(new Room("Project-Metkula-408", "408-Metkula@futu.com"));
+
 		rooms.add(new Room("Project-Verstas-506", "506-Verstas@futu.com"));
 		rooms.add(new Room("Room-Kenkäkauppa-503", "503-Kenkakauppa@futu.com"));
 		rooms.add(new Room("Room-Koivumetsä-504", "504-Koivumetsa@futu.com"));
@@ -69,6 +70,11 @@ public class DummyDataProxy extends DataProxy {
 
 	@Override
 	public void setCredentials(String user, String password) {
+		// Do nothing
+	}
+
+	@Override
+	public void setServer(String server) {
 		// Do nothing
 	}
 
