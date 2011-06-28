@@ -9,13 +9,13 @@ import android.content.Context;
 import android.view.View;
 
 public class RoomReservationPopup extends Dialog {
-	RoomReservationView reservationView;
+	LobbyReservationRowView reservationView;
 	CalendarMarker marker;
 
 	protected RoomReservationPopup(Context context, TimeSpan timeLimits, TimeSpan presetTime, Room room) {
 		super(context, R.style.Theme_Transparent);
 		setCancelable(true);
-		
+
 		setContentView(R.layout.reservation_popup);
 		findViewById(R.id.relativeLayout1).setOnClickListener(new View.OnClickListener() {
 			@Override
@@ -23,7 +23,7 @@ public class RoomReservationPopup extends Dialog {
 				cancel();
 			}
 		});
-		reservationView = (RoomReservationView)findViewById(R.id.roomReservationView1);
+		reservationView = (LobbyReservationRowView)findViewById(R.id.roomReservationView1);
 		reservationView.setClickable(true);
 		reservationView.setRoom(room);
 		reservationView.resetTimeSpan();

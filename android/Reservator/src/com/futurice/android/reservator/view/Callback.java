@@ -1,5 +1,5 @@
 package com.futurice.android.reservator.view;
 
 public interface Callback {
-	public void call(RoomReservationView v);
+	public void call(LobbyReservationRowView v);
 }

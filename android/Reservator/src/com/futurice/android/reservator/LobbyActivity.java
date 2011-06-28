@@ -6,12 +6,11 @@ import java.util.Vector;
 
 import com.futurice.android.reservator.model.DataProxy;
 import com.futurice.android.reservator.model.DataUpdatedListener;
-import com.futurice.android.reservator.model.Reservation;
 import com.futurice.android.reservator.model.ReservatorException;
 import com.futurice.android.reservator.model.Room;
 import com.futurice.android.reservator.model.rooms.RoomsInfo;
 import com.futurice.android.reservator.view.Callback;
-import com.futurice.android.reservator.view.RoomReservationView;
+import com.futurice.android.reservator.view.LobbyReservationRowView;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -121,8 +120,7 @@ public class LobbyActivity extends Activity implements OnMenuItemClickListener,
 	}
 
 	@Override
-	public void roomReservationsUpdated(final Room room,
-			Vector<Reservation> reservations) {
+	public void roomReservationsUpdated(final Room room) {
 				processRoom(room);
 				hideLoading();
 	}
@@ -134,11 +132,11 @@ public class LobbyActivity extends Activity implements OnMenuItemClickListener,
 	}
 
 	private void processRoom(Room r) {
-		RoomReservationView v = new RoomReservationView(LobbyActivity.this);
+		LobbyReservationRowView v = new LobbyReservationRowView(LobbyActivity.this);
 		v.setRoom(r);
 		v.setOnReserveCallback(new Callback() {
 			@Override
-			public void call(RoomReservationView v) {
+			public void call(LobbyReservationRowView v) {
 				refreshRoomInfo();
 			}
 		});
@@ -169,7 +167,7 @@ public class LobbyActivity extends Activity implements OnMenuItemClickListener,
 		int roomCount = container.getChildCount();
 		boolean added = false;
 		for (int index = 0; index < roomCount; index++) {
-			Room r2 = ((RoomReservationView) container.getChildAt(index))
+			Room r2 = ((LobbyReservationRowView) container.getChildAt(index))
 					.getRoom();
 			// Log.v("activity", r.toString() + " -- " +
 			// Integer.toString(r2.minutesFreeFromNow()));

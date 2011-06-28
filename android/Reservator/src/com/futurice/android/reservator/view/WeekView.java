@@ -1,9 +1,7 @@
 package com.futurice.android.reservator.view;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-import java.util.Vector;
 
 import android.content.Context;
 import android.content.DialogInterface;
@@ -23,12 +21,16 @@ import com.futurice.android.reservator.model.TimeSpan;
 public class WeekView extends RelativeLayout implements OnClickListener {
 
 	public static final int NUMBER_OF_DAYS_TO_SHOW = 10;
-	private Room currentRoom = null;
-	private CalendarView calendar = null;
+
+	private CalendarView calendarView = null;
 	private FrameLayout calendarFrame = null;
 	public WeekView(Context context) {
 		this(context, null);
 	}
+
+	// needed only for making reservation
+	// TODO: move to RoomActivity
+	private Room currentRoom;
 
 	public WeekView(Context context, AttributeSet attrs) {
 		this(context, attrs, 0);
@@ -38,16 +40,12 @@ public class WeekView extends RelativeLayout implements OnClickListener {
 		super(context, attrs, defStyle);
 	}
 
+	public void refreshData(Room room) {
+		currentRoom = room;
 
-	public void refreshData(){
-		Vector<Reservation> reservations = currentRoom.getReservations();
-		refreshData(reservations);
-	}
-
-	public void refreshData(Vector<Reservation> reservations) {
 		calendarFrame = (FrameLayout)findViewById(R.id.frameLayout1);
 		calendarFrame.removeAllViews();
-		calendar = new CalendarView(getContext());
+		calendarView = new CalendarView(getContext());
 
 		Calendar today = Calendar.getInstance();
 		today.set(Calendar.HOUR_OF_DAY, 8);
@@ -66,10 +64,9 @@ public class WeekView extends RelativeLayout implements OnClickListener {
 			Calendar endOfDay = (Calendar) day.clone();
 			endOfDay.set(Calendar.HOUR_OF_DAY, 18);
 
-			calendar.addDay((Calendar) day.clone());
-			List<Reservation> daysReservations;
+			calendarView.addDay((Calendar) day.clone());
 
-			daysReservations = getReservationsForDay(reservations, day);
+			List<Reservation> daysReservations = room.getReservationsForDay(day);
 
 			if (daysReservations.isEmpty()) {
 				addFreeMarker(day, endOfDay);
@@ -96,29 +93,10 @@ public class WeekView extends RelativeLayout implements OnClickListener {
 			day.add(Calendar.DAY_OF_YEAR, 1);
 		}
 		addDisabledMarker(today, Calendar.getInstance());
-		calendarFrame.addView(calendar, LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
+		calendarFrame.addView(calendarView, LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
 
 	}
 
-	public void setRoom(Room room) {
-		currentRoom = room;
-		refreshData();
-
-	}
-
-	private List<Reservation> getReservationsForDay(
-			List<Reservation> reservations, Calendar day) {
-		List<Reservation> daysReservations = new ArrayList<Reservation>();
-		for (Reservation r : reservations) {
-			if (r.getBeginTime().get(Calendar.DAY_OF_YEAR) == day
-					.get(Calendar.DAY_OF_YEAR)
-					&& r.getBeginTime().get(Calendar.YEAR) == day
-							.get(Calendar.YEAR)) {
-				daysReservations.add(r);
-			}
-		}
-		return daysReservations;
-	}
 
 	@Override
 	public void onClick(final View v) {
@@ -182,7 +160,7 @@ public class WeekView extends RelativeLayout implements OnClickListener {
 		if(startTime.after(endTime)){
 			throw new IllegalArgumentException("starTime must be before endTime");
 		}
-		CalendarMarker marker = calendar.addMarker(startTime, endTime);
+		CalendarMarker marker = calendarView.addMarker(startTime, endTime);
 		marker.setOnClickListener(this);
 		marker.setReserved(false);
 	}
@@ -190,13 +168,13 @@ public class WeekView extends RelativeLayout implements OnClickListener {
 		if(startTime.after(endTime)){
 			throw new IllegalArgumentException("starTime must be before endTime");
 		}
-		CalendarMarker marker = calendar.addMarker(startTime, endTime);
+		CalendarMarker marker = calendarView.addMarker(startTime, endTime);
 		marker.setClickable(true); //blocks clicks from views it covers
 		marker.setReserved(true);
 		marker.setBackgroundColor(getResources().getColor(R.color.CalendarDisabledColor));
 	}
 	private void addReseredMarker(Reservation r) {
-		CalendarMarker marker = calendar.addMarker(r.getBeginTime(),
+		CalendarMarker marker = calendarView.addMarker(r.getBeginTime(),
 				r.getEndTime());
 		marker.setText(r.getSubject());
 		marker.setReserved(true);

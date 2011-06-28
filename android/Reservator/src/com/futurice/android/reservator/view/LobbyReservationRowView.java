@@ -29,7 +29,7 @@ import android.widget.Toast;
 import android.view.View.OnClickListener;
 import android.view.inputmethod.InputMethodManager;
 
-public class RoomReservationView extends FrameLayout implements
+public class LobbyReservationRowView extends FrameLayout implements
 		OnClickListener, OnItemClickListener {
 
 	View cancelButton, bookNowButton, reserveButton, calendarButton,
@@ -43,7 +43,7 @@ public class RoomReservationView extends FrameLayout implements
 
 	private Room room;
 
-	public RoomReservationView(Context context) {
+	public LobbyReservationRowView(Context context) {
 		this(context, null);
 	}
 
@@ -57,7 +57,8 @@ public class RoomReservationView extends FrameLayout implements
 		}
 	};
 
-	public RoomReservationView(Context context, AttributeSet attrs) {
+
+	public LobbyReservationRowView(Context context, AttributeSet attrs) {
 		super(context, attrs);
 		inflate(context, R.layout.lobby_reservation_row, this);
 		cancelButton = findViewById(R.id.cancelButton);
@@ -87,7 +88,53 @@ public class RoomReservationView extends FrameLayout implements
 
 	public void setRoom(Room room) {
 		this.room = room;
-		refreshData();
+
+		// Room stuff
+		RoomsInfo info = RoomsInfo.getRoomsInfo(room);
+		roomNameView.setText(info.getRoomName());
+		if (info.getRoomNumber() == 0) {
+			roomInfoView.setText("for " + info.getRoomSize());
+		} else {
+			// U+2022 is a dot
+			roomInfoView.setText(Integer.toString(info.getRoomNumber()) + " \u2022 for " + info.getRoomSize());
+		}
+
+		// Reservation stuff
+		TimeSpan nextFreeTime = room.getNextFreeTime();
+
+		timePicker2.reset();
+		if (nextFreeTime != null) {
+			timePicker2.setMinimumTime(nextFreeTime.getStart());
+			timePicker2.setMaximumTime(nextFreeTime.getEnd());
+		} else {
+			timePicker2.setMinimumTime(Calendar.getInstance());
+		}
+		timePicker2.setEndTimeRelatively(60); // let book the room for an hour
+
+		boolean bookable = false;
+		if (room.isFree()) {
+			int freeMinutes = room.minutesFreeFromNow();
+			bookable = true;
+
+			if (freeMinutes > 180) {
+				roomStatusView.setText("Free");
+			} else if (freeMinutes < 15) {
+				roomStatusView.setText("Reserved");
+				bookable = false;
+			} else {
+				roomStatusView.setText("Free for " + Helpers.humanizeTimeSpan(freeMinutes));
+			}
+		} else {
+			roomStatusView.setText("Reserved");
+		}
+
+		if (bookable) {
+			roomStatusView.setTextColor(getResources().getColor(R.color.StatusFreeColor));
+			bookNowButton.setVisibility(View.VISIBLE);
+		} else {
+			roomStatusView.setTextColor(getResources().getColor(R.color.StatusReservedColor));
+			bookNowButton.setVisibility(View.INVISIBLE);
+		}
 	}
 
 	public Room getRoom() {
@@ -134,14 +181,13 @@ public class RoomReservationView extends FrameLayout implements
 		try {
 			application.getDataProxy().reserve(room, timePicker2.getTimeSpan(), email);
 		} catch (ReservatorException e) {
-			final RoomReservationView thisv = this;
 			Builder alertBuilder = new AlertDialog.Builder(getContext());
 			alertBuilder.setTitle("Failed to put reservation")
 				.setMessage(e.getMessage());
 			alertBuilder.setOnCancelListener(new OnCancelListener() {
 					public void onCancel(DialogInterface dialog) {
 						if (onReserveCallback != null) {
-							onReserveCallback.call(thisv);
+							onReserveCallback.call(LobbyReservationRowView.this);
 						}
 					}
 				});
@@ -168,53 +214,6 @@ public class RoomReservationView extends FrameLayout implements
 		reserveButton.setEnabled(false);
 		bookingMode.setVisibility(View.VISIBLE);
 		normalMode.setVisibility(View.GONE);
-	}
-
-	private void refreshData() {
-		TimeSpan nextFreeTime = room.getNextFreeTime();
-
-		timePicker2.reset();
-		if (nextFreeTime != null) {
-			timePicker2.setMinimumTime(nextFreeTime.getStart());
-			timePicker2.setMaximumTime(nextFreeTime.getEnd());
-		} else {
-			timePicker2.setMinimumTime(Calendar.getInstance());
-		}
-		timePicker2.setEndTimeRelatively(60); // let book the room for an hour
-
-		RoomsInfo info = RoomsInfo.getRoomsInfo(room);
-		roomNameView.setText(info.getRoomName());
-		if (info.getRoomNumber() == 0) {
-			roomInfoView.setText("for " + info.getRoomSize());
-		} else {
-			// U+2022 is a dot
-			roomInfoView.setText(Integer.toString(info.getRoomNumber()) + " \u2022 for " + info.getRoomSize());
-		}
-
-		boolean bookable = false;
-		if (room.isFree()) {
-			int freeMinutes = room.minutesFreeFromNow();
-			bookable = true;
-
-			if (freeMinutes > 180) {
-				roomStatusView.setText("Free");
-			} else if (freeMinutes < 15) {
-				roomStatusView.setText("Reserved");
-				bookable = false;
-			} else {
-				roomStatusView.setText("Free for " + Helpers.humanizeTimeSpan(freeMinutes));
-			}
-		} else {
-			roomStatusView.setText("Reserved");
-		}
-
-		if (bookable) {
-			roomStatusView.setTextColor(getResources().getColor(R.color.StatusFreeColor));
-			bookNowButton.setVisibility(View.VISIBLE);
-		} else {
-			roomStatusView.setTextColor(getResources().getColor(R.color.StatusReservedColor));
-			bookNowButton.setVisibility(View.INVISIBLE);
-		}
 	}
 
 	public void resetTimeSpan() {

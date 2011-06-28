@@ -4,7 +4,6 @@ import java.util.Vector;
 
 import com.futurice.android.reservator.model.DataProxy;
 import com.futurice.android.reservator.model.DataUpdatedListener;
-import com.futurice.android.reservator.model.Reservation;
 import com.futurice.android.reservator.model.ReservatorException;
 import com.futurice.android.reservator.model.Room;
 import com.futurice.android.reservator.model.rooms.RoomsInfo;
@@ -77,7 +76,7 @@ public class RoomActivity extends Activity implements OnMenuItemClickListener,
 		currentRoom = r;
 		roomNameLabel
 				.setText(RoomsInfo.getRoomsInfo(currentRoom).getRoomName());
-		weekView.setRoom(currentRoom);
+		weekView.refreshData(currentRoom);
 	}
 
 	@Override
@@ -119,10 +118,9 @@ public class RoomActivity extends Activity implements OnMenuItemClickListener,
 	}
 
 	@Override
-	public void roomReservationsUpdated(Room room,
-			Vector<Reservation> reservations) {
+	public void roomReservationsUpdated(Room room) {
 		if (currentRoom != null && room.getEmail().equals(roomEmail)) {
-			weekView.refreshData(reservations);
+			weekView.refreshData(room);
 		}
 	}
 

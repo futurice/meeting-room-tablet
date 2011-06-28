@@ -1,7 +1,9 @@
 package com.futurice.android.reservator.model;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
+import java.util.List;
 import java.util.Vector;
 
 public class Room {
@@ -14,9 +16,9 @@ public class Room {
 		this.reservations = new Vector<Reservation>();
 	}
 
-	public Vector<Reservation> getReservations(){
-		return this.reservations;
-	}
+	//public Vector<Reservation> getReservations(){
+	//	return this.reservations;
+	//}
 
 	public String getName() {
 		return name;
@@ -30,7 +32,7 @@ public class Room {
 		this.reservations = reservations;
 		Collections.sort(reservations);
 	}
-	
+
 	@Override
 	public String toString() {
 		return name; // + " " + (isFree() ? "(free)" : "(reserved)");
@@ -118,6 +120,20 @@ public class Room {
 		}
 
 		return null;
+	}
+
+
+	public List<Reservation> getReservationsForDay(Calendar day) {
+		List<Reservation> daysReservations = new ArrayList<Reservation>();
+		for (Reservation r : reservations) {
+			if (r.getBeginTime().get(Calendar.DAY_OF_YEAR) == day
+					.get(Calendar.DAY_OF_YEAR)
+					&& r.getBeginTime().get(Calendar.YEAR) == day
+							.get(Calendar.YEAR)) {
+				daysReservations.add(r);
+			}
+		}
+		return daysReservations;
 	}
 
 	public boolean equals(Room room) {

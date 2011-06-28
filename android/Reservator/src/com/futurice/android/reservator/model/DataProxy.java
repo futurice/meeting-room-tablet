@@ -10,14 +10,14 @@ public abstract class DataProxy {
 	public abstract void setCredentials(String user, String password);
 	public abstract void setServer(String server);
 	abstract public void reserve(Room room, TimeSpan timeSpan, String ownerEmail) throws ReservatorException;
-	
+
 	/**
 	 * Synchronously get a list of rooms this proxy is aware of. Listeners are not notified when done.
 	 * @return the rooms
 	 * @throws ReservatorException
 	 */
 	abstract public Vector<Room> getRooms() throws ReservatorException;
-	
+
 	/**
 	 * Synchronously get a list of reservations mapped to a room. The reservations are not updated to the room.
 	 * Listeners are not notified when done.
@@ -37,7 +37,7 @@ public abstract class DataProxy {
 
 	/**
 	 * Asynchronously request room's reservations and updates them to the room object.
-	 * Listener's roomReservationsUpdated is called when done. 
+	 * Listener's roomReservationsUpdated is called when done.
 	 */
 	public void refreshRoomReservations(Room room){
 		new RoomReservationRefreshTask().execute(room);
@@ -50,7 +50,7 @@ public abstract class DataProxy {
 	public void addDataUpdatedListener(DataUpdatedListener listener){
 		listeners.add(listener);
 	}
-	
+
 	/**
 	 * Remove a listener from this proxy.
 	 * @param listener
@@ -63,9 +63,9 @@ public abstract class DataProxy {
 			l.roomListUpdated(rooms);
 		}
 	}
-	private void notifyRoomReservationsUpdated(Room room, Vector<Reservation> reservations){
+	private void notifyRoomReservationsUpdated(Room room){
 		for(DataUpdatedListener l : listeners){
-			l.roomReservationsUpdated(room, reservations);
+			l.roomReservationsUpdated(room);
 		}
 	}
 
@@ -75,7 +75,7 @@ public abstract class DataProxy {
 		}
 	}
 	/**
-	 * Private inner class for asynchronously refreshing list of all the rooms. 
+	 * Private inner class for asynchronously refreshing list of all the rooms.
 	 * @author vman
 	 */
 	private class RoomListRefreshTask extends AsyncTask<Void, Void, Vector<Room>>{
@@ -99,7 +99,7 @@ public abstract class DataProxy {
 		}
 	}
 	/**
-	 * Private inner class for asynchronously refreshing room's reservation list. 
+	 * Private inner class for asynchronously refreshing room's reservation list.
 	 * @author vman
 	 */
 	private class RoomReservationRefreshTask extends AsyncTask<Room, Void, Room>{
@@ -120,7 +120,7 @@ public abstract class DataProxy {
 			if(room == null){
 				notifyRefreshFailed(e);
 			}else{
-				notifyRoomReservationsUpdated(room, room.getReservations());
+				notifyRoomReservationsUpdated(room);
 			}
 		}
 	}
