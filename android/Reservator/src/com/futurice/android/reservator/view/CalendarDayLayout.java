@@ -2,6 +2,8 @@ package com.futurice.android.reservator.view;
 
 import java.util.Calendar;
 
+import com.futurice.android.reservator.model.DateTime;
+
 
 import android.content.Context;
 import android.util.AttributeSet;
@@ -31,7 +33,7 @@ public class CalendarDayLayout extends ViewGroup {
 
 	}
 	protected void onMeasure(int widthMeasureSpec, int heightmeasureSpec) {
-		
+
 		int width = MeasureSpec.getSize(widthMeasureSpec);
 		int height = MeasureSpec.getSize(heightmeasureSpec);
 
@@ -46,7 +48,7 @@ public class CalendarDayLayout extends ViewGroup {
 			marker.measure(MeasureSpec.makeMeasureSpec(markerWidth,
 					MeasureSpec.AT_MOST), MeasureSpec.makeMeasureSpec(
 					markerHeight, MeasureSpec.EXACTLY));
-			
+
 			maxWidth = Math.max(maxWidth, MeasureSpec.getSize(marker.getMeasuredWidth()));
 		}
 		if(getLayoutParams().width == LayoutParams.WRAP_CONTENT){
@@ -56,7 +58,7 @@ public class CalendarDayLayout extends ViewGroup {
 		}
 	}
 
-	private float getProportionalYPosition(Calendar time) {
+	private float getProportionalYPosition(DateTime time) {
 		return (time.get(Calendar.MINUTE) + time.get(Calendar.HOUR_OF_DAY) * 60 - minuteStart)
 				/ (float) (minuteEnd - minuteStart);
 	}

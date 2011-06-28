@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.futurice.android.reservator.R;
+import com.futurice.android.reservator.model.DateTime;
 import com.futurice.android.reservator.model.TimeSpan;
 
 import android.content.Context;
@@ -49,11 +50,12 @@ public class CalendarView extends RelativeLayout{
 		inflate(getContext(),R.layout.calendar_view, this);
 		hourColumn = (CalendarDayLayout)findViewById(R.id.hourColumn);
 
-		for (int i = startHour.get(Calendar.HOUR_OF_DAY); i < endHour.get(Calendar.HOUR_OF_DAY); i++) {
-			CalendarMarker marker = new CalendarMarker(getContext(), new TimeSpan(new GregorianCalendar(2011, 6, 22, i, 0), Calendar.HOUR, 1));
+		DateTime today = new DateTime().stripTime();
+		for (int hour = startHour.get(Calendar.HOUR_OF_DAY); hour < endHour.get(Calendar.HOUR_OF_DAY); hour++) {
+			CalendarMarker marker = new CalendarMarker(getContext(), new TimeSpan(today.set(Calendar.HOUR_OF_DAY, hour), Calendar.HOUR, 1));
 			TextView label = new TextView(getContext());
 			label.setSingleLine();
-			label.setText(Html.fromHtml(i + "<small>00</small>"));
+			label.setText(Html.fromHtml(hour + "<small>00</small>"));
 			label.setGravity(Gravity.TOP | Gravity.RIGHT);
 			label.setTextColor(textColor);
 			label.setPadding(0,0,5,0);
@@ -64,7 +66,7 @@ public class CalendarView extends RelativeLayout{
 		scrollView = (RelativeLayout) findViewById(R.id.relativeLayout1);
 		clear();
 	}
-	
+
 	@Override
 	protected void dispatchDraw(Canvas c) {
 		/*int topLeftHeight = findViewById(R.id.topLeftEmptyBox).getHeight();
@@ -106,7 +108,7 @@ public class CalendarView extends RelativeLayout{
 	}
 
 
-	public void addDay(Calendar day) {
+	public void addDay(DateTime day) {
 		final int dayOfWeek = day.get(Calendar.DAY_OF_WEEK);
 		if( dayOfWeek == Calendar.MONDAY){
 			addVerticalDelimeter(THICK_DELIM);
@@ -143,7 +145,7 @@ public class CalendarView extends RelativeLayout{
 		addVerticalDelimeter(THIN_DELIM);
 	}
 
-	public CalendarMarker addMarker(Calendar begin, Calendar end) {
+	public CalendarMarker addMarker(DateTime begin, DateTime end) {
 		CalendarMarker marker = getViewForTimeSpan(begin, end);
 		if (begin.get(Calendar.HOUR_OF_DAY) < endHour.get(Calendar.HOUR_OF_DAY)) {
 			columns.get(getDayIdentifier(begin)).addView(marker);
@@ -151,7 +153,7 @@ public class CalendarView extends RelativeLayout{
 		return marker;
 	}
 
-	private CalendarMarker getViewForTimeSpan(Calendar begin, Calendar end) {
+	private CalendarMarker getViewForTimeSpan(DateTime begin, DateTime end) {
 		/*if (end.get(Calendar.HOUR_OF_DAY) >= endHour.get(Calendar.HOUR_OF_DAY)){
 			end.set(Calendar.HOUR_OF_DAY, endHour.get(Calendar.HOUR_OF_DAY));
 			end.set(Calendar.MINUTE, endHour.get(Calendar.MINUTE));
@@ -168,7 +170,7 @@ public class CalendarView extends RelativeLayout{
 	}
 
 	//hash function for matching columns and specific days
-	private int getDayIdentifier(Calendar day) {
+	private int getDayIdentifier(DateTime day) {
 		return day.get(Calendar.YEAR) * 1000 + day.get(Calendar.DAY_OF_YEAR);
 	}
 

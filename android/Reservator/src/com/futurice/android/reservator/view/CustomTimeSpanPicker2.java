@@ -3,6 +3,7 @@ package com.futurice.android.reservator.view;
 import java.util.Calendar;
 
 import com.futurice.android.reservator.R;
+import com.futurice.android.reservator.model.DateTime;
 import com.futurice.android.reservator.model.TimeSpan;
 
 import android.widget.FrameLayout;
@@ -16,7 +17,7 @@ public class CustomTimeSpanPicker2 extends FrameLayout implements OnClickListene
 	View startMinus, startPlus, endMinus, endPlus;
 	TextView startLabel, endLabel;
 	TimeBarView timeBar;
-	Calendar currentDay;
+	DateTime currentDay;
 
 	int currentTimeStart;
 	int currentTimeEnd;
@@ -70,7 +71,7 @@ public class CustomTimeSpanPicker2 extends FrameLayout implements OnClickListene
 		minimumTime = 0;
 		maximumTime = 24*60;
 
-		currentDay = Calendar.getInstance();
+		currentDay = new DateTime().stripTime();
 		currentTimeStart = minimumTime;
 		currentTimeEnd = maximumTime;
 		refreshLabels();
@@ -82,9 +83,9 @@ public class CustomTimeSpanPicker2 extends FrameLayout implements OnClickListene
 
 	@Override
 	public void onClick(View v) {
-		//start doing the animations 
+		//start doing the animations
 		timeBar.enableAnimation();
-		
+
 		if (v == startMinus) {
 			int start = quantize(currentTimeStart - timeStep);
 
@@ -128,9 +129,9 @@ public class CustomTimeSpanPicker2 extends FrameLayout implements OnClickListene
 	}
 
 
-	public void setMinimumTime(Calendar cal) {
+	public void setMinimumTime(DateTime time) {
 
-		int min = cal.get(Calendar.HOUR_OF_DAY)*60+cal.get(Calendar.MINUTE);
+		int min = time.get(Calendar.HOUR_OF_DAY)*60+time.get(Calendar.MINUTE);
 		if (min > maximumTime)
 			throw new IllegalArgumentException("setting minimumTime to be after the maximum");
 		minimumTime = min;
@@ -142,13 +143,13 @@ public class CustomTimeSpanPicker2 extends FrameLayout implements OnClickListene
 			currentTimeEnd = Math.min(maximumTime, minimumTime + minimumDuration);
 		}
 
-		currentDay = (Calendar) cal.clone(); // set current day
+		currentDay = time.stripTime();
 
 		refreshLabels();
 	}
 
-	public void setMaximumTime(Calendar cal) {
-		int max = cal.get(Calendar.HOUR_OF_DAY)*60+cal.get(Calendar.MINUTE);
+	public void setMaximumTime(DateTime time) {
+		int max = time.get(Calendar.HOUR_OF_DAY)*60+time.get(Calendar.MINUTE);
 		boolean tomorrow = false;
 
 		if (max == 0) {
@@ -168,16 +169,16 @@ public class CustomTimeSpanPicker2 extends FrameLayout implements OnClickListene
 			currentTimeStart = Math.max(minimumTime, maximumTime - minimumDuration);
 		}
 
-		currentDay = (Calendar) cal.clone(); // set current day
+		currentDay = time.stripTime();
 		if (tomorrow) {
-			currentDay.add(Calendar.DAY_OF_YEAR, -1);
+			currentDay = currentDay.add(Calendar.DAY_OF_YEAR, -1);
 		}
 
 		refreshLabels();
 	}
 
-	public void setStartTime(Calendar cal) {
-		int start = cal.get(Calendar.HOUR_OF_DAY)*60+cal.get(Calendar.MINUTE);
+	public void setStartTime(DateTime time) {
+		int start = time.get(Calendar.HOUR_OF_DAY)*60+time.get(Calendar.MINUTE);
 
 		if (start < minimumTime || start > maximumTime) {
 			throw new IllegalArgumentException("setting startTime outside of minmax");
@@ -188,13 +189,13 @@ public class CustomTimeSpanPicker2 extends FrameLayout implements OnClickListene
 		}
 
 		currentTimeStart = start;
-		currentDay = (Calendar) cal.clone();
+		currentDay = time.stripTime();
 
 		refreshLabels();
 	}
 
-	public void setEndTime(Calendar cal) {
-		int end = cal.get(Calendar.HOUR_OF_DAY)*60+cal.get(Calendar.MINUTE);
+	public void setEndTime(DateTime time) {
+		int end = time.get(Calendar.HOUR_OF_DAY)*60+time.get(Calendar.MINUTE);
 
 		if (end < minimumTime || end > maximumTime) {
 			throw new IllegalArgumentException("setting endTime outside of minmax");
@@ -205,7 +206,7 @@ public class CustomTimeSpanPicker2 extends FrameLayout implements OnClickListene
 		}
 
 		currentTimeEnd = end;
-		currentDay = (Calendar) cal.clone();
+		currentDay = time.stripTime();
 
 		refreshLabels();
 	}
@@ -226,48 +227,19 @@ public class CustomTimeSpanPicker2 extends FrameLayout implements OnClickListene
 		return currentTimeEnd - currentTimeStart;
 	}
 
-	public Calendar getStartTime() {
-		Calendar ret = (Calendar) currentDay.clone();
-
-		ret.set(Calendar.HOUR_OF_DAY, currentTimeStart / 60);
-		ret.set(Calendar.MINUTE, currentTimeStart % 60);
-		ret.set(Calendar.SECOND, 0);
-		ret.set(Calendar.MILLISECOND, 0);
-
-		return ret;
+	public DateTime getStartTime() {
+		return currentDay.setTime(currentTimeStart / 60, currentTimeStart % 60, 0);
 	}
 
-	public Calendar getEndTime() {
-		Calendar ret = (Calendar) currentDay.clone();
-
-		ret.set(Calendar.HOUR_OF_DAY, currentTimeEnd / 60);
-		ret.set(Calendar.MINUTE, currentTimeEnd % 60);
-		ret.set(Calendar.SECOND, 0);
-		ret.set(Calendar.MILLISECOND, 0);
-
-		return ret;
+	public DateTime getEndTime() {
+		return currentDay.setTime(currentTimeEnd / 60, currentTimeEnd % 60, 0);
 	}
-	private Calendar getMaximumTime(){
-		Calendar ret = (Calendar) currentDay.clone();
-
-		ret.set(Calendar.HOUR_OF_DAY, maximumTime / 60);
-		ret.set(Calendar.MINUTE, maximumTime % 60);
-		ret.set(Calendar.SECOND, 0);
-		ret.set(Calendar.MILLISECOND, 0);
-
-		return ret;
-
+	private DateTime getMaximumTime(){
+		return currentDay.setTime(maximumTime / 60, maximumTime % 60, 0);
 	}
-	private Calendar getMinimumTime(){
-		Calendar ret = (Calendar) currentDay.clone();
 
-		ret.set(Calendar.HOUR_OF_DAY, minimumTime / 60);
-		ret.set(Calendar.MINUTE, minimumTime % 60);
-		ret.set(Calendar.SECOND, 0);
-		ret.set(Calendar.MILLISECOND, 0);
-
-		return ret;
-
+	private DateTime getMinimumTime(){
+		return currentDay.setTime(minimumTime / 60, minimumTime % 60, 0);
 	}
 
 	public TimeSpan getTimeSpan() {

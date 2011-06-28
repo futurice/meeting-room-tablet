@@ -1,11 +1,11 @@
 package com.futurice.android.reservator;
 
-import java.util.Calendar;
 import java.util.Comparator;
 import java.util.Vector;
 
 import com.futurice.android.reservator.model.DataProxy;
 import com.futurice.android.reservator.model.DataUpdatedListener;
+import com.futurice.android.reservator.model.DateTime;
 import com.futurice.android.reservator.model.ReservatorException;
 import com.futurice.android.reservator.model.Room;
 import com.futurice.android.reservator.model.rooms.RoomsInfo;
@@ -13,7 +13,9 @@ import com.futurice.android.reservator.view.Callback;
 import com.futurice.android.reservator.view.LobbyReservationRowView;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.app.AlertDialog.Builder;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -121,14 +123,17 @@ public class LobbyActivity extends Activity implements OnMenuItemClickListener,
 
 	@Override
 	public void roomReservationsUpdated(final Room room) {
-				processRoom(room);
-				hideLoading();
+		processRoom(room);
+		hideLoading();
 	}
 
 	@Override
-	public void refreshFailed(ReservatorException ex) {
-		// TODO Auto-generated method stub
-		throw new RuntimeException(ex.getMessage());
+	public void refreshFailed(ReservatorException e) {
+		hideLoading();
+		Builder alertBuilder = new AlertDialog.Builder(getApplicationContext());
+		alertBuilder.setTitle("Error")
+			.setMessage(e.getMessage())
+			.show();
 	}
 
 	private void processRoom(Room r) {
@@ -143,7 +148,7 @@ public class LobbyActivity extends Activity implements OnMenuItemClickListener,
 
 		// This is ugly, adding views in order.
 		Comparator<Room> roomCmp = new Comparator<Room>() {
-			private Calendar now = Calendar.getInstance();
+			private DateTime now = new DateTime();
 
 			@Override
 			public int compare(Room room1, Room room2) {

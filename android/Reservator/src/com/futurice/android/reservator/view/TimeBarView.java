@@ -3,6 +3,7 @@ package com.futurice.android.reservator.view;
 import java.util.Calendar;
 
 import com.futurice.android.reservator.R;
+import com.futurice.android.reservator.model.DateTime;
 import com.futurice.android.reservator.model.TimeSpan;
 
 import android.content.Context;
@@ -33,7 +34,7 @@ public class TimeBarView extends FrameLayout{
 		durationLabel = (TextView)findViewById(R.id.textView1);
 		this.setTimeLimits(new TimeSpan(null,Calendar.HOUR, 2));
 		this.setSpan(new TimeSpan(null,Calendar.MINUTE, 90));
-		span.getStart().add(Calendar.MINUTE, 30);
+		// span.getStart().add(Calendar.MINUTE, 30); // XXX: check why
 	}
 	public void setTimeLimits(TimeSpan span){
 		this.limits = span.clone();
@@ -61,8 +62,10 @@ public class TimeBarView extends FrameLayout{
 			animatorThread = new Thread(){
 				public void run(){
 					while(Math.abs(startDelta) <  animStep || Math.abs(endDelta) < animStep){
-						TimeBarView.this.span.getStart().add(Calendar.MILLISECOND, (int)Math.signum(startDelta) * animStep);
-						TimeBarView.this.span.getEnd().add(Calendar.MILLISECOND, (int)Math.signum(endDelta) * animStep);
+						TimeBarView.this.span = new TimeSpan(
+								TimeBarView.this.span.getStart().add(Calendar.MILLISECOND, (int)Math.signum(startDelta) * animStep),
+								TimeBarView.this.span.getEnd().add(Calendar.MILLISECOND, (int)Math.signum(endDelta) * animStep));
+
 						startDelta -= Math.signum(startDelta) * animStep;
 						endDelta -= Math.signum(endDelta) * animStep;
 						postInvalidate();
@@ -132,15 +135,15 @@ public class TimeBarView extends FrameLayout{
 		}
 		p.setStyle(Style.STROKE);
 		p.setColor(Color.argb(255, 40, 40, 40));
-		Calendar time = (Calendar)limits.getStart().clone();
+		DateTime time = limits.getStart();
 
 		while(time.before(limits.getEnd())){
 			if(time.get(Calendar.MINUTE) % 30 != 0){
-				time.add(Calendar.MINUTE, 30 - time.get(Calendar.MINUTE) % 30);
+				time = time.add(Calendar.MINUTE, 30 - time.get(Calendar.MINUTE) % 30);
 			}
 			int x = (int)(width * getProportional(time));
 			c.drawLine(x, y, x, bottom, p);
-			time.add(Calendar.MINUTE, 30);
+			time = time.add(Calendar.MINUTE, 30);
 		}
 		durationLabel.setText(span.getLength() / 60000 + " minutes");
 		/*p.setColor(getResources().getColor(R.color.TimeSpanTextColor));
@@ -150,7 +153,7 @@ public class TimeBarView extends FrameLayout{
 
 		c.drawText( durationText, textX > startX ? textX : startX, bottom + padding + p.getTextSize(), p);*/
 	}
-	private float getProportional(Calendar time){
+	private float getProportional(DateTime time){
 		return (time.getTimeInMillis() - limits.getStart().getTimeInMillis()) / (float)(limits.getLength() >  MIN_SPAN_LENGTH ? limits.getLength() : MIN_SPAN_LENGTH);
 	}
 }

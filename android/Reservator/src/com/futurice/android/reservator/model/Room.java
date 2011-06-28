@@ -39,7 +39,7 @@ public class Room {
 	}
 
 	public boolean isFree() {
-		Calendar now = Calendar.getInstance();
+		DateTime now = new DateTime();
 		for (Reservation r : reservations) {
 			if (r.getStartTime().before(now) && r.getEndTime().after(now)) {
 				return false;
@@ -56,7 +56,7 @@ public class Room {
 	 * @param from
 	 * @return Integer.MAX_VALUE if no reservations in future
 	 */
-	public int minutesFreeFrom(Calendar from) {
+	public int minutesFreeFrom(DateTime from) {
 		for (Reservation r : reservations) {
 			if (r.getStartTime().after(from)) {
 				return (int) (r.getStartTime().getTimeInMillis() - from.getTimeInMillis()) / 60000;
@@ -67,7 +67,7 @@ public class Room {
 	}
 
 	public int minutesFreeFromNow() {
-		return minutesFreeFrom(Calendar.getInstance());
+		return minutesFreeFrom(new DateTime());
 	}
 
 
@@ -78,12 +78,13 @@ public class Room {
 	 * @param from
 	 * @return
 	 */
-	public int reservedForFrom(Calendar from) {
-		Calendar to = (Calendar) from.clone();
+	public int reservedForFrom(DateTime from) {
+		DateTime to = from;
+
 		for (Reservation r : reservations) {
 			if (r.getStartTime().before(to) && r.getEndTime().after(to)) {
-				to = (Calendar) r.getEndTime().clone();
-				to.add(Calendar.MINUTE, 5);
+				to = r.getEndTime();
+				to = to.later(Calendar.MINUTE, 5);
 			}
 		}
 
@@ -91,7 +92,7 @@ public class Room {
 	}
 
 	public int reservedForFromNow() {
-		return reservedForFrom(Calendar.getInstance());
+		return reservedForFrom(new DateTime());
 	}
 
 	/**
@@ -100,14 +101,9 @@ public class Room {
 	 * @return
 	 */
 	public TimeSpan getNextFreeTime(){
-		Calendar now = Calendar.getInstance();
-		Calendar max = Calendar.getInstance();
+		DateTime now = new DateTime();
+		DateTime max = now.later(Calendar.DAY_OF_YEAR, 1).stripTime();
 
-		max.roll(Calendar.DAY_OF_WEEK, 1);
-		max.set(Calendar.HOUR_OF_DAY, 0);
-		max.set(Calendar.MINUTE, 0);
-		max.set(Calendar.SECOND, 0);
-		max.set(Calendar.MILLISECOND, 0);
 
 		for (Reservation r : reservations) {
 			// bound nextFreeTime to
@@ -123,13 +119,10 @@ public class Room {
 	}
 
 
-	public List<Reservation> getReservationsForDay(Calendar day) {
+	public List<Reservation> getReservationsForDay(DateTime day) {
 		List<Reservation> daysReservations = new ArrayList<Reservation>();
 		for (Reservation r : reservations) {
-			if (r.getStartTime().get(Calendar.DAY_OF_YEAR) == day
-					.get(Calendar.DAY_OF_YEAR)
-					&& r.getStartTime().get(Calendar.YEAR) == day
-							.get(Calendar.YEAR)) {
+			if (r.getStartTime().sameDay(day)) {
 				daysReservations.add(r);
 			}
 		}

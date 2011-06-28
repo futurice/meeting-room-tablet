@@ -1,12 +1,11 @@
 package com.futurice.android.reservator.view;
 
-import java.util.Calendar;
-
 import com.futurice.android.reservator.R;
 import com.futurice.android.reservator.ReservatorApplication;
 import com.futurice.android.reservator.RoomActivity;
 import com.futurice.android.reservator.common.Helpers;
 import com.futurice.android.reservator.model.AddressBookAdapter;
+import com.futurice.android.reservator.model.DateTime;
 import com.futurice.android.reservator.model.ReservatorException;
 import com.futurice.android.reservator.model.Room;
 import com.futurice.android.reservator.model.TimeSpan;
@@ -107,7 +106,7 @@ public class LobbyReservationRowView extends FrameLayout implements
 			timePicker2.setMinimumTime(nextFreeTime.getStart());
 			timePicker2.setMaximumTime(nextFreeTime.getEnd());
 		} else {
-			timePicker2.setMinimumTime(Calendar.getInstance());
+			timePicker2.setMinimumTime(new DateTime());
 		}
 		timePicker2.setEndTimeRelatively(60); // let book the room for an hour
 
@@ -220,11 +219,11 @@ public class LobbyReservationRowView extends FrameLayout implements
 		timePicker2.reset();
 	}
 
-	public void setMinTime(Calendar time){
+	public void setMinTime(DateTime time){
 		timePicker2.setMinimumTime(time);
 	}
 
-	public void setMaxTime(Calendar time){
+	public void setMaxTime(DateTime time){
 		timePicker2.setMaximumTime(time);
 	}
 

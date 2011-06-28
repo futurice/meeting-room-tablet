@@ -11,6 +11,7 @@ import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 
 import com.futurice.android.reservator.R;
+import com.futurice.android.reservator.model.DateTime;
 import com.futurice.android.reservator.model.Reservation;
 import com.futurice.android.reservator.model.Room;
 import com.futurice.android.reservator.model.TimeSpan;
@@ -40,24 +41,19 @@ public class WeekView extends RelativeLayout implements OnClickListener {
 		calendarFrame.removeAllViews();
 		calendarView = new CalendarView(getContext());
 
-		Calendar today = Calendar.getInstance();
-		today.set(Calendar.HOUR_OF_DAY, 8);
-		today.set(Calendar.MINUTE, 0);
-		today.set(Calendar.SECOND, 0);
-		today.set(Calendar.MILLISECOND, 0);
+		DateTime today = new DateTime().stripTime();
 
-		Calendar day = (Calendar)today.clone();
-		for (int i = 0; i < NUMBER_OF_DAYS_TO_SHOW; i++) {
+		DateTime day = today.set(Calendar.HOUR_OF_DAY, 8);
+		for (int i = 0; i < NUMBER_OF_DAYS_TO_SHOW; i++, day = day.add(Calendar.DAY_OF_YEAR, 1)) {
 			// Skip weekend days
-			if (day.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY) {
-				day.add(Calendar.DAY_OF_YEAR, 2);
-			} else if (day.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) {
-				day.add(Calendar.DAY_OF_WEEK, 1);
+			if (day.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY || day.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) {
+				i -= 1;
+				continue;
 			}
-			Calendar endOfDay = (Calendar) day.clone();
-			endOfDay.set(Calendar.HOUR_OF_DAY, 18);
 
-			calendarView.addDay((Calendar) day.clone());
+			DateTime endOfDay = day.set(Calendar.HOUR_OF_DAY, 18);
+
+			calendarView.addDay(day);
 
 			List<Reservation> daysReservations = room.getReservationsForDay(day);
 
@@ -83,15 +79,14 @@ public class WeekView extends RelativeLayout implements OnClickListener {
 					addFreeMarker(last.getEndTime(), endOfDay);
 				}
 			}
-			day.add(Calendar.DAY_OF_YEAR, 1);
 		}
-		addDisabledMarker(today, Calendar.getInstance());
+		addDisabledMarker(today, new DateTime());
 		calendarFrame.addView(calendarView, LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
 
 	}
 
 	public static interface OnFreeTimeClickListener {
-		abstract void onFreeTimeClick(View v, TimeSpan timeSpan, Calendar clickTime);
+		abstract void onFreeTimeClick(View v, TimeSpan timeSpan, DateTime clickTime);
 	}
 
 	public void setOnFreeTimeClickListener(OnFreeTimeClickListener onFreeTimeClickListener) {
@@ -113,7 +108,7 @@ public class WeekView extends RelativeLayout implements OnClickListener {
 		}
 	}
 
-	private void addFreeMarker(Calendar startTime, Calendar endTime) {
+	private void addFreeMarker(DateTime startTime, DateTime endTime) {
 		if(startTime.after(endTime)){
 			throw new IllegalArgumentException("starTime must be before endTime");
 		}
@@ -121,7 +116,7 @@ public class WeekView extends RelativeLayout implements OnClickListener {
 		marker.setOnClickListener(this);
 		marker.setReserved(false);
 	}
-	private void addDisabledMarker(Calendar startTime, Calendar endTime){
+	private void addDisabledMarker(DateTime startTime, DateTime endTime){
 		if(startTime.after(endTime)){
 			throw new IllegalArgumentException("starTime must be before endTime");
 		}

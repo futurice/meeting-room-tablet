@@ -1,7 +1,6 @@
 package com.futurice.android.reservator.model.soap;
 
 import java.text.ParseException;
-import java.util.Calendar;
 import java.util.Vector;
 
 import org.simpleframework.xml.Attribute;
@@ -12,6 +11,7 @@ import org.simpleframework.xml.Path;
 import org.simpleframework.xml.Root;
 
 import com.futurice.android.reservator.model.DataProxy;
+import com.futurice.android.reservator.model.DateTime;
 import com.futurice.android.reservator.model.ReservatorException;
 import com.futurice.android.reservator.model.TimeSpan;
 
@@ -59,19 +59,18 @@ public class SoapEWS {
 			Vector<com.futurice.android.reservator.model.Reservation> reservations = new Vector<com.futurice.android.reservator.model.Reservation>();
 			if (response.getItems() == null) return reservations; // no reservations
 
-			Calendar startTime = Calendar.getInstance();
-
-			Calendar endTime = Calendar.getInstance();
-
 			for (CalendarItem item : response.getItems()) {
 				try {
-					startTime.setTime(SoapDataProxy.dateFormatUTC.parse(item.getStart()));
-					endTime.setTime(SoapDataProxy.dateFormatUTC.parse(item.getEnd()));
+					DateTime startTime = new DateTime(SoapDataProxy.dateFormatUTC.parse(item.getStart()));
+					DateTime endTime = new DateTime(SoapDataProxy.dateFormatUTC.parse(item.getEnd()));
+
+					reservations.add(new com.futurice.android.reservator.model.Reservation(
+							room,
+							item.getSubject(),
+							new TimeSpan(startTime, endTime)));
 				} catch (ParseException e) {
 					throw new ReservatorException(e);
 				}
-
-				reservations.add(new com.futurice.android.reservator.model.Reservation(room, item.getSubject(), new TimeSpan(startTime, endTime)));
 			}
 
 			return reservations;

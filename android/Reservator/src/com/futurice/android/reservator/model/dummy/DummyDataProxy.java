@@ -10,6 +10,7 @@ import java.util.Vector;
 
 
 import com.futurice.android.reservator.model.DataProxy;
+import com.futurice.android.reservator.model.DateTime;
 import com.futurice.android.reservator.model.Reservation;
 import com.futurice.android.reservator.model.ReservatorException;
 import com.futurice.android.reservator.model.Room;
@@ -99,10 +100,8 @@ public class DummyDataProxy extends DataProxy {
 
 			while (begin < end) {
 				int reservationLength = (rand.nextInt(4)+1)*1800000;
-				Calendar b = Calendar.getInstance();
-				b.setTimeInMillis(begin);
-				Calendar e = Calendar.getInstance();
-				e.setTimeInMillis(begin + reservationLength > end ? end : begin + reservationLength);
+				DateTime b = new DateTime(begin);
+				DateTime e = new DateTime(begin + reservationLength > end ? end : begin + reservationLength);
 
 				Reservation r = new Reservation(room, "foobar!", new TimeSpan(b, e));
 				ret.add(r);

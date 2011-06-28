@@ -108,7 +108,8 @@ public abstract class DataProxy {
 		protected Room doInBackground(Room... rooms) {
 			Room room = rooms[0];
 			try {
-				room.setReservations(getRoomReservations(room));
+				Vector<Reservation> reservations = getRoomReservations(room);
+				room.setReservations(reservations);
 				return room;
 			} catch (ReservatorException e) {
 				this.e = e;

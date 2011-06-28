@@ -5,6 +5,7 @@ import java.util.Vector;
 
 import com.futurice.android.reservator.model.DataProxy;
 import com.futurice.android.reservator.model.DataUpdatedListener;
+import com.futurice.android.reservator.model.DateTime;
 import com.futurice.android.reservator.model.ReservatorException;
 import com.futurice.android.reservator.model.Room;
 import com.futurice.android.reservator.model.TimeSpan;
@@ -63,23 +64,20 @@ public class RoomActivity extends Activity implements OnMenuItemClickListener,
 
 		weekView.setOnFreeTimeClickListener(new OnFreeTimeClickListener() {
 			@Override
-			public void onFreeTimeClick(View v, TimeSpan timeSpan, Calendar touchTime) {
+			public void onFreeTimeClick(View v, TimeSpan timeSpan, DateTime touch) {
 
 				RoomReservationPopup d;
-
-				Calendar start = timeSpan.getStart();
-				Calendar end = timeSpan.getEnd();
 
 				// if time span is less than hour, select it all
 				if (timeSpan.getLength() <= 60*60000) {
 					d = new RoomReservationPopup(RoomActivity.this, timeSpan, timeSpan, currentRoom);
 				} else {
-					Calendar now = Calendar.getInstance();
-					Calendar touch = (Calendar) touchTime.clone();
+					DateTime start = timeSpan.getStart();
+					DateTime end = timeSpan.getEnd();
 
-					touch.set(Calendar.MINUTE, 0);
-					touch.set(Calendar.SECOND, 0);
-					touch.set(Calendar.MILLISECOND, 0);
+					DateTime now = new DateTime();
+
+					touch = touch.stripMinutes();
 
 					if (touch.before(start)) {
 						touch = start;
@@ -89,13 +87,13 @@ public class RoomActivity extends Activity implements OnMenuItemClickListener,
 					}
 
 					TimeSpan presetTimeSpan = new TimeSpan(touch, Calendar.HOUR, 1);
-					Calendar touchend = presetTimeSpan.getEnd();
+					DateTime touchend = presetTimeSpan.getEnd();
 
 					// quantize end to 15min steps
-					touchend.set(Calendar.MINUTE, (touchend.get(Calendar.MINUTE) / 15) * 15);
+					touchend = touchend.set(Calendar.MINUTE, (touchend.get(Calendar.MINUTE) / 15) * 15);
 
 					if (touchend.after(end)) {
-						presetTimeSpan.setEnd((Calendar)end.clone()); // TODO: i really dislike this cloning
+						presetTimeSpan.setEnd(end);
 					}
 
 					d = new RoomReservationPopup(RoomActivity.this, timeSpan, presetTimeSpan, currentRoom);
@@ -177,7 +175,7 @@ public class RoomActivity extends Activity implements OnMenuItemClickListener,
 
 	@Override
 	public void refreshFailed(ReservatorException e) {
-		Builder alertBuilder = new AlertDialog.Builder(getApplicationContext());
+		Builder alertBuilder = new AlertDialog.Builder(this);
 		alertBuilder.setTitle("Error")
 			.setMessage(e.getMessage())
 			.show();

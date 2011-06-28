@@ -17,10 +17,10 @@ public class Reservation implements Comparable<Reservation> {
 	public String getSubject(){
 		return this.subject;
 	}
-	public Calendar getStartTime(){
+	public DateTime getStartTime(){
 		return timeSpan.getStart();
 	}
-	public Calendar getEndTime(){
+	public DateTime getEndTime(){
 		return timeSpan.getEnd();
 	}
 	public Room getRoom(){

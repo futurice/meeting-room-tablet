@@ -4,6 +4,7 @@ package com.futurice.android.reservator.view;
 import java.util.Calendar;
 
 import com.futurice.android.reservator.R;
+import com.futurice.android.reservator.model.DateTime;
 import com.futurice.android.reservator.model.Reservation;
 import com.futurice.android.reservator.model.TimeSpan;
 
@@ -66,8 +67,8 @@ public class CalendarMarker extends FrameLayout{
 	@Override
 	public String toString() {
 		return reservation.getRoom().getName() + ": "
-				+ reservation.getStartTime().getTime().toGMTString() + "-"
-				+ reservation.getEndTime().getTime().toGMTString();
+				+ reservation.getStartTime().toGMTString() + "-"
+				+ reservation.getEndTime().toGMTString();
 	}
 	public void setText(CharSequence text) {
 		TextView label = new TextView(getContext());
@@ -80,10 +81,8 @@ public class CalendarMarker extends FrameLayout{
 		content = v;
 		addView(v);
 	}
-	public Calendar getTouchedTime(){
-		Calendar time = Calendar.getInstance();
+	public DateTime getTouchedTime(){
 		float length = proportionalTouchYCoordinate  * timeSpan.getLength();
-		time.setTimeInMillis((long)(timeSpan.getStart().getTimeInMillis() + length));
-		return time;
+		return new DateTime((long)(timeSpan.getStart().getTimeInMillis() + length));
 	}
 }
