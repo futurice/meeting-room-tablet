@@ -34,11 +34,10 @@ public class RoomActivity extends Activity implements OnMenuItemClickListener,
 
 	DataProxy proxy;
 	Room currentRoom;
+	String roomEmail = null;
 
 	WeekView weekView;
 	TextView roomNameLabel;
-
-	String roomEmail = null;
 
 	MenuItem settingsMenu, refreshMenu;
 
@@ -161,12 +160,7 @@ public class RoomActivity extends Activity implements OnMenuItemClickListener,
 		for (Room r : rooms) {
 			if (r.getEmail().equals(roomEmail)) {
 				final Room theRoom = r;
-				runOnUiThread(new Runnable() {
-					@Override
-					public void run() {
-						setRoom(theRoom);
-					}
-				});
+				setRoom(theRoom);
 				return;
 			}
 		}
