@@ -91,7 +91,7 @@ public class TimeBarView extends FrameLayout{
 
 		super.dispatchDraw(c);
 		Paint p = new Paint();
-		p.setColor(Color.argb(255, 0, 128, 0));
+		p.setColor(getResources().getColor(R.color.ReserveLine));
 
 		int startCenterX = getWidth() / 4;
 		int endCenterX = getWidth() / 4 * 3;
@@ -101,14 +101,14 @@ public class TimeBarView extends FrameLayout{
 		int right = getWidth();
 		int y = 0;
 
-		final int padding = durationLabel.getTop() / 5;;
+		final int padding = durationLabel.getTop() / 6;
 
 		//The horizontal lines
 		c.drawLine(startCenterX - w, y, startCenterX + w, y, p);
 		c.drawLine(endCenterX - w, y, endCenterX + w, y, p);
 		//Static vertical lines
 		c.drawLine(startCenterX , y, startCenterX, y + padding + 1, p);
-		c.drawLine(endCenterX, y, endCenterX, y + padding * 3 / 2 + 1, p); //3 / 2 to shift the other line to bit lower
+		c.drawLine(endCenterX, y, endCenterX, y + padding * 2 + 1, p); // 2* to shift the other line to bit lower
 		y += padding;
 
 		int width = getWidth();
@@ -116,12 +116,12 @@ public class TimeBarView extends FrameLayout{
 		int endX = (int)(width * getProportional(span.getEnd()));
 		//dynamic horizontal lines
 		c.drawLine(startCenterX, y, startX, y, p);
-		c.drawLine(endCenterX, y + padding / 2, endX, y + padding / 2 , p);
+		c.drawLine(endCenterX, y + padding, endX, y + padding , p);
 		//and the vertical ones
 		c.drawLine(startX, y, startX, bottom, p);
-		c.drawLine(endX, y + padding / 2, endX, bottom, p);
+		c.drawLine(endX, y + padding, endX, bottom, p);
 
-		y += padding;
+		y += 2*padding;
 
 		int radius = padding;
 		p.setStyle(Style.FILL);

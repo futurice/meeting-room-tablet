@@ -73,15 +73,18 @@ public class LobbyReservationRowView extends FrameLayout implements
 		bookingMode = findViewById(R.id.bookingMode);
 		normalMode = findViewById(R.id.normalMode);
 		nameField = (AutoCompleteTextView) findViewById(R.id.autoCompleteTextView1);
-		nameField.setOnFocusChangeListener(userNameFocusChangeListener);
 		timePicker2 = (CustomTimeSpanPicker2) findViewById(R.id.timeSpanPicker2);
 		roomNameView = (TextView) findViewById(R.id.roomNameLabel);
 		roomInfoView = (TextView) findViewById(R.id.roomInfoLabel);
 		roomStatusView = (TextView) findViewById(R.id.roomStatusLabel);
 
 		application = (ReservatorApplication) this.getContext().getApplicationContext();
+		nameField.setOnFocusChangeListener(userNameFocusChangeListener);
 		nameField.setOnItemClickListener(this);
 		nameField.setOnClickListener(this);
+		if(nameField.getAdapter() == null){
+			nameField.setAdapter(new AddressBookAdapter(this.getContext(), application.getAddressBook()));
+		}
 
 	}
 
@@ -146,17 +149,15 @@ public class LobbyReservationRowView extends FrameLayout implements
 		if (v == bookNowButton) {
 			setReserveMode();
 		}
-		if (v == cancelButton) {
+		else if (v == cancelButton) {
 			setNormalMode();
 		}
-		if (v == reserveButton) {
+		else if (v == reserveButton) {
+			reserveButton.setEnabled(false);
 			makeReservation();
 		}
-		if (v == calendarButton || v == titleView) {
+		else if (v == calendarButton || v == titleView) {
 			showRoomInCalendar();
-		}
-		if(nameField.getAdapter() == null){
-			nameField.setAdapter(new AddressBookAdapter(this.getContext(), application.getAddressBook()));
 		}
 	}
 
@@ -209,7 +210,7 @@ public class LobbyReservationRowView extends FrameLayout implements
 	}
 
 	protected void setReserveMode() {
-		this.setBackgroundColor(getResources().getColor(R.color.FutuLightGreen));
+		this.setBackgroundColor(getResources().getColor(R.color.ReserveBackground));
 		reserveButton.setEnabled(false);
 		bookingMode.setVisibility(View.VISIBLE);
 		normalMode.setVisibility(View.GONE);

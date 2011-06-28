@@ -1,7 +1,5 @@
 package com.futurice.android.reservator.model;
 
-import java.util.Calendar;
-
 public class Reservation implements Comparable<Reservation> {
 	private TimeSpan timeSpan;
 	private Room room;
