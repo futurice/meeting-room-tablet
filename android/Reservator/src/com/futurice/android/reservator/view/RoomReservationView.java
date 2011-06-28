@@ -82,7 +82,7 @@ public class RoomReservationView extends FrameLayout implements
 		application = (ReservatorApplication) this.getContext().getApplicationContext();
 		nameField.setOnItemClickListener(this);
 		nameField.setOnClickListener(this);
-		
+
 	}
 
 	public void setRoom(Room room) {

@@ -11,6 +11,8 @@ import com.futurice.android.reservator.model.rooms.RoomsInfo;
 import com.futurice.android.reservator.view.WeekView;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -19,17 +21,18 @@ import android.view.MenuItem.OnMenuItemClickListener;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
-import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 public class RoomActivity extends Activity implements OnMenuItemClickListener,
 		DataUpdatedListener {
 	public static final String ROOM_EMAIL_EXTRA = "roomEmail";
-	Room currentRoom;
-	WeekView weekView;
+
 	DataProxy proxy;
-	ArrayAdapter<Room> roomAdapter;
+	Room currentRoom;
+
+	WeekView weekView;
 	TextView roomNameLabel;
+
 	String roomEmail = null;
 
 	MenuItem settingsMenu, refreshMenu;
@@ -119,15 +122,15 @@ public class RoomActivity extends Activity implements OnMenuItemClickListener,
 	public void roomReservationsUpdated(Room room,
 			Vector<Reservation> reservations) {
 		if (currentRoom != null && room.getEmail().equals(roomEmail)) {
-			if (room.getEmail().equals(roomEmail)) {
-				weekView.refreshData();
-			}
+			weekView.refreshData(reservations);
 		}
 	}
 
 	@Override
-	public void refreshFailed(ReservatorException ex) {
-		// TODO Auto-generated method stub
-		throw new RuntimeException(ex.getMessage());
+	public void refreshFailed(ReservatorException e) {
+		Builder alertBuilder = new AlertDialog.Builder(getApplicationContext());
+		alertBuilder.setTitle("Error")
+			.setMessage(e.getMessage())
+			.show();
 	}
 }

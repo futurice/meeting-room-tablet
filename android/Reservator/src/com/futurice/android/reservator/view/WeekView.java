@@ -38,20 +38,23 @@ public class WeekView extends RelativeLayout implements OnClickListener {
 		super(context, attrs, defStyle);
 	}
 
-	public void setRoom(Room room) {
+
+	public void refreshData(){
+		Vector<Reservation> reservations = currentRoom.getReservations();
+		refreshData(reservations);
+	}
+
+	public void refreshData(Vector<Reservation> reservations) {
 		calendarFrame = (FrameLayout)findViewById(R.id.frameLayout1);
 		calendarFrame.removeAllViews();
 		calendar = new CalendarView(getContext());
 
-
-		currentRoom = room;
 		Calendar today = Calendar.getInstance();
 		today.set(Calendar.HOUR_OF_DAY, 8);
 		today.set(Calendar.MINUTE, 0);
 		today.set(Calendar.SECOND, 0);
 		today.set(Calendar.MILLISECOND, 0);
-		
-		Vector<Reservation> reservations = currentRoom.getReservations();
+
 		Calendar day = (Calendar)today.clone();
 		for (int i = 0; i < NUMBER_OF_DAYS_TO_SHOW; i++) {
 			// Skip weekend days
@@ -94,6 +97,13 @@ public class WeekView extends RelativeLayout implements OnClickListener {
 		}
 		addDisabledMarker(today, Calendar.getInstance());
 		calendarFrame.addView(calendar, LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
+
+	}
+
+	public void setRoom(Room room) {
+		currentRoom = room;
+		refreshData();
+
 	}
 
 	private List<Reservation> getReservationsForDay(
@@ -168,9 +178,6 @@ public class WeekView extends RelativeLayout implements OnClickListener {
 		}
 	}
 
-	public void refreshData(){
-		setRoom(currentRoom);
-	}
 	private void addFreeMarker(Calendar startTime, Calendar endTime) {
 		if(startTime.after(endTime)){
 			throw new IllegalArgumentException("starTime must be before endTime");
@@ -194,4 +201,5 @@ public class WeekView extends RelativeLayout implements OnClickListener {
 		marker.setText(r.getSubject());
 		marker.setReserved(true);
 	}
+
 }
