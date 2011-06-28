@@ -1,18 +1,24 @@
 package com.futurice.android.reservator;
 
+import java.util.Calendar;
 import java.util.Vector;
 
 import com.futurice.android.reservator.model.DataProxy;
 import com.futurice.android.reservator.model.DataUpdatedListener;
 import com.futurice.android.reservator.model.ReservatorException;
 import com.futurice.android.reservator.model.Room;
+import com.futurice.android.reservator.model.TimeSpan;
 import com.futurice.android.reservator.model.rooms.RoomsInfo;
+import com.futurice.android.reservator.view.RoomReservationPopup;
 import com.futurice.android.reservator.view.WeekView;
+import com.futurice.android.reservator.view.WeekView.OnFreeTimeClickListener;
 
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.DialogInterface.OnCancelListener;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -55,6 +61,57 @@ public class RoomActivity extends Activity implements OnMenuItemClickListener,
 						RoomActivity.this.finish();
 					}
 				});
+
+		weekView.setOnFreeTimeClickListener(new OnFreeTimeClickListener() {
+			@Override
+			public void onFreeTimeClick(View v, TimeSpan timeSpan, Calendar touchTime) {
+
+				RoomReservationPopup d;
+
+				Calendar start = timeSpan.getStart();
+				Calendar end = timeSpan.getEnd();
+
+				// if time span is less than hour, select it all
+				if (timeSpan.getLength() <= 60*60000) {
+					d = new RoomReservationPopup(RoomActivity.this, timeSpan, timeSpan, currentRoom);
+				} else {
+					Calendar now = Calendar.getInstance();
+					Calendar touch = (Calendar) touchTime.clone();
+
+					touch.set(Calendar.MINUTE, 0);
+					touch.set(Calendar.SECOND, 0);
+					touch.set(Calendar.MILLISECOND, 0);
+
+					if (touch.before(start)) {
+						touch = start;
+					}
+					if (touch.before(now) && now.before(end)) {
+						touch = now;
+					}
+
+					TimeSpan presetTimeSpan = new TimeSpan(touch, Calendar.HOUR, 1);
+					Calendar touchend = presetTimeSpan.getEnd();
+
+					// quantize end to 15min steps
+					touchend.set(Calendar.MINUTE, (touchend.get(Calendar.MINUTE) / 15) * 15);
+
+					if (touchend.after(end)) {
+						presetTimeSpan.setEnd((Calendar)end.clone()); // TODO: i really dislike this cloning
+					}
+
+					d = new RoomReservationPopup(RoomActivity.this, timeSpan, presetTimeSpan, currentRoom);
+				}
+
+				d.show();
+				d.setOnCancelListener(new OnCancelListener() {
+
+					@Override
+					public void onCancel(DialogInterface dialog) {
+						((ReservatorApplication)getApplicationContext()).getDataProxy().refreshRoomReservations(currentRoom);
+					}
+				});
+			}
+		});
 	}
 
 	@Override

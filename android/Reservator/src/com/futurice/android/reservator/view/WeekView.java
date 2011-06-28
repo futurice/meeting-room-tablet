@@ -4,8 +4,6 @@ import java.util.Calendar;
 import java.util.List;
 
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.DialogInterface.OnCancelListener;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -13,7 +11,6 @@ import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 
 import com.futurice.android.reservator.R;
-import com.futurice.android.reservator.ReservatorApplication;
 import com.futurice.android.reservator.model.Reservation;
 import com.futurice.android.reservator.model.Room;
 import com.futurice.android.reservator.model.TimeSpan;
@@ -28,9 +25,7 @@ public class WeekView extends RelativeLayout implements OnClickListener {
 		this(context, null);
 	}
 
-	// needed only for making reservation
-	// TODO: move to RoomActivity
-	private Room currentRoom;
+	private OnFreeTimeClickListener onFreeTimeClickListener = null;
 
 	public WeekView(Context context, AttributeSet attrs) {
 		this(context, attrs, 0);
@@ -41,8 +36,6 @@ public class WeekView extends RelativeLayout implements OnClickListener {
 	}
 
 	public void refreshData(Room room) {
-		currentRoom = room;
-
 		calendarFrame = (FrameLayout)findViewById(R.id.frameLayout1);
 		calendarFrame.removeAllViews();
 		calendarView = new CalendarView(getContext());
@@ -77,7 +70,7 @@ public class WeekView extends RelativeLayout implements OnClickListener {
 				}
 				for (int j = 0; j < daysReservations.size(); j++) {
 					Reservation current = daysReservations.get(j);
-					addReseredMarker(current);
+					addReservedMarker(current);
 					if (j < daysReservations.size() - 1) {
 						Reservation next = daysReservations.get(j + 1);
 						if(next.getBeginTime().after(current.getEndTime())){
@@ -97,6 +90,13 @@ public class WeekView extends RelativeLayout implements OnClickListener {
 
 	}
 
+	public static interface OnFreeTimeClickListener {
+		abstract void onFreeTimeClick(View v, TimeSpan timeSpan, Calendar clickTime);
+	}
+
+	public void setOnFreeTimeClickListener(OnFreeTimeClickListener onFreeTimeClickListener) {
+		this.onFreeTimeClickListener  = onFreeTimeClickListener;
+	}
 
 	@Override
 	public void onClick(final View v) {
@@ -106,53 +106,10 @@ public class WeekView extends RelativeLayout implements OnClickListener {
 			if (marker.isReserved()) {
 				return;
 			} else {
-
-				RoomReservationPopup d;
-
-				Calendar start = marker.getTimeSpan().getStart();
-				Calendar end = marker.getTimeSpan().getEnd();
-
-				// if time span is less than hour, select it all
-				if (marker.getTimeSpan().getLength() <= 60*60000) {
-					d = new RoomReservationPopup(getContext(),marker.getTimeSpan(), marker.getTimeSpan(), currentRoom);
-				} else {
-					Calendar touch = marker.getTouchedTime();
-					Calendar now = Calendar.getInstance();
-
-					touch.set(Calendar.MINUTE, 0);
-					touch.set(Calendar.SECOND, 0);
-					touch.set(Calendar.MILLISECOND, 0);
-
-					if (touch.before(start)) {
-						touch = start;
-					}
-					if (touch.before(now) && now.before(end)) {
-						touch = now;
-					}
-
-					TimeSpan presetTimeSpan = new TimeSpan(touch, Calendar.HOUR, 1);
-					Calendar touchend = presetTimeSpan.getEnd();
-
-					// quantize end to 15min steps
-					touchend.set(Calendar.MINUTE, (touchend.get(Calendar.MINUTE) / 15) * 15);
-
-					if (touchend.after(end)) {
-						presetTimeSpan.setEnd((Calendar)end.clone()); // TODO: i really dislike this cloning
-					}
-
-					d = new RoomReservationPopup(getContext(),marker.getTimeSpan(), presetTimeSpan, currentRoom);
+				if (onFreeTimeClickListener != null) {
+					onFreeTimeClickListener.onFreeTimeClick(v, marker.getTimeSpan(), marker.getTouchedTime());
 				}
-
-				d.show();
-				d.setOnCancelListener(new OnCancelListener() {
-
-					@Override
-					public void onCancel(DialogInterface dialog) {
-						((ReservatorApplication)getContext().getApplicationContext()).getDataProxy().refreshRoomReservations(currentRoom);
-					}
-				});
 			}
-
 		}
 	}
 
@@ -173,7 +130,7 @@ public class WeekView extends RelativeLayout implements OnClickListener {
 		marker.setReserved(true);
 		marker.setBackgroundColor(getResources().getColor(R.color.CalendarDisabledColor));
 	}
-	private void addReseredMarker(Reservation r) {
+	private void addReservedMarker(Reservation r) {
 		CalendarMarker marker = calendarView.addMarker(r.getBeginTime(),
 				r.getEndTime());
 		marker.setText(r.getSubject());

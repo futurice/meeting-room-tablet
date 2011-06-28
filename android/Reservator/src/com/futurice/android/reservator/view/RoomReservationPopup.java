@@ -1,6 +1,7 @@
 package com.futurice.android.reservator.view;
 
 import com.futurice.android.reservator.R;
+import com.futurice.android.reservator.ReservatorApplication;
 import com.futurice.android.reservator.model.Room;
 import com.futurice.android.reservator.model.TimeSpan;
 
@@ -12,7 +13,7 @@ public class RoomReservationPopup extends Dialog {
 	LobbyReservationRowView reservationView;
 	CalendarMarker marker;
 
-	protected RoomReservationPopup(Context context, TimeSpan timeLimits, TimeSpan presetTime, Room room) {
+	public RoomReservationPopup(Context context, TimeSpan timeLimits, TimeSpan presetTime, Room room) {
 		super(context, R.style.Theme_Transparent);
 		setCancelable(true);
 
@@ -39,14 +40,25 @@ public class RoomReservationPopup extends Dialog {
 				cancel();
 			}
 		});
-		reservationView.findViewById(R.id.reserveButton).setOnClickListener(new View.OnClickListener() {
 
+		reservationView.findViewById(R.id.reserveButton).setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				reservationView.onClick(v);
 				cancel();
 			}
 		});
+
+		final Room finalRoom = room;
+
+		reservationView.setOnReserveCallback(new Callback() {
+			@Override
+			public void call(LobbyReservationRowView v) {
+				ReservatorApplication application = (ReservatorApplication) RoomReservationPopup.this.getContext().getApplicationContext();
+				application.getDataProxy().refreshRoomReservations(finalRoom);
+			}
+		});
+
 		reservationView.setReserveMode();
 	}
 }

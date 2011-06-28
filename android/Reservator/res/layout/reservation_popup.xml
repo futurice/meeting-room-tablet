@@ -1,4 +1,4 @@
 
     <RelativeLayout android:id="@+id/relativeLayout1" xmlns:android="http://schemas.android.com/apk/res/android" android:isScrollContainer="false" android:layout_width="fill_parent" android:layout_height="fill_parent" android:background="#5555" android:layout_gravity="center">
-            <com.futurice.android.reservator.view.RoomReservationView android:id="@+id/roomReservationView1" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_centerInParent="true" android:padding="10dp" android:background="@drawable/popup_background"/>
+            <com.futurice.android.reservator.view.LobbyReservationRowView android:id="@+id/roomReservationView1" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_centerInParent="true" android:padding="10dp" android:background="@drawable/popup_background"/>
     </RelativeLayout>
