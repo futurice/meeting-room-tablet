@@ -3,25 +3,25 @@ package com.futurice.android.reservator.model;
 import java.util.Calendar;
 
 public class Reservation implements Comparable<Reservation> {
-	private Calendar beginTime, endTime;
+	private TimeSpan timeSpan;
 	private Room room;
 	private String subject;
 	private boolean confirmed = false;
-	public Reservation(Room room, String subject, Calendar beginTime, Calendar endTime){
+
+	public Reservation(Room room, String subject, TimeSpan timeSpan){
 		this.room = room;
-		this.beginTime = beginTime;
-		this.endTime = endTime;
 		this.subject = subject;
+		this.timeSpan = timeSpan;
 	}
 
 	public String getSubject(){
 		return this.subject;
 	}
-	public Calendar getBeginTime(){
-		return beginTime;
+	public Calendar getStartTime(){
+		return timeSpan.getStart();
 	}
 	public Calendar getEndTime(){
-		return endTime;
+		return timeSpan.getEnd();
 	}
 	public Room getRoom(){
 		return room;
@@ -35,7 +35,7 @@ public class Reservation implements Comparable<Reservation> {
 
 	@Override
 	public int compareTo(Reservation another) {
-		return (int)(this.beginTime.getTimeInMillis() - another.beginTime.getTimeInMillis());
+		return (int)(this.getStartTime().getTimeInMillis() - another.getStartTime().getTimeInMillis());
 	}
 
 	public void setSubject(String text) {

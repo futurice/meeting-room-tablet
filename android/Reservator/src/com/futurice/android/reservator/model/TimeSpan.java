@@ -4,6 +4,7 @@ import java.util.Calendar;
 
 public class TimeSpan {
 	private Calendar start, end;
+
 	public TimeSpan(Calendar start, Calendar end){
 		this.start = (Calendar)start.clone();
 		this.end = (Calendar)end.clone();
@@ -29,7 +30,7 @@ public class TimeSpan {
 		return start;
 	}
 	public void setStart(Calendar start){
-		
+
 		this.start = start;
 		if(start.after(end)){
 			throw new IllegalArgumentException("No negative time allowed");

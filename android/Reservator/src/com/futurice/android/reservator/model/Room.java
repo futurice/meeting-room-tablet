@@ -41,7 +41,7 @@ public class Room {
 	public boolean isFree() {
 		Calendar now = Calendar.getInstance();
 		for (Reservation r : reservations) {
-			if (r.getBeginTime().before(now) && r.getEndTime().after(now)) {
+			if (r.getStartTime().before(now) && r.getEndTime().after(now)) {
 				return false;
 			}
 		}
@@ -58,8 +58,8 @@ public class Room {
 	 */
 	public int minutesFreeFrom(Calendar from) {
 		for (Reservation r : reservations) {
-			if (r.getBeginTime().after(from)) {
-				return (int) (r.getBeginTime().getTimeInMillis() - from.getTimeInMillis()) / 60000;
+			if (r.getStartTime().after(from)) {
+				return (int) (r.getStartTime().getTimeInMillis() - from.getTimeInMillis()) / 60000;
 			}
 		}
 
@@ -81,7 +81,7 @@ public class Room {
 	public int reservedForFrom(Calendar from) {
 		Calendar to = (Calendar) from.clone();
 		for (Reservation r : reservations) {
-			if (r.getBeginTime().before(to) && r.getEndTime().after(to)) {
+			if (r.getStartTime().before(to) && r.getEndTime().after(to)) {
 				to = (Calendar) r.getEndTime().clone();
 				to.add(Calendar.MINUTE, 5);
 			}
@@ -111,11 +111,11 @@ public class Room {
 
 		for (Reservation r : reservations) {
 			// bound nextFreeTime to
-			if (r.getBeginTime().after(max)) {
+			if (r.getStartTime().after(max)) {
 				return new TimeSpan(now, max);
 			}
-			if(r.getBeginTime().after(now)){
-				return new TimeSpan(now, r.getBeginTime()); //TODO maybe there are many reservations after each other..
+			if(r.getStartTime().after(now)){
+				return new TimeSpan(now, r.getStartTime()); //TODO maybe there are many reservations after each other..
 			}
 		}
 
@@ -126,9 +126,9 @@ public class Room {
 	public List<Reservation> getReservationsForDay(Calendar day) {
 		List<Reservation> daysReservations = new ArrayList<Reservation>();
 		for (Reservation r : reservations) {
-			if (r.getBeginTime().get(Calendar.DAY_OF_YEAR) == day
+			if (r.getStartTime().get(Calendar.DAY_OF_YEAR) == day
 					.get(Calendar.DAY_OF_YEAR)
-					&& r.getBeginTime().get(Calendar.YEAR) == day
+					&& r.getStartTime().get(Calendar.YEAR) == day
 							.get(Calendar.YEAR)) {
 				daysReservations.add(r);
 			}

@@ -65,16 +65,16 @@ public class WeekView extends RelativeLayout implements OnClickListener {
 				addFreeMarker(day, endOfDay);
 			} else {
 				Reservation first = daysReservations.get(0);
-				if (first.getBeginTime().after(day)) {
-					addFreeMarker(day, first.getBeginTime());
+				if (first.getStartTime().after(day)) {
+					addFreeMarker(day, first.getStartTime());
 				}
 				for (int j = 0; j < daysReservations.size(); j++) {
 					Reservation current = daysReservations.get(j);
 					addReservedMarker(current);
 					if (j < daysReservations.size() - 1) {
 						Reservation next = daysReservations.get(j + 1);
-						if(next.getBeginTime().after(current.getEndTime())){
-							addFreeMarker(current.getEndTime(), next.getBeginTime());
+						if(next.getStartTime().after(current.getEndTime())){
+							addFreeMarker(current.getEndTime(), next.getStartTime());
 						}
 					}
 				}
@@ -131,7 +131,7 @@ public class WeekView extends RelativeLayout implements OnClickListener {
 		marker.setBackgroundColor(getResources().getColor(R.color.CalendarDisabledColor));
 	}
 	private void addReservedMarker(Reservation r) {
-		CalendarMarker marker = calendarView.addMarker(r.getBeginTime(),
+		CalendarMarker marker = calendarView.addMarker(r.getStartTime(),
 				r.getEndTime());
 		marker.setText(r.getSubject());
 		marker.setReserved(true);

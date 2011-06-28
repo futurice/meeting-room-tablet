@@ -32,8 +32,8 @@ public class DummyDataProxy extends DataProxy {
 		rooms.add(new Room("Project-Metkula-408", "408-Metkula@futu.com"));
 
 		rooms.add(new Room("Project-Verstas-506", "506-Verstas@futu.com"));
-		rooms.add(new Room("Room-Kenkäkauppa-503", "503-Kenkakauppa@futu.com"));
-		rooms.add(new Room("Room-Koivumetsä-504", "504-Koivumetsa@futu.com"));
+		rooms.add(new Room("Room-Kenkï¿½kauppa-503", "503-Kenkakauppa@futu.com"));
+		rooms.add(new Room("Room-Koivumetsï¿½-504", "504-Koivumetsa@futu.com"));
 		rooms.add(new Room("Room-Merineukkari-502", "502-Merineukkari@futu.com"));
 		rooms.add(new Room("Room-Pikku Neukkari-501", "501-pikkuneukkari@futu.com"));
 
@@ -54,7 +54,7 @@ public class DummyDataProxy extends DataProxy {
 	public void reserve(Room room, TimeSpan timeSpan, String ownerEmail) throws ReservatorException {
 		// TODO: check for availability
 
-		Reservation reservation = new Reservation(room, "reserved with FutuReservator5000", timeSpan.getStart(), timeSpan.getEnd());
+		Reservation reservation = new Reservation(room, "reserved with FutuReservator5000", timeSpan);
 		Vector<Reservation> roomReservations = reservations.get(room.getEmail());
 		if (roomReservations == null) {
 			throw new ReservatorException("unknown room");
@@ -104,7 +104,7 @@ public class DummyDataProxy extends DataProxy {
 				Calendar e = Calendar.getInstance();
 				e.setTimeInMillis(begin + reservationLength > end ? end : begin + reservationLength);
 
-				Reservation r = new Reservation(room, "foobar!", b, e);
+				Reservation r = new Reservation(room, "foobar!", new TimeSpan(b, e));
 				ret.add(r);
 				begin += reservationLength + (rand.nextInt(6))*1800000;
 			}

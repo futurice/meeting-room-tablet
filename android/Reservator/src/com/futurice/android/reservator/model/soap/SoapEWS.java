@@ -13,6 +13,7 @@ import org.simpleframework.xml.Root;
 
 import com.futurice.android.reservator.model.DataProxy;
 import com.futurice.android.reservator.model.ReservatorException;
+import com.futurice.android.reservator.model.TimeSpan;
 
 public class SoapEWS {
 	@Root(strict=false)
@@ -70,7 +71,7 @@ public class SoapEWS {
 					throw new ReservatorException(e);
 				}
 
-				reservations.add(new com.futurice.android.reservator.model.Reservation(room, item.getSubject(), (Calendar) startTime.clone(), (Calendar) endTime.clone()));
+				reservations.add(new com.futurice.android.reservator.model.Reservation(room, item.getSubject(), new TimeSpan(startTime, endTime)));
 			}
 
 			return reservations;
