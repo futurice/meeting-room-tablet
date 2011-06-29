@@ -18,6 +18,7 @@ import android.app.ProgressDialog;
 import android.app.AlertDialog.Builder;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MenuItem.OnMenuItemClickListener;
@@ -32,6 +33,7 @@ public class LobbyActivity extends Activity implements OnMenuItemClickListener,
 	DataProxy proxy;
 
 	private ProgressDialog progressDialog = null;
+	int showLoadingCount = 0;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -66,7 +68,6 @@ public class LobbyActivity extends Activity implements OnMenuItemClickListener,
 		proxy.refreshRooms();
 	}
 
-	int showLoadingCount = 0;
 
 	private void showLoading() {
 		showLoadingCount++;
@@ -174,9 +175,17 @@ public class LobbyActivity extends Activity implements OnMenuItemClickListener,
 		for (int index = 0; index < roomCount; index++) {
 			Room r2 = ((LobbyReservationRowView) container.getChildAt(index))
 					.getRoom();
-			// Log.v("activity", r.toString() + " -- " +
-			// Integer.toString(r2.minutesFreeFromNow()));
-			if (roomCmp.compare(r, r2) < 0) {
+
+			if (r.equals(r2)) {
+				Log.d("LobbyActivity", "duplicate room -- " + r.getEmail());
+				// XXX: minor logic error; same room
+				// someone else requested also an update, and we got rooms twice
+				container.removeViewAt(index);
+				container.addView(v, index);
+				added = true;
+				continue;
+			}
+			else if (roomCmp.compare(r, r2) < 0) {
 				container.addView(v, index);
 				added = true;
 				break;
