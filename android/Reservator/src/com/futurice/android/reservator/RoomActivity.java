@@ -16,6 +16,7 @@ import com.futurice.android.reservator.view.WeekView.OnFreeTimeClickListener;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.app.AlertDialog.Builder;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -41,6 +42,9 @@ public class RoomActivity extends Activity implements OnMenuItemClickListener,
 	TextView roomNameLabel;
 
 	MenuItem settingsMenu, refreshMenu;
+
+	private ProgressDialog progressDialog = null;
+	int showLoadingCount = 0;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -148,9 +152,29 @@ public class RoomActivity extends Activity implements OnMenuItemClickListener,
 			Intent i = new Intent(this, SettingsActivity.class);
 			startActivity(i);
 		} else if (item == refreshMenu) {
+			showLoading();
 			proxy.refreshRoomReservations(currentRoom);
 		}
 		return true;
+	}
+
+	private void showLoading() {
+		showLoadingCount++;
+		if (this.progressDialog == null) {
+			this.progressDialog = ProgressDialog.show(this, "Loading",
+					"Refreshing reservations", true, false);
+		}
+
+	}
+
+	private void hideLoading() {
+		showLoadingCount--;
+		if (showLoadingCount <= 0) {
+			if (this.progressDialog != null) {
+				this.progressDialog.dismiss();
+				this.progressDialog = null;
+			}
+		}
 	}
 
 	@Override
@@ -171,6 +195,7 @@ public class RoomActivity extends Activity implements OnMenuItemClickListener,
 		if (currentRoom != null && room.getEmail().equals(roomEmail)) {
 			weekView.refreshData(room);
 		}
+		hideLoading();
 	}
 
 	@Override
@@ -179,5 +204,6 @@ public class RoomActivity extends Activity implements OnMenuItemClickListener,
 		alertBuilder.setTitle("Error")
 			.setMessage(e.getMessage())
 			.show();
+		hideLoading();
 	}
 }
