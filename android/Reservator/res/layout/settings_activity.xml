@@ -8,5 +8,6 @@
 		android:layout_centerInParent="true" android:paddingRight="20dp" android:paddingLeft="20dp">
 		<TextView android:layout_height="wrap_content" android:gravity="center_vertical" android:lines="2" android:layout_width="fill_parent" android:id="@+id/serverAddressLabel" android:text="@string/exchange_server_address"></TextView>
 		<EditText android:layout_height="wrap_content" android:layout_width="wrap_content" android:layout_below="@+id/serverAddressLabel" android:layout_alignLeft="@+id/serverAddressLabel" android:layout_alignRight="@+id/serverAddressLabel" android:id="@+id/serverAddressEdit" android:maxLines="1"></EditText>
+		<Button android:layout_below="@+id/serverAddressEdit" android:layout_height="wrap_content" android:layout_width="wrap_content" android:id="@+id/removeUserDataButton" android:layout_alignLeft="@+id/serverAddressEdit" android:text="@string/removeUserData"></Button>
 	</RelativeLayout>
 </RelativeLayout>

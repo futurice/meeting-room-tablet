@@ -6,7 +6,6 @@
     <string name="start">start</string>
     <string name="end">end</string>
     <string name="reserve">reserve</string>
-    <string name="PREFERENCES_NAME">ReservatorPreferences</string>
     <string name="login">Login</string>
     <string name="username">Username:</string>
     <string name="password">Password:</string>
@@ -18,5 +17,9 @@
     <string name="to">To </string>
     <string name="seeAllRooms">See all rooms</string>
     <string name="exchange_server_address">Exchange server address</string>
+    <string name="PREFERENCES_NAME">ReservatorPreferences</string>
     <string name="PREFERENCES_SERVER_ADDRESS">serverAddress</string>
+    <string name="PREFERENCES_USERNAME">username</string>
+    <string name="PREFERENCES_PASSWORD">password</string>
+    <string name="removeUserData">Remove login info</string>
 </resources>
