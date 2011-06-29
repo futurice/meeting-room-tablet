@@ -59,10 +59,8 @@ public class CustomTimeSpanPicker2 extends FrameLayout implements OnClickListene
 		endLabel = (TextView) findViewById(R.id.endTimeLabel);
 		timeBar = (TimeBarView)findViewById(R.id.timeBarView);
 
-		minimumDuration = 15;
-		timeStep = 15;
-
-
+		minimumDuration = 30;
+		timeStep = 30;
 
 		reset();
 	}
