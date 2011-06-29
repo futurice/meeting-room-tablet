@@ -24,7 +24,6 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AutoCompleteTextView;
 import android.widget.FrameLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.view.View.OnClickListener;
 import android.view.inputmethod.InputMethodManager;
 
@@ -173,12 +172,10 @@ public class LobbyReservationRowView extends FrameLayout implements
 	private void makeReservation() {
 		String email = application.getAddressBook().getEmailByName(nameField.getText().toString());
 
-		if (email == null) {
-			Toast t = Toast.makeText(getContext(), "No such user, try again", Toast.LENGTH_LONG);
-			t.show();
-		}
-
 		try {
+			if (email == null) {
+				throw new ReservatorException("No such user, try again");
+			}
 			application.getDataProxy().reserve(room, timePicker2.getTimeSpan(), email);
 		} catch (ReservatorException e) {
 			Builder alertBuilder = new AlertDialog.Builder(getContext());
