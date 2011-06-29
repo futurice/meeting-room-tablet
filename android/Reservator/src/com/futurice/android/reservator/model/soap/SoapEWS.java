@@ -1,6 +1,7 @@
 package com.futurice.android.reservator.model.soap;
 
 import java.text.ParseException;
+import java.util.Calendar;
 import java.util.Vector;
 
 import org.simpleframework.xml.Attribute;
@@ -67,6 +68,15 @@ public class SoapEWS {
 					synchronized (SoapDataProxy.dateFormatUTC) {
 						startTime = new DateTime(SoapDataProxy.dateFormatUTC.parse(item.getStart()));
 						endTime = new DateTime(SoapDataProxy.dateFormatUTC.parse(item.getEnd()));
+					}
+
+					while (!startTime.sameDay(endTime)) {
+						DateTime tmp = startTime.stripTime().add(Calendar.DAY_OF_YEAR, 1);
+						reservations.add(new com.futurice.android.reservator.model.Reservation(
+								room,
+								item.getSubject(),
+								new TimeSpan(startTime, tmp)));
+						startTime = tmp;
 					}
 
 					reservations.add(new com.futurice.android.reservator.model.Reservation(
