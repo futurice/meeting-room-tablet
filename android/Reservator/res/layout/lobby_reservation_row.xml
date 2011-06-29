@@ -20,8 +20,8 @@
 		<AutoCompleteTextView android:id="@+id/autoCompleteTextView1" android:layout_height="wrap_content"
 			android:lines="1"
 			android:hint="Your name" android:completionHint="Your name" android:inputType="textFilter" android:maxLines="1" android:imeOptions="actionDone" android:layout_width="230dp" android:layout_gravity="center" android:completionThreshold="2" android:layout_marginRight="10dp" android:layout_marginLeft="10dp"></AutoCompleteTextView>
-		<Button android:layout_height="wrap_content"
-			android:layout_width="wrap_content" android:minWidth="40sp" android:id="@+id/reserveButton" android:focusable="true" android:text="Reserve"></Button>
+		<Button android:layout_height="wrap_content" 
+			android:layout_width="wrap_content" android:id="@+id/reserveButton" android:focusable="true" android:text="Reserve" android:background="@drawable/button_background"></Button>
 		<FrameLayout android:layout_width="1dp" android:layout_weight="1" android:layout_height="match_parent" />
 		<ImageButton android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/cancelButton" android:layout_gravity="top" android:background="@drawable/close_button_states"></ImageButton>
 	</LinearLayout>
@@ -31,7 +31,7 @@
 			android:layout_height="wrap_content" android:id="@+id/roomStatusLabel"
 			android:text="&lt;status&gt;" android:width="200px" android:layout_gravity="center"></TextView>
 		<FrameLayout android:layout_height="match_parent" android:layout_width="wrap_content" android:layout_weight="1"></FrameLayout>
-		<Button android:layout_width="wrap_content"
+		<Button android:layout_width="wrap_content" android:background="@drawable/button_background"
 			android:layout_height="wrap_content" android:text="@string/book_now"
 			android:id="@+id/bookNowButton" android:focusable="true" android:layout_gravity="center"></Button>
 		<FrameLayout android:layout_height="match_parent" android:layout_width="wrap_content" android:layout_weight="1"></FrameLayout>

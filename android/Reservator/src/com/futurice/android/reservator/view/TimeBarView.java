@@ -8,10 +8,9 @@ import com.futurice.android.reservator.model.TimeSpan;
 
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.RectF;
 import android.graphics.Paint.Style;
+import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.widget.FrameLayout;
 import android.widget.TextView;
@@ -25,6 +24,12 @@ public class TimeBarView extends FrameLayout{
 	Thread animatorThread = null;
 	TimeSpan limits, span;
 	private static final int MIN_SPAN_LENGTH = 60*120*1000;
+
+	Drawable background;
+	Drawable reservationOwn;
+	Drawable reservationOther;
+	int tickColor;
+
 	public TimeBarView(Context context) {
 		this(context, null);
 	}
@@ -35,6 +40,11 @@ public class TimeBarView extends FrameLayout{
 		this.setTimeLimits(new TimeSpan(null,Calendar.HOUR, 2));
 		this.setSpan(new TimeSpan(null,Calendar.MINUTE, 90));
 		// span.getStart().add(Calendar.MINUTE, 30); // XXX: check why
+
+		background = getResources().getDrawable(R.drawable.timeline);
+		reservationOwn = getResources().getDrawable(R.drawable.oma_varaus);
+		reservationOther = getResources().getDrawable(R.drawable.muu_varaus);
+		tickColor = getResources().getColor(R.color.TimeBarTickColor);
 	}
 	public void setTimeLimits(TimeSpan span){
 		this.limits = span.clone();
@@ -123,29 +133,39 @@ public class TimeBarView extends FrameLayout{
 
 		y += 2*padding;
 
-		int radius = padding;
-		p.setStyle(Style.FILL);
-		p.setColor(Color.LTGRAY);
-		c.drawRoundRect(new RectF(left, y, right, bottom), radius, radius, p);
-		p.setColor(getResources().getColor(R.color.TimeSpanTextColor));
-		c.drawRoundRect(new RectF(startX, y, endX, bottom), radius, radius, p);
-		p.setColor(Color.RED);
-		if(span.getLength() < MIN_SPAN_LENGTH){
-			c.drawRoundRect(new RectF(width * getProportional(limits.getEnd()), y, width, bottom), radius, radius, p);
-		}
-		p.setStyle(Style.STROKE);
-		p.setColor(Color.argb(255, 40, 40, 40));
-		DateTime time = limits.getStart();
+		// Background
+		background.setBounds(left, y, right, bottom);
+		background.draw(c);
 
-		while(time.before(limits.getEnd())){
+		// Reservation
+		reservationOwn.setBounds(startX, y, endX, bottom);
+		reservationOwn.draw(c);
+
+		// Other reservation
+		if(span.getLength() < MIN_SPAN_LENGTH){
+			reservationOther.setBounds((int) (width * getProportional(limits.getEnd())), y, width, bottom);
+			reservationOther.draw(c);
+		}
+
+		// Ticks
+		p.setStyle(Style.STROKE);
+		p.setColor(tickColor);
+		DateTime time = limits.getStart();
+		DateTime end = getMaximum();
+
+		while(time.before(end)){
 			if(time.get(Calendar.MINUTE) % 30 != 0){
 				time = time.add(Calendar.MINUTE, 30 - time.get(Calendar.MINUTE) % 30);
 			}
 			int x = (int)(width * getProportional(time));
 			c.drawLine(x, y, x, bottom, p);
+
 			time = time.add(Calendar.MINUTE, 30);
 		}
+
+		// Duration label
 		durationLabel.setText(span.getLength() / 60000 + " minutes");
+
 		/*p.setColor(getResources().getColor(R.color.TimeSpanTextColor));
 		String durationText = span.getLength() / 60000 + " minutes";
 		int textWidth = (int) p.measureText(durationText);
@@ -153,6 +173,11 @@ public class TimeBarView extends FrameLayout{
 
 		c.drawText( durationText, textX > startX ? textX : startX, bottom + padding + p.getTextSize(), p);*/
 	}
+
+	private DateTime getMaximum() {
+		return limits.getStart().add(Calendar.MILLISECOND, (int) (limits.getLength() >  MIN_SPAN_LENGTH ? limits.getLength() : MIN_SPAN_LENGTH));
+	}
+
 	private float getProportional(DateTime time){
 		return (time.getTimeInMillis() - limits.getStart().getTimeInMillis()) / (float)(limits.getLength() >  MIN_SPAN_LENGTH ? limits.getLength() : MIN_SPAN_LENGTH);
 	}

@@ -30,4 +30,5 @@
     <color name="FutuLightGreen">#cbdeb2</color>
     <color name="ReserveBackground">#d2e5bd</color>
     <color name="ReserveLine">#a4cb80</color>
+    <color name="TimeBarTickColor">#6333</color>
 </resources>
