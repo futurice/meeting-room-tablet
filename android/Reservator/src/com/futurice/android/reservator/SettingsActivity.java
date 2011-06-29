@@ -9,7 +9,6 @@ import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.widget.EditText;
 
-import com.futurice.android.reservator.model.ReservatorException;
 import com.futurice.android.reservator.model.Room;
 
 public class SettingsActivity extends Activity {
@@ -25,12 +24,6 @@ public class SettingsActivity extends Activity {
 	@Override
 	public void onResume(){
 		super.onPostResume();
-		ReservatorApplication app = (ReservatorApplication)getApplication();
-		try {
-			rooms = app.getDataProxy().getRooms();
-		} catch (ReservatorException e) {
-
-		}
 
 		serverAddressView = (EditText) findViewById(R.id.serverAddressEdit);
 
