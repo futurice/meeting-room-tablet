@@ -114,7 +114,7 @@ public class LobbyActivity extends Activity implements OnMenuItemClickListener,
 		for (Room r : rooms) {
 			RoomsInfo info = RoomsInfo.getRoomsInfo(r);
 			if (info.isProjectRoom()) {
-				return; // skip project room
+				continue; // skip project room
 			}
 			showLoading();
 			proxy.refreshRoomReservations(r);

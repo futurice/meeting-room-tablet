@@ -96,38 +96,40 @@ public class TimeBarView extends FrameLayout{
 	}
 	@Override
 	public void dispatchDraw(Canvas c){
-
-
-
 		super.dispatchDraw(c);
-		Paint p = new Paint();
-		p.setColor(getResources().getColor(R.color.ReserveLine));
+
 
 		int startCenterX = getWidth() / 4;
 		int endCenterX = getWidth() / 4 * 3;
 		int w = 10;
 		int left = 0;
 		int bottom = durationLabel.getTop();
-		int right = getWidth();
+		int right = getWidth()-1;
 		int y = 0;
 
 		final int padding = durationLabel.getTop() / 6;
 
-		//The horizontal lines
+		Paint p = new Paint();
+		p.setColor(getResources().getColor(R.color.ReserveLine));
+
+		// The horizontal lines
 		c.drawLine(startCenterX - w, y, startCenterX + w, y, p);
 		c.drawLine(endCenterX - w, y, endCenterX + w, y, p);
-		//Static vertical lines
+
+		// ... and vertical
 		c.drawLine(startCenterX , y, startCenterX, y + padding + 1, p);
 		c.drawLine(endCenterX, y, endCenterX, y + padding * 2 + 1, p); // 2* to shift the other line to bit lower
 		y += padding;
 
-		int width = getWidth();
+		int width = getWidth()-1;
 		int startX = (int)(width * getProportional(span.getStart()));
 		int endX = (int)(width * getProportional(span.getEnd()));
-		//dynamic horizontal lines
+
+		// Dynamic horizontal lines
 		c.drawLine(startCenterX, y, startX, y, p);
 		c.drawLine(endCenterX, y + padding, endX, y + padding , p);
-		//and the vertical ones
+
+		// ... and vertical
 		c.drawLine(startX, y, startX, bottom, p);
 		c.drawLine(endX, y + padding, endX, bottom, p);
 
@@ -153,10 +155,12 @@ public class TimeBarView extends FrameLayout{
 		DateTime time = limits.getStart();
 		DateTime end = getMaximum();
 
+		if (time.get(Calendar.MINUTE) % 30 == 0) {
+			time = time.set(Calendar.MINUTE, (time.get(Calendar.MINUTE) % 30) * 30);
+		}
+		time = time.add(Calendar.MINUTE, 30);
+
 		while(time.before(end)){
-			if(time.get(Calendar.MINUTE) % 30 != 0){
-				time = time.add(Calendar.MINUTE, 30 - time.get(Calendar.MINUTE) % 30);
-			}
 			int x = (int)(width * getProportional(time));
 			c.drawLine(x, y, x, bottom, p);
 
