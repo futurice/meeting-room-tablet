@@ -21,7 +21,7 @@
 			android:lines="1"
 			android:hint="Your name" android:completionHint="Your name" android:inputType="textFilter" android:maxLines="1" android:imeOptions="actionDone" android:layout_width="230dp" android:layout_gravity="center" android:completionThreshold="2" android:layout_marginRight="10dp" android:layout_marginLeft="10dp"></AutoCompleteTextView>
 		<Button android:layout_height="wrap_content" 
-			android:layout_width="wrap_content" android:id="@+id/reserveButton" android:focusable="true" android:text="Reserve" android:background="@drawable/button_background" android:layout_gravity="center"></Button>
+			android:layout_width="wrap_content" android:id="@+id/reserveButton" android:focusable="true" android:text="Reserve" android:background="@drawable/button_background" android:layout_gravity="center" android:textColor="@color/button_color"></Button>
 		<FrameLayout android:layout_width="1dp" android:layout_weight="1" android:layout_height="match_parent" />
 		<ImageButton android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/cancelButton" android:layout_gravity="top" android:background="@drawable/close_button_states"></ImageButton>
 	</LinearLayout>
