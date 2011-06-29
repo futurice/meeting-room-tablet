@@ -209,8 +209,10 @@ public class SoapDataProxy extends DataProxy{
 		xml = xml.replace("{RoomName}", room.getName());
 		xml = xml.replace("{RoomAddress}", room.getEmail());
 		xml = xml.replace("{UserAddress}", ownerEmail);
-		xml = xml.replace("{StartTime}", dateFormat.format(timeSpan.getStart().getTime()));
-		xml = xml.replace("{EndTime}", dateFormat.format(timeSpan.getEnd().getTime()));
+		synchronized (dateFormatUTC) {
+			xml = xml.replace("{StartTime}", dateFormat.format(timeSpan.getStart().getTime()));
+			xml = xml.replace("{EndTime}", dateFormat.format(timeSpan.getEnd().getTime()));
+		}
 		xml = xml.replace("{Subject}", "Reserved with FutuReservator5000");
 
 		String result = httpPost(xml);
@@ -246,9 +248,10 @@ public class SoapDataProxy extends DataProxy{
 
 		String xml = findItemCalendarXmlTemplate;
 		xml = xml.replace("{RoomAddress}", room.getEmail());
-		xml = xml.replace("{StartTime}", dateFormatUTC.format(now.getTime()));
-		xml = xml.replace("{EndTime}", dateFormatUTC.format(fromNow.getTime()));
-
+		synchronized (dateFormatUTC) {
+			xml = xml.replace("{StartTime}", dateFormatUTC.format(now.getTime()));
+			xml = xml.replace("{EndTime}", dateFormatUTC.format(fromNow.getTime()));
+		}
 		String result = httpPost(xml);
 		Log.v("SOAP", result);
 

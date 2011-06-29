@@ -61,8 +61,13 @@ public class SoapEWS {
 
 			for (CalendarItem item : response.getItems()) {
 				try {
-					DateTime startTime = new DateTime(SoapDataProxy.dateFormatUTC.parse(item.getStart()));
-					DateTime endTime = new DateTime(SoapDataProxy.dateFormatUTC.parse(item.getEnd()));
+					DateTime startTime;
+					DateTime endTime;
+
+					synchronized (SoapDataProxy.dateFormatUTC) {
+						startTime = new DateTime(SoapDataProxy.dateFormatUTC.parse(item.getStart()));
+						endTime = new DateTime(SoapDataProxy.dateFormatUTC.parse(item.getEnd()));
+					}
 
 					reservations.add(new com.futurice.android.reservator.model.Reservation(
 							room,
