@@ -1,8 +1,5 @@
 package com.futurice.android.reservator.view;
 
-
-import java.util.Calendar;
-
 import com.futurice.android.reservator.R;
 import com.futurice.android.reservator.model.DateTime;
 import com.futurice.android.reservator.model.Reservation;
