@@ -7,6 +7,6 @@
 		android:layout_width="wrap_content" android:layout_height="wrap_content"
 		android:layout_centerInParent="true" android:paddingRight="20dp" android:paddingLeft="20dp">
 		<TextView android:layout_height="wrap_content" android:gravity="center_vertical" android:lines="2" android:layout_width="fill_parent" android:id="@+id/serverAddressLabel" android:text="@string/exchange_server_address"></TextView>
-		<EditText android:layout_height="wrap_content" android:layout_width="wrap_content" android:layout_below="@+id/serverAddressLabel" android:layout_alignLeft="@+id/serverAddressLabel" android:layout_alignRight="@+id/serverAddressLabel" android:id="@+id/serverAddressEdit"></EditText>
+		<EditText android:layout_height="wrap_content" android:layout_width="wrap_content" android:layout_below="@+id/serverAddressLabel" android:layout_alignLeft="@+id/serverAddressLabel" android:layout_alignRight="@+id/serverAddressLabel" android:id="@+id/serverAddressEdit" android:maxLines="1"></EditText>
 	</RelativeLayout>
 </RelativeLayout>
