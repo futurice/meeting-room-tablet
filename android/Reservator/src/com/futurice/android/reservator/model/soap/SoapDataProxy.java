@@ -71,9 +71,6 @@ public class SoapDataProxy extends DataProxy{
 		dateFormatUTC.setTimeZone(TimeZone.getTimeZone("UTC"));
 	}
 
-	Vector<String> roomLists = null;
-	Vector<Room> rooms = null;
-
 	@Override
 	public void setCredentials(String user, String password) {
 		this.user = user;
@@ -135,10 +132,8 @@ public class SoapDataProxy extends DataProxy{
 		return result;
 	}
 
-	protected void fetchRoomLists() throws ReservatorException {
+	protected Vector<String> fetchRoomLists() throws ReservatorException {
 		// fetch only once
-		if (roomLists != null) return;
-
 		String result = httpPost(getRoomListsXml);
 		Log.d("fetchRoomLists", result);
 
@@ -148,7 +143,7 @@ public class SoapDataProxy extends DataProxy{
 			// why non/strictness doesn't work with the attributes?
 			Envelope envelope = serializer.read(Envelope.class, result, false);
 			Log.d("SOAP", envelope.toString());
-			roomLists = envelope.getRoomLists();
+			return envelope.getRoomLists();
 		} catch (ReservatorException e) {
 			throw e;
 		} catch (Exception e) {
@@ -180,14 +175,11 @@ public class SoapDataProxy extends DataProxy{
 
 	@Override
 	public Vector<Room> getRooms() throws ReservatorException {
-		// cache
-		if (rooms != null) return rooms;
-
 		fetchRoomLists();
 
-		rooms = new Vector<Room>();
+		Vector<Room> rooms = new Vector<Room>();
 
-		for (String roomAddress : roomLists) {
+		for (String roomAddress : fetchRoomLists()) {
 			rooms.addAll(fetchRooms(roomAddress));
 		}
 

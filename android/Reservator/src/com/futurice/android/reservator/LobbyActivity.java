@@ -30,7 +30,6 @@ public class LobbyActivity extends Activity implements OnMenuItemClickListener,
 		DataUpdatedListener {
 	MenuItem settingsMenu, refreshMenu;
 	LinearLayout container = null;
-	private long lastTimeRefreshed = 0;
 	DataProxy proxy;
 
 	private ProgressDialog progressDialog = null;
@@ -72,13 +71,6 @@ public class LobbyActivity extends Activity implements OnMenuItemClickListener,
 	}
 
 	private void refreshRoomInfo() {
-		// Do not refresh too often
-		long now = System.currentTimeMillis();
-		if (lastTimeRefreshed + 60000 > now) {
-			return;
-		}
-		lastTimeRefreshed = now;
-
 		showLoading();
 		container = (LinearLayout) findViewById(R.id.linearLayout1);
 		container.removeAllViews();

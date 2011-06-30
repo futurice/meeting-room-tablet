@@ -80,7 +80,7 @@ public class RoomsInfo {
 
 		RoomsInfo info;
 
-		Log.v("roomsinfo", email.substring(0, atindex));
+		// Log.v("roomsinfo", email.substring(0, atindex));
 
 		if (atindex == -1 || (info = rooms.get(email.substring(0, atindex).toLowerCase())) == null) {
 			return new RoomsInfo(room.getName(), 0, 6, "unknown");
