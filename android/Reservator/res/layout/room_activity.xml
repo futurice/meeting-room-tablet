@@ -4,8 +4,7 @@
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	android:background="@drawable/background" android:padding="10dip">
 	<TextView android:layout_width="wrap_content"
-		android:layout_height="wrap_content" android:text="TextView"
-		android:id="@+id/roomNameLabel" android:layout_marginLeft="80dp" android:paddingLeft="40dp" android:layout_marginTop="10dp"></TextView>
+		android:layout_height="wrap_content" android:id="@+id/roomNameLabel" android:layout_marginLeft="80dp" android:paddingLeft="40dp" android:layout_marginTop="10dp" android:textColor="@color/TextColor" android:textStyle="bold"></TextView>
 	<Button android:background="@drawable/button_background" android:layout_height="wrap_content" android:layout_width="wrap_content" android:layout_alignParentRight="true" android:text="@string/seeAllRooms" android:id="@+id/seeAllRoomsButton" android:layout_alignTop="@+id/roomNameLabel"></Button>
 	<com.futurice.android.reservator.view.WeekView
 		android:layout_width="fill_parent" android:id="@+id/weekView1"

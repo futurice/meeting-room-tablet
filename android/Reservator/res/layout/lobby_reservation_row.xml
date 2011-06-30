@@ -1,42 +1,38 @@
-
+<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout android:layout_width="fill_parent"
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	android:gravity="center_vertical" android:layout_height="wrap_content"
-	android:layout_gravity="center" android:paddingLeft="80dp" android:paddingRight="80dp">
-	<LinearLayout android:layout_height="wrap_content" android:orientation="vertical" android:layout_marginRight="20dp"
-		android:id="@+id/titleLayout" android:layout_width="150dp" android:layout_gravity="center">
-		<TextView android:id="@+id/roomNameLabel"
-			android:layout_width="wrap_content" android:layout_height="wrap_content"
-			android:text="Room name XXX" android:textStyle="bold" android:textColor="@color/TextColor"></TextView>
-		<TextView android:id="@+id/roomInfoLabel"
-			android:layout_width="wrap_content" android:layout_height="wrap_content"
-			android:text="(42 persons)" android:textColor="@color/TextColor"></TextView>
-	</LinearLayout>
+	android:layout_gravity="center">
+	<FrameLayout android:layout_height="match_parent" android:layout_width="150dp" android:layout_marginLeft="120dp" android:layout_marginRight="20dp" android:id="@+id/outerTitleLayout" android:layout_gravity="center">
+		<LinearLayout android:layout_height="wrap_content" android:orientation="vertical" android:id="@+id/titleLayout" android:layout_width="wrap_content" android:layout_gravity="center_vertical|left">
+			<TextView android:id="@+id/roomNameLabel"
+				android:layout_width="wrap_content" android:layout_height="wrap_content"
+				android:text="Room name XXX" android:textStyle="bold" android:textColor="@color/TextColor"></TextView>
+			<TextView android:id="@+id/roomInfoLabel"
+				android:layout_width="wrap_content" android:layout_height="wrap_content"
+				android:text="(42 persons)" android:textColor="@color/TextInfoColor"></TextView>
+		</LinearLayout>
+	</FrameLayout>
 	<LinearLayout android:id="@+id/bookingMode"
 		android:gravity="center_vertical"
-		android:layout_height="wrap_content" android:layout_marginTop="30dp" android:layout_marginBottom="30dp" android:layout_width="fill_parent" android:visibility="gone">
+		android:layout_height="wrap_content" android:layout_width="fill_parent" android:visibility="gone">
 		<com.futurice.android.reservator.view.CustomTimeSpanPicker2
-			android:id="@+id/timeSpanPicker2" android:layout_height="wrap_content" android:layout_gravity="center" android:layout_width="wrap_content"/>
+			android:id="@+id/timeSpanPicker2" android:layout_height="wrap_content" android:layout_gravity="center" android:layout_width="wrap_content" android:layout_marginBottom="30dp" android:layout_marginTop="30sp"/>
 		<AutoCompleteTextView android:id="@+id/autoCompleteTextView1" android:layout_height="wrap_content"
 			android:lines="1"
-			android:hint="Your name" android:completionHint="Your name" android:inputType="textFilter" android:maxLines="1" android:imeOptions="actionDone" android:layout_width="230dp" android:layout_gravity="center" android:completionThreshold="2" android:layout_marginRight="10dp" android:layout_marginLeft="10dp"></AutoCompleteTextView>
+			android:hint="Your name" android:completionHint="Your name" android:inputType="textFilter" android:maxLines="1" android:imeOptions="actionDone" android:layout_width="230dp" android:layout_gravity="center" android:completionThreshold="2" android:layout_marginRight="10dp" android:layout_marginLeft="10dp" android:layout_marginBottom="30dp" android:layout_marginTop="30dp"></AutoCompleteTextView>
 		<Button android:layout_height="wrap_content" 
-			android:layout_width="wrap_content" android:id="@+id/reserveButton" android:focusable="true" android:text="Reserve" android:background="@drawable/button_background" android:layout_gravity="center" android:textColor="@color/button_color"></Button>
+			android:layout_width="wrap_content" android:id="@+id/reserveButton" android:focusable="true" android:text="Reserve" android:background="@drawable/button_background" android:layout_gravity="center" android:textColor="@color/button_color" android:layout_marginTop="30dp" android:layout_marginBottom="30dp"></Button>
 		<FrameLayout android:layout_width="1dp" android:layout_weight="1" android:layout_height="match_parent" />
-		<ImageButton android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/cancelButton" android:layout_gravity="top" android:background="@drawable/close_button_states"></ImageButton>
+		<ImageButton android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/cancelButton" android:layout_gravity="top" android:background="@drawable/close_button_states" android:layout_marginTop="10dp" android:layout_marginRight="10dp"></ImageButton>
 	</LinearLayout>
 	<LinearLayout android:id="@+id/normalMode"
 		android:layout_height="wrap_content" android:layout_marginTop="10dp" android:layout_marginBottom="10dp" android:layout_width="fill_parent" android:layout_marginRight="0dp" android:visibility="visible">
-		<TextView android:layout_width="wrap_content"
-			android:layout_height="wrap_content" android:id="@+id/roomStatusLabel"
-			android:text="&lt;status&gt;" android:width="200px" android:layout_gravity="center"></TextView>
-		<FrameLayout android:layout_height="match_parent" android:layout_width="wrap_content" android:layout_weight="1"></FrameLayout>
-		<Button android:layout_width="wrap_content" android:background="@drawable/button_background"
-			android:layout_height="wrap_content" android:text="@string/book_now"
-			android:id="@+id/bookNowButton" android:focusable="true" android:layout_gravity="center"></Button>
+		<Button android:id="@+id/bookNowButton" android:background="@drawable/button_background" android:layout_gravity="center" android:text="@string/book_now" android:layout_width="wrap_content" android:layout_height="wrap_content" android:focusable="true" android:layout_marginLeft="20dp"></Button>
+		<TextView android:layout_gravity="center" android:text="&lt;status&gt;" android:layout_width="wrap_content" android:id="@+id/roomStatusLabel" android:layout_height="wrap_content" android:width="200px" android:layout_marginLeft="20dp"></TextView>
 		<FrameLayout android:layout_height="match_parent" android:layout_width="wrap_content" android:layout_weight="1"></FrameLayout>
 		<Button android:background="@drawable/calendar_small"
 			android:id="@+id/calendarButton" android:layout_height="wrap_content"
-			android:layout_width="wrap_content" android:focusable="true" android:layout_gravity="center"></Button>
+			android:layout_width="wrap_content" android:focusable="true" android:layout_gravity="center" android:visibility="gone"></Button>
 	</LinearLayout>
 </LinearLayout>

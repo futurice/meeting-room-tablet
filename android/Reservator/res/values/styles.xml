@@ -28,10 +28,11 @@
         <item name="android:textSize">22sp</item>
     </style>
     <color name="FutuLightGreen">#cbdeb2</color>
-    <color name="ReserveBackground">#d2e5bd</color>
+    <color name="ReserveBackground">#6698c655</color>
     <color name="ReserveLine">#a4cb80</color>
     <color name="TimeBarTickColor">#6333</color>
     <color name="buttonTextNormalColor">#333</color>
     <color name="buttonTextActiveColor">#333</color>
     <color name="buttonTextDisabledColor">#999</color>
+    <color name="TextInfoColor">#666</color>
 </resources>
