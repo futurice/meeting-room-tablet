@@ -71,7 +71,7 @@ public class TimeBarView extends FrameLayout{
 		if (animatorThread == null){
 			animatorThread = new Thread(){
 				public void run(){
-					while(Math.abs(startDelta) <  animStep || Math.abs(endDelta) < animStep){
+					while(Math.abs(startDelta) > animStep || Math.abs(endDelta) > animStep){
 						TimeBarView.this.span = new TimeSpan(
 								TimeBarView.this.span.getStart().add(Calendar.MILLISECOND, (int)Math.signum(startDelta) * animStep),
 								TimeBarView.this.span.getEnd().add(Calendar.MILLISECOND, (int)Math.signum(endDelta) * animStep));
