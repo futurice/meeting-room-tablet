@@ -88,6 +88,8 @@ public class CustomTimeSpanPicker2 extends FrameLayout implements OnClickListene
 			int start = quantize(currentTimeStart - timeStep);
 
 			currentTimeStart = Math.max(start, minimumTime);
+
+			// refreshing texts
 			refreshLabels();
 		}
 		else if (v == startPlus) {
@@ -110,12 +112,21 @@ public class CustomTimeSpanPicker2 extends FrameLayout implements OnClickListene
 		}
 	}
 
+	protected void refreshButtonStates() {
+		startMinus.setEnabled(currentTimeStart != minimumTime);
+		startPlus.setEnabled(currentTimeStart < currentTimeEnd - minimumDuration);
+		endMinus.setEnabled(currentTimeEnd > currentTimeStart + minimumDuration);
+		endPlus.setEnabled(currentTimeEnd != maximumTime);
+	}
+
 	protected void refreshLabels() {
 		startLabel.setText(String.format("%02d:%02d", currentTimeStart / 60, currentTimeStart % 60));
 		endLabel.setText(String.format("%02d:%02d", currentTimeEnd / 60, currentTimeEnd % 60));
 
 		timeBar.setTimeLimits(new TimeSpan(getMinimumTime(), getMaximumTime()));
 		timeBar.setSpan(new TimeSpan(getStartTime(), getEndTime()));
+
+		refreshButtonStates();
 	}
 
 	public void setMinimumDuration(int minimumDuration) {
@@ -213,6 +224,7 @@ public class CustomTimeSpanPicker2 extends FrameLayout implements OnClickListene
 		int end = quantize(currentTimeStart + minutes);
 
 		currentTimeEnd = Math.min(end, maximumTime);
+
 		refreshLabels();
 	}
 
