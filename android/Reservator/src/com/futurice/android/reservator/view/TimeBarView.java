@@ -168,8 +168,17 @@ public class TimeBarView extends FrameLayout{
 		}
 
 		// Duration label
-		durationLabel.setText(span.getLength() / 60000 + " minutes");
+		int minutes = (int) (span.getLength() / 60000);
+		int hours = minutes / 60;
+		minutes = minutes % 60;
 
+		if (hours > 0 && minutes == 0) {
+			durationLabel.setText(hours + (hours == 1 ? " hour" : " hours"));
+		} else if (hours > 0) {
+			durationLabel.setText(hours + (hours == 1 ? " hour" : " hours") + minutes + " minutes");
+		} else {
+			durationLabel.setText(minutes + " minutes");
+		}
 		/*p.setColor(getResources().getColor(R.color.TimeSpanTextColor));
 		String durationText = span.getLength() / 60000 + " minutes";
 		int textWidth = (int) p.measureText(durationText);
