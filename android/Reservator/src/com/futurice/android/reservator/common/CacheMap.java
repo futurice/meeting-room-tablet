@@ -2,8 +2,6 @@ package com.futurice.android.reservator.common;
 
 import java.util.HashMap;
 
-import android.util.Log;
-
 public class CacheMap<K, V> {
 	private class Bucket {
 		private long expireAt;
