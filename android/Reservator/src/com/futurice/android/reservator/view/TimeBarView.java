@@ -175,7 +175,7 @@ public class TimeBarView extends FrameLayout{
 		if (hours > 0 && minutes == 0) {
 			durationLabel.setText(hours + (hours == 1 ? " hour" : " hours"));
 		} else if (hours > 0) {
-			durationLabel.setText(hours + (hours == 1 ? " hour" : " hours") + minutes + " minutes");
+			durationLabel.setText(hours + (hours == 1 ? " hour " : " hours ") + minutes + " minutes");
 		} else {
 			durationLabel.setText(minutes + " minutes");
 		}
