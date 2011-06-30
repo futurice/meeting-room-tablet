@@ -18,6 +18,7 @@ import android.app.ProgressDialog;
 import android.app.AlertDialog.Builder;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -35,24 +36,32 @@ public class LobbyActivity extends Activity implements OnMenuItemClickListener,
 	private ProgressDialog progressDialog = null;
 	int showLoadingCount = 0;
 
+	final Handler handler = new Handler();
+
+	final Runnable updateRoomsRunnable = new Runnable() {
+		@Override
+		public void run() {
+			Log.v("Refresh", "refreshing room info");
+			refreshRoomInfo();
+			handler.postDelayed(updateRoomsRunnable, 10*60000); // update after 10minutes
+		}
+	};
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		this.setContentView(R.layout.lobby_activity);
 		proxy = ((ReservatorApplication) getApplication()).getDataProxy();
+
+		handler.postDelayed(updateRoomsRunnable, 10*60000); // update after 10minutes
 	}
 
 	@Override
 	public void onResume() {
 		super.onResume();
 		proxy.addDataUpdatedListener(this);
-		// Do not refresh too often
-		long now = System.currentTimeMillis();
-		if (lastTimeRefreshed + 60000 > now) {
-			return;
-		}
-		lastTimeRefreshed = now;
+
 
 		refreshRoomInfo();
 	}
@@ -61,13 +70,20 @@ public class LobbyActivity extends Activity implements OnMenuItemClickListener,
 		super.onPause();
 		proxy.removeDataUpdatedListener(this);
 	}
+
 	private void refreshRoomInfo() {
+		// Do not refresh too often
+		long now = System.currentTimeMillis();
+		if (lastTimeRefreshed + 60000 > now) {
+			return;
+		}
+		lastTimeRefreshed = now;
+
 		showLoading();
 		container = (LinearLayout) findViewById(R.id.linearLayout1);
 		container.removeAllViews();
 		proxy.refreshRooms();
 	}
-
 
 	private void showLoading() {
 		showLoadingCount++;
@@ -153,19 +169,20 @@ public class LobbyActivity extends Activity implements OnMenuItemClickListener,
 
 			@Override
 			public int compare(Room room1, Room room2) {
-				boolean room1Free = room1.isFree();
-				boolean room2Free = room2.isFree();
+				boolean room1Free = room1.isFree() && room1.minutesFreeFromNow() >= 30;
+				boolean room2Free = room2.isFree() && room2.minutesFreeFromNow() >= 30;
 
 				if (room1Free && !room2Free) {
 					return -1;
 				} else if (!room1Free && room2Free) {
 					return 1;
 				} else if (room1Free && room2Free) {
+					// Log.d("Lobby", room1.toString() + " -- " + room2.toString());
 					return room2.minutesFreeFrom(now)
 							- room1.minutesFreeFrom(now);
 				} else {
-					return room1.reservedForFrom(now)
-							- room2.reservedForFrom(now);
+					return 0;
+					//return room1.reservedForFrom(now) - room2.reservedForFrom(now);
 				}
 			}
 		};
@@ -176,6 +193,8 @@ public class LobbyActivity extends Activity implements OnMenuItemClickListener,
 			Room r2 = ((LobbyReservationRowView) container.getChildAt(index))
 					.getRoom();
 
+			// Log.d("Lobby", "sorting: " + r.getName() + ":" + r.isFree() + " -- " + r2.getName() + ":" + r2.isFree());
+
 			if (r.equals(r2)) {
 				Log.d("LobbyActivity", "duplicate room -- " + r.getEmail());
 				// XXX: minor logic error; same room
@@ -183,7 +202,7 @@ public class LobbyActivity extends Activity implements OnMenuItemClickListener,
 				container.removeViewAt(index);
 				container.addView(v, index);
 				added = true;
-				continue;
+				break;
 			}
 			else if (roomCmp.compare(r, r2) < 0) {
 				container.addView(v, index);

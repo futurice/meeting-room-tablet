@@ -22,6 +22,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.DialogInterface.OnCancelListener;
 import android.os.Bundle;
+import android.os.Handler;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MenuItem.OnMenuItemClickListener;
@@ -32,11 +34,10 @@ import android.widget.TextView;
 
 public class RoomActivity extends Activity implements OnMenuItemClickListener,
 		DataUpdatedListener {
-	public static final String ROOM_EMAIL_EXTRA = "roomEmail";
+	public static final String ROOM_EXTRA = "room";
 
 	DataProxy proxy;
 	Room currentRoom;
-	String roomEmail = null;
 
 	WeekView weekView;
 	TextView roomNameLabel;
@@ -46,6 +47,17 @@ public class RoomActivity extends Activity implements OnMenuItemClickListener,
 	private ProgressDialog progressDialog = null;
 	int showLoadingCount = 0;
 
+	final Handler handler = new Handler();
+
+	final Runnable updateRoomsRunnable = new Runnable() {
+		@Override
+		public void run() {
+			Log.v("Refresh", "refreshing room info");
+			refreshData();
+			handler.postDelayed(updateRoomsRunnable, 10*60000); // update after 10minutes
+		}
+	};
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -53,11 +65,16 @@ public class RoomActivity extends Activity implements OnMenuItemClickListener,
 		setContentView(R.layout.room_activity);
 		this.weekView = (WeekView) findViewById(R.id.weekView1);
 		this.roomNameLabel = (TextView) findViewById(R.id.roomNameLabel);
-		roomEmail = getIntent().getStringExtra(ROOM_EMAIL_EXTRA);
-		if (roomEmail == null || roomEmail.length() == 0) {
-			throw new IllegalArgumentException(
-					"No room identifying e-mail address found as string extra 'roomEmail'");
+		try {
+			currentRoom = (Room) getIntent().getSerializableExtra(ROOM_EXTRA);
+		} catch (ClassCastException e) {
+			throw new IllegalArgumentException("No room found as Serializable extra " + ROOM_EXTRA);
 		}
+		if (currentRoom == null) {
+			throw new IllegalArgumentException(
+					"No room found as Serializable extra " + ROOM_EXTRA);
+		}
+
 		findViewById(R.id.seeAllRoomsButton).setOnClickListener(
 				new OnClickListener() {
 					@Override
@@ -119,7 +136,7 @@ public class RoomActivity extends Activity implements OnMenuItemClickListener,
 	public void onResume() {
 		proxy = ((ReservatorApplication) getApplication()).getDataProxy();
 		proxy.addDataUpdatedListener(this);
-		proxy.refreshRooms();
+		refreshData();
 		super.onResume();
 	}
 
@@ -152,10 +169,14 @@ public class RoomActivity extends Activity implements OnMenuItemClickListener,
 			Intent i = new Intent(this, SettingsActivity.class);
 			startActivity(i);
 		} else if (item == refreshMenu) {
-			showLoading();
-			proxy.refreshRoomReservations(currentRoom);
+			refreshData();
 		}
 		return true;
+	}
+
+	private void refreshData() {
+		showLoading();
+		proxy.refreshRoomReservations(currentRoom);
 	}
 
 	private void showLoading() {
@@ -179,6 +200,8 @@ public class RoomActivity extends Activity implements OnMenuItemClickListener,
 
 	@Override
 	public void roomListUpdated(Vector<Room> rooms) {
+		// XXX: todo
+		/*
 		for (Room r : rooms) {
 			if (r.getEmail().equals(roomEmail)) {
 				final Room theRoom = r;
@@ -188,12 +211,13 @@ public class RoomActivity extends Activity implements OnMenuItemClickListener,
 		}
 		// TODO what if the room is not in the list?
 		throw new RuntimeException("Requested room not in the list.");
+		*/
 	}
 
 	@Override
 	public void roomReservationsUpdated(Room room) {
-		if (currentRoom != null && room.getEmail().equals(roomEmail)) {
-			weekView.refreshData(room);
+		if (currentRoom != null && room.equals(currentRoom)) {
+			setRoom(room);
 		}
 		hideLoading();
 	}

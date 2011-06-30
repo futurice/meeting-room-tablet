@@ -63,7 +63,7 @@ public class CalendarMarker extends FrameLayout{
 
 	@Override
 	public String toString() {
-		return reservation.getRoom().getName() + ": "
+		return "reservation: "
 				+ reservation.getStartTime().toGMTString() + "-"
 				+ reservation.getEndTime().toGMTString();
 	}

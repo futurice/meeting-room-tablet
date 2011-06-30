@@ -235,7 +235,7 @@ public class LobbyReservationRowView extends FrameLayout implements
 
 	private void showRoomInCalendar() {
 		Intent i = new Intent(getContext(), RoomActivity.class);
-		i.putExtra(RoomActivity.ROOM_EMAIL_EXTRA, room.getEmail());
+		i.putExtra(RoomActivity.ROOM_EXTRA, room);
 		getContext().startActivity(i);
 	}
 }

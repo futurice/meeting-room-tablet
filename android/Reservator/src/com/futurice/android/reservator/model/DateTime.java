@@ -1,9 +1,11 @@
 package com.futurice.android.reservator.model;
 
+import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Date;
 
-public class DateTime {
+public class DateTime implements Serializable {
+	private static final long serialVersionUID = 1L;
 	private Calendar cal;
 
 	public DateTime() {
