@@ -9,7 +9,6 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.FrameLayout;
-import android.widget.HorizontalScrollView;
 import android.widget.RelativeLayout;
 
 import com.futurice.android.reservator.R;
@@ -22,7 +21,6 @@ public class WeekView extends RelativeLayout implements OnClickListener {
 
 	public static final int NUMBER_OF_DAYS_TO_SHOW = 10;
 
-	private CalendarView calendarView = null;
 	private FrameLayout calendarFrame = null;
 	public WeekView(Context context) {
 		this(context, null);
@@ -49,14 +47,10 @@ public class WeekView extends RelativeLayout implements OnClickListener {
 		}
 		
 		
-		HorizontalScrollView hsv = new HorizontalScrollView(getContext());
-		
-		calendarFrame.addView(hsv, LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
 		CalendarVisualizer cv = new CalendarVisualizer(getContext());
 		cv.setReservations(reservations);
-		hsv.addView(cv);
-		hsv.setHorizontalFadingEdgeEnabled(false);
 		cv.setOnClickListener(this);
+		calendarFrame.addView(cv, LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
 		return;
 	}
 	/*

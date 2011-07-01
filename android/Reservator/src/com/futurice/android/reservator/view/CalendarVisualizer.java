@@ -12,7 +12,6 @@ import android.graphics.LinearGradient;
 import android.graphics.Paint;
 import android.graphics.Canvas.VertexMode;
 import android.graphics.Paint.Align;
-import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Shader;
 import android.graphics.Shader.TileMode;
@@ -21,15 +20,15 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
-import android.widget.Toast;
+import android.widget.FrameLayout;
+import android.widget.HorizontalScrollView;
 
 import com.futurice.android.reservator.R;
 import com.futurice.android.reservator.model.DateTime;
 import com.futurice.android.reservator.model.Reservation;
-import com.futurice.android.reservator.model.Room;
 import com.futurice.android.reservator.model.TimeSpan;
 
-public class CalendarVisualizer extends View implements ReservatorVisualizer,
+public class CalendarVisualizer extends HorizontalScrollView implements ReservatorVisualizer,
 		OnTouchListener {
 	private Paint markerPaint, textPaint, gridPaint;
 	private int dayStartTime = 60 * 8, dayEndTime = 60 * 18; // minutes from
@@ -47,13 +46,16 @@ public class CalendarVisualizer extends View implements ReservatorVisualizer,
 	String dayLabels[], weekLabels[];
 	private SimpleDateFormat dayLabelFormatter, weekLabelFormatter;
 	private Paint fadingEdgePaint;
-	private RectF calendarAreaRect;
+	private RectF calendarAreaRect, timeLabelRect, headerRect;
+	private FrameLayout contentFrame;
 	public CalendarVisualizer(Context context) {
 		this(context, null);
 	}
 
 	public CalendarVisualizer(Context context, AttributeSet attrs) {
 		super(context, attrs);
+		contentFrame = new FrameLayout(getContext());
+		this.addView(contentFrame, LayoutParams.WRAP_CONTENT, LayoutParams.MATCH_PARENT);
 		this.textColor = getResources().getColor(R.color.CalendarTextColor);
 		this.gridColor = getResources().getColor(R.color.CalendarBorderColor);
 		this.textPaint = new Paint();
@@ -68,12 +70,13 @@ public class CalendarVisualizer extends View implements ReservatorVisualizer,
 		this.leftEdgeShader = new LinearGradient(0, 0, 8, 0, Color.argb(128, 64, 64, 64), Color.argb(0, 0,0,0), TileMode.CLAMP);
 		this.rightEdgeShader = new LinearGradient(0, 0, 8, 0, Color.argb(0, 0, 0, 0), Color.argb(128, 64, 64, 64), TileMode.CLAMP);
 		
-		
+		setHorizontalFadingEdgeEnabled(false);
 		this.setBackgroundColor(Color.TRANSPARENT);
 		this.setOnTouchListener(this);
 		dayLabelFormatter = new SimpleDateFormat(getResources().getString(R.string.dateLabelFormat));
 		String weekLabelFormat = getResources().getString(R.string.weekLabelFormat);
 		weekLabelFormatter = new SimpleDateFormat(weekLabelFormat);
+		
 	}
 
 	@Override
@@ -83,7 +86,7 @@ public class CalendarVisualizer extends View implements ReservatorVisualizer,
 		reservationList.toArray(this.reservations);
 		Arrays.sort(this.reservations);
 		generateDayHeaderLabels();
-		invalidate();
+		contentFrame.setPadding(Math.max(getWidth(), daysToShow * dayWidth + timeLabelWidth), 0,0,0);
 	}
 	private void generateDayHeaderLabels(){
 		if(reservations.length > 0){
@@ -103,24 +106,24 @@ public class CalendarVisualizer extends View implements ReservatorVisualizer,
 		}
 	}
 
-	
-	private void drawTimeLabels(Canvas c, int width, int height){
+	private void drawTimeLabels(Canvas c, RectF area){
+		float width = area.width();
+		float height = area.height();
 		Align originalAlign = textPaint.getTextAlign();
-		c.save();
-		if(getParent() instanceof View){
-			int dx = ((View)getParent()).getScrollX();
-			if(dx != 0){
-				c.translate(dx, 0);
-			}
-		}
 		
+		
+		
+		c.save();
+		c.translate(getScrollX(), 0);
+		//c.clipRect(area); no clipRect used. the first label goes few pixels above the top
+		c.translate(area.left, area.top);
 		textPaint.setTextAlign(Align.RIGHT);
 		float normalTextSize = textPaint.getTextSize();
 		float smallTextSize = normalTextSize * 0.642f;
 		textPaint.setTextSize(smallTextSize);
-		int padding = width / 8;
-		int x = width - padding;
-		float minutesWidth = textPaint.measureText(":00");
+		float padding = width / 8;
+		float x = width - padding;
+		float minutesWidth = textPaint.measureText(":00"); //minutes are drawn separately with smaller font
 		for(int minutes = dayStartTime; minutes < dayEndTime; minutes += 60){
 			float timeY = getProportionalY(0,minutes) * height;
 			textPaint.setTextSize(smallTextSize);
@@ -130,23 +133,34 @@ public class CalendarVisualizer extends View implements ReservatorVisualizer,
 			c.drawText(hoursStr, x-minutesWidth,  timeY + smallTextSize, textPaint);
 			c.drawLine(x + (width - x) / 3, timeY, width, timeY, gridPaint);
 		}
-		c.restore();
 		textPaint.setTextAlign(originalAlign);
+		c.restore();
 	}
-	private void drawDayHeaders(Canvas c, int width, int height){
-		int textSize = height / 3;
+	private void drawDayHeaders(Canvas c, RectF area){
+		c.save();
+		c.clipRect(area.left + getScrollX(), area.top,  area.right + getScrollX(), area.bottom);
+		c.translate(area.left, area.top);
+		
+
+		float textSize = area.height() / 3;
 		textPaint.setTextSize(textSize);
-		int dayLabelY = height - textSize / 2;
-		int weekLabelY = dayLabelY - textSize;
+		float dayLabelY = area.height() - textSize / 2;
+		float weekLabelY = dayLabelY - textSize;
 		for(int i = 0; i < dayLabels.length; i++) {
-			int x = i * dayWidth + textSize / 2;
+			float x = i * dayWidth + textSize / 2;
 			if(weekLabels[i] != null){
 				c.drawText(weekLabels[i], x, weekLabelY, textPaint);
 			}
 			c.drawText(dayLabels[i], x, dayLabelY, textPaint);
 		}
+		c.restore();
 	}
-	private void drawCalendarReservations(Canvas c, int width, int height){
+	private void drawCalendarReservations(Canvas c, RectF area){
+		c.save();
+		c.clipRect(area.left + getScrollX(), area.top, area.right + getScrollX(), area.bottom);
+		c.translate(area.left, area.top);
+		
+		int height = (int)area.height();
 		if (reservations.length > 0) {
 			float[] points = new float[reservations.length * 12];
 			int j = 0;
@@ -169,83 +183,92 @@ public class CalendarVisualizer extends View implements ReservatorVisualizer,
 			c.drawVertices(VertexMode.TRIANGLE_STRIP, points.length, points, 0,
 					points, 0, null, 0, null, 0, 0, markerPaint);
 		}
+		c.restore();
 	}
-	private void drawCalendarLines(Canvas c, int width, int height){
+	private void drawCalendarLines(Canvas c, RectF area){
+		float height = area.height();
+		c.save();
+		c.clipRect(area.left + getScrollX(), area.top, area.right + getScrollX(), area.bottom);
+		c.translate(area.left, area.top);
+		
+		
 		for(int i = 0; i < dayLabels.length; i++) {
 			c.drawLine(i * dayWidth, 0, i * dayWidth, height, gridPaint);
 		}
 		for (int minutes = dayStartTime; minutes < dayEndTime; minutes += 60) {
 			float y = getProportionalY(0, minutes) * height;
-			c.drawLine(0, y, getWidth(), y, gridPaint);
+			c.drawLine(0, y, contentFrame.getWidth(), y, gridPaint);
 		}
+		c.restore();
 	}
-	private void drawReservationSubjects(Canvas c, int width, int height){
+	private void drawReservationSubjects(Canvas c, RectF area){
 		float textHeight = textPaint.getTextSize();
 		int padding = 4;
+		float height = area.height();
+		c.save();
+		c.clipRect(area.left + getScrollX(), area.top, area.right + getScrollX(), area.bottom);
+		c.translate(area.left, area.top);
+		
+		
 		for(Reservation r : reservations){
 			c.drawText(r.getSubject(), getXForTime(r.getStartTime()) + padding,getProportionalY(r.getStartTime())*height + textHeight + padding, textPaint);
 		}
+		c.restore();
 	}
-	private void drawFadingEdges(Canvas c, int width, int height){
+	private void drawFadingEdges(Canvas c, RectF area){
+		c.save();
+		//c.clipRect(area.left + getScrollX(), area.top,  area.right + getScrollX(), area.bottom);
+		c.translate(area.left,area.top);
 		if(getParent() instanceof View){
-			View parent = (View)getParent();
-			int scrollX = parent.getScrollX();
-			Rect drawingRect = new Rect();
-			getDrawingRect(drawingRect);
-			c.translate(scrollX, 0);
-			if(scrollX > 0){
+			c.translate(getScrollX(), 0);
+			if(getScrollX() > 0){
 				fadingEdgePaint.setShader(leftEdgeShader);
-				c.drawRect(0, 0, 8, height, fadingEdgePaint);
+				c.drawRect(0, 0, 8, area.height(), fadingEdgePaint);
 			}
-			if(scrollX + parent.getWidth() < getWidth()){ //A bit ugly mayhaps
-				c.translate(width-8, 0);
+			if(getScrollX() + getWidth() < contentFrame.getWidth()){
+				c.translate(area.width()-8, 0);
 				fadingEdgePaint.setShader(rightEdgeShader);
-				c.drawRect(0, 0, 8, height, fadingEdgePaint);
+				c.drawRect(0, 0, 8, area.height(), fadingEdgePaint);
 			}
 		}
-		//TODO right edge too
+		c.restore();
 	}
 	@Override
 	protected void onDraw(Canvas c) {
-		
-		int parentScroll = ((View)(getParent())).getScrollX();
-		int headerHeight = Math.min(getHeight(), getWidth()) / 10;
-		calendarAreaRect = new RectF(timeLabelWidth, headerHeight, getWidth(), getHeight() - 20); //getright is bad
-		
+		int headerHeight = Math.min(getHeight(), getWidth()) / 12;
+		timeLabelRect = new RectF(0, headerHeight, timeLabelWidth, getHeight());
+		calendarAreaRect = new RectF(timeLabelWidth, headerHeight, getWidth(), getHeight());
+		headerRect = new RectF(timeLabelWidth, 0, getWidth(), headerHeight);
 		textPaint.setAntiAlias(true);
 		//dayWidth = getWidth() / daysToShow;
-		
 		//day and week labels
-		c.save();
-		c.translate(timeLabelWidth, 0);
-		c.translate(parentScroll, 0);
-		c.clipRect(0,0,getWidth() - timeLabelWidth, headerHeight);
-		c.translate(-parentScroll, 0);
-		drawDayHeaders(c, getWidth() - timeLabelWidth, headerHeight);
-		c.restore();
-		
-		
-		//calendar markers and the grid
-		c.save();
-		c.translate(parentScroll, 0);
-		c.clipRect(calendarAreaRect);
-		c.translate(-parentScroll, 0);
-		c.translate(timeLabelWidth, headerHeight);
-		drawCalendarReservations(c, getWidth() - timeLabelWidth, getHeight() - headerHeight);
-		drawReservationSubjects(c, getWidth() - timeLabelWidth, getHeight() - headerHeight);
-		drawCalendarLines(c, getWidth() - timeLabelWidth, getHeight() - headerHeight);
-		c.restore();
+//		c.save();
+//		c.translate(timeLabelWidth, 0);
+//		c.translate(parentScroll, 0);
+//		c.clipRect(0,0,getWidth() - timeLabelWidth, headerHeight);
+//		c.translate(-parentScroll, 0);
+		drawDayHeaders(c, headerRect);
+//		//c.restore();
+//		
+//		//calendar markers and the grid
+//		c.save();
+//		c.translate(parentScroll, 0);
+//		c.clipRect(calendarAreaRect);
+//		c.translate(-parentScroll, 0);
+//		c.translate(timeLabelWidth, headerHeight);
+		drawCalendarLines(c, calendarAreaRect);//getWidth() - timeLabelWidth, getHeight() - headerHeight);
+		drawCalendarReservations(c, calendarAreaRect);//getWidth() - timeLabelWidth, getHeight() - headerHeight);
+		drawReservationSubjects(c, calendarAreaRect);//getWidth() - timeLabelWidth, getHeight() - headerHeight);
+		drawFadingEdges(c, calendarAreaRect);//((View)getParent()).getWidth() - (int)calendarAreaRect.left, (int)calendarAreaRect.height());
+		//		c.restore();
 		
 		//timeLabels on the left
-		c.save();
-		c.translate(0, headerHeight);
-		drawTimeLabels(c, timeLabelWidth, getHeight() - headerHeight);
-		c.restore();
+		//c.save();
+		//c.translate(0, headerHeight);
+		drawTimeLabels(c, timeLabelRect);//timeLabelWidth, getHeight() - headerHeight);
+		//c.restore();
 		
-		c.save();
-		c.translate(calendarAreaRect.left, calendarAreaRect.top);
-		drawFadingEdges(c, ((View)getParent()).getWidth() - (int)calendarAreaRect.left, (int)calendarAreaRect.height());
-		c.restore();
+		
 	}
 
 	private int getDaysFromStart(DateTime day) {
@@ -355,9 +378,9 @@ public class CalendarVisualizer extends View implements ReservatorVisualizer,
 		return getDaysFromStart(day) * dayWidth;
 
 	}
-	@Override
+	/*@Override
 	public void onMeasure(int widthSpec, int heightSpec) {
 		int width = Math.max(MeasureSpec.getSize(widthSpec), daysToShow	* dayWidth + timeLabelWidth);
 		setMeasuredDimension(width, MeasureSpec.getSize(heightSpec));
-	}
+	}*/
 }

@@ -30,7 +30,8 @@ public class LoginActivity extends Activity implements OnClickListener, OnMenuIt
 
 		if (preferences.contains("username")
 				&& preferences.contains("password")
-				&& login(preferences.getString("username", null), preferences.getString("password", null))) {
+				&& login(preferences.getString(getString(R.string.PREFERENCES_USERNAME), null),
+						preferences.getString(getString(R.string.PREFERENCES_PASSWORD), null))) {
 			// do nothing, activity is changed in login
 		} else {
 			setContentView(R.layout.login_activity);

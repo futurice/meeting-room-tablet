@@ -53,14 +53,15 @@ public class LobbyActivity extends Activity implements OnMenuItemClickListener,
 		this.setContentView(R.layout.lobby_activity);
 		proxy = ((ReservatorApplication) getApplication()).getDataProxy();
 
-		handler.postDelayed(updateRoomsRunnable, 10*60000); // update after 10minutes
+		// handler.postDelayed(updateRoomsRunnable, 10*60000); // update after 10minutes
 	}
 
 	@Override
 	public void onResume() {
 		super.onResume();
+		showLoadingCount = 0; //TODO better fix
 		proxy.addDataUpdatedListener(this);
-
+		
 
 		refreshRoomInfo();
 	}
@@ -88,12 +89,16 @@ public class LobbyActivity extends Activity implements OnMenuItemClickListener,
 
 	private void hideLoading() {
 		showLoadingCount--;
+		if(this.progressDialog != null){
+			progressDialog.setTitle("Loading count " + showLoadingCount);
+		}
 		if (showLoadingCount <= 0) {
 			if (this.progressDialog != null) {
 				this.progressDialog.dismiss();
 				this.progressDialog = null;
 			}
 		}
+	
 	}
 
 	@Override
