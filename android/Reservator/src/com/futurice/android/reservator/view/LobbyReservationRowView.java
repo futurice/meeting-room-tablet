@@ -119,7 +119,7 @@ public class LobbyReservationRowView extends FrameLayout implements
 
 			if (freeMinutes > 180) {
 				roomStatusView.setText("Free");
-			} else if (freeMinutes < 15) {
+			} else if (freeMinutes < 30) {
 				roomStatusView.setText("Reserved");
 				bookable = false;
 			} else {
