@@ -21,7 +21,7 @@ public class TimeSpan implements Serializable {
 			start = new DateTime();
 		}
 		this.start = start;
-		this.end = start.later(units, count);
+		this.end = start.add(units, count);
 		if(this.start.after(this.end)){
 			throw new IllegalArgumentException("No negative time allowed");
 		}

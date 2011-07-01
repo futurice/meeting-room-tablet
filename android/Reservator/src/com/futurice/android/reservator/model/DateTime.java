@@ -42,12 +42,6 @@ public class DateTime implements Serializable {
 		return cal.before(other.cal);
 	}
 
-	public DateTime later(int units, int count) {
-		Calendar n = (Calendar) cal.clone();
-		n.add(units, count);
-		return new DateTime(n, false);
-	}
-
 	public long getTimeInMillis() {
 		return cal.getTimeInMillis();
 	}

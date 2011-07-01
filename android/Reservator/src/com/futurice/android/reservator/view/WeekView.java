@@ -1,5 +1,6 @@
 package com.futurice.android.reservator.view;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
@@ -8,6 +9,7 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.FrameLayout;
+import android.widget.HorizontalScrollView;
 import android.widget.RelativeLayout;
 
 import com.futurice.android.reservator.R;
@@ -39,6 +41,25 @@ public class WeekView extends RelativeLayout implements OnClickListener {
 	public void refreshData(Room room) {
 		calendarFrame = (FrameLayout)findViewById(R.id.frameLayout1);
 		calendarFrame.removeAllViews();
+		List<Reservation> reservations = new ArrayList<Reservation>();
+		DateTime day = new DateTime();
+		for (int i = 0; i < NUMBER_OF_DAYS_TO_SHOW; i++) {
+			reservations.addAll(room.getReservationsForDay(day));
+			day = day.add(Calendar.DAY_OF_YEAR, 1);
+		}
+		
+		
+		HorizontalScrollView hsv = new HorizontalScrollView(getContext());
+		
+		calendarFrame.addView(hsv, LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
+		CalendarVisualizer cv = new CalendarVisualizer(getContext());
+		cv.setReservations(reservations);
+		hsv.addView(cv);
+		hsv.setHorizontalFadingEdgeEnabled(false);
+		cv.setOnClickListener(this);
+		return;
+	}
+	/*
 		calendarView = new CalendarView(getContext());
 
 		DateTime today = new DateTime().stripTime();
@@ -84,7 +105,7 @@ public class WeekView extends RelativeLayout implements OnClickListener {
 		calendarFrame.addView(calendarView, LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
 
 	}
-
+*/
 	public static interface OnFreeTimeClickListener {
 		abstract void onFreeTimeClick(View v, TimeSpan timeSpan, DateTime clickTime);
 	}
@@ -105,9 +126,14 @@ public class WeekView extends RelativeLayout implements OnClickListener {
 					onFreeTimeClickListener.onFreeTimeClick(v, marker.getTimeSpan(), marker.getTouchedTime());
 				}
 			}
+		}else if(v instanceof ReservatorVisualizer) {
+			ReservatorVisualizer visualizer = (ReservatorVisualizer)v;
+			if(onFreeTimeClickListener != null) {
+				onFreeTimeClickListener.onFreeTimeClick(v, visualizer.getSelectedTimeSpan(), visualizer.getSelectedTime());
+			}
 		}
 	}
-
+/*
 	private void addFreeMarker(DateTime startTime, DateTime endTime) {
 		if(startTime.after(endTime)){
 			throw new IllegalArgumentException("starTime must be before endTime");
@@ -131,5 +157,5 @@ public class WeekView extends RelativeLayout implements OnClickListener {
 		marker.setText(r.getSubject());
 		marker.setReserved(true);
 	}
-
+*/
 }

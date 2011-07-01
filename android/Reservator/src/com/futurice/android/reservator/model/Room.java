@@ -86,7 +86,7 @@ public class Room implements Serializable {
 		for (Reservation r : reservations) {
 			if (r.getStartTime().before(to) && r.getEndTime().after(to)) {
 				to = r.getEndTime();
-				to = to.later(Calendar.MINUTE, 5);
+				to = to.add(Calendar.MINUTE, 5);
 			}
 		}
 
@@ -104,7 +104,7 @@ public class Room implements Serializable {
 	 */
 	public TimeSpan getNextFreeTime(){
 		DateTime now = new DateTime();
-		DateTime max = now.later(Calendar.DAY_OF_YEAR, 1).stripTime();
+		DateTime max = now.add(Calendar.DAY_OF_YEAR, 1).stripTime();
 
 
 		for (Reservation r : reservations) {

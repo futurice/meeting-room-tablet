@@ -32,6 +32,7 @@ public class CalendarDayLayout extends ViewGroup {
 		}
 
 	}
+	@Override
 	protected void onMeasure(int widthMeasureSpec, int heightmeasureSpec) {
 
 		int width = MeasureSpec.getSize(widthMeasureSpec);
