@@ -30,7 +30,7 @@
     <color name="FutuLightGreen">#cbdeb2</color>
     <color name="ReserveBackground">#6698c655</color>
     <color name="ReserveLine">#a4cb80</color>
-    <color name="TimeBarTickColor">#6333</color>
+    <color name="TimeBarTickColor">#3333</color>
     <color name="buttonTextNormalColor">#333</color>
     <color name="buttonTextActiveColor">#333</color>
     <color name="buttonTextDisabledColor">#999</color>
