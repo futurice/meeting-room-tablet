@@ -49,8 +49,8 @@ public class WeekView extends RelativeLayout implements OnClickListener {
 		
 		CalendarVisualizer cv = new CalendarVisualizer(getContext());
 		cv.setReservations(reservations);
-		cv.setOnClickListener(this);
 		calendarFrame.addView(cv, LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
+		cv.setOnClickListener(this);
 		return;
 	}
 	/*

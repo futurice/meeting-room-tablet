@@ -24,7 +24,12 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AutoCompleteTextView;
 import android.widget.FrameLayout;
 import android.widget.TextView;
+import android.widget.ViewSwitcher;
 import android.view.View.OnClickListener;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.view.animation.Animation.AnimationListener;
 import android.view.inputmethod.InputMethodManager;
 
 public class LobbyReservationRowView extends FrameLayout implements
@@ -36,7 +41,7 @@ public class LobbyReservationRowView extends FrameLayout implements
 	CustomTimeSpanPicker2 timePicker2;
 	TextView roomNameView, roomInfoView, roomStatusView;
 	ReservatorApplication application;
-
+	ViewSwitcher modeSwitcher;
 	Callback onReserveCallback = null;
 
 	private Room room;
@@ -54,7 +59,6 @@ public class LobbyReservationRowView extends FrameLayout implements
 
 		}
 	};
-
 
 	public LobbyReservationRowView(Context context, AttributeSet attrs) {
 		super(context, attrs);
@@ -76,15 +80,17 @@ public class LobbyReservationRowView extends FrameLayout implements
 		roomNameView = (TextView) findViewById(R.id.roomNameLabel);
 		roomInfoView = (TextView) findViewById(R.id.roomInfoLabel);
 		roomStatusView = (TextView) findViewById(R.id.roomStatusLabel);
-
-		application = (ReservatorApplication) this.getContext().getApplicationContext();
+		modeSwitcher = (ViewSwitcher) findViewById(R.id.modeSwitcher);
+		modeSwitcher.setDisplayedChild(modeSwitcher.indexOfChild(normalMode));
+		application = (ReservatorApplication) this.getContext()
+				.getApplicationContext();
 		nameField.setOnFocusChangeListener(userNameFocusChangeListener);
 		nameField.setOnItemClickListener(this);
 		nameField.setOnClickListener(this);
-		if(nameField.getAdapter() == null){
-			nameField.setAdapter(new AddressBookAdapter(this.getContext(), application.getAddressBook()));
+		if (nameField.getAdapter() == null) {
+			nameField.setAdapter(new AddressBookAdapter(this.getContext(),
+					application.getAddressBook()));
 		}
-
 	}
 
 	public void setRoom(Room room) {
@@ -97,7 +103,8 @@ public class LobbyReservationRowView extends FrameLayout implements
 			roomInfoView.setText("for " + info.getRoomSize());
 		} else {
 			// U+2022 is a dot
-			roomInfoView.setText(Integer.toString(info.getRoomNumber()) + " \u2022 for " + info.getRoomSize());
+			roomInfoView.setText(Integer.toString(info.getRoomNumber())
+					+ " \u2022 for " + info.getRoomSize());
 		}
 
 		// Reservation stuff
@@ -123,17 +130,20 @@ public class LobbyReservationRowView extends FrameLayout implements
 				roomStatusView.setText("Reserved");
 				bookable = false;
 			} else {
-				roomStatusView.setText("Free for " + Helpers.humanizeTimeSpan(freeMinutes));
+				roomStatusView.setText("Free for "
+						+ Helpers.humanizeTimeSpan(freeMinutes));
 			}
 		} else {
 			roomStatusView.setText("Reserved");
 		}
 
 		if (bookable) {
-			roomStatusView.setTextColor(getResources().getColor(R.color.StatusFreeColor));
+			roomStatusView.setTextColor(getResources().getColor(
+					R.color.StatusFreeColor));
 			bookNowButton.setVisibility(View.VISIBLE);
 		} else {
-			roomStatusView.setTextColor(getResources().getColor(R.color.StatusReservedColor));
+			roomStatusView.setTextColor(getResources().getColor(
+					R.color.StatusReservedColor));
 			bookNowButton.setVisibility(View.INVISIBLE);
 		}
 	}
@@ -147,15 +157,12 @@ public class LobbyReservationRowView extends FrameLayout implements
 
 		if (v == bookNowButton) {
 			setReserveMode();
-		}
-		else if (v == cancelButton) {
+		} else if (v == cancelButton) {
 			setNormalMode();
-		}
-		else if (v == reserveButton) {
+		} else if (v == reserveButton) {
 			reserveButton.setEnabled(false);
 			makeReservation();
-		}
-		else if (v == calendarButton || v == titleView) {
+		} else if (v == calendarButton || v == titleView) {
 			showRoomInCalendar();
 		}
 	}
@@ -164,34 +171,37 @@ public class LobbyReservationRowView extends FrameLayout implements
 	public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
 		reserveButton.setEnabled(true);
 		nameField.setSelected(false);
-		InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+		InputMethodManager imm = (InputMethodManager) getContext()
+				.getSystemService(Context.INPUT_METHOD_SERVICE);
 		imm.hideSoftInputFromWindow(nameField.getRootView().getWindowToken(), 0);
 		// Toast t = Toast.makeText(context, text, duration)
 	}
 
 	private void makeReservation() {
-		String email = application.getAddressBook().getEmailByName(nameField.getText().toString());
+		String email = application.getAddressBook().getEmailByName(
+				nameField.getText().toString());
 
 		try {
 			if (email == null) {
 				throw new ReservatorException("No such user, try again");
 			}
-			application.getDataProxy().reserve(room, timePicker2.getTimeSpan(), email);
+			application.getDataProxy().reserve(room, timePicker2.getTimeSpan(),
+					email);
 		} catch (ReservatorException e) {
 			Builder alertBuilder = new AlertDialog.Builder(getContext());
-			alertBuilder.setTitle("Failed to put reservation")
-				.setMessage(e.getMessage());
+			alertBuilder.setTitle("Failed to put reservation").setMessage(
+					e.getMessage());
 			alertBuilder.setOnCancelListener(new OnCancelListener() {
-					public void onCancel(DialogInterface dialog) {
-						if (onReserveCallback != null) {
-							onReserveCallback.call(LobbyReservationRowView.this);
-						}
+				public void onCancel(DialogInterface dialog) {
+					if (onReserveCallback != null) {
+						onReserveCallback.call(LobbyReservationRowView.this);
 					}
-				});
+				}
+			});
 
-		alertBuilder.show();
+			alertBuilder.show();
 
-				return;
+			return;
 		}
 
 		if (onReserveCallback != null) {
@@ -202,26 +212,26 @@ public class LobbyReservationRowView extends FrameLayout implements
 
 	protected void setNormalMode() {
 		this.setBackgroundColor(getResources().getColor(R.color.Transparent));
-		bookingMode.setVisibility(View.GONE);
-		normalMode.setVisibility(View.VISIBLE);
+		modeSwitcher.setDisplayedChild(modeSwitcher.indexOfChild(normalMode));
 	}
 
 	protected void setReserveMode() {
-		this.setBackgroundColor(getResources().getColor(R.color.ReserveBackground));
+		this.setBackgroundColor(getResources().getColor(
+				R.color.ReserveBackground));
+		modeSwitcher.setDisplayedChild(modeSwitcher.indexOfChild(bookingMode));
 		reserveButton.setEnabled(false);
-		bookingMode.setVisibility(View.VISIBLE);
-		normalMode.setVisibility(View.GONE);
+	
 	}
 
 	public void resetTimeSpan() {
 		timePicker2.reset();
 	}
 
-	public void setMinTime(DateTime time){
+	public void setMinTime(DateTime time) {
 		timePicker2.setMinimumTime(time);
 	}
 
-	public void setMaxTime(DateTime time){
+	public void setMaxTime(DateTime time) {
 		timePicker2.setMaximumTime(time);
 	}
 

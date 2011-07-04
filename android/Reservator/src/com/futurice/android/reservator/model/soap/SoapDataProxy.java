@@ -78,6 +78,7 @@ public class SoapDataProxy extends DataProxy{
 	}
 
 	private String httpPost(String entity) throws ReservatorException {
+		long start = System.currentTimeMillis();
 		Log.v("httpPost", entity);
 		String result = "";
 
@@ -128,21 +129,23 @@ public class SoapDataProxy extends DataProxy{
 		}
 
 		Log.v("SOAP", result);
-
+		Log.d("Performance", "HTTP post done in "+ (System.currentTimeMillis() - start) + "ms");
 		return result;
 	}
 
 	protected Vector<String> fetchRoomLists() throws ReservatorException {
 		// fetch only once
 		String result = httpPost(getRoomListsXml);
-		Log.d("fetchRoomLists", result);
+		//Log.d("fetchRoomLists", result);
 
 		Serializer serializer = new Persister(new Format(new MicrosoftStyle()));
 
 		try {
 			// why non/strictness doesn't work with the attributes?
+			long start = System.currentTimeMillis();
 			Envelope envelope = serializer.read(Envelope.class, result, false);
-			Log.d("SOAP", envelope.toString());
+			Log.d("Performance", "Read roomlist envelope in " + (System.currentTimeMillis() - start) + "ms");
+			//Log.d("SOAP", envelope.toString());
 			return envelope.getRoomLists();
 		} catch (ReservatorException e) {
 			throw e;
@@ -157,13 +160,15 @@ public class SoapDataProxy extends DataProxy{
 
 		String xml = getRoomsXmlTemplate.replace("{RoomListAddress}", roomAddress);
 		String result = httpPost(xml);
-		Log.d("fetchRooms", result);
+		//Log.d("fetchRooms", result);
 
 		Serializer serializer = new Persister(new Format(new MicrosoftStyle()));
 
 		try {
+			long start = System.currentTimeMillis();
 			Envelope envelope = serializer.read(Envelope.class, result, false);
-			Log.d("SOAP", envelope.toString());
+			Log.d("Performance", "Read room envelope in " + (System.currentTimeMillis() - start) + "ms");
+			//Log.d("SOAP", envelope.toString());
 			return envelope.getRooms(this);
 		} catch (ReservatorException e) {
 			throw e;
@@ -245,13 +250,15 @@ public class SoapDataProxy extends DataProxy{
 			xml = xml.replace("{EndTime}", dateFormatUTC.format(fromNow.getTime()));
 		}
 		String result = httpPost(xml);
-		Log.v("SOAP", result);
+		//Log.v("SOAP", result);
 
 		Serializer serializer = new Persister(new Format(new MicrosoftStyle()));
 
 		try {
+			long start = System.currentTimeMillis();
 			Envelope envelope = serializer.read(Envelope.class, result, false);
-			Log.d("SOAP", envelope.toString());
+			Log.d("Performance", "Parsed room reservations envelope in " + (System.currentTimeMillis() - start) + "ms");
+			//Log.d("SOAP", envelope.toString());
 			return envelope.getReservations(room);
 		} catch (ReservatorException e) {
 			throw e;
