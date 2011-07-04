@@ -85,6 +85,7 @@ public class LobbyActivity extends Activity implements OnMenuItemClickListener,
 			progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
 			progressDialog.setMessage("Refreshing room list...");
 			progressDialog.setCancelable(false);
+			progressDialog.setMax(1);
 			progressDialog.show();
 		}
 
