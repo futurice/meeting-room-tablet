@@ -61,7 +61,7 @@ public class LobbyActivity extends Activity implements OnMenuItemClickListener,
 		super.onResume();
 		showLoadingCount = 0; //TODO better fix
 		proxy.addDataUpdatedListener(this);
-		
+
 
 		refreshRoomInfo();
 	}
@@ -81,16 +81,25 @@ public class LobbyActivity extends Activity implements OnMenuItemClickListener,
 	private void showLoading() {
 		showLoadingCount++;
 		if (this.progressDialog == null) {
-			this.progressDialog = ProgressDialog.show(this, "Loading",
-					"Refreshing meeting rooms list", true, false);
+			progressDialog = new ProgressDialog(this);
+			progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+			progressDialog.setMessage("Refreshing room list...");
+			progressDialog.setCancelable(false);
+			progressDialog.show();
 		}
 
+		if (this.progressDialog != null) {
+			if (showLoadingCount > progressDialog.getMax()) {
+				progressDialog.setMax(showLoadingCount);
+			}
+		}
 	}
 
 	private void hideLoading() {
 		showLoadingCount--;
-		if(this.progressDialog != null){
+		if (this.progressDialog != null){
 			progressDialog.setTitle("Loading count " + showLoadingCount);
+			progressDialog.setProgress(progressDialog.getMax() - Math.max(0, showLoadingCount));
 		}
 		if (showLoadingCount <= 0) {
 			if (this.progressDialog != null) {
@@ -98,7 +107,7 @@ public class LobbyActivity extends Activity implements OnMenuItemClickListener,
 				this.progressDialog = null;
 			}
 		}
-	
+
 	}
 
 	@Override
