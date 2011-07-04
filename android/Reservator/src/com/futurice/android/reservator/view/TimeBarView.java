@@ -155,9 +155,8 @@ public class TimeBarView extends FrameLayout{
 		DateTime time = limits.getStart();
 		DateTime end = getMaximum();
 
-		if (time.get(Calendar.MINUTE) % 30 == 0) {
-			time = time.set(Calendar.MINUTE, (time.get(Calendar.MINUTE) % 30) * 30);
-		}
+		// round time to the half an hour, and skip the first one
+		time = time.set(Calendar.MINUTE, (time.get(Calendar.MINUTE) / 30) * 30);
 		time = time.add(Calendar.MINUTE, 30);
 
 		while(time.before(end)){
