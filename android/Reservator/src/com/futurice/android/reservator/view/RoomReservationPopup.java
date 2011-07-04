@@ -49,16 +49,10 @@ public class RoomReservationPopup extends Dialog {
 			}
 		});
 
-		final Room finalRoom = room;
-
-		reservationView.setOnReserveCallback(new Callback() {
-			@Override
-			public void call(LobbyReservationRowView v) {
-				ReservatorApplication application = (ReservatorApplication) RoomReservationPopup.this.getContext().getApplicationContext();
-				application.getDataProxy().refreshRoomReservations(finalRoom);
-			}
-		});
-
 		reservationView.setReserveMode();
+	}
+
+	public void setOnReserveCallback(Callback callback) {
+		reservationView.setOnReserveCallback(callback);
 	}
 }

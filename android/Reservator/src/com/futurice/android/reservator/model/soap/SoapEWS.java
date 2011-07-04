@@ -1,6 +1,7 @@
 package com.futurice.android.reservator.model.soap;
 
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Vector;
 
@@ -60,7 +61,7 @@ public class SoapEWS {
 			Vector<com.futurice.android.reservator.model.Reservation> reservations = new Vector<com.futurice.android.reservator.model.Reservation>();
 			if (response.getItems() == null) return reservations; // no reservations
 
-			for (CalendarItem item : response.getItems()) {
+			for (CalendarItemFull item : response.getItems()) {
 				try {
 					DateTime startTime;
 					DateTime endTime;
@@ -73,14 +74,14 @@ public class SoapEWS {
 					while (!startTime.sameDay(endTime)) {
 						DateTime tmp = startTime.stripTime().add(Calendar.DAY_OF_YEAR, 1);
 						reservations.add(new com.futurice.android.reservator.model.Reservation(
-								room,
+								item.getId(),
 								item.getSubject(),
 								new TimeSpan(startTime, tmp)));
 						startTime = tmp;
 					}
 
 					reservations.add(new com.futurice.android.reservator.model.Reservation(
-							room,
+							item.getId(),
 							item.getSubject(),
 							new TimeSpan(startTime, endTime)));
 				} catch (ParseException e) {
@@ -91,11 +92,13 @@ public class SoapEWS {
 			return reservations;
 		}
 
-		public void checkCreateItemSuccessful() throws ReservatorException {
+		public String checkCreateItemSuccessful() throws ReservatorException {
 			CreateItemResponse response = body.getCreateItemResponse();
 			if (response == null || !response.getResponseCode().equals("NoError") || !response.getResponseClass().equals("Success")) {
 				throw new ReservatorException("Error in SOAP answer");
 			}
+
+			return response.getItemId();
 		}
 	}
 
@@ -193,8 +196,12 @@ public class SoapEWS {
 
 		public CreateItemResponse() {}
 
+		public String getItemId() {
+			return responseMessages.get(0).getItem().getId();
+		}
+
 		protected CreateItemResponseMessage getMessage() {
-			if (responseMessages.size() != 1) {
+			if (responseMessages.size() != 1 || responseMessages.get(0).getItem() == null) {
 				return null;
 			}
 
@@ -257,7 +264,7 @@ public class SoapEWS {
 			}
 		}
 
-		public Vector<CalendarItem> getItems() {
+		public Vector<CalendarItemFull> getItems() {
 			FindItemResponseMessage message = getMessage();
 			if (message == null) {
 				return null;
@@ -290,16 +297,28 @@ public class SoapEWS {
 
 	public static class CreateItemResponseMessage extends ResponseMessage {
 		public CreateItemResponseMessage() {}
+
+		@ElementList
+		@Namespace(prefix="m")
+		private ArrayList<CalendarItem> items;
+
+		public CalendarItem getItem() {
+			if (items.size() == 1) {
+				return items.get(0);
+			}
+
+			return null;
+		}
 	}
 
 	public static class FindItemResponseMessage extends ResponseMessage {
 		@ElementList
 		@Path("m:RootFolder")
-		private Vector<CalendarItem> items;
+		private Vector<CalendarItemFull> items;
 
 		public FindItemResponseMessage() {}
 
-		public Vector<CalendarItem> getItems() {
+		public Vector<CalendarItemFull> getItems() {
 			return items;
 		}
 	}
@@ -348,6 +367,17 @@ public class SoapEWS {
 
 	public static class CalendarItem {
 		@Element
+		private ItemId itemId;
+
+		public CalendarItem() {}
+
+		public String getId() {
+			return itemId.getId();
+		}
+	}
+
+	public static class CalendarItemFull extends CalendarItem {
+		@Element
 		private String start;
 
 		@Element
@@ -361,7 +391,7 @@ public class SoapEWS {
 		@Path("t:Organizer/t:Mailbox")
 		private String organizer;
 
-		public CalendarItem() {}
+		public CalendarItemFull() {}
 
 		public String getStart() {
 			return start;
@@ -376,6 +406,24 @@ public class SoapEWS {
 				return organizer;
 			}
 			return subject;
+		}
+	}
+
+	public static class ItemId {
+		@Attribute
+		private String id;
+
+		@Attribute
+		private String changeKey;
+
+		public ItemId() {}
+
+		public String getId() {
+			return id;
+		}
+
+		public String getChangeKey() {
+			return changeKey;
 		}
 	}
 }

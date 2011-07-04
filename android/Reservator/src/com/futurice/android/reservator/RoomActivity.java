@@ -10,6 +10,8 @@ import com.futurice.android.reservator.model.ReservatorException;
 import com.futurice.android.reservator.model.Room;
 import com.futurice.android.reservator.model.TimeSpan;
 import com.futurice.android.reservator.model.rooms.RoomsInfo;
+import com.futurice.android.reservator.view.Callback;
+import com.futurice.android.reservator.view.LobbyReservationRowView;
 import com.futurice.android.reservator.view.RoomReservationPopup;
 import com.futurice.android.reservator.view.WeekView;
 import com.futurice.android.reservator.view.WeekView.OnFreeTimeClickListener;
@@ -120,14 +122,14 @@ public class RoomActivity extends Activity implements OnMenuItemClickListener,
 					d = new RoomReservationPopup(RoomActivity.this, timeSpan, presetTimeSpan, currentRoom);
 				}
 
-				d.show();
-				d.setOnCancelListener(new OnCancelListener() {
-
+				d.setOnReserveCallback(new Callback() {
 					@Override
-					public void onCancel(DialogInterface dialog) {
-						((ReservatorApplication)getApplicationContext()).getDataProxy().refreshRoomReservations(currentRoom);
+					public void call(LobbyReservationRowView v) {
+						refreshData();
 					}
 				});
+
+				d.show();
 			}
 		});
 	}

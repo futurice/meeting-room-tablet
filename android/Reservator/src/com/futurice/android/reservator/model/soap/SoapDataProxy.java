@@ -6,6 +6,9 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 import java.util.TimeZone;
 import java.util.Vector;
 
@@ -45,6 +48,35 @@ public class SoapDataProxy extends DataProxy{
 	private String password = null;
 
 	private String server;
+
+	private class Bucket {
+		private final long millis;
+		private final Room room;
+		private final Reservation reservation;
+
+		public Bucket(Room room, Reservation reservation) {
+			this.millis = System.currentTimeMillis();
+			this.room = room;
+			this.reservation = reservation;
+		}
+
+		public long getMillis() {
+			return millis;
+		}
+
+		public Room getRoom() {
+			return room;
+		}
+
+		public Reservation getReservation() {
+			return reservation;
+		}
+
+	}
+
+	private final long RECENLY_ADDED_EXPIRE_TIME = 10*1000; // 30 seconds
+
+	private Vector<Bucket> recentlyAdded = new Vector<Bucket>();
 
 	public SoapDataProxy(String server) {
 		this.server = server;
@@ -220,7 +252,10 @@ public class SoapDataProxy extends DataProxy{
 		try {
 			Envelope envelope = serializer.read(Envelope.class, result, false);
 			Log.d("SOAP", envelope.toString());
-			envelope.checkCreateItemSuccessful();
+			String id = envelope.checkCreateItemSuccessful();
+			synchronized (recentlyAdded) {
+				recentlyAdded.add(new Bucket(room, new Reservation(id, "FutuReservator5000", timeSpan)));
+			}
 		} catch (ReservatorException e) {
 			throw e;
 		} catch (Exception e) {
@@ -257,14 +292,53 @@ public class SoapDataProxy extends DataProxy{
 		try {
 			long start = System.currentTimeMillis();
 			Envelope envelope = serializer.read(Envelope.class, result, false);
+			// Log.d("SOAP", envelope.toString());
+			Vector<Reservation> reservations = envelope.getReservations(room);
+
+			expireRecentlyAdded();
+
+			synchronized (recentlyAdded) {
+				for (Bucket bucket : recentlyAdded) {
+					// not our room
+					if (!bucket.getRoom().equals(room)) {
+						continue;
+					}
+
+					boolean isThere = false;
+
+					// see if reservation is there
+					for (Reservation r : reservations) {
+						if (bucket.getReservation().equals(r)) {
+							isThere = true;
+							break;
+						}
+					}
+
+					// add if not there
+					if (!isThere) {
+						reservations.add(bucket.getReservation());
+					}
+				}
+			}
+
 			Log.d("Performance", "Parsed room reservations envelope in " + (System.currentTimeMillis() - start) + "ms");
-			//Log.d("SOAP", envelope.toString());
-			return envelope.getReservations(room);
+			return reservations;
 		} catch (ReservatorException e) {
 			throw e;
 		} catch (Exception e) {
 			Log.e("SOAP", "getRoomReservations XML-parsing failed", e);
 			throw new ReservatorException(e);
 		}
+	}
+
+	private void expireRecentlyAdded() {
+		long stamp = System.currentTimeMillis() - RECENLY_ADDED_EXPIRE_TIME;
+		for (Iterator<Bucket> iter = recentlyAdded.iterator(); iter.hasNext(); ) {
+			Bucket buck = iter.next();
+			if (buck.getMillis() < stamp) {
+				iter.remove();
+			}
+		}
+
 	}
 }

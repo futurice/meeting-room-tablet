@@ -19,6 +19,8 @@ import com.futurice.android.reservator.model.TimeSpan;
 public class DummyDataProxy extends DataProxy {
 	Vector<Room> rooms = null;
 	Map<String,Vector<Reservation>> reservations;
+	private int counter = 0;
+
 	public DummyDataProxy() {
 		this.rooms = new Vector<Room>();
 		this.reservations = Collections.synchronizedMap(new HashMap<String,Vector<Reservation>>());
@@ -55,7 +57,7 @@ public class DummyDataProxy extends DataProxy {
 	public void reserve(Room room, TimeSpan timeSpan, String ownerEmail) throws ReservatorException {
 		// TODO: check for availability
 
-		Reservation reservation = new Reservation(room, "reserved with FutuReservator5000", timeSpan);
+		Reservation reservation = new Reservation(Integer.toString(counter++), "reserved with FutuReservator5000", timeSpan);
 		Vector<Reservation> roomReservations = reservations.get(room.getEmail());
 		if (roomReservations == null) {
 			throw new ReservatorException("unknown room");
@@ -103,7 +105,7 @@ public class DummyDataProxy extends DataProxy {
 				DateTime b = new DateTime(begin);
 				DateTime e = new DateTime(begin + reservationLength > end ? end : begin + reservationLength);
 
-				Reservation r = new Reservation(room, "foobar!", new TimeSpan(b, e));
+				Reservation r = new Reservation(Integer.toString(counter++), "foobar!", new TimeSpan(b, e));
 				ret.add(r);
 				begin += reservationLength + (rand.nextInt(6))*1800000;
 			}
