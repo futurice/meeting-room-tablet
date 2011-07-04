@@ -154,7 +154,7 @@ public class LobbyActivity extends Activity implements OnMenuItemClickListener,
 	@Override
 	public void refreshFailed(ReservatorException e) {
 		hideLoading();
-		Builder alertBuilder = new AlertDialog.Builder(getApplicationContext());
+		Builder alertBuilder = new AlertDialog.Builder(this);
 		alertBuilder.setTitle("Error")
 			.setMessage(e.getMessage())
 			.show();
