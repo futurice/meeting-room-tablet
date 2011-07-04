@@ -61,7 +61,7 @@ public class Room implements Serializable {
 	public int minutesFreeFrom(DateTime from) {
 		for (Reservation r : reservations) {
 			if (r.getStartTime().after(from)) {
-				return (int) (r.getStartTime().getTimeInMillis() - from.getTimeInMillis()) / 60000;
+				return (int) ((r.getStartTime().getTimeInMillis() - from.getTimeInMillis()) / 60000);
 			}
 		}
 
