@@ -290,7 +290,7 @@ public class CalendarVisualizer extends HorizontalScrollView implements Reservat
 			if(before == null || touchedTime.stripTime().after(before.getEndTime())){
 				start = touchedTime.setTime(dayStartTime / 60, dayStartTime % 60, 0);
 			}else{
-				start = before.getStartTime();
+				start = before.getEndTime();
 			}
 			DateTime end;
 			Reservation after = findReservationAfter(touchedTime);

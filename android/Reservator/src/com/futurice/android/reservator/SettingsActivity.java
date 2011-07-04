@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
@@ -42,6 +45,26 @@ public class SettingsActivity extends Activity {
 				Toast.makeText(SettingsActivity.this, "Removed!", Toast.LENGTH_SHORT).show();
 			}
 		});
+		Builder builder = new AlertDialog.Builder(this);
+		builder.setTitle(getString(R.string.doNotModify));
+		builder.setMessage(getString(R.string.onlyItTeamShouldModify));
+		builder.setCancelable(false);
+		DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener() {
+			
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				if(which == AlertDialog.BUTTON_NEGATIVE){
+					dialog.dismiss();
+					finish();
+				}else{
+					dialog.dismiss();
+				}
+				
+			}
+		}; 
+		builder.setPositiveButton(getString(R.string.continueBtn), listener);
+		builder.setNegativeButton(getString(R.string.goBackBtn), listener);
+		builder.show();
 	}
 
 	@Override

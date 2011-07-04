@@ -15,6 +15,10 @@
     <string name="weekLabelFormat">\'Week\' w</string>
     <string name="from">From </string>
     <string name="to">To </string>
+    <string name="goBackBtn">Go back!</string>
+    <string name="continueBtn">Continue</string>
+    <string name="doNotModify">Do not modify these settings, go away!</string>
+    <string name="onlyItTeamShouldModify">Only IT team should modify these settings.</string>
     <string name="seeAllRooms">See all rooms</string>
     <string name="exchange_server_address">Exchange server address</string>
     <string name="PREFERENCES_NAME">ReservatorPreferences</string>

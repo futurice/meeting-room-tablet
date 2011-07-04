@@ -26,10 +26,6 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.ViewSwitcher;
 import android.view.View.OnClickListener;
-import android.view.animation.AlphaAnimation;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import android.view.animation.Animation.AnimationListener;
 import android.view.inputmethod.InputMethodManager;
 
 public class LobbyReservationRowView extends FrameLayout implements
@@ -81,7 +77,7 @@ public class LobbyReservationRowView extends FrameLayout implements
 		roomInfoView = (TextView) findViewById(R.id.roomInfoLabel);
 		roomStatusView = (TextView) findViewById(R.id.roomStatusLabel);
 		modeSwitcher = (ViewSwitcher) findViewById(R.id.modeSwitcher);
-		modeSwitcher.setDisplayedChild(modeSwitcher.indexOfChild(normalMode));
+		setNormalMode();
 		application = (ReservatorApplication) this.getContext()
 				.getApplicationContext();
 		nameField.setOnFocusChangeListener(userNameFocusChangeListener);
@@ -213,14 +209,16 @@ public class LobbyReservationRowView extends FrameLayout implements
 	protected void setNormalMode() {
 		this.setBackgroundColor(getResources().getColor(R.color.Transparent));
 		modeSwitcher.setDisplayedChild(modeSwitcher.indexOfChild(normalMode));
+		bookingMode.setVisibility(GONE);
+		modeSwitcher.requestLayout();
 	}
 
 	protected void setReserveMode() {
-		this.setBackgroundColor(getResources().getColor(
-				R.color.ReserveBackground));
+		this.setBackgroundColor(getResources().getColor(R.color.ReserveBackground));
 		modeSwitcher.setDisplayedChild(modeSwitcher.indexOfChild(bookingMode));
+		bookingMode.setVisibility(VISIBLE);
+		modeSwitcher.requestLayout();
 		reserveButton.setEnabled(false);
-	
 	}
 
 	public void resetTimeSpan() {
