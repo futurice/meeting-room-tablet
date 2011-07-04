@@ -3,14 +3,19 @@
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	android:gravity="center_vertical" android:layout_height="wrap_content"
 	android:layout_gravity="center">
-	<FrameLayout android:layout_height="match_parent" android:layout_width="150dp" android:layout_marginLeft="120dp" android:layout_marginRight="20dp" android:id="@+id/outerTitleLayout" android:layout_gravity="center">
-		<LinearLayout android:layout_height="wrap_content" android:orientation="vertical" android:id="@+id/titleLayout" android:layout_width="wrap_content" android:layout_gravity="center_vertical|left">
-			<TextView android:id="@+id/roomNameLabel"
-				android:layout_width="wrap_content" android:layout_height="wrap_content"
-				android:text="Room name XXX" android:textStyle="bold" android:textColor="@color/TextColor"></TextView>
-			<TextView android:id="@+id/roomInfoLabel"
-				android:layout_width="wrap_content" android:layout_height="wrap_content"
-				android:text="(42 persons)" android:textColor="@color/TextInfoColor"></TextView>
+	<FrameLayout android:layout_height="match_parent" android:layout_marginLeft="120dp" android:layout_marginRight="20dp" android:id="@+id/outerTitleLayout" android:layout_gravity="center" android:layout_width="170dp">
+		<LinearLayout android:layout_height="wrap_content" android:orientation="horizontal" android:id="@+id/middleTitleLayout" android:layout_width="wrap_content" android:layout_gravity="center_vertical">
+				<Button android:background="@drawable/calendar_small_grey"
+				android:id="@+id/calendarButton" android:layout_height="wrap_content"
+				android:layout_width="wrap_content" android:focusable="true" android:layout_gravity="center"></Button>
+			<LinearLayout android:layout_height="wrap_content" android:orientation="vertical" android:id="@+id/titleLayout" android:layout_width="wrap_content" android:layout_gravity="center_vertical|left" android:layout_marginLeft="10dp">
+				<TextView android:id="@+id/roomNameLabel"
+					android:layout_width="wrap_content" android:layout_height="wrap_content"
+					android:text="Room name XXX" android:textStyle="bold" android:textColor="@color/TextColor"></TextView>
+				<TextView android:id="@+id/roomInfoLabel"
+					android:layout_width="wrap_content" android:layout_height="wrap_content"
+					android:text="(42 persons)" android:textColor="@color/TextInfoColor"></TextView>
+			</LinearLayout>
 		</LinearLayout>
 	</FrameLayout>
 	<LinearLayout android:id="@+id/bookingMode"
@@ -31,8 +36,5 @@
 		<Button android:id="@+id/bookNowButton" android:background="@drawable/button_background" android:layout_gravity="center" android:text="@string/book_now" android:layout_width="wrap_content" android:layout_height="wrap_content" android:focusable="true" android:layout_marginLeft="20dp"></Button>
 		<TextView android:layout_gravity="center" android:text="&lt;status&gt;" android:layout_width="wrap_content" android:id="@+id/roomStatusLabel" android:layout_height="wrap_content" android:width="200px" android:layout_marginLeft="20dp"></TextView>
 		<FrameLayout android:layout_height="match_parent" android:layout_width="wrap_content" android:layout_weight="1"></FrameLayout>
-		<Button android:background="@drawable/calendar_small"
-			android:id="@+id/calendarButton" android:layout_height="wrap_content"
-			android:layout_width="wrap_content" android:focusable="true" android:layout_gravity="center" android:visibility="gone"></Button>
 	</LinearLayout>
 </LinearLayout>
