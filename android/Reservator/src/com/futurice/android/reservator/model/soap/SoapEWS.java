@@ -356,6 +356,11 @@ public class SoapEWS {
 		@Element
 		private String subject;
 
+		@Element(name="Name", required=false)
+		@Namespace(prefix="t")
+		@Path("t:Organizer/t:Mailbox")
+		private String organizer;
+
 		public CalendarItem() {}
 
 		public String getStart() {
@@ -367,6 +372,9 @@ public class SoapEWS {
 		}
 
 		public String getSubject() {
+			if (organizer != null) {
+				return organizer;
+			}
 			return subject;
 		}
 	}
