@@ -13,7 +13,6 @@ import android.view.View;
 public class RoomReservationPopup extends Dialog {
 	LobbyReservationRowView reservationView;
 	CalendarMarker marker;
-
 	public RoomReservationPopup(Context context, TimeSpan timeLimits, TimeSpan presetTime, Room room) {
 		super(context, R.style.Theme_Transparent);
 		setCancelable(true);
@@ -26,6 +25,7 @@ public class RoomReservationPopup extends Dialog {
 			}
 		});
 		reservationView = (LobbyReservationRowView)findViewById(R.id.roomReservationView1);
+		reservationView.setAnimationDuration(0);
 		reservationView.setClickable(true);
 		reservationView.setRoom(room);
 		reservationView.resetTimeSpan();
@@ -34,14 +34,18 @@ public class RoomReservationPopup extends Dialog {
 		reservationView.timePicker2.setStartTime(presetTime.getStart());
 		reservationView.timePicker2.setEndTime(presetTime.getEnd());
 		reservationView.setEndTimeRelatively(60);
-
 		reservationView.setOnCancellListener(new OnCancellListener() {
 			@Override
 			public void onCancel(LobbyReservationRowView view) {
 				cancel();
 			}
 		});
-
+		reservationView.setOnReserveCallback(new OnReserveListener() {
+			@Override
+			public void call(LobbyReservationRowView v) {
+				cancel();
+			}
+		});
 		reservationView.setReserveMode();
 	}
 

@@ -3,9 +3,9 @@ package com.futurice.android.reservator.model;
 import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 
 public class DateTime implements Serializable {
-	private static final long MILLIS_IN_DAY = 60*60*24*1000;
 	private static final long serialVersionUID = 1L;
 	private Calendar cal;
 
@@ -104,8 +104,6 @@ public class DateTime implements Serializable {
 	}
 	public int subtract(DateTime o, int unit){
 		switch(unit){
-		case Calendar.DAY_OF_YEAR:
-			return (int)((this.getTimeInMillis() - o.getTimeInMillis()) / MILLIS_IN_DAY);
 		default:
 			throw new IllegalArgumentException("Not implemented with unit " + unit);
 		}

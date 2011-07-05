@@ -54,7 +54,7 @@ public class CalendarVisualizer extends HorizontalScrollView implements Reservat
 
 	public CalendarVisualizer(Context context, AttributeSet attrs) {
 		super(context, attrs);
-		 firstDayToShow = new DateTime();
+		 firstDayToShow = new DateTime().stripTime();
 		 //forces scroll view to have scrollable content area
 		contentFrame = new FrameLayout(getContext());
 		contentFrame.setClickable(true);
@@ -276,7 +276,8 @@ public class CalendarVisualizer extends HorizontalScrollView implements Reservat
 	}
 
 	private int getDaysFromStart(DateTime day) {
-		return day.subtract(getFirstDayToShow(), Calendar.DAY_OF_YEAR);
+		return (int)(day.getTimeInMillis() - getFirstDayToShow().getTimeInMillis()) / (60*60*24*1000);
+		//return day.subtract(getFirstDayToShow(), Calendar.DAY_OF_YEAR);
 	}
 
 	private float getProportionalY(DateTime time){
@@ -372,12 +373,12 @@ public class CalendarVisualizer extends HorizontalScrollView implements Reservat
 				&& reservations[0].getStartTime().before(firstDayToShow)) {
 			return reservations[0].getStartTime();
 		} else {
-			return firstDayToShow; // TODO some logic here
+			return firstDayToShow; // TODO some logic here now it's today by default
 		}
 	}
 
 	public int getXForTime(DateTime day) {
-		return getDaysFromStart(day)  * dayWidth;
+		return getDaysFromStart(day) * dayWidth;
 	}
 
 	@Override
