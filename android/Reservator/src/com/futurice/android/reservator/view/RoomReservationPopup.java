@@ -1,7 +1,6 @@
 package com.futurice.android.reservator.view;
 
 import com.futurice.android.reservator.R;
-import com.futurice.android.reservator.ReservatorApplication;
 import com.futurice.android.reservator.model.Room;
 import com.futurice.android.reservator.model.TimeSpan;
 

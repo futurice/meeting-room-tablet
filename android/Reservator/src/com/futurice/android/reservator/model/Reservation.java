@@ -32,7 +32,10 @@ public class Reservation implements Comparable<Reservation>, Serializable {
 	}
 
 	public boolean equals(Reservation other) {
-		return id.equals(other.id);
+		final long threshold = 2000;
+		return id.equals(other.id)
+			|| ( Math.abs(getStartTime().getTimeInMillis() - other.getStartTime().getTimeInMillis()) < threshold
+					&& Math.abs(getEndTime().getTimeInMillis() - other.getEndTime().getTimeInMillis()) < threshold);
 	}
 
 	@Override

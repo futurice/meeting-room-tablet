@@ -6,9 +6,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Map;
 import java.util.TimeZone;
 import java.util.Vector;
 
@@ -74,7 +72,7 @@ public class SoapDataProxy extends DataProxy{
 
 	}
 
-	private final long RECENLY_ADDED_EXPIRE_TIME = 10*1000; // 30 seconds
+	private final long RECENLY_ADDED_EXPIRE_TIME = 10*1000; // 10 seconds
 
 	private Vector<Bucket> recentlyAdded = new Vector<Bucket>();
 
