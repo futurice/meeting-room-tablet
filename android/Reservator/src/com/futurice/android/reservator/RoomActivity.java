@@ -10,10 +10,10 @@ import com.futurice.android.reservator.model.ReservatorException;
 import com.futurice.android.reservator.model.Room;
 import com.futurice.android.reservator.model.TimeSpan;
 import com.futurice.android.reservator.model.rooms.RoomsInfo;
-import com.futurice.android.reservator.view.OnReserveCallback;
 import com.futurice.android.reservator.view.LobbyReservationRowView;
 import com.futurice.android.reservator.view.RoomReservationPopup;
 import com.futurice.android.reservator.view.WeekView;
+import com.futurice.android.reservator.view.LobbyReservationRowView.OnReserveListener;
 import com.futurice.android.reservator.view.WeekView.OnFreeTimeClickListener;
 
 import android.app.Activity;
@@ -87,12 +87,11 @@ public class RoomActivity extends Activity implements OnMenuItemClickListener,
 			@Override
 			public void onFreeTimeClick(View v, TimeSpan timeSpan, DateTime touch) {
 
-				RoomReservationPopup d;
 
-				// if time span is less than hour, select it all
-				if (timeSpan.getLength() <= 60*60000) {
-					d = new RoomReservationPopup(RoomActivity.this, timeSpan, timeSpan, currentRoom);
-				} else {
+				TimeSpan reservationTimeSpan = timeSpan;
+
+				// if time span is greater than hour do stuff
+				if (timeSpan.getLength() > 60*60000) {
 					DateTime start = timeSpan.getStart();
 					DateTime end = timeSpan.getEnd();
 
@@ -107,22 +106,22 @@ public class RoomActivity extends Activity implements OnMenuItemClickListener,
 						touch = now;
 					}
 
-					TimeSpan presetTimeSpan = new TimeSpan(touch, Calendar.HOUR, 1);
-					DateTime touchend = presetTimeSpan.getEnd();
+					reservationTimeSpan = new TimeSpan(touch, Calendar.HOUR, 1);
+					DateTime touchend = reservationTimeSpan.getEnd();
 
 					// quantize end to 15min steps
 					touchend = touchend.set(Calendar.MINUTE, (touchend.get(Calendar.MINUTE) / 15) * 15);
 
 					if (touchend.after(end)) {
-						presetTimeSpan.setEnd(end);
+						reservationTimeSpan.setEnd(end);
 					}
-
-					d = new RoomReservationPopup(RoomActivity.this, timeSpan, presetTimeSpan, currentRoom);
 				}
 
-				d.setOnReserveCallback(new OnReserveCallback() {
+				final RoomReservationPopup d = new RoomReservationPopup(RoomActivity.this, timeSpan, reservationTimeSpan, currentRoom);
+				d.setOnReserveCallback(new OnReserveListener() {
 					@Override
 					public void call(LobbyReservationRowView v) {
+						d.dismiss();
 						refreshData();
 					}
 				});

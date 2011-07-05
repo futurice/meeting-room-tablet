@@ -9,8 +9,8 @@ import com.futurice.android.reservator.model.DateTime;
 import com.futurice.android.reservator.model.ReservatorException;
 import com.futurice.android.reservator.model.Room;
 import com.futurice.android.reservator.model.rooms.RoomsInfo;
-import com.futurice.android.reservator.view.OnReserveCallback;
 import com.futurice.android.reservator.view.LobbyReservationRowView;
+import com.futurice.android.reservator.view.LobbyReservationRowView.OnReserveListener;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -164,7 +164,7 @@ public class LobbyActivity extends Activity implements OnMenuItemClickListener,
 	private void processRoom(Room r) {
 		LobbyReservationRowView v = new LobbyReservationRowView(LobbyActivity.this);
 		v.setRoom(r);
-		v.setOnReserveCallback(new OnReserveCallback() {
+		v.setOnReserveCallback(new OnReserveListener() {
 			@Override
 			public void call(LobbyReservationRowView v) {
 				refreshRoomInfo();

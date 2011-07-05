@@ -41,7 +41,7 @@ public class LobbyReservationRowView extends FrameLayout implements
 	TextView roomNameView, roomInfoView, roomStatusView;
 	ReservatorApplication application;
 	ViewSwitcher modeSwitcher;
-	OnReserveCallback onReserveCallback = null;
+	OnReserveListener onReserveCallback = null;
 	OnCancellListener onCancellListener = null;
 	private Room room;
 
@@ -159,7 +159,7 @@ public class LobbyReservationRowView extends FrameLayout implements
 			setReserveMode();
 		} else if (v == cancelButton) {
 			if(this.onCancellListener != null){
-				this.onCancellListener.onCancell(this);
+				this.onCancellListener.onCancel(this);
 			}
 			setNormalMode();
 		} else if (v == reserveButton) {
@@ -214,7 +214,7 @@ public class LobbyReservationRowView extends FrameLayout implements
 	}
 
 	protected void setNormalMode() {
-		
+
 		Animation scale = new ScaleAnimation(1.0f, 1.0f, 1.0f, 0.0f,  ScaleAnimation.RELATIVE_TO_SELF, 0.5f,  ScaleAnimation.RELATIVE_TO_SELF, 0.5f);
 		scale.setDuration(400);
 		scale.setAnimationListener(new AnimationListener() {
@@ -237,7 +237,7 @@ public class LobbyReservationRowView extends FrameLayout implements
 	}
 
 	protected void setReserveMode() {
-		
+
 		Animation scale = new ScaleAnimation(1.0f, 1.0f, 1.0f, 0.0f,  ScaleAnimation.RELATIVE_TO_SELF, 0.5f,  ScaleAnimation.RELATIVE_TO_SELF, 0.5f);
 		scale.setDuration(400);
 		scale.setAnimationListener(new AnimationListener() {
@@ -275,7 +275,7 @@ public class LobbyReservationRowView extends FrameLayout implements
 		timePicker2.setEndTimeRelatively(minutes);
 	}
 
-	public void setOnReserveCallback(OnReserveCallback onReserveCallback) {
+	public void setOnReserveCallback(OnReserveListener onReserveCallback) {
 		this.onReserveCallback = onReserveCallback;
 	}
 
@@ -284,11 +284,16 @@ public class LobbyReservationRowView extends FrameLayout implements
 		i.putExtra(RoomActivity.ROOM_EXTRA, room);
 		getContext().startActivity(i);
 	}
-	
-	public void setOnCancelListener(OnCancellListener l){
+
+	public void setOnCancellListener(OnCancellListener l){
 		this.onCancellListener = l;
 	}
+
 	public interface OnCancellListener{
-		public void onCancell(LobbyReservationRowView view);
+		public void onCancel(LobbyReservationRowView view);
+	}
+
+	public interface OnReserveListener {
+		public void call(LobbyReservationRowView v);
 	}
 }
