@@ -185,14 +185,10 @@ public class CalendarVisualizer extends HorizontalScrollView implements Reservat
 				points[j + 2] = getXForTime(reservations[i].getStartTime()) + dayWidth;
 				points[j + 3] = points[j + 1];
 				points[j + 4] = points[j];
-				points[j + 5] = getProportionalY(reservations[i].getEndTime())*height;
+				points[j + 5] = getProportionalEndY(reservations[i].getEndTime())*height;
 				points[j + 6] = points[j + 2];
 				points[j + 7] = points[j + 5];
 				j += 8;
-				//top-left * 2, top-right, bottom-left, bottom-right * 2
-				// *2 makes reservation connecting triangles zero area
-
-
 				//top-left * 2, top-right, bottom-left, bottom-right * 2
 				// *2 makes reservation connecting triangles zero area
 				int p = 6 * i;
@@ -280,6 +276,10 @@ public class CalendarVisualizer extends HorizontalScrollView implements Reservat
 		//return day.subtract(getFirstDayToShow(), Calendar.DAY_OF_YEAR);
 	}
 
+	private float getProportionalEndY(DateTime time){
+		int hours = time.get(Calendar.HOUR_OF_DAY);
+		return getProportionalY(hours ==  0 ? 24 : hours , time.get(Calendar.MINUTE));
+	}
 	private float getProportionalY(DateTime time){
 		return getProportionalY(time.get(Calendar.HOUR_OF_DAY), time.get(Calendar.MINUTE));
 	}
@@ -289,6 +289,7 @@ public class CalendarVisualizer extends HorizontalScrollView implements Reservat
 
 	@Override
 	public boolean onTouch(View v, MotionEvent e) {
+		//TODO This causes a small slow down in scrolling animation when ACTION_UP occurs:/
 		if (e.getAction() == MotionEvent.ACTION_UP) {
 			touchedTime = getTimeForCoordinates(e.getX(), e.getY());
 			Reservation colliding = getReservationForTime(touchedTime);

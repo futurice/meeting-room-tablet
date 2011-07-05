@@ -1,6 +1,6 @@
 
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android" android:layout_height="fill_parent" android:layout_width="fill_parent" android:background="@drawable/background" android:id="@+id/relativeLayout1" android:padding="0dip">
-        <AnalogClock android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/analogClock1" android:layout_alignParentRight="true" android:layout_centerVertical="true" android:layout_marginRight="150dp"></AnalogClock>
+        <DigitalClock android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/digitalClock1" android:layout_alignParentRight="true" android:layout_centerVertical="true" android:layout_marginRight="150dp" style="@style/DigitalClockStyle"></DigitalClock>
         <ScrollView android:id="@+id/scrollView1" android:layout_width="match_parent" android:layout_marginTop="0dp" android:layout_marginBottom="0dp" android:layout_marginLeft="0dp" android:layout_height="match_parent">
             <LinearLayout android:orientation="vertical" android:id="@+id/linearLayout1" android:layout_height="wrap_content" android:layout_width="match_parent" android:paddingTop="60dp"></LinearLayout>
         </ScrollView>

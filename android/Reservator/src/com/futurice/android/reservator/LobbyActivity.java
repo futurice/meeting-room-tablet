@@ -17,6 +17,7 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.app.AlertDialog.Builder;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -24,6 +25,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MenuItem.OnMenuItemClickListener;
 import android.view.Window;
+import android.widget.DigitalClock;
 import android.widget.LinearLayout;
 
 public class LobbyActivity extends Activity implements OnMenuItemClickListener,
@@ -52,6 +54,8 @@ public class LobbyActivity extends Activity implements OnMenuItemClickListener,
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		this.setContentView(R.layout.lobby_activity);
 		proxy = ((ReservatorApplication) getApplication()).getDataProxy();
+		DigitalClock clock =  (DigitalClock)findViewById(R.id.digitalClock1);
+        clock.setTypeface(Typeface.createFromAsset(getAssets(), "fonts/EHSMB.TTF"));
 		// handler.postDelayed(updateRoomsRunnable, 10*60000); // update after 10minutes
 	}
 
