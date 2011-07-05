@@ -54,10 +54,10 @@ public class DummyDataProxy extends DataProxy {
 	}
 
 	@Override
-	public void reserve(Room room, TimeSpan timeSpan, String ownerEmail) throws ReservatorException {
+	public void reserve(Room room, TimeSpan timeSpan, String owner, String ownerEmail) throws ReservatorException {
 		// TODO: check for availability
 
-		Reservation reservation = new Reservation(Integer.toString(counter++), "reserved with FutuReservator5000", timeSpan);
+		Reservation reservation = new Reservation(Integer.toString(counter++), owner, timeSpan);
 		Vector<Reservation> roomReservations = reservations.get(room.getEmail());
 		if (roomReservations == null) {
 			throw new ReservatorException("unknown room");

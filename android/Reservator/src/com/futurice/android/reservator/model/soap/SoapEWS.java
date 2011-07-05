@@ -73,6 +73,7 @@ public class SoapEWS {
 
 					while (!startTime.sameDay(endTime)) {
 						DateTime tmp = startTime.stripTime().add(Calendar.DAY_OF_YEAR, 1);
+
 						reservations.add(new com.futurice.android.reservator.model.Reservation(
 								item.getId(),
 								item.getSubject(),
@@ -80,10 +81,13 @@ public class SoapEWS {
 						startTime = tmp;
 					}
 
-					reservations.add(new com.futurice.android.reservator.model.Reservation(
-							item.getId(),
-							item.getSubject(),
-							new TimeSpan(startTime, endTime)));
+					// skip if startTime and endTime is too close
+					if (Math.abs(startTime.subtract(endTime, Calendar.MILLISECOND)) >= 1000) {
+						reservations.add(new com.futurice.android.reservator.model.Reservation(
+								item.getId(),
+								item.getSubject(),
+								new TimeSpan(startTime, endTime)));
+					}
 				} catch (ParseException e) {
 					throw new ReservatorException(e);
 				}

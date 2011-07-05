@@ -9,7 +9,7 @@ import android.os.AsyncTask;
 public abstract class DataProxy {
 	public abstract void setCredentials(String user, String password);
 	public abstract void setServer(String server);
-	abstract public void reserve(Room room, TimeSpan timeSpan, String ownerEmail) throws ReservatorException;
+	abstract public void reserve(Room room, TimeSpan timeSpan, String owner, String ownerEmail) throws ReservatorException;
 
 	/**
 	 * Synchronously get a list of rooms this proxy is aware of. Listeners are not notified when done.

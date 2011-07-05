@@ -146,7 +146,7 @@ public class SoapDataProxy extends DataProxy{
 			HttpResponse response = httpclient.execute(httpPost);
 
 			if (response.getStatusLine().getStatusCode() != 200) {
-				throw new ReservatorException("Http error -- " + response.getStatusLine().getStatusCode() + " " + response.getStatusLine().getReasonPhrase());
+				throw new ReservatorException("Http error -- " + response.getStatusLine().getStatusCode() + " " + response.getStatusLine().getReasonPhrase() + "\n" + response.getEntity().getContent());
 			}
 
 			result = Helpers.readFromInputStream(response.getEntity().getContent(), (int) response.getEntity().getContentLength());
@@ -229,7 +229,7 @@ public class SoapDataProxy extends DataProxy{
 	}
 
 	@Override
-	public void reserve(Room room, TimeSpan timeSpan, String ownerEmail) throws ReservatorException {
+	public void reserve(Room room, TimeSpan timeSpan, String owner, String ownerEmail) throws ReservatorException {
 		Log.v("SOAP", "reserve");
 
 		String xml = createItemCalendarXmlTemplate;
@@ -240,7 +240,7 @@ public class SoapDataProxy extends DataProxy{
 			xml = xml.replace("{StartTime}", dateFormat.format(timeSpan.getStart().getTime()));
 			xml = xml.replace("{EndTime}", dateFormat.format(timeSpan.getEnd().getTime()));
 		}
-		xml = xml.replace("{Subject}", "Reserved with FutuReservator5000");
+		xml = xml.replace("{Subject}", owner);
 
 		String result = httpPost(xml);
 		Log.v("SOAP", result);
@@ -274,7 +274,11 @@ public class SoapDataProxy extends DataProxy{
 		now.set(Calendar.MILLISECOND, 0);
 
 		Calendar fromNow = (Calendar) now.clone();
-		fromNow.add(Calendar.MONTH, 1);
+
+		// from week before
+		now.add(Calendar.DAY_OF_YEAR, -7);
+		// ... to the 40 days into the future
+		fromNow.add(Calendar.DAY_OF_YEAR, 40);
 
 		String xml = findItemCalendarXmlTemplate;
 		xml = xml.replace("{RoomAddress}", room.getEmail());

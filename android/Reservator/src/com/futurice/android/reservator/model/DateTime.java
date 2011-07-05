@@ -102,8 +102,13 @@ public class DateTime implements Serializable {
 		n.set(Calendar.MILLISECOND, 0);
 		return new DateTime(n, false);
 	}
+
 	public int subtract(DateTime o, int unit){
 		switch(unit){
+		case Calendar.DAY_OF_YEAR:
+			return (int)((this.getTimeInMillis() - o.getTimeInMillis()) / (1000*60*60*24));
+		case Calendar.MILLISECOND:
+			return (int)(this.getTimeInMillis() - o.getTimeInMillis());
 		default:
 			throw new IllegalArgumentException("Not implemented with unit " + unit);
 		}

@@ -18,14 +18,14 @@ public abstract class AddressBook {
 		}
 	}
 
-	public String getEmailByName(String name) {
+	public AddressBookEntry getEntryByName(String name) {
 		if (entries == null) {
 			return null; // no entries, no win
 		}
 
 		for (AddressBookEntry entry : entries) {
 			if (entry.getName().equals(name)) {
-				return entry.getEmail();
+				return entry;
 			}
 		}
 		return null;

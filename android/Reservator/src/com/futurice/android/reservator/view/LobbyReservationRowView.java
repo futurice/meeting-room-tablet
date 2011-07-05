@@ -5,6 +5,7 @@ import com.futurice.android.reservator.ReservatorApplication;
 import com.futurice.android.reservator.RoomActivity;
 import com.futurice.android.reservator.common.Helpers;
 import com.futurice.android.reservator.model.AddressBookAdapter;
+import com.futurice.android.reservator.model.AddressBookEntry;
 import com.futurice.android.reservator.model.DateTime;
 import com.futurice.android.reservator.model.ReservatorException;
 import com.futurice.android.reservator.model.Room;
@@ -184,15 +185,15 @@ public class LobbyReservationRowView extends FrameLayout implements
 	}
 
 	private void makeReservation() {
-		String email = application.getAddressBook().getEmailByName(
+		AddressBookEntry entry = application.getAddressBook().getEntryByName(
 				nameField.getText().toString());
 
 		try {
-			if (email == null) {
+			if (entry == null) {
 				throw new ReservatorException("No such user, try again");
 			}
 			application.getDataProxy().reserve(room, timePicker2.getTimeSpan(),
-					email);
+					entry.getName(), entry.getEmail());
 		} catch (ReservatorException e) {
 			Builder alertBuilder = new AlertDialog.Builder(getContext());
 			alertBuilder.setTitle("Failed to put reservation").setMessage(

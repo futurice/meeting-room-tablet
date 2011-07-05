@@ -44,10 +44,10 @@ public class CachedDataProxy extends DataProxy {
 	}
 
 	@Override
-	public void reserve(Room room, TimeSpan timeSpan, String ownerEmail)
+	public void reserve(Room room, TimeSpan timeSpan, String owner, String ownerEmail)
 			throws ReservatorException {
 		reservationCache.remove(room.getEmail());
-		dataProxy.reserve(room, timeSpan, ownerEmail);
+		dataProxy.reserve(room, timeSpan, owner, ownerEmail);
 	}
 
 	@Override
