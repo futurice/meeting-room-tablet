@@ -3,6 +3,7 @@ package com.futurice.android.reservator.view;
 import com.futurice.android.reservator.R;
 import com.futurice.android.reservator.model.Room;
 import com.futurice.android.reservator.model.TimeSpan;
+import com.futurice.android.reservator.view.LobbyReservationRowView.OnCancellListener;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -33,13 +34,12 @@ public class RoomReservationPopup extends Dialog {
 		reservationView.timePicker2.setEndTime(presetTime.getEnd());
 		reservationView.setEndTimeRelatively(60);
 
-		reservationView.findViewById(R.id.cancelButton).setOnClickListener(new View.OnClickListener() {
+		reservationView.setOnCancelListener(new OnCancellListener() {
 			@Override
-			public void onClick(View v) {
+			public void onCancell(LobbyReservationRowView view) {
 				cancel();
 			}
 		});
-
 		reservationView.findViewById(R.id.reserveButton).setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -51,7 +51,7 @@ public class RoomReservationPopup extends Dialog {
 		reservationView.setReserveMode();
 	}
 
-	public void setOnReserveCallback(Callback callback) {
-		reservationView.setOnReserveCallback(callback);
+	public void setOnReserveCallback(OnReserveCallback onReserveCallback) {
+		reservationView.setOnReserveCallback(onReserveCallback);
 	}
 }

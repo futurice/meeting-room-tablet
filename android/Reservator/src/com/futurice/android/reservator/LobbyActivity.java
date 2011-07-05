@@ -9,7 +9,7 @@ import com.futurice.android.reservator.model.DateTime;
 import com.futurice.android.reservator.model.ReservatorException;
 import com.futurice.android.reservator.model.Room;
 import com.futurice.android.reservator.model.rooms.RoomsInfo;
-import com.futurice.android.reservator.view.Callback;
+import com.futurice.android.reservator.view.OnReserveCallback;
 import com.futurice.android.reservator.view.LobbyReservationRowView;
 
 import android.app.Activity;
@@ -52,7 +52,6 @@ public class LobbyActivity extends Activity implements OnMenuItemClickListener,
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		this.setContentView(R.layout.lobby_activity);
 		proxy = ((ReservatorApplication) getApplication()).getDataProxy();
-
 		// handler.postDelayed(updateRoomsRunnable, 10*60000); // update after 10minutes
 	}
 
@@ -61,14 +60,16 @@ public class LobbyActivity extends Activity implements OnMenuItemClickListener,
 		super.onResume();
 		showLoadingCount = 0; //TODO better fix
 		proxy.addDataUpdatedListener(this);
-
-
 		refreshRoomInfo();
 	}
 	@Override
 	public void onPause() {
 		super.onPause();
 		proxy.removeDataUpdatedListener(this);
+		if(progressDialog != null){
+			progressDialog.dismiss();
+			progressDialog = null;
+		}
 	}
 
 	private void refreshRoomInfo() {
@@ -163,7 +164,7 @@ public class LobbyActivity extends Activity implements OnMenuItemClickListener,
 	private void processRoom(Room r) {
 		LobbyReservationRowView v = new LobbyReservationRowView(LobbyActivity.this);
 		v.setRoom(r);
-		v.setOnReserveCallback(new Callback() {
+		v.setOnReserveCallback(new OnReserveCallback() {
 			@Override
 			public void call(LobbyReservationRowView v) {
 				refreshRoomInfo();
