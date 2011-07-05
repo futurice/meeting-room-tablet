@@ -30,7 +30,7 @@ import com.futurice.android.reservator.model.TimeSpan;
 
 public class CalendarVisualizer extends HorizontalScrollView implements ReservatorVisualizer,
 		OnTouchListener {
-	private Paint markerPaint, textPaint, gridPaint;
+	private Paint markerPaint, textPaint, weekTextPaint, gridPaint;
 	private int dayStartTime = 60 * 8, dayEndTime = 60 * 18; // minutes from
 																// midnight
 	private DateTime firstDayToShow;
@@ -41,7 +41,7 @@ public class CalendarVisualizer extends HorizontalScrollView implements Reservat
 	TimeSpan touchedTimeSpan;
 	DateTime touchedTime;
 	Shader reservationShader, leftEdgeShader, rightEdgeShader;
-	int textColor, gridColor;
+	int textColor, weekTextColor, gridColor;
 	int weekStartDay = Calendar.MONDAY;
 	String dayLabels[], weekLabels[];
 	private SimpleDateFormat dayLabelFormatter, weekLabelFormatter;
@@ -60,29 +60,38 @@ public class CalendarVisualizer extends HorizontalScrollView implements Reservat
 		contentFrame.setClickable(true);
 		contentFrame.setOnTouchListener(this);
 		this.addView(contentFrame, LayoutParams.WRAP_CONTENT, LayoutParams.MATCH_PARENT);
-		
-		
+
+
 		this.textColor = getResources().getColor(R.color.CalendarTextColor);
+		this.weekTextColor = getResources().getColor(R.color.CalendarWeekTextColor);
 		this.gridColor = getResources().getColor(R.color.CalendarBorderColor);
+
 		this.textPaint = new Paint();
 		textPaint.setColor(textColor);
+		textPaint.setAntiAlias(true);
+
+		this.weekTextPaint = new Paint();
+		weekTextPaint.setColor(weekTextColor);
+		weekTextPaint.setAntiAlias(true);
+
 		this.gridPaint = new Paint();
 		gridPaint.setColor(gridColor);
+
 		this.markerPaint = new Paint();
 		this.reservationShader = new LinearGradient(0, 0, 1, 1, getResources().getColor(R.color.CalendarMarkerReservedColor), getResources().getColor(R.color.CalendarMarkerReservedColor), TileMode.REPEAT);
 		markerPaint.setShader(reservationShader);
-		
+
 		this.fadingEdgePaint = new Paint();
 		this.leftEdgeShader = new LinearGradient(0, 0, 16, 0, Color.argb(128, 128, 128, 128), Color.argb(0, 0,0,0), TileMode.CLAMP);
 		this.rightEdgeShader = new LinearGradient(0, 0, 16, 0, Color.argb(0, 0, 0, 0), Color.argb(128, 128, 128, 128), TileMode.CLAMP);
-		
+
 		setHorizontalFadingEdgeEnabled(false);
 		this.setBackgroundColor(Color.TRANSPARENT);
-		
+
 		dayLabelFormatter = new SimpleDateFormat(getResources().getString(R.string.dateLabelFormat));
 		String weekLabelFormat = getResources().getString(R.string.weekLabelFormat);
 		weekLabelFormatter = new SimpleDateFormat(weekLabelFormat);
-		
+
 	}
 
 	@Override
@@ -103,7 +112,7 @@ public class CalendarVisualizer extends HorizontalScrollView implements Reservat
 			dayLabels = new String[daysToShow];
 			weekLabels = new String[daysToShow];
 		}
-		
+
 		DateTime day = getFirstDayToShow();
 		for(int i = 0; i < dayLabels.length; i++){
 			dayLabels[i] = dayLabelFormatter.format(day.getTime());
@@ -116,9 +125,9 @@ public class CalendarVisualizer extends HorizontalScrollView implements Reservat
 		float width = area.width();
 		float height = area.height();
 		Align originalAlign = textPaint.getTextAlign();
-		
-		
-		
+
+
+
 		c.save();
 		c.translate(getScrollX(), 0);
 		//c.clipRect(area); no clipRect used. the first label goes few pixels above the top
@@ -129,7 +138,7 @@ public class CalendarVisualizer extends HorizontalScrollView implements Reservat
 		textPaint.setTextSize(smallTextSize);
 		float padding = width / 8;
 		float x = width - padding;
-		final String minuteStr = "00"; 
+		final String minuteStr = "00";
 		float minutesWidth = textPaint.measureText(minuteStr); //minutes are drawn separately with smaller font
 		for(int minutes = dayStartTime; minutes < dayEndTime; minutes += 60){
 			float timeY = getProportionalY(0,minutes) * height;
@@ -154,7 +163,7 @@ public class CalendarVisualizer extends HorizontalScrollView implements Reservat
 		for(int i = 0; i < dayLabels.length; i++) {
 			float x = i * dayWidth + textSize / 2;
 			if(weekLabels[i] != null){
-				c.drawText(weekLabels[i], x, weekLabelY, textPaint);
+				c.drawText(weekLabels[i], x, weekLabelY, weekTextPaint);
 			}
 			c.drawText(dayLabels[i], x, dayLabelY, textPaint);
 		}
@@ -182,8 +191,8 @@ public class CalendarVisualizer extends HorizontalScrollView implements Reservat
 				j += 8;
 				//top-left * 2, top-right, bottom-left, bottom-right * 2
 				// *2 makes reservation connecting triangles zero area
-				
-				
+
+
 				//top-left * 2, top-right, bottom-left, bottom-right * 2
 				// *2 makes reservation connecting triangles zero area
 				int p = 6 * i;
@@ -205,8 +214,8 @@ public class CalendarVisualizer extends HorizontalScrollView implements Reservat
 		c.save();
 		c.clipRect(area.left + getScrollX(), area.top, area.right + getScrollX(), area.bottom);
 		c.translate(area.left, area.top);
-		
-		
+
+
 		for(int i = 0; i < dayLabels.length; i++) {
 			c.drawLine(i * dayWidth, 0, i * dayWidth, height, gridPaint);
 		}
@@ -214,7 +223,7 @@ public class CalendarVisualizer extends HorizontalScrollView implements Reservat
 			float y = getProportionalY(0, minutes) * height;
 			c.drawLine(0, y, contentFrame.getWidth(), y, gridPaint);
 		}
-		
+
 		c.restore();
 	}
 	private void drawReservationSubjects(Canvas c, RectF area){
@@ -224,8 +233,8 @@ public class CalendarVisualizer extends HorizontalScrollView implements Reservat
 		c.save();
 		c.clipRect(area.left + getScrollX(), area.top, area.right + getScrollX(), area.bottom);
 		c.translate(area.left, area.top);
-		
-		
+
+
 		for(Reservation r : reservations){
 			c.drawText(r.getSubject(), getXForTime(r.getStartTime()) + padding,getProportionalY(r.getStartTime())*height + textHeight + padding, textPaint);
 		}
@@ -256,7 +265,7 @@ public class CalendarVisualizer extends HorizontalScrollView implements Reservat
 		timeLabelRect = new RectF(0, headerHeight, timeLabelWidth, getHeight());
 		calendarAreaRect = new RectF(timeLabelWidth, headerHeight, getWidth(), getHeight());
 		headerRect = new RectF(timeLabelWidth, 0, getWidth(), headerHeight);
-		textPaint.setAntiAlias(true);
+
 		drawDayHeaders(c, headerRect);
 		drawCalendarLines(c, calendarAreaRect);
 		drawCalendarReservations(c, calendarAreaRect);
@@ -269,7 +278,7 @@ public class CalendarVisualizer extends HorizontalScrollView implements Reservat
 	private int getDaysFromStart(DateTime day) {
 		return day.subtract(getFirstDayToShow(), Calendar.DAY_OF_YEAR);
 	}
-	
+
 	private float getProportionalY(DateTime time){
 		return getProportionalY(time.get(Calendar.HOUR_OF_DAY), time.get(Calendar.MINUTE));
 	}
@@ -298,7 +307,7 @@ public class CalendarVisualizer extends HorizontalScrollView implements Reservat
 				end = touchedTime.setTime(dayEndTime / 60, dayEndTime % 60, 0);
 			}else{
 				end = after.getStartTime();
-			} 
+			}
 			touchedTimeSpan = new TimeSpan(start, end);
 			Log.d("CalendarVisualize", "Calendar visualizer touched time: "
 					+ touchedTime.toGMTString() + "\n timespan: "
@@ -357,7 +366,7 @@ public class CalendarVisualizer extends HorizontalScrollView implements Reservat
 	public TimeSpan getSelectedTimeSpan() {
 		return touchedTimeSpan;
 	}
-	
+
 	private DateTime getFirstDayToShow() {
 		if (reservations.length > 0
 				&& reservations[0].getStartTime().before(firstDayToShow)) {
@@ -370,7 +379,7 @@ public class CalendarVisualizer extends HorizontalScrollView implements Reservat
 	public int getXForTime(DateTime day) {
 		return getDaysFromStart(day)  * dayWidth;
 	}
-	
+
 	@Override
 	public void setOnClickListener(final OnClickListener l){
 		//ScrollView does not produce onClick events, so bind the contentFrame's onClick to fake this ones onClick..
@@ -381,5 +390,5 @@ public class CalendarVisualizer extends HorizontalScrollView implements Reservat
 			}
 		});
 	}
-	
+
 }
