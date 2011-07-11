@@ -56,7 +56,7 @@ def _room(request, ews, room, view_all = False, c = None):
 
 	monday = day - timedelta(day.weekday())
 	nextmonday = monday + timedelta(7)
-	lastmonday = monday - timedelta(7)
+	prevmonday = monday - timedelta(7)
 
 	if not view_all:
 		reservations = [r for r in reservations if r.start.date() >= monday and r.start.date() < nextmonday]
@@ -72,7 +72,7 @@ def _room(request, ews, room, view_all = False, c = None):
 		"view_all": view_all,
 		"monday": monday,
 		"nextmonday": nextmonday.strftime(DATE_FORMAT),
-		"lastmonday": lastmonday.strftime(DATE_FORMAT),
+		"prevmonday": prevmonday.strftime(DATE_FORMAT),
 		})
 
 	return render_to_response("room.html", c, context_instance=RequestContext(request))

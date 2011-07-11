@@ -1,5 +1,4 @@
 function reservator_init(monday, nextmonday) {
-	var date_re = '';
 	var time_re = new RegExp('(\\d\\d):(\\d\\d)');
 
 	var container_div = $('#reservations');
@@ -37,7 +36,7 @@ function reservator_init(monday, nextmonday) {
 		// console.log(start_m, start_x, end_m, end_x);
 
 		// dimensions
-		r.css('width', w/7);
+		r.css('width', w/7-2);
 		r.css('height', end_x - start_x-2);
 
 		r.css('left', w*dow/7);
