@@ -59,7 +59,7 @@ def _room(request, ews, room, view_all = False, c = None):
 	lastmonday = monday - timedelta(7)
 
 	if not view_all:
-		reservations = [r for r in reservations if r.start.date() >= monday and r.end.date() < nextmonday]
+		reservations = [r for r in reservations if r.start.date() >= monday and r.start.date() < nextmonday]
 
 
 	if c is None:

@@ -22,22 +22,24 @@ $futugreen: #3A8203;
 	background: lighten($futugreen, 60%);
 }
 
-span.debug {
-	display: block;
-	font-size: small;
+span.dayofweek, span.debug {
+	display: none;
 }
+
 span.start:after {
 	content: "-";
 }
 span.subject {
+	display: block;
 	font-weight: bold;
 }
 
 .week-calendar {
 	position: relative;
 	width: 100%;
-	height: 600px;
+	height: 720px;
 	overflow: hidden;
+	background: url('../images/calendar-background.png');
 
 	.reservation {
 		position: absolute;

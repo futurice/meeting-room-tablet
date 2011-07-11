@@ -43,10 +43,6 @@ function reservator_init(monday, nextmonday) {
 		r.css('left', w*dow/7);
 		r.css('top', start_x);
 
-		// hidding nonneeded spans
-		debug_span.css('display', 'none');
-		dow_span.css('display', 'none');
-
 		var buttons = {};
 
 		// extra for the cancelable

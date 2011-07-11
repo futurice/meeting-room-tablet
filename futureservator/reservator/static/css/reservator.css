@@ -12,21 +12,22 @@
 .cancelable {
   background: #d7fdba; }
 
-span.debug {
-  display: block;
-  font-size: small; }
+span.dayofweek, span.debug {
+  display: none; }
 
 span.start:after {
   content: "-"; }
 
 span.subject {
+  display: block;
   font-weight: bold; }
 
 .week-calendar {
   position: relative;
   width: 100%;
-  height: 600px;
-  overflow: hidden; }
+  height: 720px;
+  overflow: hidden;
+  background: url("../images/calendar-background.png"); }
   .week-calendar .reservation {
     position: absolute;
     overflow: hidden; }
