@@ -1,3 +1,4 @@
+{% load url from future %}
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html>
     <head>
@@ -9,17 +10,21 @@
         <script src="{{ CDN_URL }}js/jquery.dataTables-1.7.6.min.js"></script>
         <script src="{{ CDN_URL }}js/jquery.default-value-1.0.js"></script>
         <script src="{{ CDN_URL }}js/futuservice.js"></script>
+
+		<link href="{{ STATIC_URL}}css/reservator.css" rel="stylesheet" type="text/css" />
+		<script src="{{ STATIC_URL }}js/reservator.js"></script>
+
 		<title>Reservator &gt; {{ title }}</title>
     </head>
     <body>
         <div id="innerBody">
             <div id="header">
-                <a id="serviceTitle" href="{% url reservator.views.index %}">Reservator</a>
+                <a id="serviceTitle" href="{% url 'index' %}">Reservator</a>
             </div>
             <div id="content">
                 <div class="futu-box">
                     <div class="futu-box-header">
-						{# <a class="futu-box-action" href="#">Some action</a> #}
+						{% block actions %}{% endblock %}
 						<h1>{{ title }}</h1>
                     </div>
 					<div class="futu-box-content">

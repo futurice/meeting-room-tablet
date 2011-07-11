@@ -6,7 +6,7 @@ import base64
 
 from contextlib import closing
 
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, time
 
 # TODO: trace -decorator
 
@@ -47,6 +47,7 @@ find_item_calendar_skeleton = Element(
 			ResponseMessages = ElementList(namespace="m",
 				FindItemResponseMessage = Element(namespace="m",
 					ResponseCode = Element(namespace="m"),
+					MessageText = Element(namespace="m"),
 					RootFolder = Element(namespace="m",
 						Items = ElementList(namespace="t",
 							CalendarItem = Element(namespace="t",
@@ -59,6 +60,16 @@ find_item_calendar_skeleton = Element(
 									Mailbox = Element(namespace="t",
 										Name = Element(namespace="t")))))))))))
 
+delete_item_skeleton = Element(
+	Body = Element(namespace="s",
+		DeleteItemResponse = Element(namespace="m",
+			ResponseMessages = ElementList(namespace="m",
+				DeleteItemResponseMessage = Element(namespace="m",
+					ResponseCode = Element(namespace="m"),
+					MessageText = Element(namespace="m"))))))
+
+class EWSException(Exception):
+	pass
 
 class Room(object):
 	def __init__(self, name, address):
@@ -115,7 +126,7 @@ class EWS(object):
 			# headers resp.getheaders()
 
 			if resp.status != 200:
-				raise Exception, resp.reason
+				raise EWSException, resp.reason
 
 			return resp.read()
 
@@ -153,7 +164,7 @@ class EWS(object):
 		response = parsed["Body"]["GetRoomsResponse"]
 
 		if response["ResponseCode"] != "NoError":
-			raise Exception, "error"
+			raise EWSException, "error"
 
 		return map(lambda x: Room(x["Id"]["Name"], x["Id"]["EmailAddress"]), response["Rooms"])
 
@@ -186,13 +197,34 @@ class EWS(object):
 		# print message
 
 		if message["ResponseCode"] != "NoError":
-			raise Exception, "error"
+			raise EWSException, message["MessageText"]
 
 		def parse_datetime(s):
-			return datetime.strptime(s, utc_timeformat).replace(tzinfo=mtzinfo.utc)
+			return datetime.strptime(s, utc_timeformat).replace(tzinfo=mtzinfo.utc).astimezone(mtzinfo.local)
 
-		# TODO
-		r = map(lambda x: Reservation(x["ItemId"]["Id"], x["ItemId"]["ChangeKey"], parse_datetime(x["Start"]), parse_datetime(x["End"]), x["Subject"], x["Location"]), message["RootFolder"]["Items"])
+		def reservation_parse(x):
+			itemid    = x["ItemId"]["Id"]
+			changekey = x["ItemId"]["ChangeKey"]
+			subject   = x["Subject"]
+			location  = x["Location"]
+
+			start = parse_datetime(x["Start"])
+			end = parse_datetime(x["End"])
+
+			# splitting many-days-spanning reservations
+			acc = []
+			while start.date() != end.date():
+				tmp = datetime.combine(start.date() + timedelta(1), time(0, 0, tzinfo=mtzinfo.local))
+				acc.append(Reservation(itemid, changekey, start, tmp, subject, location))
+				start = tmp
+
+			if start != end:
+				acc.append(Reservation(itemid, changekey, start, end, subject, location))
+
+			return acc
+
+		# Sum, as we could split reservation into many
+		r = sum(map(reservation_parse, message["RootFolder"]["Items"]), [])
 		r.sort(key= lambda x: x.start)
 		return r
 
@@ -201,6 +233,20 @@ class EWS(object):
 
 	def get_own_reservations(self):
 		return self._get_reservations("FindItemCalendarOwn.xml")
+
+	def cancel(self, itemid):
+		tpl = self._get_template('DeleteItem.xml', ItemId=itemid)
+		res = self._http_post(tpl)
+		parsed = xmlol.parseString(res, delete_item_skeleton)
+
+		print tpl
+		print prettyxml(res)
+		print parsed
+
+		message = parsed["Body"]["DeleteItemResponse"]["ResponseMessages"][0]
+
+		if message["ResponseCode"] != "NoError":
+			raise EWSException, message["MessageText"]
 
 
 def django_ews():

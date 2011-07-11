@@ -85,6 +85,7 @@ TEMPLATE_DIRS = (
 
 INSTALLED_APPS = (
 		'reservator',
+		'django.contrib.staticfiles',
     #'django.contrib.auth',
     #'django.contrib.contenttypes',
     #'django.contrib.sessions',
@@ -108,6 +109,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 		"reservator.cdn",
 )
 
+STATIC_URL = "/static/"
 CDN_URL = 'https://cdn.futurice.com/'
 
 RESERVATOR = {

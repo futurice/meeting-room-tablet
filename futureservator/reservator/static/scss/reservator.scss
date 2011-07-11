@@ -1,0 +1,31 @@
+$futugreen: #3A8203;
+
+@mixin border-radius($radius: 2px) {
+	border-radius: $radius;
+	-moz-border-radius: $radius;
+	-khtml-border-radius: $radius;
+	-webkit-border-radius: $radius;
+}
+
+.reservation {
+	margin-bottom: 10px;
+	padding: 2px 10px;
+	border: 1px solid $futugreen;
+	@include border-radius;
+	background: lighten($futugreen, 90%);
+}
+
+.cancelable {
+	background: lighten($futugreen, 70%);
+}
+
+span.debug {
+	display: block;
+	font-size: small;
+}
+span.start:after {
+	content: "-";
+}
+span.subject {
+	font-weight: bold;
+}

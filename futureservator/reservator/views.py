@@ -1,31 +1,35 @@
 from django.shortcuts import render_to_response
 from django.http import Http404
+from django.http import HttpResponseRedirect, HttpResponse
+from django.core.urlresolvers import reverse
+from django.template import RequestContext
 
 from django.conf import settings
 
-from ews import django_ews
+from ews import django_ews, EWSException
 
-def index(response):
-	ews = django_ews()
+from datetime import date, timedelta, datetime
+
+DATE_FORMAT = "%Y-%m-%d"
+
+def _get_room(ews, room_address):
 	rooms = ews.get_rooms()
 
-	c = {"title": "Room list", "rooms": rooms, "CDN_URL": settings.CDN_URL}
-
-	return render_to_response('index.html', c)
-
-def room(response, room_address):
-	ews = django_ews()
-
-	rooms = ews.get_rooms()
-
-	room = None
 	for r in rooms:
 		if r.address == room_address:
-			room = r
+			return r
 
-	if room is None:
-		raise Http404
+	raise Http404
 
+def index(request):
+	ews = django_ews()
+	rooms = ews.get_rooms()
+
+	c = {"title": "Room list", "rooms": rooms}
+
+	return render_to_response('index.html', c, context_instance=RequestContext(request))
+
+def _room(request, ews, room, view_all = False, c = None):
 	reservations = ews.get_reservations(room)
 	own_reservations = ews.get_own_reservations()
 
@@ -42,7 +46,51 @@ def room(response, room_address):
 
 	reservations = acc
 
+	day = date.today()
 
-	c = { "title": room.name, "CDN_URL": settings.CDN_URL, "reservations": reservations}
+	if not view_all:
+		try:
+			day = datetime.strptime(request.GET["day"], DATE_FORMAT).date()
+		except Exception as e:
+			pass
 
-	return render_to_response('room.html', c)
+	monday = day - timedelta(day.weekday())
+	nextmonday = monday + timedelta(7)
+	lastmonday = monday - timedelta(7)
+
+	if not view_all:
+		reservations = [r for r in reservations if r.start.date() >= monday and r.end.date() < nextmonday]
+
+
+	if c is None:
+		c = {}
+
+	c.update({
+		"title": room.name,
+		"room_address": room.address,
+		"reservations": reservations,
+		"view_all": view_all,
+		"monday": monday,
+		"nextmonday": nextmonday.strftime(DATE_FORMAT),
+		"lastmonday": lastmonday.strftime(DATE_FORMAT),
+		})
+
+	return render_to_response("room.html", c, context_instance=RequestContext(request))
+
+def reservations(request, room_address, view_all = False):
+	ews = django_ews()
+	room = _get_room(ews, room_address)
+	return _room(request, ews, room, view_all)
+
+
+def cancel(request, room_address):
+	ews = django_ews()
+
+	room = _get_room(ews, room_address)
+
+	try:
+		ews.cancel(request.POST["itemid"])
+	except (KeyError, EWSException) as e:
+		return _room(request, ews, room, True, { "error_message": str(e) })
+
+	return HttpResponseRedirect(reverse("reservator.views.room", args=(room_address,)))

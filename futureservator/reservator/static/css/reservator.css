@@ -1,0 +1,22 @@
+.reservation {
+  margin-bottom: 10px;
+  padding: 2px 10px;
+  border: 1px solid #3a8203;
+  border-radius: 2px;
+  -moz-border-radius: 2px;
+  -khtml-border-radius: 2px;
+  -webkit-border-radius: 2px;
+  background: white; }
+
+.cancelable {
+  background: #f4ffeb; }
+
+span.debug {
+  display: block;
+  font-size: small; }
+
+span.start:after {
+  content: "-"; }
+
+span.subject {
+  font-weight: bold; }
