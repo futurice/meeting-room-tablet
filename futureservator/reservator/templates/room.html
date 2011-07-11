@@ -1,0 +1,15 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+
+<h2>Room reservations</h2>
+{% for r in reservations %}
+{{ r|pprint }}
+<form>
+	<input type="submit" value="Cancel" />
+</form>
+
+<br />
+{% endfor %}
+
+{% endblock %}

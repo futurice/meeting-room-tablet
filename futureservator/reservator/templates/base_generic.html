@@ -1,0 +1,34 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+    <head>
+        <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+        <link href="{{ CDN_URL }}css/jquery-ui-1.8.4.css" rel="stylesheet" type="text/css"/>
+        <link href="{{ CDN_URL }}css/futuservice.css" rel="stylesheet" type="text/css"/>
+        <script src="{{ CDN_URL }}js/jquery-1.5.2.min.js"></script>
+        <script src="{{ CDN_URL }}js/jquery-ui-1.8.4.min.js"></script>
+        <script src="{{ CDN_URL }}js/jquery.dataTables-1.7.6.min.js"></script>
+        <script src="{{ CDN_URL }}js/jquery.default-value-1.0.js"></script>
+        <script src="{{ CDN_URL }}js/futuservice.js"></script>
+		<title>Reservator &gt; {{ title }}</title>
+    </head>
+    <body>
+        <div id="innerBody">
+            <div id="header">
+                <a id="serviceTitle" href="{% url reservator.views.index %}">Reservator</a>
+            </div>
+            <div id="content">
+                <div class="futu-box">
+                    <div class="futu-box-header">
+						{# <a class="futu-box-action" href="#">Some action</a> #}
+						<h1>{{ title }}</h1>
+                    </div>
+					<div class="futu-box-content">
+						{% block content%}
+						{% endblock %}
+                    </div>
+                </div>
+            </div>
+            <!-- END content -->
+        </div>
+    </body>
+</html>
