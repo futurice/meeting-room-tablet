@@ -93,4 +93,4 @@ def cancel(request, room_address):
 	except (KeyError, EWSException) as e:
 		return _room(request, ews, room, True, { "error_message": str(e) })
 
-	return HttpResponseRedirect(reverse("reservator.views.room", args=(room_address,)))
+	return HttpResponseRedirect(reverse("reservations", kwargs={"room_address": room_address}))

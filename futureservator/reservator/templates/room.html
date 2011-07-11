@@ -17,19 +17,22 @@
 <div id="reservations">
 {% for r in reservations %}
 <div class="reservation{% if r.linked %} cancelable{% endif %}">
-	<span class="date">{{ r.start|date }}</span>
-	<span class="start">{{ r.start|time:"H:i" }}</span><span class="end">{{ r.end|time:"H:i" }}</span>
+	<div class="inner">
 	<span class="subject">{{ r.subject|escape }}</span>
+	<span class="date">{{ r.start|date:"Y-m-d" }}</span>
+	<span class="dayofweek">{{ r.start|date:"w" }}</span>
+	<span class="start">{{ r.start|time:"H:i" }}</span><span class="end">{{ r.end|time:"H:i" }}</span>
 	<span class="debug">{{ r|pprint }}</span>
-{% if r.linked %}
-<form action="{% url 'cancel' room_address %}" method="post">
-{% csrf_token %}
-	<div>
-		<input type="hidden" name="itemid" value="{{ r.linked.id }}" />
-		<input type="submit" value="Cancel" />
-	</div>
-</form>
-{% endif %}
+	{% if r.linked %}
+	<form action="{% url 'cancel' room_address %}" method="post">
+		{% csrf_token %}
+		<div>
+			<input type="hidden" name="itemid" value="{{ r.linked.id }}" />
+			<input type="submit" value="Cancel" />
+		</div>
+	</form>
+	{% endif %}
+</div>
 </div>
 {% endfor %}
 </div>
