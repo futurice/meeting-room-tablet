@@ -1,6 +1,8 @@
 import xml.sax
 import xml.sax.handler
 
+from pprint import pprint
+
 # TODO: logging
 
 __all__ = ["Element", "ElementList", "parseString"]
@@ -60,7 +62,7 @@ class XmlToPyHandlerSchema(xml.sax.handler.ContentHandler):
 
 		if type(skeleton) == Element:
 			if skeleton.children == {} and skeleton.attributes == []:
-				obj = ""
+				obj = u""
 
 			elif skeleton.attributes != []:
 				obj = {}
@@ -106,10 +108,10 @@ class XmlToPyHandlerSchema(xml.sax.handler.ContentHandler):
 		if content.strip() == "" or self.current_skeleton is None:
 			return
 
-		if type(self.current_obj) != str:
-			raise Exception, "current object is not a string"
+		if type(self.current_obj) != unicode:
+			raise Exception, "current object is not a string -- " + self.current_skeleton.name
 
-		self.current_obj = content.strip()
+		self.current_obj = unicode(content.strip())
 
 
 def parseString(string, schema):

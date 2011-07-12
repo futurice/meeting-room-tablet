@@ -206,7 +206,10 @@ class EWS(object):
 			itemid    = x["ItemId"]["Id"]
 			changekey = x["ItemId"]["ChangeKey"]
 			subject   = x["Subject"]
-			location  = x["Location"]
+			try:
+				location  = x["Location"]
+			except KeyError:
+				location = ""
 
 			start = parse_datetime(x["Start"])
 			end = parse_datetime(x["End"])
@@ -239,9 +242,9 @@ class EWS(object):
 		res = self._http_post(tpl)
 		parsed = xmlol.parseString(res, delete_item_skeleton)
 
-		print tpl
-		print prettyxml(res)
-		print parsed
+		#print tpl
+		#print prettyxml(res)
+		#print parsed
 
 		message = parsed["Body"]["DeleteItemResponse"]["ResponseMessages"][0]
 
