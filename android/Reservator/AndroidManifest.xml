@@ -14,9 +14,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="RoomActivity" android:screenOrientation="landscape"></activity>
+        <activity android:name="RoomActivity"></activity>
         <activity android:name="SettingsActivity"></activity>
-        <activity android:name="LobbyActivity" android:screenOrientation="landscape"></activity>
+        <activity android:name="LobbyActivity"></activity>
         <activity android:name=".view.RoomReservationPopup" android:theme="@style/Theme.Transparent"></activity>
 
     </application>
