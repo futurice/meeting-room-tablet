@@ -68,7 +68,7 @@ public class FumAddressBook extends AddressBook {
 		UsernamePasswordCredentials credentials = new UsernamePasswordCredentials(user, password);
 		httpclient.getCredentialsProvider().setCredentials(AuthScope.ANY, credentials);
 
-		HttpGet httpGet = new HttpGet("https://fum3.futurice.com/api/group/Futurice/?username=ogre");
+		HttpGet httpGet = new HttpGet("https://fum3.futurice.com/api/group/Futurice/?username=itteam&include=uniqueMember");
 
 		//httpGet.setHeader("Content-Type","text/xml; charset=utf-8");
 
