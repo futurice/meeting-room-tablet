@@ -30,6 +30,7 @@ import android.view.MenuItem.OnMenuItemClickListener;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.TextView;
 
 public class RoomActivity extends Activity implements OnMenuItemClickListener,
@@ -63,6 +64,7 @@ public class RoomActivity extends Activity implements OnMenuItemClickListener,
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.room_activity);
+		this.getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN | WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 		this.weekView = (WeekView) findViewById(R.id.weekView1);
 		this.roomNameLabel = (TextView) findViewById(R.id.roomNameLabel);
 		try {

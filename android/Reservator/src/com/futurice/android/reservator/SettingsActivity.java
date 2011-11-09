@@ -35,7 +35,7 @@ public class SettingsActivity extends Activity {
 		editor = settings.edit();
 
 		serverAddressView = (EditText) findViewById(R.id.serverAddressEdit);
-		serverAddressView.setText(settings.getString(getString(R.string.PREFERENCES_SERVER_ADDRESS), "10.4.2.214"));
+		serverAddressView.setText(settings.getString(getString(R.string.PREFERENCES_SERVER_ADDRESS), "mail.futurice.com"));
 		
 		findViewById(R.id.removeUserDataButton).setOnClickListener(new OnClickListener() {
 			@Override
