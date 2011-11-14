@@ -55,6 +55,24 @@ public abstract class DataProxy {
 	}
 	
 	/**
+	 * Returns an array of all room names
+	 * @return array of all room names
+	 * @throws ReservatorException
+	 */
+	public String[] getRoomNames() throws ReservatorException{
+		Vector<Room> rooms = getRooms();
+		String[] roomNames = new String[rooms.size()];
+		int ind = 0;
+		Iterator<Room> it = rooms.iterator();
+		while(it.hasNext()){
+			Room room = it.next();
+			roomNames[ind] = room.getName();
+			ind ++;
+		}
+		return roomNames;
+	}
+	
+	/**
 	 * Asynchronously request room's reservations and updates them to the room object.
 	 * Listener's roomReservationsUpdated is called when done.
 	 */
