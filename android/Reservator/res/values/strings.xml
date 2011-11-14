@@ -21,8 +21,10 @@
     <string name="onlyItTeamShouldModify">Only IT team should modify these settings.</string>
     <string name="seeAllRooms">See all rooms</string>
     <string name="exchange_server_address">Exchange server address</string>
+    <string name="room_name">Name of the default room</string>
     <string name="PREFERENCES_NAME">ReservatorPreferences</string>
     <string name="PREFERENCES_SERVER_ADDRESS">serverAddress</string>
+    <string name="PREFERENCES_ROOM_NAME">roomName</string>
     <string name="PREFERENCES_USERNAME">username</string>
     <string name="PREFERENCES_PASSWORD">password</string>
     <string name="removeUserData">Remove login info</string>

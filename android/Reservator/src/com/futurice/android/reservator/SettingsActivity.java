@@ -20,6 +20,7 @@ import com.futurice.android.reservator.model.Room;
 public class SettingsActivity extends Activity {
 	Editor editor;
 	EditText serverAddressView;
+	EditText roomNameView;
 	List<Room> rooms = new ArrayList<Room>();
 	SharedPreferences settings;
 	@Override
@@ -36,6 +37,8 @@ public class SettingsActivity extends Activity {
 
 		serverAddressView = (EditText) findViewById(R.id.serverAddressEdit);
 		serverAddressView.setText(settings.getString(getString(R.string.PREFERENCES_SERVER_ADDRESS), "mail.futurice.com"));
+		roomNameView = (EditText) findViewById(R.id.roomNameEdit);
+		roomNameView.setText(settings.getString(getString(R.string.PREFERENCES_ROOM_NAME), ""));		
 		
 		findViewById(R.id.removeUserDataButton).setOnClickListener(new OnClickListener() {
 			@Override
@@ -71,7 +74,9 @@ public class SettingsActivity extends Activity {
 	public void onPause(){
 		// TODO: save button?
 		String serverAddress = serverAddressView.getText().toString().trim();
+		String roomName = roomNameView.getText().toString().trim();
 		editor.putString(getString(R.string.PREFERENCES_SERVER_ADDRESS), serverAddress);
+		editor.putString(getString(R.string.PREFERENCES_ROOM_NAME), roomName);
 		editor.commit();
 
 		// update proxy

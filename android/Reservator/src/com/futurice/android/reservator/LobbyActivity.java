@@ -24,11 +24,13 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MenuItem.OnMenuItemClickListener;
+import android.view.View;
 import android.view.Window;
 import android.widget.DigitalClock;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
-public class LobbyActivity extends Activity implements OnMenuItemClickListener,
+public class LobbyActivity extends ReservatorActivity implements OnMenuItemClickListener,
 		DataUpdatedListener {
 	MenuItem settingsMenu, refreshMenu;
 	LinearLayout container = null;
@@ -48,6 +50,10 @@ public class LobbyActivity extends Activity implements OnMenuItemClickListener,
 		}
 	};
 
+	public ReservatorApplication getResApplication(){
+		return (ReservatorApplication) getApplication();
+	}
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -75,7 +81,7 @@ public class LobbyActivity extends Activity implements OnMenuItemClickListener,
 			progressDialog = null;
 		}
 	}
-
+	
 	private void refreshRoomInfo() {
 		showLoading();
 		container = (LinearLayout) findViewById(R.id.linearLayout1);

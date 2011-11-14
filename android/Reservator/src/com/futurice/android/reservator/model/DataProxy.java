@@ -1,6 +1,7 @@
 package com.futurice.android.reservator.model;
 
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
 import java.util.Vector;
 
@@ -17,7 +18,7 @@ public abstract class DataProxy {
 	 * @throws ReservatorException
 	 */
 	abstract public Vector<Room> getRooms() throws ReservatorException;
-
+	
 	/**
 	 * Synchronously get a list of reservations mapped to a room. The reservations are not updated to the room.
 	 * Listeners are not notified when done.
@@ -35,6 +36,24 @@ public abstract class DataProxy {
 		new RoomListRefreshTask().execute();
 	}
 
+	/**
+	 * Synchronously gets a rooms with its name. Listeners are not notified when done.
+	 * @param roomName. The room name to look for
+	 * @return the room matching roomName or null
+	 * @throws ReservatorException
+	 */
+	public Room getRoomWithName(String roomName) throws ReservatorException{
+		Vector<Room> rooms = getRooms();
+		Iterator<Room> it = rooms.iterator();
+		while(it.hasNext()){
+			Room room = it.next();
+			if (room.getName().equals(roomName)){
+				return room;
+			}
+		}
+		throw new ReservatorException("Can't find room " + roomName);
+	}
+	
 	/**
 	 * Asynchronously request room's reservations and updates them to the room object.
 	 * Listener's roomReservationsUpdated is called when done.

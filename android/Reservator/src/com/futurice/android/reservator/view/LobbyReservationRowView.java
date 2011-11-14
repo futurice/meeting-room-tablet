@@ -170,7 +170,7 @@ public class LobbyReservationRowView extends FrameLayout implements
 			reserveButton.setEnabled(false);
 			makeReservation();
 		} else if (v == calendarButton || v == titleView) {
-			showRoomInCalendar();
+			RoomActivity.startWith(getContext(), getRoom());
 		}
 	}
 
@@ -297,12 +297,6 @@ public class LobbyReservationRowView extends FrameLayout implements
 
 	public void setOnReserveCallback(OnReserveListener onReserveCallback) {
 		this.onReserveCallback = onReserveCallback;
-	}
-
-	private void showRoomInCalendar() {
-		Intent i = new Intent(getContext(), RoomActivity.class);
-		i.putExtra(RoomActivity.ROOM_EXTRA, room);
-		getContext().startActivity(i);
 	}
 
 	public void setOnCancellListener(OnCancellListener l){

@@ -20,6 +20,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.app.AlertDialog.Builder;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -33,7 +34,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.TextView;
 
-public class RoomActivity extends Activity implements OnMenuItemClickListener,
+public class RoomActivity extends ReservatorActivity implements OnMenuItemClickListener,
 		DataUpdatedListener {
 	public static final String ROOM_EXTRA = "room";
 
@@ -131,8 +132,20 @@ public class RoomActivity extends Activity implements OnMenuItemClickListener,
 				d.show();
 			}
 		});
+		// We don't want to automatically change room if this is already the right activity
+		ReservatorApplication app = ((ReservatorApplication) getApplication());
+		String favouriteRoomName = app.getSettingValue(R.string.PREFERENCES_ROOM_NAME, "");
+		if (currentRoom.getName().equals(favouriteRoomName)){
+			prehensible = false;
+		}
 	}
 
+	public static void startWith(Context context, Room room) {
+		Intent i = new Intent(context, RoomActivity.class);
+		i.putExtra(ROOM_EXTRA, room);
+		context.startActivity(i);
+	}
+	
 	@Override
 	public void onResume() {
 		proxy = ((ReservatorApplication) getApplication()).getDataProxy();
@@ -148,6 +161,11 @@ public class RoomActivity extends Activity implements OnMenuItemClickListener,
 				.removeDataUpdatedListener(this);
 	}
 
+	@Override
+	public void onPrehended() {
+		this.finish();
+	}
+	
 	private void setRoom(Room r) {
 		currentRoom = r;
 		roomNameLabel
