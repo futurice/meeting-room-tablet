@@ -8,22 +8,7 @@
       <ItemShape>
         <t:BaseShape>AllProperties</t:BaseShape>
       </ItemShape>
-	  <Restriction>
-		  <And xmlns="http://schemas.microsoft.com/exchange/services/2006/types">
-			<IsGreaterThanOrEqualTo>
-				<FieldURI FieldURI="calendar:Start" />
-				<FieldURIOrConstant>
-					<Constant Value="{StartTime}"/>
-				</FieldURIOrConstant>
-			</IsGreaterThanOrEqualTo>
-			<IsLessThanOrEqualTo>
-				<FieldURI FieldURI="calendar:End" />
-				<FieldURIOrConstant>
-					<Constant Value="{EndTime}"/>
-				</FieldURIOrConstant>
-			</IsLessThanOrEqualTo>
-		</And>
-      </Restriction>
+      <CalendarView MaxEntriesReturned="9999" StartDate="{StartTime}" EndDate="{EndTime}" />
       <ParentFolderIds>
 		  <t:DistinguishedFolderId Id="calendar">
 		  	<t:Mailbox>
