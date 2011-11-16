@@ -68,7 +68,10 @@ public class SettingsActivity extends Activity {
 		roomNameView = (Spinner) findViewById(R.id.roomNameSpinner);
 		String roomName = settings.getString(getString(R.string.PREFERENCES_ROOM_NAME), "");
 		ArrayAdapter<String> adapter = (ArrayAdapter<String>) roomNameView.getAdapter();
-		int spinnerPosition = adapter.getPosition(roomName);
+		int spinnerPosition = 0;
+		if (adapter != null){
+			spinnerPosition = adapter.getPosition(roomName);
+		}
 		roomNameView.setSelection(spinnerPosition);
 		
 		// Setup button for removing log
@@ -107,7 +110,11 @@ public class SettingsActivity extends Activity {
 		// TODO: save button?
 		// Save the settings
 		String serverAddress = serverAddressView.getText().toString().trim();
-		String roomName = roomNameView.getSelectedItem().toString().trim();
+		Object selectedRoomName = roomNameView.getSelectedItem();
+		String roomName = "";
+		if (selectedRoomName != null){
+			roomName = selectedRoomName.toString().trim();
+		}
 		editor.putString(getString(R.string.PREFERENCES_SERVER_ADDRESS), serverAddress);
 		editor.putString(getString(R.string.PREFERENCES_ROOM_NAME), roomName);
 		editor.commit();

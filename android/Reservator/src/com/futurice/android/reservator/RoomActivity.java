@@ -34,6 +34,7 @@ import android.view.View.OnClickListener;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class RoomActivity extends ReservatorActivity implements OnMenuItemClickListener,
 		DataUpdatedListener {
@@ -212,7 +213,7 @@ public class RoomActivity extends ReservatorActivity implements OnMenuItemClickL
 	}
 	
 	private void startAutoRefreshData(){
-		handler.postDelayed(refreshDataRunnable, 100000);
+		handler.postDelayed(refreshDataRunnable, 60000);
 	}
 	
 	private void stopAutoRefreshData(){
@@ -264,10 +265,12 @@ public class RoomActivity extends ReservatorActivity implements OnMenuItemClickL
 
 	@Override
 	public void refreshFailed(ReservatorException e) {
-		Builder alertBuilder = new AlertDialog.Builder(this);
-		alertBuilder.setTitle("Error")
-			.setMessage(e.getMessage())
-			.show();
 		hideLoading();
+		stopAutoRefreshData();
+		Toast err = Toast.makeText(this, e.getMessage(),
+				Toast.LENGTH_LONG);
+		err.show();
+		startAutoRefreshData();
+		return;
 	}
 }

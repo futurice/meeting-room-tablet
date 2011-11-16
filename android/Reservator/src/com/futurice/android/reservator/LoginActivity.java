@@ -53,8 +53,6 @@ public class LoginActivity extends Activity implements OnClickListener, OnMenuIt
 		DataProxy dataProxy = ((ReservatorApplication) getApplication())
 				.getDataProxy();
 		try {
-			username = "reserve@futurice.com"; // TODO: for debugging, remove before delivery
-			password = "Ig1hCMzSnz";
 			dataProxy.setCredentials(username, password);
 			dataProxy.getRooms(); // checks the credentials with room query
 			SharedPreferences preferences = getSharedPreferences(
