@@ -41,15 +41,6 @@ public class LobbyActivity extends ReservatorActivity implements OnMenuItemClick
 
 	final Handler handler = new Handler();
 
-	final Runnable updateRoomsRunnable = new Runnable() {
-		@Override
-		public void run() {
-			Log.v("Refresh", "refreshing room info");
-			refreshRoomInfo();
-			handler.postDelayed(updateRoomsRunnable, 10*60000); // update after 10minutes
-		}
-	};
-
 	public ReservatorApplication getResApplication(){
 		return (ReservatorApplication) getApplication();
 	}
@@ -62,7 +53,6 @@ public class LobbyActivity extends ReservatorActivity implements OnMenuItemClick
 		proxy = ((ReservatorApplication) getApplication()).getDataProxy();
 		DigitalClock clock =  (DigitalClock)findViewById(R.id.digitalClock1);
         clock.setTypeface(Typeface.createFromAsset(getAssets(), "fonts/EHSMB.TTF"));
-		// handler.postDelayed(updateRoomsRunnable, 10*60000); // update after 10minutes
 	}
 
 	@Override

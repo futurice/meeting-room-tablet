@@ -3,6 +3,7 @@ package com.futurice.android.reservator.model;
 import java.util.Vector;
 
 import android.util.Log;
+import android.widget.Toast;
 
 import com.futurice.android.reservator.common.CacheMap;
 
@@ -61,6 +62,15 @@ public class CachedDataProxy extends DataProxy {
 		clearCache();
 	}
 
+	/**
+	 * Force Refreshing the room, clearing the cached data for that room if it exists.
+	 * @param room
+	 */
+	public void forceRefreshRoomReservations(Room room){
+		this.reservationCache.remove(room.getEmail());
+		this.refreshRoomReservations(room);
+	}
+	
 	public void clearCache() {
 		this.rooms = null;
 		this.reservationCache.clear();

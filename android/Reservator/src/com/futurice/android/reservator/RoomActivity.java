@@ -3,6 +3,7 @@ package com.futurice.android.reservator;
 import java.util.Calendar;
 import java.util.Vector;
 
+import com.futurice.android.reservator.model.CachedDataProxy;
 import com.futurice.android.reservator.model.DataProxy;
 import com.futurice.android.reservator.model.DataUpdatedListener;
 import com.futurice.android.reservator.model.DateTime;
@@ -50,13 +51,12 @@ public class RoomActivity extends ReservatorActivity implements OnMenuItemClickL
 	int showLoadingCount = 0;
 
 	final Handler handler = new Handler();
-
-	final Runnable updateRoomsRunnable = new Runnable() {
+	final Runnable refreshDataRunnable = new Runnable() {
 		@Override
 		public void run() {
 			Log.v("Refresh", "refreshing room info");
 			refreshData();
-			handler.postDelayed(updateRoomsRunnable, 10*60000); // update after 10minutes
+			startAutoRefreshData();
 		}
 	};
 
@@ -140,6 +140,11 @@ public class RoomActivity extends ReservatorActivity implements OnMenuItemClickL
 		}
 	}
 
+	/**
+	 * Helper for starting a RoomActivity 
+	 * @param context
+	 * @param room
+	 */
 	public static void startWith(Context context, Room room) {
 		Intent i = new Intent(context, RoomActivity.class);
 		i.putExtra(ROOM_EXTRA, room);
@@ -151,11 +156,13 @@ public class RoomActivity extends ReservatorActivity implements OnMenuItemClickL
 		proxy = ((ReservatorApplication) getApplication()).getDataProxy();
 		proxy.addDataUpdatedListener(this);
 		refreshData();
+		startAutoRefreshData();
 		super.onResume();
 	}
 
 	@Override
 	public void onPause() {
+		stopAutoRefreshData();
 		super.onPause();
 		((ReservatorApplication) getApplication()).getDataProxy()
 				.removeDataUpdatedListener(this);
@@ -193,11 +200,25 @@ public class RoomActivity extends ReservatorActivity implements OnMenuItemClickL
 		return true;
 	}
 
+	public void onUserInteraction() {
+		super.onUserInteraction();
+		stopAutoRefreshData();
+		startAutoRefreshData();
+	}
+	
 	private void refreshData() {
 		showLoading();
-		proxy.refreshRoomReservations(currentRoom);
+		((CachedDataProxy) proxy).forceRefreshRoomReservations(currentRoom);
 	}
-
+	
+	private void startAutoRefreshData(){
+		handler.postDelayed(refreshDataRunnable, 100000);
+	}
+	
+	private void stopAutoRefreshData(){
+		handler.removeCallbacks(refreshDataRunnable);
+	}
+	
 	private void showLoading() {
 		showLoadingCount++;
 		if (this.progressDialog == null) {

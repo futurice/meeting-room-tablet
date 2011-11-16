@@ -28,16 +28,9 @@ public abstract class DataProxy {
 	abstract public Vector<Reservation> getRoomReservations(Room r) throws ReservatorException;
 
 	private Set<DataUpdatedListener> listeners = new HashSet<DataUpdatedListener>();
-	/**
-	 * Asynchronously request a room list refresh.
-	 * Listener's roomListUpdated is called when done.
-	 */
-	public void refreshRooms(){
-		new RoomListRefreshTask().execute();
-	}
 
 	/**
-	 * Synchronously gets a rooms with its name. Listeners are not notified when done.
+	 * Synchronously gets a room with its name. Listeners are not notified when done.
 	 * @param roomName. The room name to look for
 	 * @return the room matching roomName or null
 	 * @throws ReservatorException
@@ -70,6 +63,14 @@ public abstract class DataProxy {
 			ind ++;
 		}
 		return roomNames;
+	}
+	
+	/**
+	 * Asynchronously request a room list refresh.
+	 * Listener's roomListUpdated is called when done.
+	 */
+	public void refreshRooms(){
+		new RoomListRefreshTask().execute();
 	}
 	
 	/**

@@ -14,6 +14,14 @@ public class ReservatorActivity extends Activity {
 	
 	protected Boolean prehensible = true;
 	
+	private final ReservatorAppHandler handler = new ReservatorAppHandler();
+	class ReservatorAppHandler extends Handler{
+		@Override
+		public void handleMessage(Message msg){
+			return;
+		}
+	}
+	
 	private GoToFavouriteRoom goToFavouriteRoomRunable;
 	class GoToFavouriteRoom implements Runnable {
 		
@@ -31,7 +39,7 @@ public class ReservatorActivity extends Activity {
 			try {
 				room = app.getDataProxy().getRoomWithName(roomName);
 			} catch (ReservatorException ex) {
-				Toast err = Toast.makeText(app, ex.getMessage(),
+				Toast err = Toast.makeText(activity, ex.getMessage(),
 						Toast.LENGTH_LONG);
 				err.show();
 				return;
@@ -42,14 +50,6 @@ public class ReservatorActivity extends Activity {
 		
 	}
 	
-	private final ReservatorAppHandler handler = new ReservatorAppHandler();
-	class ReservatorAppHandler extends Handler{
-		@Override
-		public void handleMessage(Message msg){
-			return;
-		}
-	}
-	
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		goToFavouriteRoomRunable = new GoToFavouriteRoom(this);
@@ -57,29 +57,29 @@ public class ReservatorActivity extends Activity {
 		
 	public void onResume() {
 		super.onResume();		
-		startTimer();
+		startAutoGoToFavouriteRoom();
 	}
 	
 	public void onPause() {
 		super.onPause();
-		stopTimer();
+		stopAutoGoToFavouriteRoom();
 	}
 	
 	public void onPrehended() {}
 	
 	public void onUserInteraction() {
 		super.onUserInteraction();
-		stopTimer();
-		startTimer();
+		stopAutoGoToFavouriteRoom();
+		startAutoGoToFavouriteRoom();
 	}
 	
-	private void startTimer() {
+	private void startAutoGoToFavouriteRoom() {
 		if (prehensible){
-			handler.postDelayed(goToFavouriteRoomRunable, 60000);
+			handler.postDelayed(goToFavouriteRoomRunable, 100000);
 		}
 	}
 	
-	private void stopTimer() {
+	private void stopAutoGoToFavouriteRoom() {
 		if (prehensible){
 			handler.removeCallbacks(goToFavouriteRoomRunable);
 		}
