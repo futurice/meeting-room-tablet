@@ -17,9 +17,10 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class LoginActivity extends Activity implements OnClickListener, OnMenuItemClickListener {
+public class LoginActivity extends ReservatorActivity implements OnClickListener, OnMenuItemClickListener {
+	
 	MenuItem settingsMenu;
-
+	
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -49,9 +50,9 @@ public class LoginActivity extends Activity implements OnClickListener, OnMenuIt
 	}
 
 	private boolean login(String username, String password) {
-
-		DataProxy dataProxy = ((ReservatorApplication) getApplication())
-				.getDataProxy();
+		username = "reserve@futurice.com";// TODO: REMOVE
+		password = "Ig1hCMzSnz";
+		DataProxy dataProxy = this.getResApplication().getDataProxy();
 		try {
 			dataProxy.setCredentials(username, password);
 			dataProxy.getRooms(); // checks the credentials with room query

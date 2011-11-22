@@ -133,12 +133,6 @@ public class RoomActivity extends ReservatorActivity implements OnMenuItemClickL
 				d.show();
 			}
 		});
-		// We don't want to automatically change room if this is already the right activity
-		ReservatorApplication app = ((ReservatorApplication) getApplication());
-		String favouriteRoomName = app.getSettingValue(R.string.PREFERENCES_ROOM_NAME, "");
-		if (currentRoom.getName().equals(favouriteRoomName)){
-			prehensible = false;
-		}
 	}
 
 	/**
@@ -154,7 +148,7 @@ public class RoomActivity extends ReservatorActivity implements OnMenuItemClickL
 	
 	@Override
 	public void onResume() {
-		proxy = ((ReservatorApplication) getApplication()).getDataProxy();
+		proxy = this.getResApplication().getDataProxy();
 		proxy.addDataUpdatedListener(this);
 		refreshData();
 		startAutoRefreshData();
@@ -165,13 +159,7 @@ public class RoomActivity extends ReservatorActivity implements OnMenuItemClickL
 	public void onPause() {
 		stopAutoRefreshData();
 		super.onPause();
-		((ReservatorApplication) getApplication()).getDataProxy()
-				.removeDataUpdatedListener(this);
-	}
-
-	@Override
-	public void onPrehended() {
-		this.finish();
+		this.getResApplication().getDataProxy().removeDataUpdatedListener(this);
 	}
 	
 	private void setRoom(Room r) {
@@ -205,6 +193,17 @@ public class RoomActivity extends ReservatorActivity implements OnMenuItemClickL
 		super.onUserInteraction();
 		stopAutoRefreshData();
 		startAutoRefreshData();
+	}
+	
+	@Override
+	protected Boolean isPrehensible() {
+		String favouriteRoomName = getResApplication().getFavouriteRoomName();
+		return !(currentRoom.getName().equals(favouriteRoomName));
+	}
+	
+	@Override
+	public void onPrehended(){
+		this.finish();
 	}
 	
 	private void refreshData() {

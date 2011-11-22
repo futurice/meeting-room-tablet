@@ -40,17 +40,13 @@ public class LobbyActivity extends ReservatorActivity implements OnMenuItemClick
 	int showLoadingCount = 0;
 
 	final Handler handler = new Handler();
-
-	public ReservatorApplication getResApplication(){
-		return (ReservatorApplication) getApplication();
-	}
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		this.setContentView(R.layout.lobby_activity);
-		proxy = ((ReservatorApplication) getApplication()).getDataProxy();
+		proxy = this.getResApplication().getDataProxy();
 		DigitalClock clock =  (DigitalClock)findViewById(R.id.digitalClock1);
         clock.setTypeface(Typeface.createFromAsset(getAssets(), "fonts/EHSMB.TTF"));
 	}
@@ -70,6 +66,12 @@ public class LobbyActivity extends ReservatorActivity implements OnMenuItemClick
 			progressDialog.dismiss();
 			progressDialog = null;
 		}
+	}
+	
+	@Override
+	protected Boolean isPrehensible() {
+		String favouriteRoomName = getResApplication().getFavouriteRoomName();
+		return !(favouriteRoomName.equals(getString(R.string.lobbyRoomName)));
 	}
 	
 	private void refreshRoomInfo() {

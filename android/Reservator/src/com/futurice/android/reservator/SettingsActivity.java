@@ -22,32 +22,32 @@ import com.futurice.android.reservator.model.DataProxy;
 import com.futurice.android.reservator.model.ReservatorException;
 import com.futurice.android.reservator.model.Room;
 
-public class SettingsActivity extends Activity {
+public class SettingsActivity extends ReservatorActivity {
 	Editor editor;
 	EditText serverAddressView;
 	Spinner roomNameView;
-	ReservatorApplication app;
 	DataProxy proxy;
 
 	SharedPreferences settings;
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.settings_activity);
 
-	    app = ((ReservatorApplication) getApplication());
-	    proxy = app.getDataProxy();
+	    proxy = getResApplication().getDataProxy();
 	    
 		// Populates the select box with list of rooms
 	    Spinner spinner = (Spinner) findViewById(R.id.roomNameSpinner);
 	    ArrayAdapter<String> adapter;
-	    String[] roomNames;
+	    ArrayList<String> roomNames;
 	    try {
 	    	roomNames = proxy.getRoomNames();
+	    	roomNames.add(getString(R.string.lobbyRoomName));
 		    adapter = new ArrayAdapter<String>(
 		            this, android.R.layout.simple_spinner_item, roomNames);
 	    } catch (ReservatorException e) {
-			Toast err = Toast.makeText(app, e.getMessage(),
+			Toast err = Toast.makeText(getResApplication(), e.getMessage(),
 					Toast.LENGTH_LONG);
 			err.show();
 	    	return;

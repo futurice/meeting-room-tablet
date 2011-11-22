@@ -11,9 +11,7 @@ import android.os.Message;
 import android.widget.Toast;
 
 public class ReservatorActivity extends Activity {
-	
-	protected Boolean prehensible = true;
-	
+		
 	private final ReservatorAppHandler handler = new ReservatorAppHandler();
 	class ReservatorAppHandler extends Handler{
 		@Override
@@ -33,21 +31,21 @@ public class ReservatorActivity extends Activity {
 		
 		@Override
 		public void run() {
-			ReservatorApplication app = ((ReservatorApplication) activity.getApplication());
-			String roomName = app.getSettingValue(R.string.PREFERENCES_ROOM_NAME, "");
-			Room room;
-			try {
-				room = app.getDataProxy().getRoomWithName(roomName);
-			} catch (ReservatorException ex) {
-				Toast err = Toast.makeText(activity, ex.getMessage(),
-						Toast.LENGTH_LONG);
-				err.show();
-				return;
+			String roomName = activity.getResApplication().getFavouriteRoomName();
+			if (roomName != getString(R.string.lobbyRoomName)){
+				Room room;
+				try {
+					room = activity.getResApplication().getDataProxy().getRoomWithName(roomName);
+				} catch (ReservatorException ex) {
+					Toast err = Toast.makeText(activity, ex.getMessage(),
+							Toast.LENGTH_LONG);
+					err.show();
+					return;
+				}
+				RoomActivity.startWith(activity, room);
 			}
-			RoomActivity.startWith(activity, room);
 			activity.onPrehended();
-		}
-		
+		}		
 	}
 	
 	public void onCreate(Bundle savedInstanceState) {
@@ -56,7 +54,7 @@ public class ReservatorActivity extends Activity {
 	}
 		
 	public void onResume() {
-		super.onResume();		
+		super.onResume();
 		startAutoGoToFavouriteRoom();
 	}
 	
@@ -64,23 +62,42 @@ public class ReservatorActivity extends Activity {
 		super.onPause();
 		stopAutoGoToFavouriteRoom();
 	}
-	
-	public void onPrehended() {}
-	
+		
 	public void onUserInteraction() {
 		super.onUserInteraction();
 		stopAutoGoToFavouriteRoom();
 		startAutoGoToFavouriteRoom();
 	}
 	
+	/**
+	 * @return Identical to getApplication, but returns a ReservatorApplication.
+	 */
+	public ReservatorApplication getResApplication(){
+		return (ReservatorApplication) getApplication();
+	}
+	
+	/**
+	 * Hook to execute actions when the activity has been prehended
+	 */
+	public void onPrehended(){
+		
+	}
+	
+	/**
+	 * @return false to forbid the application to prehend the activity and go to favourite room, true to allow that.
+	 */
+	protected Boolean isPrehensible(){
+		return false;
+	}
+	
 	private void startAutoGoToFavouriteRoom() {
-		if (prehensible){
-			handler.postDelayed(goToFavouriteRoomRunable, 60000);
+		if (isPrehensible()){
+			handler.postDelayed(goToFavouriteRoomRunable, 6000);
 		}
 	}
 	
 	private void stopAutoGoToFavouriteRoom() {
-		if (prehensible){
+		if (isPrehensible()){
 			handler.removeCallbacks(goToFavouriteRoomRunable);
 		}
 	}

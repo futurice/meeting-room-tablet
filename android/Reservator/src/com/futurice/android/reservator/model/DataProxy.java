@@ -1,5 +1,6 @@
 package com.futurice.android.reservator.model;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
@@ -52,15 +53,13 @@ public abstract class DataProxy {
 	 * @return array of all room names
 	 * @throws ReservatorException
 	 */
-	public String[] getRoomNames() throws ReservatorException{
+	public ArrayList<String> getRoomNames() throws ReservatorException{
 		Vector<Room> rooms = getRooms();
-		String[] roomNames = new String[rooms.size()];
-		int ind = 0;
+		ArrayList<String> roomNames = new ArrayList<String>();
 		Iterator<Room> it = rooms.iterator();
 		while(it.hasNext()){
 			Room room = it.next();
-			roomNames[ind] = room.getName();
-			ind ++;
+			roomNames.add(room.getName());
 		}
 		return roomNames;
 	}

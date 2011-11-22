@@ -49,4 +49,8 @@ public class ReservatorApplication extends Application {
 		SharedPreferences settings = getSharedPreferences(getString(R.string.PREFERENCES_NAME), 0);
 		return settings.getString(getString(settingNameId), defaultValue);
 	}
+	
+	public String getFavouriteRoomName(){
+		return this.getSettingValue(R.string.PREFERENCES_ROOM_NAME, getString(R.string.lobbyRoomName));
+	}
 }
