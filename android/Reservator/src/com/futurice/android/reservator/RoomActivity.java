@@ -66,7 +66,6 @@ public class RoomActivity extends ReservatorActivity implements OnMenuItemClickL
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.room_activity);
-		this.getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN | WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 		this.weekView = (WeekView) findViewById(R.id.weekView1);
 		this.roomNameLabel = (TextView) findViewById(R.id.roomNameLabel);
 		try {

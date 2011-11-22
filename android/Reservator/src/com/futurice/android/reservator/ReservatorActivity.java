@@ -8,6 +8,7 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.view.WindowManager;
 import android.widget.Toast;
 
 public class ReservatorActivity extends Activity {
@@ -50,6 +51,7 @@ public class ReservatorActivity extends Activity {
 	
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		this.getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN | WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 		goToFavouriteRoomRunable = new GoToFavouriteRoom(this);
 	}
 		
