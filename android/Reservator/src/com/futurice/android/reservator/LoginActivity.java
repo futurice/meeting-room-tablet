@@ -50,8 +50,6 @@ public class LoginActivity extends ReservatorActivity implements OnClickListener
 	}
 
 	private boolean login(String username, String password) {
-		username = "reserve@futurice.com";// TODO: REMOVE
-		password = "Ig1hCMzSnz";
 		DataProxy dataProxy = this.getResApplication().getDataProxy();
 		try {
 			dataProxy.setCredentials(username, password);

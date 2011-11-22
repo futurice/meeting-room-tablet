@@ -92,7 +92,7 @@ public class ReservatorActivity extends Activity {
 	
 	private void startAutoGoToFavouriteRoom() {
 		if (isPrehensible()){
-			handler.postDelayed(goToFavouriteRoomRunable, 6000);
+			handler.postDelayed(goToFavouriteRoomRunable, 60000);
 		}
 	}
 	
