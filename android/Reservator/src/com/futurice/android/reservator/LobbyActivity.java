@@ -3,19 +3,9 @@ package com.futurice.android.reservator;
 import java.util.Comparator;
 import java.util.Vector;
 
-import com.futurice.android.reservator.model.DataProxy;
-import com.futurice.android.reservator.model.DataUpdatedListener;
-import com.futurice.android.reservator.model.DateTime;
-import com.futurice.android.reservator.model.ReservatorException;
-import com.futurice.android.reservator.model.Room;
-import com.futurice.android.reservator.model.rooms.RoomsInfo;
-import com.futurice.android.reservator.view.LobbyReservationRowView;
-import com.futurice.android.reservator.view.LobbyReservationRowView.OnReserveListener;
-
-import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.app.AlertDialog.Builder;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -24,11 +14,18 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MenuItem.OnMenuItemClickListener;
-import android.view.View;
 import android.view.Window;
 import android.widget.DigitalClock;
 import android.widget.LinearLayout;
-import android.widget.Toast;
+
+import com.futurice.android.reservator.model.DataProxy;
+import com.futurice.android.reservator.model.DataUpdatedListener;
+import com.futurice.android.reservator.model.DateTime;
+import com.futurice.android.reservator.model.ReservatorException;
+import com.futurice.android.reservator.model.Room;
+import com.futurice.android.reservator.model.rooms.RoomsInfo;
+import com.futurice.android.reservator.view.LobbyReservationRowView;
+import com.futurice.android.reservator.view.LobbyReservationRowView.OnReserveListener;
 
 public class LobbyActivity extends ReservatorActivity implements OnMenuItemClickListener,
 		DataUpdatedListener {
@@ -47,7 +44,7 @@ public class LobbyActivity extends ReservatorActivity implements OnMenuItemClick
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		this.setContentView(R.layout.lobby_activity);
 		proxy = this.getResApplication().getDataProxy();
-		DigitalClock clock =  (DigitalClock)findViewById(R.id.digitalClock1);
+		DigitalClock clock =  (DigitalClock)findViewById(R.id.digitalClock1);  //FIXME deprecated
         clock.setTypeface(Typeface.createFromAsset(getAssets(), "fonts/EHSMB.TTF"));
 	}
 

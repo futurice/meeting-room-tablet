@@ -1,21 +1,22 @@
 package com.futurice.android.reservator;
 
-import com.futurice.android.reservator.model.DataProxy;
-import com.futurice.android.reservator.model.ReservatorException;
-
-import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
+import android.view.Window;
 import android.view.MenuItem.OnMenuItemClickListener;
+import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.futurice.android.reservator.model.DataProxy;
+import com.futurice.android.reservator.model.ReservatorException;
 
 public class LoginActivity extends ReservatorActivity implements OnClickListener, OnMenuItemClickListener {
 	
@@ -28,7 +29,11 @@ public class LoginActivity extends ReservatorActivity implements OnClickListener
 		super.onCreate(savedInstanceState);
 		SharedPreferences preferences = getSharedPreferences(
 				this.getString(R.string.PREFERENCES_NAME), 0);
-
+		// Keep the screen on
+		getWindow().setFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON, WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+		// No title
+		getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+		
 		if (preferences.contains("username")
 				&& preferences.contains("password")
 				&& login(preferences.getString(getString(R.string.PREFERENCES_USERNAME), null),
@@ -38,6 +43,7 @@ public class LoginActivity extends ReservatorActivity implements OnClickListener
 			setContentView(R.layout.login_activity);
 			((Button) findViewById(R.id.loginButton)).setOnClickListener(this);
 		}
+		
 	}
 
 	@Override

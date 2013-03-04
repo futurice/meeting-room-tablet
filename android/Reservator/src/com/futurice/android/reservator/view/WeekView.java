@@ -53,6 +53,7 @@ public class WeekView extends RelativeLayout implements OnClickListener {
 		cv.setOnClickListener(this);
 		return;
 	}
+	// TODO What is this? If this is unusable, remove the commented section when cleaning up
 	/*
 		calendarView = new CalendarView(getContext());
 

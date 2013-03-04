@@ -1,22 +1,15 @@
 package com.futurice.android.reservator;
 
+import android.app.Activity;
+import android.app.Application;
+import android.content.SharedPreferences;
+
 import com.futurice.android.reservator.model.AddressBook;
 import com.futurice.android.reservator.model.CachedDataProxy;
-import com.futurice.android.reservator.model.Room;
-import com.futurice.android.reservator.model.dummy.DummyDataProxy;
 import com.futurice.android.reservator.model.DataProxy;
 import com.futurice.android.reservator.model.ReservatorException;
 import com.futurice.android.reservator.model.fum3.FumAddressBook;
 import com.futurice.android.reservator.model.soap.SoapDataProxy;
-
-import android.app.Activity;
-import android.app.Application;
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
-import android.widget.Toast;
 
 public class ReservatorApplication extends Application {
 	private DataProxy proxy;

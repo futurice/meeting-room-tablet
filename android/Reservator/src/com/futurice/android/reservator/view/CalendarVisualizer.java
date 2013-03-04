@@ -31,7 +31,7 @@ import com.futurice.android.reservator.model.TimeSpan;
 public class CalendarVisualizer extends HorizontalScrollView implements ReservatorVisualizer,
 		OnTouchListener {
 	private Paint markerPaint, textPaint, weekTextPaint, gridPaint;
-	private int dayStartTime = 60 * 8, dayEndTime = 60 * 18; // minutes from
+	private int dayStartTime = 60 * 8, dayEndTime = 60 * 20; // minutes from
 																// midnight
 	private DateTime firstDayToShow;
 	private int daysToShow = 10;

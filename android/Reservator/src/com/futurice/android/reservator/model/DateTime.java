@@ -3,7 +3,6 @@ package com.futurice.android.reservator.model;
 import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 
 public class DateTime implements Serializable {
 	private static final long serialVersionUID = 1L;

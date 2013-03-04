@@ -1,7 +1,6 @@
 package com.futurice.android.reservator.model;
 
 import java.io.Serializable;
-import java.util.Calendar;
 
 public class TimeSpan implements Serializable {
 	private static final long serialVersionUID = 1L;

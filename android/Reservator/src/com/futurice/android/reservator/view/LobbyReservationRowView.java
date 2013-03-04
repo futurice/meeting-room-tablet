@@ -1,5 +1,24 @@
 package com.futurice.android.reservator.view;
 
+import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnCancelListener;
+import android.util.AttributeSet;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.animation.Animation;
+import android.view.animation.Animation.AnimationListener;
+import android.view.animation.ScaleAnimation;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AutoCompleteTextView;
+import android.widget.FrameLayout;
+import android.widget.TextView;
+import android.widget.ViewSwitcher;
+
 import com.futurice.android.reservator.R;
 import com.futurice.android.reservator.ReservatorApplication;
 import com.futurice.android.reservator.RoomActivity;
@@ -11,26 +30,6 @@ import com.futurice.android.reservator.model.ReservatorException;
 import com.futurice.android.reservator.model.Room;
 import com.futurice.android.reservator.model.TimeSpan;
 import com.futurice.android.reservator.model.rooms.RoomsInfo;
-
-import android.app.AlertDialog;
-import android.app.AlertDialog.Builder;
-import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.DialogInterface.OnCancelListener;
-import android.util.AttributeSet;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.AutoCompleteTextView;
-import android.widget.FrameLayout;
-import android.widget.TextView;
-import android.widget.ViewSwitcher;
-import android.view.View.OnClickListener;
-import android.view.animation.Animation;
-import android.view.animation.ScaleAnimation;
-import android.view.animation.Animation.AnimationListener;
-import android.view.inputmethod.InputMethodManager;
 
 public class LobbyReservationRowView extends FrameLayout implements
 		OnClickListener, OnItemClickListener {

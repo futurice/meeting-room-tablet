@@ -3,24 +3,7 @@ package com.futurice.android.reservator;
 import java.util.Calendar;
 import java.util.Vector;
 
-import com.futurice.android.reservator.model.CachedDataProxy;
-import com.futurice.android.reservator.model.DataProxy;
-import com.futurice.android.reservator.model.DataUpdatedListener;
-import com.futurice.android.reservator.model.DateTime;
-import com.futurice.android.reservator.model.ReservatorException;
-import com.futurice.android.reservator.model.Room;
-import com.futurice.android.reservator.model.TimeSpan;
-import com.futurice.android.reservator.model.rooms.RoomsInfo;
-import com.futurice.android.reservator.view.LobbyReservationRowView;
-import com.futurice.android.reservator.view.RoomReservationPopup;
-import com.futurice.android.reservator.view.WeekView;
-import com.futurice.android.reservator.view.LobbyReservationRowView.OnReserveListener;
-import com.futurice.android.reservator.view.WeekView.OnFreeTimeClickListener;
-
-import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.ProgressDialog;
-import android.app.AlertDialog.Builder;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -32,9 +15,22 @@ import android.view.MenuItem.OnMenuItemClickListener;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
-import android.view.WindowManager;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.futurice.android.reservator.model.CachedDataProxy;
+import com.futurice.android.reservator.model.DataProxy;
+import com.futurice.android.reservator.model.DataUpdatedListener;
+import com.futurice.android.reservator.model.DateTime;
+import com.futurice.android.reservator.model.ReservatorException;
+import com.futurice.android.reservator.model.Room;
+import com.futurice.android.reservator.model.TimeSpan;
+import com.futurice.android.reservator.model.rooms.RoomsInfo;
+import com.futurice.android.reservator.view.LobbyReservationRowView;
+import com.futurice.android.reservator.view.LobbyReservationRowView.OnReserveListener;
+import com.futurice.android.reservator.view.RoomReservationPopup;
+import com.futurice.android.reservator.view.WeekView;
+import com.futurice.android.reservator.view.WeekView.OnFreeTimeClickListener;
 
 public class RoomActivity extends ReservatorActivity implements OnMenuItemClickListener,
 		DataUpdatedListener {

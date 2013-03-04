@@ -3,7 +3,6 @@ package com.futurice.android.reservator.model;
 import java.util.Vector;
 
 import android.util.Log;
-import android.widget.Toast;
 
 import com.futurice.android.reservator.common.CacheMap;
 
