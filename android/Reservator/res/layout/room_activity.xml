@@ -3,13 +3,10 @@
 	android:layout_width="fill_parent" android:layout_height="fill_parent"
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	android:background="@drawable/background" android:padding="10dip">
-	<TextView android:layout_width="wrap_content"
-		android:layout_height="wrap_content" android:id="@+id/roomNameLabel" android:layout_marginLeft="80dp" android:paddingLeft="40dp" android:layout_marginTop="10dp" android:textColor="@color/TextColor" android:textStyle="bold" android:textSize="20sp"></TextView>
-	<Button android:background="@drawable/button_background" android:layout_height="wrap_content" android:layout_width="wrap_content" android:layout_alignParentRight="true" android:text="@string/seeAllRooms" android:id="@+id/seeAllRoomsButton" android:layout_alignTop="@+id/roomNameLabel"></Button>
 	<com.futurice.android.reservator.view.WeekView
 		android:layout_width="fill_parent" android:id="@+id/weekView1"
-		android:layout_height="fill_parent" android:layout_alignLeft="@+id/roomNameLabel"
-		android:layout_marginLeft="0dp" android:layout_marginRight="0dp" android:layout_marginBottom="0dp" android:layout_marginTop="0dp" android:layout_below="@+id/seeAllRoomsButton">
+		android:layout_height="fill_parent" android:layout_below="@+id/roomNameLabel"
+		android:layout_marginLeft="0dp" android:layout_marginRight="0dp" android:layout_marginBottom="0dp" android:layout_marginTop="0dp" android:layout_toRightOf="@+id/seeAllRoomsButton">
 		<FrameLayout
 		android:layout_width="fill_parent"
 		android:layout_height="fill_parent"
@@ -17,4 +14,25 @@
 		android:layout_marginBottom="0dp"
 		android:id="@+id/frameLayout1"></FrameLayout>
 	</com.futurice.android.reservator.view.WeekView>
+
+	<TextView
+	    android:id="@+id/roomNameLabel"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_alignParentLeft="true"
+	    android:layout_marginLeft="86dp"
+	    android:paddingLeft="40dp"
+	    android:textColor="@color/TextColor"
+	    android:textSize="20sp"
+	    android:textStyle="bold" />
+
+	<Button
+	    android:id="@+id/seeAllRoomsButton"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_alignBottom="@+id/weekView1"
+	    android:layout_alignParentLeft="true"
+	    android:background="@drawable/button_background"
+	    android:text="@string/seeAllRooms" />
+
 </RelativeLayout>
