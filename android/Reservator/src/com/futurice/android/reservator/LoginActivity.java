@@ -86,8 +86,10 @@ public class LoginActivity extends ReservatorActivity implements OnClickListener
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		settingsMenu = menu.add("Settings").setOnMenuItemClickListener(this);
-		settingsMenu.setIcon(android.R.drawable.ic_menu_preferences);
+		// One cannot do anything from the settings menu without logging in first => disabling the menu for now...
+/*		settingsMenu = menu.add("Settings").setOnMenuItemClickListener(this);
+		settingsMenu.setIcon(android.R.drawable.ic_menu_preferences);*/
+
 		return true;
 	}
 
