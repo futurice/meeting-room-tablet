@@ -6,11 +6,9 @@ import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.Window;
 import android.view.MenuItem.OnMenuItemClickListener;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -29,10 +27,6 @@ public class LoginActivity extends ReservatorActivity implements OnClickListener
 		super.onCreate(savedInstanceState);
 		SharedPreferences preferences = getSharedPreferences(
 				this.getString(R.string.PREFERENCES_NAME), 0);
-		// Keep the screen on
-		getWindow().setFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON, WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-		// No title
-		getWindow().requestFeature(Window.FEATURE_NO_TITLE);
 		
 		if (preferences.contains("username")
 				&& preferences.contains("password")

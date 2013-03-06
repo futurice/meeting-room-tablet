@@ -64,7 +64,8 @@ public class FumAddressBook extends AddressBook {
 		// http://msdn.microsoft.com/en-us/library/bb856547(v=exchg.80).aspx
 		// Authentication scheme ntlm not supported
 
-		Log.v("httpGet","credentials "+user+":"+password);
+		// Let's not log the user and password on verbose level
+		// Log.v("httpGet","credentials "+user+":"+password);
 		UsernamePasswordCredentials credentials = new UsernamePasswordCredentials(user, password);
 		httpclient.getCredentialsProvider().setCredentials(AuthScope.ANY, credentials);
 
