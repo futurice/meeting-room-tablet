@@ -155,9 +155,10 @@ public class LobbyActivity extends ReservatorActivity implements OnMenuItemClick
 
 /*	This is never used?
  * 
- * @Override
+ **/ 
+	@Override
 	public void refreshFailed(ReservatorException e) {
-		
+	/*	
 		if (alertDialog != null) {
 			Toast.makeText(this, "dismissed an alert", Toast.LENGTH_SHORT).show();
 			alertDialog.dismiss();
@@ -169,15 +170,18 @@ public class LobbyActivity extends ReservatorActivity implements OnMenuItemClick
 			.setMessage(e.getMessage())
 			.show();
 		Toast.makeText(this, "created an alert", Toast.LENGTH_SHORT).show();
-	}*/
+		*/
+	}
 
 	private void processRoom(Room r) {
 		LobbyReservationRowView v = new LobbyReservationRowView(LobbyActivity.this);
 		if (v.getException() != null) {
+			hideLoading();
 			Log.d("LobbyReservator", "found exception");
 			// show only one dialog at time
 			if (alertDialog == null || !alertDialog.isShowing()) {
-				hideLoading();
+				if (alertDialog != null)
+					alertDialog.dismiss();
 				Builder alertBuilder = new AlertDialog.Builder(this);
 				alertBuilder.setTitle("Error!");
 				alertBuilder.setMessage(v.getException().getMessage());
