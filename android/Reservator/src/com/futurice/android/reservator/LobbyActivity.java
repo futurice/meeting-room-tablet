@@ -38,6 +38,8 @@ public class LobbyActivity extends ReservatorActivity implements OnMenuItemClick
 
 	final Handler handler = new Handler();
 	
+	AlertDialog alertDialog;
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -151,17 +153,38 @@ public class LobbyActivity extends ReservatorActivity implements OnMenuItemClick
 		hideLoading();
 	}
 
-	@Override
+/*	This is never used?
+ * 
+ * @Override
 	public void refreshFailed(ReservatorException e) {
+		
+		if (alertDialog != null) {
+			Toast.makeText(this, "dismissed an alert", Toast.LENGTH_SHORT).show();
+			alertDialog.dismiss();
+		}
+			
 		hideLoading();
 		Builder alertBuilder = new AlertDialog.Builder(this);
-		alertBuilder.setTitle("Error")
+		alertDialog = alertBuilder.setTitle("Error")
 			.setMessage(e.getMessage())
 			.show();
-	}
+		Toast.makeText(this, "created an alert", Toast.LENGTH_SHORT).show();
+	}*/
 
 	private void processRoom(Room r) {
 		LobbyReservationRowView v = new LobbyReservationRowView(LobbyActivity.this);
+		if (v.getException() != null) {
+			Log.d("LobbyReservator", "found exception");
+			// show only one dialog at time
+			if (alertDialog == null || !alertDialog.isShowing()) {
+				hideLoading();
+				Builder alertBuilder = new AlertDialog.Builder(this);
+				alertBuilder.setTitle("Error!");
+				alertBuilder.setMessage(v.getException().getMessage());
+				alertDialog = alertBuilder.show();
+			}
+		}
+		
 		v.setRoom(r);
 		v.setOnReserveCallback(new OnReserveListener() {
 			@Override

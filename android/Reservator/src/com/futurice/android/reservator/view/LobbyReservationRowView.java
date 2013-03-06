@@ -45,6 +45,7 @@ public class LobbyReservationRowView extends FrameLayout implements
 	OnCancellListener onCancellListener = null;
 	private Room room;
 	private int animationDuration = 300;
+	private ReservatorException reservatorException;
 	
 	public LobbyReservationRowView(Context context) {
 		this(context, null);
@@ -89,13 +90,22 @@ public class LobbyReservationRowView extends FrameLayout implements
 		nameField.setOnItemClickListener(this);
 		nameField.setOnClickListener(this);
 		if (nameField.getAdapter() == null) {
-			nameField.setAdapter(new AddressBookAdapter(this.getContext(),
+			try {
+				nameField.setAdapter(new AddressBookAdapter(this.getContext(),
 					application.getAddressBook()));
+			} catch (ReservatorException e) {
+				reservatorException = e;
+			}
 		}
 	}
 	public void setAnimationDuration(int millis){
 		animationDuration = millis;
 	}
+	
+	public ReservatorException getException() {
+		return reservatorException;
+	}
+	
 	public void setRoom(Room room) {
 		this.room = room;
 
