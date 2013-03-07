@@ -15,7 +15,7 @@
             </intent-filter>
         </activity>
         <activity android:name="RoomActivity"></activity>
-        <activity android:name="SettingsActivity"></activity>
+        <activity android:name="SettingsActivity" android:theme="@style/Theme.Transparent"></activity>
         <activity android:name="LobbyActivity"></activity>
         <activity android:name=".view.RoomReservationPopup" android:theme="@style/Theme.Transparent"></activity>
 

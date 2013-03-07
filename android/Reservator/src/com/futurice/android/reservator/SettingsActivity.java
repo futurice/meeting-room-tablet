@@ -8,15 +8,19 @@ import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.futurice.android.reservator.model.DataProxy;
 import com.futurice.android.reservator.model.ReservatorException;
+import com.futurice.android.reservator.view.SettingsRoomRowAdapter;
 
 public class SettingsActivity extends ReservatorActivity {
 	Editor editor;
@@ -50,6 +54,20 @@ public class SettingsActivity extends ReservatorActivity {
 	    }
 	    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 	    spinner.setAdapter(adapter);
+	    
+
+	    ListView l = (ListView) findViewById(R.id.roomListView);
+	    SettingsRoomRowAdapter SRRA = new SettingsRoomRowAdapter(this, R.layout.custom_settings_row, roomNames);
+	    l.setAdapter(SRRA);
+	    
+	    //final LayoutInflater inflater = getLayoutInflater();
+	    //final RelativeLayout view = (RelativeLayout) inflater.inflate(R.layout.custom_settings_row, l, true);
+/*
+	    adapter = new ArrayAdapter<String>(
+	            this, R.id.checkedTextView1, roomNames);
+	    l.setAdapter(adapter);
+*/
+	    
 	}
 
 	@Override
