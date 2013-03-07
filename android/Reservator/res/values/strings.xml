@@ -27,6 +27,7 @@
     <string name="PREFERENCES_ROOM_NAME">roomName</string>
     <string name="PREFERENCES_USERNAME">username</string>
     <string name="PREFERENCES_PASSWORD">password</string>
+    <string name="PREFERENCES_UNSELECTED_ROOMS">unselectedRooms</string>
     <string name="removeUserData">Remove login info</string>
     <string name="lobbyRoomName">Lobby</string>
 </resources>
