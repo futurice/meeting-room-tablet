@@ -10,7 +10,7 @@ import android.util.AttributeSet;
 import android.view.ViewGroup;
 
 public class CalendarDayLayout extends ViewGroup {
-	int minuteStart = 8 * 60, minuteEnd = 18 * 60;
+	int minuteStart = 8 * 60, minuteEnd = 20 * 60;
 	public CalendarDayLayout(Context context) {
 		this(context, null);
 	}
