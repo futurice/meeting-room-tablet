@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <style name="CalendarFont" parent="@android:style/TextAppearance.Medium">
         <item name="android:textColor">#666</item>
         <item name="android:textSize">18pt</item>
     </style>
+
     <color name="CalendarDisabledColor">#4000</color>
     <color name="CalendarBorderColor">#ccc</color>
     <color name="CalendarTextColor">#000</color>
@@ -12,25 +14,30 @@
     <color name="Transparent">#0000</color>
     <color name="CalendarMarkerReservedColor">#d8f6d5c5</color>
     <color name="CalendarMarkerFreeColor">#0000</color>
+
     <style name="Theme.Transparent" parent="android:Theme">
-    	<item name="android:windowIsTranslucent">true</item>
-    	<item name="android:windowBackground">@color/Transparent</item>
-    	<item name="android:windowContentOverlay">@null</item>
-    	<item name="android:windowNoTitle">true</item>
-    	<!-- <item name="android:windowIsFloating">true</item> -->
-    	<item name="android:backgroundDimEnabled">true</item>
-  </style>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@color/Transparent</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowNoTitle">true</item>
+        <!-- <item name="android:windowIsFloating">true</item> -->
+        <item name="android:backgroundDimEnabled">true</item>
+    </style>
+
     <color name="TextColor">#000</color>
     <color name="TimeSpanTextColor">#529200</color>
+
     <style name="TimeSpanTimeStyle">
         <item name="android:textStyle">bold</item>
         <item name="android:textColor">@color/TimeSpanTextColor</item>
         <item name="android:textSize">22sp</item>
     </style>
+
     <style name="DigitalClockStyle">
         <item name="android:textColor">@color/TimeSpanTextColor</item>
         <item name="android:textSize">64sp</item>
     </style>
+
     <color name="FutuLightGreen">#cbdeb2</color>
     <color name="ReserveBackground">#6698c655</color>
     <color name="ReserveLine">#a4cb80</color>
@@ -40,4 +47,5 @@
     <color name="buttonTextDisabledColor">#999</color>
     <color name="TextInfoColor">#666</color>
     <color name="CalendarWeekTextColor">#999</color>
+
 </resources>

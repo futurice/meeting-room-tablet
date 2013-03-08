@@ -1,10 +1,71 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/relativeLayout1"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@drawable/background"
+    android:padding="0dip" >
 
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="fill_parent" android:id="@+id/relativeLayout1" android:layout_height="fill_parent" android:padding="0dip" android:background="@drawable/background">
-        <LinearLayout android:layout_height="wrap_content" android:id="@+id/linearLayout1" android:layout_width="wrap_content" android:layout_centerInParent="true" android:orientation="vertical" android:padding="0dip">
-            <TextView android:layout_height="wrap_content" android:text="@string/username" android:id="@+id/textView1" android:layout_width="wrap_content"></TextView>
-            <EditText android:layout_height="wrap_content" android:maxLines="1" android:layout_width="200dp" android:id="@+id/username" android:gravity="center" android:hint="Username" android:inputType="text"></EditText>
-            <TextView android:layout_height="wrap_content" android:text="@string/password" android:id="@+id/textView2" android:layout_width="wrap_content"></TextView>
-            <EditText android:layout_height="wrap_content" android:maxLines="1" android:inputType="textPassword" android:layout_width="200dp" android:id="@+id/password" android:gravity="center" android:hint="Password" android:singleLine="true"></EditText>
-            <Button android:id="@+id/loginButton" android:layout_height="wrap_content" android:layout_width="200dp" android:text="@string/login"></Button>
-        </LinearLayout>
-    </RelativeLayout>
+    <LinearLayout
+        android:id="@+id/linearLayout1"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:orientation="vertical"
+        android:padding="0dip" >
+
+        <TextView
+            android:id="@+id/textView1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/exchange_username"
+            android:textColor="#000" >
+
+        </TextView>
+
+        <EditText
+            android:id="@+id/username"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:hint="@string/username_hint"
+            android:inputType="text"
+            android:maxLines="1"
+            android:textColor="#000" >
+
+        </EditText>
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="@string/exchange_password"
+            android:textColor="#000" >
+
+        </TextView>
+
+        <EditText
+            android:id="@+id/password"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:hint="@string/password_hint"
+            android:inputType="textPassword"
+            android:maxLines="1"
+            android:singleLine="true"
+            android:textColor="#000" >
+
+        </EditText>
+
+        <Button
+            android:id="@+id/loginButton"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="@string/login"
+            android:textColor="#000" >
+
+        </Button>
+    </LinearLayout>
+
+</RelativeLayout>

@@ -7,8 +7,10 @@
     <string name="end">end</string>
     <string name="reserve">reserve</string>
     <string name="login">Login</string>
-    <string name="username">Username:</string>
-    <string name="password">Password:</string>
+    <string name="username_hint">username</string>
+    <string name="password_hint">password</string>
+    <string name="exchange_username">Exchange username:</string>
+    <string name="exchange_password">Exchange password:</string>
     <string name="reservationTextTemplate">Reserved: ^1</string>
     <string name="book_now">Book now</string>
     <string name="dateLabelFormat">EEEE d.M.</string>
