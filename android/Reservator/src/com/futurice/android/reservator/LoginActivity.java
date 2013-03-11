@@ -45,7 +45,8 @@ public class LoginActivity extends ReservatorActivity implements OnClickListener
 						preferences.getString(getString(R.string.PREFERENCES_PASSWORD), null));
 			// do nothing, activity is changed after a successful login
 		} else {
-			pd.dismiss();
+			if (pd != null)
+				pd.dismiss();
 		}
 	}
 
@@ -98,7 +99,8 @@ public class LoginActivity extends ReservatorActivity implements OnClickListener
 			editor.putString("username", username);
 			editor.putString("password", password);
 			editor.commit();
-			pd.dismiss();
+			if (pd != null)
+				pd.dismiss();
 			
 			DataProxy dataProxy = this.getResApplication().getDataProxy();
 			dataProxy.removeDataUpdatedListener(this);
@@ -115,7 +117,8 @@ public class LoginActivity extends ReservatorActivity implements OnClickListener
 
 	@Override
 	public void refreshFailed(ReservatorException ex) {
-		pd.dismiss();
+		if (pd != null)
+			pd.dismiss();
 		Toast.makeText(this, ex.getMessage(),
 				Toast.LENGTH_LONG).show();
 		setContentView(R.layout.login_activity);

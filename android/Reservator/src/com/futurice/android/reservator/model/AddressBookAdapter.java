@@ -10,9 +10,12 @@ public class AddressBookAdapter extends ArrayAdapter<String>{
 		throws ReservatorException {
 		super(ctx,android.R.layout.simple_spinner_dropdown_item);
 
+		// TODO Add listeners to handle null
 		List<AddressBookEntry> entries = addressBook.getEntries();
-		for(AddressBookEntry abe : entries){
-			this.add(abe.getName());
+		if (entries != null) {
+			for(AddressBookEntry abe : entries) {
+				this.add(abe.getName());
+			}
 		}
 
 	}
