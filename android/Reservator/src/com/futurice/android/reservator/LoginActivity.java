@@ -2,6 +2,7 @@ package com.futurice.android.reservator;
 
 import java.util.Vector;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -27,12 +28,16 @@ public class LoginActivity extends ReservatorActivity implements OnClickListener
 	MenuItem settingsMenu;
 	private String username;
 	private String password;
+	private ProgressDialog pd;
 	
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 
 		super.onCreate(savedInstanceState);
+		setContentView(R.layout.login_activity);
+		((Button) findViewById(R.id.loginButton)).setOnClickListener(this);
+		
 		SharedPreferences preferences = getSharedPreferences(
 				this.getString(R.string.PREFERENCES_NAME), Context.MODE_PRIVATE);
 		
@@ -42,8 +47,7 @@ public class LoginActivity extends ReservatorActivity implements OnClickListener
 						preferences.getString(getString(R.string.PREFERENCES_PASSWORD), null));
 			// do nothing, activity is changed after a successful login
 		} else {
-			setContentView(R.layout.login_activity);
-			((Button) findViewById(R.id.loginButton)).setOnClickListener(this);
+			pd.dismiss();
 		}
 	}
 
@@ -70,6 +74,8 @@ public class LoginActivity extends ReservatorActivity implements OnClickListener
 	}
 	
 	private void login(String username, String password) {
+		pd = ProgressDialog.show(this, "Loading", "Logging in with the saved credentials", true, true);
+
 		this.username = username;
 		this.password = password;
 		DataProxy dataProxy = this.getResApplication().getDataProxy();
@@ -137,6 +143,7 @@ public class LoginActivity extends ReservatorActivity implements OnClickListener
 			editor.putString("username", username);
 			editor.putString("password", password);
 			editor.commit();
+			pd.dismiss();
 			
 			DataProxy dataProxy = this.getResApplication().getDataProxy();
 			dataProxy.removeDataUpdatedListener(this);
@@ -153,6 +160,7 @@ public class LoginActivity extends ReservatorActivity implements OnClickListener
 
 	@Override
 	public void refreshFailed(ReservatorException ex) {
+		pd.dismiss();
 		Toast.makeText(this, ex.getMessage(),
 				Toast.LENGTH_LONG).show();
 		setContentView(R.layout.login_activity);
