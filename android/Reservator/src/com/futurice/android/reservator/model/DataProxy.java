@@ -130,7 +130,7 @@ public abstract class DataProxy {
 		protected void onPostExecute(Vector<Room> rooms){
 			if(rooms == null){
 				notifyRefreshFailed(e);
-			}else{
+			} else {
 				notifyRoomsUpdated(rooms);
 			}
 		}

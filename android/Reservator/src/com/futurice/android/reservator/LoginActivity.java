@@ -40,12 +40,11 @@ public class LoginActivity extends ReservatorActivity implements OnClickListener
 				&& preferences.contains("password")) {
 				login(preferences.getString(getString(R.string.PREFERENCES_USERNAME), null),
 						preferences.getString(getString(R.string.PREFERENCES_PASSWORD), null));
-			// do nothing, activity is changed in login
+			// do nothing, activity is changed after a successful login
 		} else {
 			setContentView(R.layout.login_activity);
 			((Button) findViewById(R.id.loginButton)).setOnClickListener(this);
 		}
-		
 	}
 
 	@Override
@@ -66,8 +65,6 @@ public class LoginActivity extends ReservatorActivity implements OnClickListener
 		dataProxy.addDataUpdatedListener(this);
 		dataProxy.refreshRooms(); // checks the credentials with room query
 	}
-	
-	
 	
 /*
 	private boolean login(String username, String password) {
@@ -122,15 +119,20 @@ public class LoginActivity extends ReservatorActivity implements OnClickListener
 	public void roomListUpdated(Vector<Room> rooms) {
 		SharedPreferences preferences = getSharedPreferences(
 				this.getString(R.string.PREFERENCES_NAME), 0);
-		if (username != null && password != null) {
+		if (username == null || password == null) {
+			refreshFailed(new ReservatorException("Failed to find current username or password for login"));
+		} else {
 			Editor editor = preferences.edit();
 			editor.putString("username", username);
 			editor.putString("password", password);
 			editor.commit();
-		}
+			
+			DataProxy dataProxy = this.getResApplication().getDataProxy();
+			dataProxy.removeDataUpdatedListener(this);
 
-		Intent i = new Intent(this, LobbyActivity.class);
-		startActivityForResult(i, 0);
+			Intent i = new Intent(this, LobbyActivity.class);
+			startActivityForResult(i, 0);
+		}
 	}
 
 	@Override

@@ -1,6 +1,5 @@
 package com.futurice.android.reservator;
 
-import android.app.Activity;
 import android.app.Application;
 import android.content.SharedPreferences;
 
@@ -14,7 +13,7 @@ import com.futurice.android.reservator.model.soap.SoapDataProxy;
 public class ReservatorApplication extends Application {
 	private DataProxy proxy;
 	private AddressBook addressBook;
-	private Activity runningActivity;
+	//private Activity runningActivity;
 
 	public DataProxy getDataProxy(){
 		return proxy;
@@ -28,7 +27,7 @@ public class ReservatorApplication extends Application {
 	public void onCreate(){
 		String serverAddress = getSettingValue(R.string.PREFERENCES_SERVER_ADDRESS, "mail.futurice.com");// TODO: change to mail.futurice.com before delivery
 		proxy = new SoapDataProxy(serverAddress);
-		// proxy = new DummyDataProxy();
+		//proxy = new DummyDataProxy();
 		proxy = new CachedDataProxy(proxy);
 		addressBook  = new FumAddressBook();
 		try {

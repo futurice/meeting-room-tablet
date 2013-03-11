@@ -57,12 +57,14 @@ public class LobbyActivity extends ReservatorActivity implements OnMenuItemClick
 		proxy.addDataUpdatedListener(this);
 		refreshRoomInfo();
 	}
+
 	@Override
 	public void onPause() {
 		super.onPause();
 		proxy.removeDataUpdatedListener(this);
 		if(progressDialog != null){
 			progressDialog.dismiss();
+			showLoadingCount = 0;
 			progressDialog = null;
 		}
 	}
@@ -74,13 +76,48 @@ public class LobbyActivity extends ReservatorActivity implements OnMenuItemClick
 	}
 	
 	private void refreshRoomInfo() {
-		showLoading();
+		updateLoadingWindow(1);
 		container = (LinearLayout) findViewById(R.id.linearLayout1);
 		container.removeAllViews();
 		proxy.refreshRooms();
 	}
+	
+	private void updateLoadingWindow(int howMuch) {
+		showLoadingCount += howMuch;
 
-	private void showLoading() {
+		// if loadingcount <= 0 => dismiss
+		if (showLoadingCount <= 0 && progressDialog != null) {
+			progressDialog.dismiss();
+			progressDialog = null;
+			return;
+		}
+		
+		if (showLoadingCount > 0 && (progressDialog == null || !progressDialog.isShowing())) {
+			if (progressDialog != null)
+				progressDialog.dismiss();
+			progressDialog = constructNewProgressDialog();
+			progressDialog.setMax(showLoadingCount);
+			progressDialog.show();
+		}
+		
+		if (progressDialog != null && showLoadingCount > progressDialog.getMax()) {
+			progressDialog.setMax(showLoadingCount);
+		}
+
+	}
+	
+	private ProgressDialog constructNewProgressDialog() {
+		ProgressDialog d = new ProgressDialog(this);
+		d.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+		d.setMessage("Refreshing room list...");
+		d.setCancelable(false);
+		d.setMax(1);
+		return d;
+	}
+
+/*	private void showLoading() {
+//		if (showLoadingCount < 0)
+//			showLoadingCount = 0;
 		showLoadingCount++;
 		if (this.progressDialog == null) {
 			progressDialog = new ProgressDialog(this);
@@ -112,6 +149,7 @@ public class LobbyActivity extends ReservatorActivity implements OnMenuItemClick
 		}
 
 	}
+	*/
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -141,16 +179,16 @@ public class LobbyActivity extends ReservatorActivity implements OnMenuItemClick
 			if (info.isProjectRoom()) {
 				continue; // skip project room
 			}
-			showLoading();
+			updateLoadingWindow(1);
 			proxy.refreshRoomReservations(r);
 		}
-		hideLoading();
+		updateLoadingWindow(-1);
 	}
 
 	@Override
 	public void roomReservationsUpdated(final Room room) {
 		processRoom(room);
-		hideLoading();
+		updateLoadingWindow(-1);
 	}
 
 /*	This is never used?
@@ -176,8 +214,8 @@ public class LobbyActivity extends ReservatorActivity implements OnMenuItemClick
 	private void processRoom(Room r) {
 		LobbyReservationRowView v = new LobbyReservationRowView(LobbyActivity.this);
 		if (v.getException() != null) {
-			hideLoading();
-			Log.d("LobbyReservator", "found exception");
+			//updateLoadingWindow(-1);
+			Log.d("LobbyReservator", "Exception in LobbyReservator: " + v.getException().getMessage());
 			// show only one dialog at time
 			if (alertDialog == null || !alertDialog.isShowing()) {
 				if (alertDialog != null)
