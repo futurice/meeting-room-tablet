@@ -43,7 +43,6 @@ public class LobbyActivity extends ReservatorActivity implements OnMenuItemClick
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		this.setContentView(R.layout.lobby_activity);
 		proxy = this.getResApplication().getDataProxy();
 		DigitalClock clock =  (DigitalClock)findViewById(R.id.digitalClock1);  //FIXME deprecated

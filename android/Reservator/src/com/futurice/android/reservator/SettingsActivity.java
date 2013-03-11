@@ -1,6 +1,7 @@
 package com.futurice.android.reservator;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
@@ -8,13 +9,13 @@ import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -55,19 +56,9 @@ public class SettingsActivity extends ReservatorActivity {
 	    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 	    spinner.setAdapter(adapter);
 	    
-
 	    ListView l = (ListView) findViewById(R.id.roomListView);
-	    SettingsRoomRowAdapter SRRA = new SettingsRoomRowAdapter(this, R.layout.custom_settings_row, roomNames);
-	    l.setAdapter(SRRA);
-	    
-	    //final LayoutInflater inflater = getLayoutInflater();
-	    //final RelativeLayout view = (RelativeLayout) inflater.inflate(R.layout.custom_settings_row, l, true);
-/*
-	    adapter = new ArrayAdapter<String>(
-	            this, R.id.checkedTextView1, roomNames);
-	    l.setAdapter(adapter);
-*/
-	    
+	    SettingsRoomRowAdapter roomListAdapter = new SettingsRoomRowAdapter(this, R.layout.settings_select_room_row, roomNames);
+	    l.setAdapter(roomListAdapter);
 	}
 
 	@Override
@@ -92,9 +83,10 @@ public class SettingsActivity extends ReservatorActivity {
 		findViewById(R.id.removeUserDataButton).setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
+				// credentials
 				editor.remove(getString(R.string.PREFERENCES_USERNAME))
 					.remove(getString(R.string.PREFERENCES_PASSWORD));
-				Toast.makeText(SettingsActivity.this, "Removed!", Toast.LENGTH_SHORT).show();
+				Toast.makeText(SettingsActivity.this, "Removed credentials!", Toast.LENGTH_SHORT).show();
 			}
 		});
 		Builder builder = new AlertDialog.Builder(this);
@@ -131,11 +123,31 @@ public class SettingsActivity extends ReservatorActivity {
 		}
 		editor.putString(getString(R.string.PREFERENCES_SERVER_ADDRESS), serverAddress);
 		editor.putString(getString(R.string.PREFERENCES_ROOM_NAME), roomName);
+		
+		// load the unselected rooms
+    	HashSet<String> unselectedRooms = new HashSet<String>();
+		
+		// get the rooms
+		ListView rooms = (ListView) findViewById(R.id.roomListView);
+		int count = ((ViewGroup) rooms).getChildCount();
+		for (int i = 0; i < count; i++) {
+			// note: null is not checked, as the layout inside one row should not be changed (or else everything will break anyhow)
+			View v = ((ViewGroup) rooms).getChildAt(i).findViewById(R.id.checkBox1);
+			if (v instanceof CheckBox) {
+				CheckBox c = (CheckBox)v;
+				if (!c.isChecked() && !unselectedRooms.contains(c.getText())) {
+					unselectedRooms.add(c.getText().toString());
+				}
+			}
+		}
+		
+		editor.putStringSet(getString(R.string.PREFERENCES_UNSELECTED_ROOMS), unselectedRooms);
 		editor.commit();
 
 		// Update proxy
 		proxy.setServer(serverAddress);
-
+		Toast.makeText(getApplicationContext(), "Settings saved", Toast.LENGTH_SHORT).show();
+		
 		super.onPause();
 	}
 

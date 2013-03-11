@@ -24,18 +24,18 @@ public class SettingsRoomRowAdapter extends ArrayAdapter<String> {
 	    this.context = context;
 	    this.values = values;
 	    
-		/*preferences = context.getSharedPreferences(
+		preferences = context.getSharedPreferences(
 				context.getString(R.string.PREFERENCES_NAME), Context.MODE_PRIVATE);
 		
 		// load the unselected rooms
-    	preferences.getStringSet(context.getString(R.string.PREFERENCES_UNSELECTED_ROOMS), unselectedRooms);*/
+    	unselectedRooms = (HashSet<String>) preferences.getStringSet(context.getString(R.string.PREFERENCES_UNSELECTED_ROOMS), new HashSet<String>());
 	  }
 
 	  @Override
 	  public View getView(int position, View convertView, ViewGroup parent) {
 	    LayoutInflater inflater = (LayoutInflater) context
 	        .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-	    View rowView = inflater.inflate(R.layout.custom_settings_row, parent, false);
+	    View rowView = inflater.inflate(R.layout.settings_select_room_row, parent, false);
 	    
 	    CheckBox t = (CheckBox) rowView.findViewById(R.id.checkBox1);
 	    String current = values.get(position);
