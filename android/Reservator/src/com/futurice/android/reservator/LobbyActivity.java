@@ -82,6 +82,14 @@ public class LobbyActivity extends ReservatorActivity implements OnMenuItemClick
 		proxy.refreshRooms();
 	}
 	
+	/*
+	 * @param howMuch If howMuch > 0, an item has been added to our progressdialog and 
+	 * we need to increase the number of max items. If param is less than zero, 
+	 * something has been completed and we can increase the progress. This should be
+	 * split to two different functions, increaseMaxItems() and itemFinished(),
+	 * because (at least in the current version) there is always only one increment
+	 * at time.
+	 */
 	private void updateLoadingWindow(int howMuch) {
 		showLoadingCount += howMuch;
 
@@ -100,10 +108,16 @@ public class LobbyActivity extends ReservatorActivity implements OnMenuItemClick
 			progressDialog.show();
 		}
 		
-		if (progressDialog != null && showLoadingCount > progressDialog.getMax()) {
-			progressDialog.setMax(showLoadingCount);
+		if (progressDialog != null) {
+			// Increment the maximum number of items if needed
+			if (showLoadingCount > progressDialog.getMax()) {
+				progressDialog.setMax(showLoadingCount);
+			}
+			// "howMuch < 0" => something has been completed.
+			if (howMuch < 0) {
+				progressDialog.incrementProgressBy(Math.abs(howMuch));
+			}
 		}
-
 	}
 	
 	private ProgressDialog constructNewProgressDialog() {

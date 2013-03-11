@@ -48,6 +48,19 @@ public class LoginActivity extends ReservatorActivity implements OnClickListener
 	}
 
 	@Override
+	public void onResume() {
+		super.onResume();
+		DataProxy dataProxy = this.getResApplication().getDataProxy();
+		dataProxy.addDataUpdatedListener(this);
+	}
+	
+	public void onPause() {
+		super.onPause();
+		DataProxy dataProxy = this.getResApplication().getDataProxy();
+		dataProxy.removeDataUpdatedListener(this);
+	}
+	
+	@Override
 	public void onClick(View v) {
 		v.setEnabled(false);
 		TextView currentPassword = (TextView) findViewById(R.id.password);
@@ -56,13 +69,11 @@ public class LoginActivity extends ReservatorActivity implements OnClickListener
 		v.setEnabled(true);
 	}
 	
-	
 	private void login(String username, String password) {
 		this.username = username;
 		this.password = password;
 		DataProxy dataProxy = this.getResApplication().getDataProxy();
 		dataProxy.setCredentials(username, password);
-		dataProxy.addDataUpdatedListener(this);
 		dataProxy.refreshRooms(); // checks the credentials with room query
 	}
 	
