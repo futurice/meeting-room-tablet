@@ -1,12 +1,15 @@
 package com.futurice.android.reservator;
 
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.Vector;
 
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Handler;
@@ -14,7 +17,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MenuItem.OnMenuItemClickListener;
-import android.view.Window;
 import android.widget.DigitalClock;
 import android.widget.LinearLayout;
 
@@ -35,6 +37,7 @@ public class LobbyActivity extends ReservatorActivity implements OnMenuItemClick
 
 	private ProgressDialog progressDialog = null;
 	int showLoadingCount = 0;
+	private SharedPreferences settings;
 
 	final Handler handler = new Handler();
 	
@@ -52,6 +55,7 @@ public class LobbyActivity extends ReservatorActivity implements OnMenuItemClick
 	@Override
 	public void onResume() {
 		super.onResume();
+		settings = getSharedPreferences(getString(R.string.PREFERENCES_NAME), Context.MODE_PRIVATE);
 		showLoadingCount = 0; //TODO better fix
 		proxy.addDataUpdatedListener(this);
 		refreshRoomInfo();
@@ -123,46 +127,10 @@ public class LobbyActivity extends ReservatorActivity implements OnMenuItemClick
 		ProgressDialog d = new ProgressDialog(this);
 		d.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
 		d.setMessage("Refreshing room list...");
-		d.setCancelable(false);
+		d.setCancelable(true);
 		d.setMax(1);
 		return d;
 	}
-
-/*	private void showLoading() {
-//		if (showLoadingCount < 0)
-//			showLoadingCount = 0;
-		showLoadingCount++;
-		if (this.progressDialog == null) {
-			progressDialog = new ProgressDialog(this);
-			progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-			progressDialog.setMessage("Refreshing room list...");
-			progressDialog.setCancelable(false);
-			progressDialog.setMax(1);
-			progressDialog.show();
-		}
-
-		if (this.progressDialog != null) {
-			if (showLoadingCount > progressDialog.getMax()) {
-				progressDialog.setMax(showLoadingCount);
-			}
-		}
-	}
-
-	private void hideLoading() {
-		showLoadingCount--;
-		if (this.progressDialog != null){
-			progressDialog.setTitle("Loading count " + showLoadingCount);
-			progressDialog.setProgress(progressDialog.getMax() - Math.max(0, showLoadingCount));
-		}
-		if (showLoadingCount <= 0) {
-			if (this.progressDialog != null) {
-				this.progressDialog.dismiss();
-				this.progressDialog = null;
-			}
-		}
-
-	}
-	*/
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -186,11 +154,18 @@ public class LobbyActivity extends ReservatorActivity implements OnMenuItemClick
 
 	@Override
 	public void roomListUpdated(Vector<Room> rooms) {
+		HashSet<String> hiddenRooms = (HashSet<String>) 
+				settings.getStringSet(getString(R.string.PREFERENCES_UNSELECTED_ROOMS), new HashSet<String>());
+
 		//proceed to requesting room reservation data
 		for (Room r : rooms) {
 			RoomsInfo info = RoomsInfo.getRoomsInfo(r);
 			if (info.isProjectRoom()) {
 				continue; // skip project room
+			}
+			// Maybe: Move the filtering to the DataProxy
+			if (hiddenRooms.contains(r.getName())) {
+				continue;
 			}
 			updateLoadingWindow(1);
 			proxy.refreshRoomReservations(r);

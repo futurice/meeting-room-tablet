@@ -24,7 +24,6 @@ import org.apache.http.impl.conn.SingleClientConnManager;
 import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpParams;
 import org.apache.http.protocol.HTTP;
-
 import org.simpleframework.xml.Serializer;
 import org.simpleframework.xml.core.Persister;
 import org.simpleframework.xml.stream.Format;
@@ -37,9 +36,8 @@ import com.futurice.android.reservator.model.Reservation;
 import com.futurice.android.reservator.model.ReservatorException;
 import com.futurice.android.reservator.model.Room;
 import com.futurice.android.reservator.model.TimeSpan;
-
-import com.futurice.android.reservator.model.soap.EWS.MicrosoftStyle;
 import com.futurice.android.reservator.model.soap.SoapEWS.Envelope;
+import com.futurice.android.reservator.model.soap.EWS.MicrosoftStyle;
 
 public class SoapDataProxy extends DataProxy{
 	private String user = null;
@@ -210,11 +208,11 @@ public class SoapDataProxy extends DataProxy{
 
 	@Override
 	public Vector<Room> getRooms() throws ReservatorException {
-		fetchRoomLists();
-
+		Vector<String> roomList = fetchRoomLists();
 		Vector<Room> rooms = new Vector<Room>();
 
-		for (String roomAddress : fetchRoomLists()) {
+		// for (String roomAddress : fetchRoomLists()) {
+		for (String roomAddress : roomList) {
 			rooms.addAll(fetchRooms(roomAddress));
 		}
 

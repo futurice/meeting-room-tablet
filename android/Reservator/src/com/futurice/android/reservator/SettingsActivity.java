@@ -5,13 +5,13 @@ import java.util.HashSet;
 
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -30,6 +30,7 @@ public class SettingsActivity extends ReservatorActivity {
 	DataProxy proxy;
 
 	SharedPreferences settings;
+	HashSet<String> unselectedRooms;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState){
@@ -64,7 +65,8 @@ public class SettingsActivity extends ReservatorActivity {
 	@Override
 	public void onResume(){
 		super.onResume();
-		settings = getSharedPreferences(getString(R.string.PREFERENCES_NAME), 0);
+		settings = getSharedPreferences(getString(R.string.PREFERENCES_NAME), Context.MODE_PRIVATE);
+		unselectedRooms = (HashSet<String>) settings.getStringSet(getString(R.string.PREFERENCES_UNSELECTED_ROOMS), new HashSet<String>());
 		editor = settings.edit();
 
 		// Set back the recorded settings
@@ -124,11 +126,8 @@ public class SettingsActivity extends ReservatorActivity {
 		editor.putString(getString(R.string.PREFERENCES_SERVER_ADDRESS), serverAddress);
 		editor.putString(getString(R.string.PREFERENCES_ROOM_NAME), roomName);
 		
-		// load the unselected rooms
-    	HashSet<String> unselectedRooms = new HashSet<String>();
-		
 		// get the rooms
-		ListView rooms = (ListView) findViewById(R.id.roomListView);
+/*		ListView rooms = (ListView) findViewById(R.id.roomListView);
 		int count = ((ViewGroup) rooms).getChildCount();
 		for (int i = 0; i < count; i++) {
 			// note: null is not checked, as the layout inside one row should not be changed (or else everything will break anyhow)
@@ -137,9 +136,11 @@ public class SettingsActivity extends ReservatorActivity {
 				CheckBox c = (CheckBox)v;
 				if (!c.isChecked() && !unselectedRooms.contains(c.getText())) {
 					unselectedRooms.add(c.getText().toString());
+				} else if (c.isChecked() && unselectedRooms.contains(c.getText())) {
+					unselectedRooms.remove(c.getText().toString());
 				}
 			}
-		}
+		}*/
 		
 		editor.putStringSet(getString(R.string.PREFERENCES_UNSELECTED_ROOMS), unselectedRooms);
 		editor.commit();
@@ -149,6 +150,21 @@ public class SettingsActivity extends ReservatorActivity {
 		Toast.makeText(getApplicationContext(), "Settings saved", Toast.LENGTH_SHORT).show();
 		
 		super.onPause();
+	}
+
+	public void roomRowClicked(final View view) {
+		if (view instanceof CheckBox) {
+			CheckBox c = (CheckBox)view;
+			// checked = "not unselected". sorry!
+			if (c.isChecked()) {
+				unselectedRooms.remove(c.getText().toString());
+			} else {
+				unselectedRooms.add(c.getText().toString());
+			}
+			editor.putStringSet(getString(R.string.PREFERENCES_UNSELECTED_ROOMS), unselectedRooms);
+			editor.commit();
+			
+		}
 	}
 
 }

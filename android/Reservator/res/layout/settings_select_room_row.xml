@@ -10,6 +10,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:checked="true"
+        android:onClick="roomRowClicked"
         android:text=" "
         android:textColor="#000" />
 

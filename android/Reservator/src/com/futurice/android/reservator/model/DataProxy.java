@@ -68,7 +68,7 @@ public abstract class DataProxy {
 	 * Asynchronously request a room list refresh.
 	 * Listener's roomListUpdated is called when done.
 	 */
-	public void refreshRooms(){
+	public void refreshRooms() {
 		new RoomListRefreshTask().execute();
 	}
 	
