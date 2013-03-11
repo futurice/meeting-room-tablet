@@ -74,8 +74,9 @@ public class LoginActivity extends ReservatorActivity implements OnClickListener
 	}
 	
 	private void login(String username, String password) {
-		pd = ProgressDialog.show(this, "Loading", "Logging in with the saved credentials", true, true);
-
+		((TextView) findViewById(R.id.username)).setText(username);
+		pd = ProgressDialog.show(this, "Loading", "Logging in...", true, true);
+		
 		this.username = username;
 		this.password = password;
 		DataProxy dataProxy = this.getResApplication().getDataProxy();
