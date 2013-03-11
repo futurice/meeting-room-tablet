@@ -155,6 +155,9 @@ public class RoomActivity extends ReservatorActivity implements OnMenuItemClickL
 		stopAutoRefreshData();
 		super.onPause();
 		this.getResApplication().getDataProxy().removeDataUpdatedListener(this);
+		progressDialog.dismiss();
+		progressDialog = null;
+		showLoadingCount = 0;
 	}
 	
 	private void setRoom(Room r) {

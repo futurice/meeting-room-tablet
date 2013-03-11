@@ -83,10 +83,10 @@ public class LobbyActivity extends ReservatorActivity implements OnMenuItemClick
 	}
 	
 	/*
-	 * @param howMuch If howMuch > 0, an item has been added to our progressdialog and 
-	 * we need to increase the number of max items. If param is less than zero, 
+	 * @param howMuch If howMuch > 0, an item has been added to our ProgressDialog and 
+	 * we need to increase the number of max items. If howMuch is less than zero, 
 	 * something has been completed and we can increase the progress. This should be
-	 * split to two different functions, increaseMaxItems() and itemFinished(),
+	 * split to two different functions, incrementMaxItems() and itemFinished(),
 	 * because (at least in the current version) there is always only one increment
 	 * at time.
 	 */
