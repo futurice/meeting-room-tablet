@@ -90,8 +90,7 @@ public class LoginActivity extends ReservatorActivity implements OnClickListener
 
 	@Override
 	public void roomListUpdated(Vector<Room> rooms) {
-		SharedPreferences preferences = getSharedPreferences(
-				this.getString(R.string.PREFERENCES_NAME), 0);
+		SharedPreferences preferences = getSharedPreferences(this.getString(R.string.PREFERENCES_NAME), Context.MODE_PRIVATE);
 		if (username == null || password == null) {
 			refreshFailed(new ReservatorException("Failed to find current username or password for login"));
 		} else {

@@ -24,7 +24,6 @@ import com.futurice.android.reservator.model.ReservatorException;
 import com.futurice.android.reservator.view.SettingsRoomRowAdapter;
 
 public class SettingsActivity extends ReservatorActivity {
-	Editor editor;
 	EditText serverAddressView;
 	Spinner roomNameView;
 	DataProxy proxy;
@@ -66,14 +65,15 @@ public class SettingsActivity extends ReservatorActivity {
 	public void onResume(){
 		super.onResume();
 		settings = getSharedPreferences(getString(R.string.PREFERENCES_NAME), Context.MODE_PRIVATE);
-		unselectedRooms = (HashSet<String>) settings.getStringSet(getString(R.string.PREFERENCES_UNSELECTED_ROOMS), new HashSet<String>());
-		editor = settings.edit();
+		
+		unselectedRooms = new HashSet<String>(settings.getStringSet(getString(R.string.PREFERENCES_UNSELECTED_ROOMS), new HashSet<String>()));
 
 		// Set back the recorded settings
 		serverAddressView = (EditText) findViewById(R.id.serverAddressEdit);
 		serverAddressView.setText(settings.getString(getString(R.string.PREFERENCES_SERVER_ADDRESS), "mail.futurice.com"));
 		roomNameView = (Spinner) findViewById(R.id.roomNameSpinner);
 		String roomName = settings.getString(getString(R.string.PREFERENCES_ROOM_NAME), "");
+		
 		ArrayAdapter<String> adapter = (ArrayAdapter<String>) roomNameView.getAdapter();
 		int spinnerPosition = 0;
 		if (adapter != null){
@@ -86,8 +86,10 @@ public class SettingsActivity extends ReservatorActivity {
 			@Override
 			public void onClick(View v) {
 				// credentials
+				Editor editor = settings.edit();
 				editor.remove(getString(R.string.PREFERENCES_USERNAME))
 					.remove(getString(R.string.PREFERENCES_PASSWORD));
+				editor.apply();
 				Toast.makeText(SettingsActivity.this, "Removed credentials!", Toast.LENGTH_SHORT).show();
 			}
 		});
@@ -115,6 +117,7 @@ public class SettingsActivity extends ReservatorActivity {
 
 	@Override
 	public void onPause(){
+		super.onPause();
 		// TODO: save button?
 		// Save the settings
 		String serverAddress = serverAddressView.getText().toString().trim();
@@ -123,37 +126,21 @@ public class SettingsActivity extends ReservatorActivity {
 		if (selectedRoomName != null){
 			roomName = selectedRoomName.toString().trim();
 		}
+		Editor editor = settings.edit();
 		editor.putString(getString(R.string.PREFERENCES_SERVER_ADDRESS), serverAddress);
 		editor.putString(getString(R.string.PREFERENCES_ROOM_NAME), roomName);
 		
-		// get the rooms
-/*		ListView rooms = (ListView) findViewById(R.id.roomListView);
-		int count = ((ViewGroup) rooms).getChildCount();
-		for (int i = 0; i < count; i++) {
-			// note: null is not checked, as the layout inside one row should not be changed (or else everything will break anyhow)
-			View v = ((ViewGroup) rooms).getChildAt(i).findViewById(R.id.checkBox1);
-			if (v instanceof CheckBox) {
-				CheckBox c = (CheckBox)v;
-				if (!c.isChecked() && !unselectedRooms.contains(c.getText())) {
-					unselectedRooms.add(c.getText().toString());
-				} else if (c.isChecked() && unselectedRooms.contains(c.getText())) {
-					unselectedRooms.remove(c.getText().toString());
-				}
-			}
-		}*/
-		
-		editor.putStringSet(getString(R.string.PREFERENCES_UNSELECTED_ROOMS), unselectedRooms);
-		editor.commit();
+		editor.apply();
 
 		// Update proxy
 		proxy.setServer(serverAddress);
 		Toast.makeText(getApplicationContext(), "Settings saved", Toast.LENGTH_SHORT).show();
-		
-		super.onPause();
 	}
 
 	public void roomRowClicked(final View view) {
 		if (view instanceof CheckBox) {
+			Editor editor = settings.edit();
+
 			CheckBox c = (CheckBox)view;
 			// checked = "not unselected". sorry!
 			if (c.isChecked()) {
@@ -161,10 +148,11 @@ public class SettingsActivity extends ReservatorActivity {
 			} else {
 				unselectedRooms.add(c.getText().toString());
 			}
-			editor.putStringSet(getString(R.string.PREFERENCES_UNSELECTED_ROOMS), unselectedRooms);
+
+			// Create a new HashSet, because...
+			// http://stackoverflow.com/questions/14034803/misbehavior-when-trying-to-store-a-string-set-using-sharedpreferences
+			editor.putStringSet(getString(R.string.PREFERENCES_UNSELECTED_ROOMS), new HashSet<String>(unselectedRooms));
 			editor.commit();
-			
 		}
 	}
-
 }
