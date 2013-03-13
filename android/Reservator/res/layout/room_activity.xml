@@ -33,6 +33,7 @@
 	    android:layout_alignBottom="@+id/weekView1"
 	    android:layout_alignParentLeft="true"
 	    android:background="@drawable/button_background"
-	    android:text="@string/seeAllRooms" />
+	    android:text="@string/seeAllRooms"
+	    android:textColor="#000" />
 
 </RelativeLayout>

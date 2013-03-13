@@ -268,7 +268,7 @@ public class CalendarVisualizer extends HorizontalScrollView implements Reservat
 		
 		int startX = getXForTime(now);
 		int endX = startX + dayWidth;
-		int currentY = (int) getProportionalY(now) * height;
+		int currentY = (int) (getProportionalY(now) * height);
 
 		Paint fillPaint = new Paint();
 		fillPaint.setARGB(128, 192, 192, 192); // #C0C0C0 = semialpha grey
