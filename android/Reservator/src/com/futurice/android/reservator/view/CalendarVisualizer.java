@@ -257,6 +257,34 @@ public class CalendarVisualizer extends HorizontalScrollView implements Reservat
 		}
 		c.restore();
 	}
+	
+	private void drawCurrentTimeIndicators(Canvas c, RectF area) {
+		c.save();
+		c.clipRect(area.left + getScrollX(), area.top, area.right + getScrollX(), area.bottom);
+		c.translate(area.left, area.top);
+		int height = (int) area.height();
+		
+		DateTime now = new DateTime();
+		
+		int startX = getXForTime(now);
+		int endX = startX + dayWidth;
+		int currentY = (int) getProportionalY(now) * height;
+
+		Paint fillPaint = new Paint();
+		fillPaint.setARGB(128, 192, 192, 192); // #C0C0C0 = semialpha grey
+		
+		// the rectangle
+		c.drawRect(startX, 0, endX, currentY, fillPaint);
+		
+		Paint linePaint = new Paint();
+		linePaint.setColor(Color.RED);
+		
+		// the red line
+		c.drawLine(startX, currentY, endX, currentY, linePaint);
+		
+		c.restore();
+	}
+	
 	@Override
 	protected void onDraw(Canvas c) {
 		long start = System.currentTimeMillis();
@@ -271,6 +299,8 @@ public class CalendarVisualizer extends HorizontalScrollView implements Reservat
 		drawReservationSubjects(c, calendarAreaRect);
 		drawFadingEdges(c, calendarAreaRect);
 		drawTimeLabels(c, timeLabelRect);
+		drawCurrentTimeIndicators(c, calendarAreaRect);
+		
 		Log.d("Performance", "Drew CalendarVisualizer in " + (System.currentTimeMillis() - start) + "ms");
 	}
 
