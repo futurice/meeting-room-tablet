@@ -96,8 +96,8 @@ public class LoginActivity extends ReservatorActivity implements OnClickListener
 			refreshFailed(new ReservatorException("Failed to find current username or password for login"));
 		} else {
 			Editor editor = preferences.edit();
-			editor.putString("username", username);
-			editor.putString("password", password);
+			editor.putString(getString(R.string.PREFERENCES_USERNAME), username);
+			editor.putString(getString(R.string.PREFERENCES_PASSWORD), password);
 			editor.commit();
 			if (pd != null)
 				pd.dismiss();
