@@ -36,11 +36,19 @@
 			android:visibility="visible" android:layout_marginBottom="10dp"
 			android:layout_marginTop="10dp" android:layout_height="wrap_content"
 			android:id="@+id/normalMode">
-			<Button android:layout_height="wrap_content"
-				android:background="@drawable/button_background" android:id="@+id/bookNowButton"
-				android:focusable="true" android:text="@string/book_now"
-				android:layout_marginLeft="20dp" android:layout_gravity="center"
-				android:layout_width="wrap_content"></Button>
+
+			<Button
+			    android:id="@+id/bookNowButton"
+			    android:layout_width="wrap_content"
+			    android:layout_height="wrap_content"
+			    android:layout_gravity="center"
+			    android:layout_marginLeft="20dp"
+			    android:background="@drawable/button_background"
+			    android:focusable="true"
+			    android:text="@string/book_now"
+			    android:textColor="#000" >
+			</Button>
+			
 			<TextView android:layout_height="wrap_content" android:id="@+id/roomStatusLabel"
 				android:width="200px" android:layout_marginLeft="20dp"
 				android:layout_gravity="center" android:text="&lt;status&gt;"

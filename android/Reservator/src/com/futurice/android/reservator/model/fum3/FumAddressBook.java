@@ -22,8 +22,11 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.util.Log;
 
+import com.futurice.android.reservator.R;
 import com.futurice.android.reservator.common.Helpers;
 import com.futurice.android.reservator.model.AddressBook;
 import com.futurice.android.reservator.model.AddressBookEntry;
@@ -40,7 +43,12 @@ import com.futurice.android.reservator.model.soap.UnsafeSSLSocketFactory;
 public class FumAddressBook extends AddressBook {
 	// ^\s*(.*)\((\S+)\)\s*$
 	private Pattern namePattern = Pattern.compile("^\\s*(.*)\\((\\S+)\\)\\s*$");
+	private Context context;
 
+	public FumAddressBook(Context c) {
+		context = c;
+	}
+	
 	@Override
 	protected Vector<AddressBookEntry> fetchEntries() throws ReservatorException {
 		Vector<AddressBookEntry> entries = new Vector<AddressBookEntry>();
@@ -48,9 +56,14 @@ public class FumAddressBook extends AddressBook {
 		String result = "";
 
 		// TODO: make configurable
-		String user = "roomreservator";
-		String password = "ako7Thar";
+//		String user = "roomreservator";
+//		String password = "ako7Thar";
 
+		SharedPreferences settings = context.getSharedPreferences(context.getString(R.string.PREFERENCES_NAME), Context.MODE_PRIVATE);
+
+		String user = settings.getString(context.getString(R.string.PREFERENCES_FUM_USERNAME), "");
+		String password = settings.getString(context.getString(R.string.PREFERENCES_FUM_PASSWORD), "");
+		
 		SchemeRegistry schemeRegistry = new SchemeRegistry();
 		schemeRegistry.register(new Scheme("https", UnsafeSSLSocketFactory.getUnsafeSocketFactory(), 443)); // XXX, Unsafe, only for debugging!
 		schemeRegistry.register(new Scheme("http", PlainSocketFactory.getSocketFactory(), 80));

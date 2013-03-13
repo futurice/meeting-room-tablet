@@ -35,6 +35,8 @@ public class SettingsActivity extends ReservatorActivity {
 	public void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.settings_activity);
+		settings = getSharedPreferences(getString(R.string.PREFERENCES_NAME), Context.MODE_PRIVATE);
+		unselectedRooms = new HashSet<String>(settings.getStringSet(getString(R.string.PREFERENCES_UNSELECTED_ROOMS), new HashSet<String>()));
 
 	    proxy = getResApplication().getDataProxy();
 	    
@@ -45,6 +47,7 @@ public class SettingsActivity extends ReservatorActivity {
 	    try {
 	    	roomNames = proxy.getRoomNames();
 	    	roomNames.add(getString(R.string.lobbyRoomName));
+	    	// TODO Remove the unselected rooms from the spinner
 		    adapter = new ArrayAdapter<String>(
 		            this, android.R.layout.simple_spinner_item, roomNames);
 	    } catch (ReservatorException e) {
@@ -88,7 +91,9 @@ public class SettingsActivity extends ReservatorActivity {
 				// credentials
 				Editor editor = settings.edit();
 				editor.remove(getString(R.string.PREFERENCES_USERNAME))
-					.remove(getString(R.string.PREFERENCES_PASSWORD));
+					.remove(getString(R.string.PREFERENCES_PASSWORD))
+					.remove(getString(R.string.PREFERENCES_FUM_USERNAME))
+					.remove(getString(R.string.PREFERENCES_FUM_PASSWORD));
 				editor.apply();
 				Toast.makeText(SettingsActivity.this, "Removed credentials!", Toast.LENGTH_SHORT).show();
 			}

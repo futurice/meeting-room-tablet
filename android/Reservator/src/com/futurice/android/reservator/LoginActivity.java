@@ -39,8 +39,10 @@ public class LoginActivity extends ReservatorActivity implements OnClickListener
 		SharedPreferences preferences = getSharedPreferences(
 				this.getString(R.string.PREFERENCES_NAME), Context.MODE_PRIVATE);
 		
-		if (preferences.contains("username")
-				&& preferences.contains("password")) {
+		if (preferences.contains(getString(R.string.PREFERENCES_USERNAME))
+				&& preferences.contains(getString(R.string.PREFERENCES_PASSWORD))
+				&& preferences.contains(getString(R.string.PREFERENCES_FUM_USERNAME))
+				&& preferences.contains(getString(R.string.PREFERENCES_FUM_PASSWORD))) {
 				login(preferences.getString(getString(R.string.PREFERENCES_USERNAME), null),
 						preferences.getString(getString(R.string.PREFERENCES_PASSWORD), null));
 			// do nothing, activity is changed after a successful login
@@ -92,11 +94,16 @@ public class LoginActivity extends ReservatorActivity implements OnClickListener
 	public void roomListUpdated(Vector<Room> rooms) {
 		SharedPreferences preferences = getSharedPreferences(this.getString(R.string.PREFERENCES_NAME), Context.MODE_PRIVATE);
 		if (username == null || password == null) {
-			refreshFailed(new ReservatorException("Failed to find current username or password for login"));
+			refreshFailed(new ReservatorException("Failed to find current exchange username or password for login"));
 		} else {
 			Editor editor = preferences.edit();
 			editor.putString(getString(R.string.PREFERENCES_USERNAME), username);
 			editor.putString(getString(R.string.PREFERENCES_PASSWORD), password);
+			
+			// FUM
+			editor.putString(getString(R.string.PREFERENCES_FUM_USERNAME), ((TextView)findViewById(R.id.fumUsername)).getText().toString());
+			editor.putString(getString(R.string.PREFERENCES_FUM_PASSWORD), ((TextView)findViewById(R.id.fumPassword)).getText().toString());
+			
 			editor.commit();
 			if (pd != null)
 				pd.dismiss();

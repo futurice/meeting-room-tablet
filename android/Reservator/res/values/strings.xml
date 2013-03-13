@@ -11,6 +11,8 @@
     <string name="password_hint">password</string>
     <string name="exchange_username">Exchange username:</string>
     <string name="exchange_password">Exchange password:</string>
+    <string name="fum_username">FUM3 username:</string>
+    <string name="fum_password">FUM3 password:</string>
     <string name="reservationTextTemplate">Reserved: ^1</string>
     <string name="book_now">Book now</string>
     <string name="dateLabelFormat">EEEE d.M.</string>
@@ -29,6 +31,8 @@
     <string name="PREFERENCES_ROOM_NAME">roomName</string>
     <string name="PREFERENCES_USERNAME">username</string>
     <string name="PREFERENCES_PASSWORD">password</string>
+    <string name="PREFERENCES_FUM_USERNAME">fumUsername</string>
+    <string name="PREFERENCES_FUM_PASSWORD">fumPassword</string>
     <string name="PREFERENCES_UNSELECTED_ROOMS">unselectedRooms</string>
     <string name="removeUserData">Remove login info</string>
     <string name="lobbyRoomName">Lobby</string>

@@ -29,7 +29,7 @@ public class ReservatorApplication extends Application {
 		proxy = new SoapDataProxy(serverAddress);
 		//proxy = new DummyDataProxy();
 		proxy = new CachedDataProxy(proxy);
-		addressBook  = new FumAddressBook();
+		addressBook  = new FumAddressBook(this);
 		try {
 			addressBook.prefetchEntries();
 		} catch (ReservatorException e) {
