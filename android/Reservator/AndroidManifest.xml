@@ -15,7 +15,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="RoomActivity"></activity>
+        <!-- Hardware acceleration breaks the drawing of the vertices -->
+        <activity android:name="RoomActivity" android:hardwareAccelerated="false"></activity>
         <activity android:name="SettingsActivity" android:theme="@style/Theme.Transparent"></activity>
         <activity android:name="LobbyActivity"></activity>
         <activity android:name=".view.RoomReservationPopup" android:theme="@style/Theme.Transparent"></activity>

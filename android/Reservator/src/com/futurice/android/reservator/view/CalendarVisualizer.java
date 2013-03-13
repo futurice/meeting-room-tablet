@@ -105,10 +105,12 @@ public class CalendarVisualizer extends HorizontalScrollView implements Reservat
 		Log.d("Performance", "Set reservations done in " + (System.currentTimeMillis() - start) + "ms");
 	}
 	private void generateDayHeaderLabels(){
-		if(reservations.length > 0){
-		dayLabels = new String[Math.max(getDaysFromStart(reservations[reservations.length - 1].getEndTime()), daysToShow)];
-		weekLabels = new String[dayLabels.length];
-		}else{
+		if (reservations.length > 0) {
+			dayLabels = new String[Math.max(
+					getDaysFromStart(reservations[reservations.length - 1]
+							.getEndTime()), daysToShow)];
+			weekLabels = new String[dayLabels.length];
+		} else {
 			dayLabels = new String[daysToShow];
 			weekLabels = new String[daysToShow];
 		}
@@ -202,6 +204,7 @@ public class CalendarVisualizer extends HorizontalScrollView implements Reservat
 			}
 			c.drawVertices(VertexMode.TRIANGLE_STRIP, points.length, points, 0,
 					points, 0, null, 0, indices, 0, indices.length, markerPaint);
+		
 		}
 		c.restore();
 	}
