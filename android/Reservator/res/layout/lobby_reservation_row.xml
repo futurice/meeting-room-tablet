@@ -9,10 +9,15 @@
 		<LinearLayout android:layout_height="wrap_content"
 			android:orientation="horizontal" android:id="@+id/middleTitleLayout"
 			android:layout_width="wrap_content" android:layout_gravity="center_vertical">
-			<Button android:background="@drawable/calendar_small_grey"
-				android:id="@+id/calendarButton" android:layout_height="wrap_content"
-				android:layout_width="wrap_content" android:focusable="true"
-				android:layout_gravity="center"></Button>
+
+			<Button
+			    android:id="@+id/calendarButton"
+			    android:layout_width="50dp"
+			    android:layout_height="50dp"
+			    android:layout_gravity="center"
+			    android:background="@drawable/calendar_small_grey"
+			    android:focusable="true" >
+</Button>
 			<LinearLayout android:layout_height="wrap_content"
 				android:orientation="vertical" android:id="@+id/titleLayout"
 				android:layout_width="wrap_content" android:layout_gravity="center_vertical|left"

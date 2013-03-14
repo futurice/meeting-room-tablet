@@ -17,7 +17,9 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:lines="2"
-            android:text="@string/exchange_server_address" >
+            android:text="@string/exchange_server_address"
+            android:textColor="#000" >
+
         </TextView>
 
         <EditText
@@ -37,7 +39,9 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/serverAddressEdit"
             android:lines="2"
-            android:text="@string/room_name" >
+            android:text="@string/room_name"
+            android:textColor="#000" >
+
         </TextView>
 
         <Spinner

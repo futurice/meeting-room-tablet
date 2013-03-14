@@ -207,7 +207,7 @@ public class RoomActivity extends ReservatorActivity implements OnMenuItemClickL
 	}
 	
 	private void refreshData() {
-		showLoading();
+		//showLoading();
 		((CachedDataProxy) proxy).forceRefreshRoomReservations(currentRoom);
 	}
 	
@@ -218,7 +218,11 @@ public class RoomActivity extends ReservatorActivity implements OnMenuItemClickL
 	private void stopAutoRefreshData(){
 		handler.removeCallbacks(refreshDataRunnable);
 	}
-	
+	/*
+	 * 
+	 * These do no create any extra value for the user.
+	 * 
+
 	private void showLoading() {
 		showLoadingCount++;
 		if (this.progressDialog == null) {
@@ -236,7 +240,7 @@ public class RoomActivity extends ReservatorActivity implements OnMenuItemClickL
 				this.progressDialog = null;
 			}
 		}
-	}
+	}*/
 
 	@Override
 	public void roomListUpdated(Vector<Room> rooms) {
@@ -259,12 +263,12 @@ public class RoomActivity extends ReservatorActivity implements OnMenuItemClickL
 		if (currentRoom != null && room.equals(currentRoom)) {
 			setRoom(room);
 		}
-		hideLoading();
+		//hideLoading();
 	}
 
 	@Override
 	public void refreshFailed(ReservatorException e) {
-		hideLoading();
+		//hideLoading();
 		stopAutoRefreshData();
 		Toast err = Toast.makeText(this, e.getMessage(),
 				Toast.LENGTH_LONG);

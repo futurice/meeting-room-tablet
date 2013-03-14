@@ -39,7 +39,8 @@
                     android:hint="@string/username_hint"
                     android:inputType="text"
                     android:maxLines="1"
-                    android:textColor="#000" >
+                    android:textColor="#000"
+                    android:text="@string/default_exchange_username" >
                 </EditText>
 
                 <TextView
@@ -60,7 +61,9 @@
                     android:inputType="textPassword"
                     android:maxLines="1"
                     android:singleLine="true"
-                    android:textColor="#000" >
+                    android:textColor="#000" 
+                    android:text=""
+                    >
                 </EditText>
             </LinearLayout>
 
@@ -87,7 +90,9 @@
                     android:hint="@string/username_hint"
                     android:inputType="text"
                     android:maxLines="1"
-                    android:textColor="#000" >
+                    android:textColor="#000" 
+                    android:text="@string/default_fum_username"
+                    >
                 </EditText>
 
                 <TextView
@@ -108,7 +113,8 @@
                     android:inputType="textPassword"
                     android:maxLines="1"
                     android:singleLine="true"
-                    android:textColor="#000" >
+                    android:textColor="#000" 
+                    android:text="">
                 </EditText>
             </LinearLayout>
         </LinearLayout>
