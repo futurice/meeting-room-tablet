@@ -18,6 +18,8 @@ import android.view.Window;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.futurice.android.reservator.model.AddressBook;
+import com.futurice.android.reservator.model.AddressBookUpdatedListener;
 import com.futurice.android.reservator.model.CachedDataProxy;
 import com.futurice.android.reservator.model.DataProxy;
 import com.futurice.android.reservator.model.DataUpdatedListener;
@@ -33,7 +35,7 @@ import com.futurice.android.reservator.view.WeekView;
 import com.futurice.android.reservator.view.WeekView.OnFreeTimeClickListener;
 
 public class RoomActivity extends ReservatorActivity implements OnMenuItemClickListener,
-		DataUpdatedListener {
+		DataUpdatedListener, AddressBookUpdatedListener {
 	public static final String ROOM_EXTRA = "room";
 
 	DataProxy proxy;
@@ -263,6 +265,9 @@ public class RoomActivity extends ReservatorActivity implements OnMenuItemClickL
 		if (currentRoom != null && room.equals(currentRoom)) {
 			setRoom(room);
 		}
+		// let's update the cache (otherwise the changes (eg. new employees) won't be shown in the lists before restart)
+		AddressBook ab = getResApplication().getAddressBook();
+		ab.prefetchEntries();
 		//hideLoading();
 	}
 
@@ -275,5 +280,15 @@ public class RoomActivity extends ReservatorActivity implements OnMenuItemClickL
 		err.show();
 		startAutoRefreshData();
 		return;
+	}
+
+	@Override
+	public void addressBookUpdated() {
+		// No operation, because the update operation is executed only to refresh the cache.
+	}
+
+	@Override
+	public void addressBookUpdateFailed(ReservatorException e) {
+		refreshFailed(e);
 	}
 }

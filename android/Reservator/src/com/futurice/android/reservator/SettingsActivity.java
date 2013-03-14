@@ -67,6 +67,7 @@ public class SettingsActivity extends ReservatorActivity {
 
 		refreshRoomNamesSpinner();
 		
+		@SuppressWarnings("unchecked")
 		ArrayAdapter<String> adapter = (ArrayAdapter<String>) roomNameView.getAdapter();
 		int spinnerPosition = 0;
 		if (adapter != null){
