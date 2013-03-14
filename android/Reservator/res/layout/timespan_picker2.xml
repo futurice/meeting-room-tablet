@@ -34,7 +34,9 @@
         android:layout_alignRight="@+id/startTimeLabel"
         android:layout_centerVertical="false"
         android:gravity="center"
-        android:text="@string/start" >
+        android:text="@string/start"
+        android:textColor="#000" >
+
     </TextView>
  -->
  
@@ -103,7 +105,9 @@
         android:layout_alignLeft="@+id/endTimeLabel"
         android:layout_alignRight="@+id/endTimeLabel"
         android:gravity="center"
-        android:text="@string/end" >
+        android:text="@string/end"
+        android:textColor="#000" >
+
     </TextView>
 
     <ImageButton
