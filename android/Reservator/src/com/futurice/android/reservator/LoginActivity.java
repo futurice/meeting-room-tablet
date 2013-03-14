@@ -12,21 +12,26 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.futurice.android.reservator.model.AddressBook;
+import com.futurice.android.reservator.model.AddressBookUpdatedListener;
 import com.futurice.android.reservator.model.DataProxy;
 import com.futurice.android.reservator.model.DataUpdatedListener;
 import com.futurice.android.reservator.model.ReservatorException;
 import com.futurice.android.reservator.model.Room;
 
 public class LoginActivity extends ReservatorActivity implements OnClickListener, 
-	DataUpdatedListener {
+	DataUpdatedListener, AddressBookUpdatedListener {
 	
 	MenuItem settingsMenu;
 	private String username;
 	private String password;
 	private ProgressDialog pd;
+	private boolean roomListOk = false;
+	private boolean addressBookOk = false;
 	
 	/** Called when the activity is first created. */
 	@Override
@@ -57,12 +62,16 @@ public class LoginActivity extends ReservatorActivity implements OnClickListener
 		super.onResume();
 		DataProxy dataProxy = this.getResApplication().getDataProxy();
 		dataProxy.addDataUpdatedListener(this);
+		AddressBook ab = this.getResApplication().getAddressBook();
+		ab.addDataUpdatedListener(this);
 	}
 	
 	public void onPause() {
 		super.onPause();
 		DataProxy dataProxy = this.getResApplication().getDataProxy();
 		dataProxy.removeDataUpdatedListener(this);
+		AddressBook ab = this.getResApplication().getAddressBook();
+		ab.removeDataUpdatedListener(this);
 	}
 	
 	@Override
@@ -77,12 +86,28 @@ public class LoginActivity extends ReservatorActivity implements OnClickListener
 	private void login(String username, String password) {
 		((TextView) findViewById(R.id.username)).setText(username);
 		pd = ProgressDialog.show(this, "Logging in...", null, true, true);
+		updateProgressDialogMessage();
 		
 		this.username = username;
 		this.password = password;
 		DataProxy dataProxy = this.getResApplication().getDataProxy();
 		dataProxy.setCredentials(username, password);
 		dataProxy.refreshRooms(); // checks the credentials with room query
+		
+		
+		
+		AddressBook ab = this.getResApplication().getAddressBook();
+		// FIXME create setCredentials() for addressbook!
+		
+		SharedPreferences preferences = getSharedPreferences(this.getString(R.string.PREFERENCES_NAME), Context.MODE_PRIVATE);
+		Editor editor = preferences.edit();
+		editor.putString(getString(R.string.PREFERENCES_USERNAME), username);
+		editor.putString(getString(R.string.PREFERENCES_PASSWORD), password);
+		
+		editor.putString(getString(R.string.PREFERENCES_FUM_USERNAME), ((EditText)findViewById(R.id.fumUsername)).getText().toString());
+		editor.putString(getString(R.string.PREFERENCES_FUM_PASSWORD), ((EditText)findViewById(R.id.fumPassword)).getText().toString());
+		editor.commit();
+		ab.prefetchEntries();
 	}
 	
 	@Override
@@ -92,10 +117,33 @@ public class LoginActivity extends ReservatorActivity implements OnClickListener
 
 	@Override
 	public void roomListUpdated(Vector<Room> rooms) {
-		SharedPreferences preferences = getSharedPreferences(this.getString(R.string.PREFERENCES_NAME), Context.MODE_PRIVATE);
 		if (username == null || password == null) {
 			refreshFailed(new ReservatorException("Failed to find current exchange username or password for login"));
 		} else {
+			roomListOk = true;
+			updateProgressDialogMessage();
+			checkAndGo();
+		}
+	}
+	
+	private void updateProgressDialogMessage() {
+		String s = "";
+		if (roomListOk)
+			s += "Exchange login ok\n";
+		else
+			s += "Exchange login pending...\n";
+		
+		if (addressBookOk)
+			s += "FUM login ok\n";
+		else
+			s += "FUM login pending...\n";
+		
+		pd.setMessage(s);
+	}
+	
+	private void checkAndGo() {
+		if (roomListOk && addressBookOk) {
+			SharedPreferences preferences = getSharedPreferences(this.getString(R.string.PREFERENCES_NAME), Context.MODE_PRIVATE);
 			Editor editor = preferences.edit();
 			editor.putString(getString(R.string.PREFERENCES_USERNAME), username);
 			editor.putString(getString(R.string.PREFERENCES_PASSWORD), password);
@@ -125,10 +173,22 @@ public class LoginActivity extends ReservatorActivity implements OnClickListener
 	public void refreshFailed(ReservatorException ex) {
 		if (pd != null)
 			pd.dismiss();
-		Toast.makeText(this, ex.getMessage(),
+		Toast.makeText(getApplicationContext(), ex.getMessage(),
 				Toast.LENGTH_LONG).show();
 		setContentView(R.layout.login_activity);
 		((Button) findViewById(R.id.loginButton)).setOnClickListener(this);
+	}
+
+	@Override
+	public void addressBookUpdated() {
+		addressBookOk = true;
+		updateProgressDialogMessage();
+		checkAndGo();
+	}
+
+	@Override
+	public void addressBookUpdateFailed(ReservatorException e) {
+		refreshFailed(e);
 	}
 
 }

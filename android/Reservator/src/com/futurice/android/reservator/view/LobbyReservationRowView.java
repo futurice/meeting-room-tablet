@@ -1,10 +1,13 @@
 package com.futurice.android.reservator.view;
 
+import java.util.Vector;
+
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
+import android.os.AsyncTask;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -93,6 +96,8 @@ public class LobbyReservationRowView extends FrameLayout implements
 			try {
 				nameField.setAdapter(new AddressBookAdapter(this.getContext(),
 					application.getAddressBook()));
+//				AddressBook a = application.getAddressBook();
+//				Toast.makeText(getContext(), a.toString(), Toast.LENGTH_SHORT).show();
 			} catch (ReservatorException e) {
 				reservatorException = e;
 			}
@@ -177,7 +182,7 @@ public class LobbyReservationRowView extends FrameLayout implements
 			}
 		} else if (v == reserveButton) {
 			reserveButton.setEnabled(false);
-			makeReservation();
+			new MakeReservationTask().execute();
 		} else if (v == calendarButton || v == titleView) {
 			RoomActivity.startWith(getContext(), getRoom());
 		}
@@ -190,40 +195,47 @@ public class LobbyReservationRowView extends FrameLayout implements
 		InputMethodManager imm = (InputMethodManager) getContext()
 				.getSystemService(Context.INPUT_METHOD_SERVICE);
 		imm.hideSoftInputFromWindow(nameField.getRootView().getWindowToken(), 0);
-		// Toast t = Toast.makeText(context, text, duration)
 	}
+	
+	private class MakeReservationTask extends AsyncTask<Void, Void, Void>{
 
-	private void makeReservation() {
-		AddressBookEntry entry = application.getAddressBook().getEntryByName(
-				nameField.getText().toString());
-
-		try {
+		@Override
+		protected Void doInBackground(Void... arg0) {
+			AddressBookEntry entry = application.getAddressBook().getEntryByName(
+					nameField.getText().toString());
 			if (entry == null) {
-				throw new ReservatorException("No such user, try again");
+				reservatorError(new ReservatorException("No such user, try again"));
 			}
-			application.getDataProxy().reserve(room, timePicker2.getTimeSpan(),
-					entry.getName(), entry.getEmail());
-		} catch (ReservatorException e) {
-			Builder alertBuilder = new AlertDialog.Builder(getContext());
-			alertBuilder.setTitle("Failed to put reservation").setMessage(
-					e.getMessage());
-			alertBuilder.setOnCancelListener(new OnCancelListener() {
-				public void onCancel(DialogInterface dialog) {
-					if (onReserveCallback != null) {
-						onReserveCallback.call(LobbyReservationRowView.this);
-					}
+			try {
+				application.getDataProxy().reserve(room, timePicker2.getTimeSpan(),
+						entry.getName(), entry.getEmail());
+			} catch (ReservatorException e) {
+				reservatorError(e);
+			}
+			
+			// Void requires "return null;". Java blah.
+			return null;
+		}
+		
+		@Override
+		protected void onPostExecute(Void v){
+			onReserveCallback.call(LobbyReservationRowView.this);
+		}
+	}
+	
+	private void reservatorError(ReservatorException e) {
+		Builder alertBuilder = new AlertDialog.Builder(getContext());
+		alertBuilder.setTitle("Failed to put reservation").setMessage(
+				e.getMessage());
+		alertBuilder.setOnCancelListener(new OnCancelListener() {
+			public void onCancel(DialogInterface dialog) {
+				if (onReserveCallback != null) {
+					onReserveCallback.call(LobbyReservationRowView.this);
 				}
-			});
+			}
+		});
 
-			alertBuilder.show();
-
-			return;
-		}
-
-		if (onReserveCallback != null) {
-			onReserveCallback.call(this);
-		}
-
+		alertBuilder.show();
 	}
 
 	public void setNormalMode() {

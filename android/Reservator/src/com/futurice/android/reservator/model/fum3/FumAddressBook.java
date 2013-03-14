@@ -43,10 +43,9 @@ import com.futurice.android.reservator.model.soap.UnsafeSSLSocketFactory;
 public class FumAddressBook extends AddressBook {
 	// ^\s*(.*)\((\S+)\)\s*$
 	private Pattern namePattern = Pattern.compile("^\\s*(.*)\\((\\S+)\\)\\s*$");
-	private Context context;
 
 	public FumAddressBook(Context c) {
-		context = c;
+		super(c);
 	}
 	
 	@Override

@@ -6,7 +6,6 @@ import android.content.SharedPreferences;
 import com.futurice.android.reservator.model.AddressBook;
 import com.futurice.android.reservator.model.CachedDataProxy;
 import com.futurice.android.reservator.model.DataProxy;
-import com.futurice.android.reservator.model.ReservatorException;
 import com.futurice.android.reservator.model.fum3.FumAddressBook;
 import com.futurice.android.reservator.model.soap.SoapDataProxy;
 
@@ -30,11 +29,11 @@ public class ReservatorApplication extends Application {
 		//proxy = new DummyDataProxy();
 		proxy = new CachedDataProxy(proxy);
 		addressBook  = new FumAddressBook(this);
-		try {
-			addressBook.prefetchEntries();
-		} catch (ReservatorException e) {
-			// TODO: DIE!
-		}
+//		try {
+//			addressBook.prefetchEntries();
+//		} catch (ReservatorException e) {
+//			// TODO: DIE!
+//		}
 	}
 	
 	public String getSettingValue(int settingNameId, String defaultValue){

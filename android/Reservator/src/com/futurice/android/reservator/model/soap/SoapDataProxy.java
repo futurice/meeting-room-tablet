@@ -250,7 +250,8 @@ public class SoapDataProxy extends DataProxy{
 			Log.d("SOAP", envelope.toString());
 			String id = envelope.checkCreateItemSuccessful();
 			synchronized (recentlyAdded) {
-				recentlyAdded.add(new Bucket(room, new Reservation(id, "FutuReservator5000", timeSpan)));
+//				recentlyAdded.add(new Bucket(room, new Reservation(id, "FutuReservator5000", timeSpan)));
+				recentlyAdded.add(new Bucket(room, new Reservation(id, owner, timeSpan)));
 			}
 		} catch (ReservatorException e) {
 			throw e;

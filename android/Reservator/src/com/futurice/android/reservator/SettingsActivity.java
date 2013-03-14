@@ -84,7 +84,7 @@ public class SettingsActivity extends ReservatorActivity {
 					.remove(getString(R.string.PREFERENCES_FUM_USERNAME))
 					.remove(getString(R.string.PREFERENCES_FUM_PASSWORD));
 				editor.apply();
-				Toast.makeText(SettingsActivity.this, "Removed credentials!", Toast.LENGTH_SHORT).show();
+				Toast.makeText(SettingsActivity.this, "Removed credentials", Toast.LENGTH_SHORT).show();
 			}
 		});
 		Builder builder = new AlertDialog.Builder(this);

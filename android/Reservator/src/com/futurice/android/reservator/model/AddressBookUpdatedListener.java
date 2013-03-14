@@ -7,4 +7,5 @@ package com.futurice.android.reservator.model;
  */
 public interface AddressBookUpdatedListener {
 	public void addressBookUpdated();
+	public void addressBookUpdateFailed(ReservatorException e);
 }
