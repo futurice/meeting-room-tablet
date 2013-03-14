@@ -23,10 +23,8 @@ import org.json.JSONObject;
 import org.json.JSONTokener;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.util.Log;
 
-import com.futurice.android.reservator.R;
 import com.futurice.android.reservator.common.Helpers;
 import com.futurice.android.reservator.model.AddressBook;
 import com.futurice.android.reservator.model.AddressBookEntry;
@@ -43,10 +41,18 @@ import com.futurice.android.reservator.model.soap.UnsafeSSLSocketFactory;
 public class FumAddressBook extends AddressBook {
 	// ^\s*(.*)\((\S+)\)\s*$
 	private Pattern namePattern = Pattern.compile("^\\s*(.*)\\((\\S+)\\)\\s*$");
+	private String username;
+	private String password;
 
 	public FumAddressBook(Context c) {
 		super(c);
 	}
+	
+	public void setCredentials(String newUsername, String newPassword) {
+		username = newUsername;
+		password = newPassword;
+	}
+
 	
 	@Override
 	protected Vector<AddressBookEntry> fetchEntries() throws ReservatorException {
@@ -54,11 +60,6 @@ public class FumAddressBook extends AddressBook {
 
 		String result = "";
 
-		SharedPreferences settings = context.getSharedPreferences(context.getString(R.string.PREFERENCES_NAME), Context.MODE_PRIVATE);
-
-		String user = settings.getString(context.getString(R.string.PREFERENCES_FUM_USERNAME), "");
-		String password = settings.getString(context.getString(R.string.PREFERENCES_FUM_PASSWORD), "");
-		
 		SchemeRegistry schemeRegistry = new SchemeRegistry();
 		schemeRegistry.register(new Scheme("https", UnsafeSSLSocketFactory.getUnsafeSocketFactory(), 443)); // XXX, Unsafe, only for debugging!
 		schemeRegistry.register(new Scheme("http", PlainSocketFactory.getSocketFactory(), 80));
@@ -74,7 +75,7 @@ public class FumAddressBook extends AddressBook {
 
 		// Let's not log the user and password on verbose level
 		// Log.v("httpGet","credentials "+user+":"+password);
-		UsernamePasswordCredentials credentials = new UsernamePasswordCredentials(user, password);
+		UsernamePasswordCredentials credentials = new UsernamePasswordCredentials(username, password);
 		httpclient.getCredentialsProvider().setCredentials(AuthScope.ANY, credentials);
 
 		HttpGet httpGet = new HttpGet("https://fum3.futurice.com/api/group/Futurice/?username=itteam&include=uniqueMember");

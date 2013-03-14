@@ -2,6 +2,7 @@ package com.futurice.android.reservator;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Map;
 
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
@@ -79,12 +80,13 @@ public class SettingsActivity extends ReservatorActivity {
 			public void onClick(View v) {
 				// credentials
 				Editor editor = settings.edit();
-				editor.remove(getString(R.string.PREFERENCES_USERNAME))
-					.remove(getString(R.string.PREFERENCES_PASSWORD))
-					.remove(getString(R.string.PREFERENCES_FUM_USERNAME))
-					.remove(getString(R.string.PREFERENCES_FUM_PASSWORD));
+				Map<String, ?> keys = settings.getAll();
+				for (Map.Entry<String, ?> entry : keys.entrySet()) {
+					editor.remove(entry.getKey());
+				}
 				editor.apply();
-				Toast.makeText(SettingsActivity.this, "Removed credentials", Toast.LENGTH_SHORT).show();
+				Toast.makeText(getApplicationContext(), "Removed credentials and reseted settings", Toast.LENGTH_SHORT).show();
+				finish();
 			}
 		});
 		Builder builder = new AlertDialog.Builder(this);

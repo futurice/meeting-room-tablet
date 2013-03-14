@@ -12,7 +12,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,27 +28,34 @@ public class LoginActivity extends ReservatorActivity implements OnClickListener
 	MenuItem settingsMenu;
 	private String username;
 	private String password;
+	private String fumUsername;
+	private String fumPassword;
+	
 	private ProgressDialog pd;
 	private boolean roomListOk = false;
 	private boolean addressBookOk = false;
-	
+	private SharedPreferences preferences;
+	private Editor editor;
+
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
-
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.login_activity);
 		((Button) findViewById(R.id.loginButton)).setOnClickListener(this);
 		
-		SharedPreferences preferences = getSharedPreferences(
-				this.getString(R.string.PREFERENCES_NAME), Context.MODE_PRIVATE);
+		preferences = getSharedPreferences(this.getString(R.string.PREFERENCES_NAME), Context.MODE_PRIVATE);
+		editor = preferences.edit();
 		
 		if (preferences.contains(getString(R.string.PREFERENCES_USERNAME))
 				&& preferences.contains(getString(R.string.PREFERENCES_PASSWORD))
 				&& preferences.contains(getString(R.string.PREFERENCES_FUM_USERNAME))
 				&& preferences.contains(getString(R.string.PREFERENCES_FUM_PASSWORD))) {
 				login(preferences.getString(getString(R.string.PREFERENCES_USERNAME), null),
-						preferences.getString(getString(R.string.PREFERENCES_PASSWORD), null));
+						preferences.getString(getString(R.string.PREFERENCES_PASSWORD), null),
+						preferences.getString(getString(R.string.PREFERENCES_FUM_USERNAME), null),
+						preferences.getString(getString(R.string.PREFERENCES_FUM_PASSWORD), null)
+						);
 			// do nothing, activity is changed after a successful login
 		} else {
 			if (pd != null)
@@ -79,34 +85,31 @@ public class LoginActivity extends ReservatorActivity implements OnClickListener
 		v.setEnabled(false);
 		TextView currentPassword = (TextView) findViewById(R.id.password);
 		TextView currentUsername = (TextView) findViewById(R.id.username);
-		login(currentUsername.getText().toString(), currentPassword.getText().toString());
+		login(currentUsername.getText().toString(), 
+				currentPassword.getText().toString(),
+				((TextView)findViewById(R.id.fumUsername)).getText().toString(),
+				((TextView)findViewById(R.id.fumPassword)).getText().toString()
+				);
 		v.setEnabled(true);
 	}
 	
-	private void login(String username, String password) {
+	private void login(String username, String password, String fumUsername, String fumPassword) {
 		((TextView) findViewById(R.id.username)).setText(username);
 		pd = ProgressDialog.show(this, "Logging in...", null, true, true);
 		updateProgressDialogMessage();
 		
 		this.username = username;
 		this.password = password;
+		
+		this.fumUsername = fumUsername;
+		this.fumPassword = fumPassword;
+		
 		DataProxy dataProxy = this.getResApplication().getDataProxy();
 		dataProxy.setCredentials(username, password);
 		dataProxy.refreshRooms(); // checks the credentials with room query
 		
-		
-		
 		AddressBook ab = this.getResApplication().getAddressBook();
-		// FIXME create setCredentials() for addressbook!
-		
-		SharedPreferences preferences = getSharedPreferences(this.getString(R.string.PREFERENCES_NAME), Context.MODE_PRIVATE);
-		Editor editor = preferences.edit();
-		editor.putString(getString(R.string.PREFERENCES_USERNAME), username);
-		editor.putString(getString(R.string.PREFERENCES_PASSWORD), password);
-		
-		editor.putString(getString(R.string.PREFERENCES_FUM_USERNAME), ((EditText)findViewById(R.id.fumUsername)).getText().toString());
-		editor.putString(getString(R.string.PREFERENCES_FUM_PASSWORD), ((EditText)findViewById(R.id.fumPassword)).getText().toString());
-		editor.commit();
+		ab.setCredentials(fumUsername, fumPassword);
 		ab.prefetchEntries();
 	}
 	
@@ -127,6 +130,9 @@ public class LoginActivity extends ReservatorActivity implements OnClickListener
 	}
 	
 	private void updateProgressDialogMessage() {
+		if (pd == null)
+			return;
+		
 		String s = "";
 		if (roomListOk)
 			s += "Exchange login ok\n";
@@ -143,16 +149,14 @@ public class LoginActivity extends ReservatorActivity implements OnClickListener
 	
 	private void checkAndGo() {
 		if (roomListOk && addressBookOk) {
-			SharedPreferences preferences = getSharedPreferences(this.getString(R.string.PREFERENCES_NAME), Context.MODE_PRIVATE);
-			Editor editor = preferences.edit();
 			editor.putString(getString(R.string.PREFERENCES_USERNAME), username);
 			editor.putString(getString(R.string.PREFERENCES_PASSWORD), password);
 			
 			// FUM
-			editor.putString(getString(R.string.PREFERENCES_FUM_USERNAME), ((TextView)findViewById(R.id.fumUsername)).getText().toString());
-			editor.putString(getString(R.string.PREFERENCES_FUM_PASSWORD), ((TextView)findViewById(R.id.fumPassword)).getText().toString());
+			editor.putString(getString(R.string.PREFERENCES_FUM_USERNAME), fumUsername);
+			editor.putString(getString(R.string.PREFERENCES_FUM_PASSWORD), fumPassword);
 			
-			editor.commit();
+			editor.apply();
 			if (pd != null)
 				pd.dismiss();
 			
@@ -173,8 +177,8 @@ public class LoginActivity extends ReservatorActivity implements OnClickListener
 	public void refreshFailed(ReservatorException ex) {
 		if (pd != null)
 			pd.dismiss();
-		Toast.makeText(getApplicationContext(), ex.getMessage(),
-				Toast.LENGTH_LONG).show();
+		Toast.makeText(getApplicationContext(), ex.getMessage(), Toast.LENGTH_LONG).show();
+		roomListOk = addressBookOk = false;
 		setContentView(R.layout.login_activity);
 		((Button) findViewById(R.id.loginButton)).setOnClickListener(this);
 	}

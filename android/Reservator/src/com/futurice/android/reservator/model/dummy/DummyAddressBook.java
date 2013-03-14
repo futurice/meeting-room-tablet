@@ -22,4 +22,9 @@ public class DummyAddressBook extends AddressBook {
 
 		return entries;
 	}
+
+	@Override
+	public void setCredentials(String username, String password) {
+		// NOOP
+	}
 }

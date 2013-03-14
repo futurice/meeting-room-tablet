@@ -15,6 +15,8 @@ public abstract class AddressBook {
 
 	protected Context context;
 
+	public abstract void setCredentials(String username, String password);
+	
 	public AddressBook(Context c) {
 		context = c;
 	}
@@ -101,6 +103,4 @@ public abstract class AddressBook {
 			}
 		}
 	}
-	
-	
 }
