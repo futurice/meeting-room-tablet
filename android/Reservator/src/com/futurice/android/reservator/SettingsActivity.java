@@ -30,52 +30,41 @@ public class SettingsActivity extends ReservatorActivity {
 
 	SharedPreferences settings;
 	HashSet<String> unselectedRooms;
+	ArrayList<String> roomNames;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.settings_activity);
-		settings = getSharedPreferences(getString(R.string.PREFERENCES_NAME), Context.MODE_PRIVATE);
-		unselectedRooms = new HashSet<String>(settings.getStringSet(getString(R.string.PREFERENCES_UNSELECTED_ROOMS), new HashSet<String>()));
-
 	    proxy = getResApplication().getDataProxy();
 	    
-		// Populates the select box with list of rooms
-	    Spinner spinner = (Spinner) findViewById(R.id.roomNameSpinner);
-	    ArrayAdapter<String> adapter;
-	    ArrayList<String> roomNames;
 	    try {
 	    	roomNames = proxy.getRoomNames();
 	    	roomNames.add(getString(R.string.lobbyRoomName));
-	    	// TODO Remove the unselected rooms from the spinner
-		    adapter = new ArrayAdapter<String>(
-		            this, android.R.layout.simple_spinner_item, roomNames);
 	    } catch (ReservatorException e) {
 			Toast err = Toast.makeText(getResApplication(), e.getMessage(),
 					Toast.LENGTH_LONG);
 			err.show();
-	    	return;
 	    }
-	    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-	    spinner.setAdapter(adapter);
-	    
-	    ListView l = (ListView) findViewById(R.id.roomListView);
-	    SettingsRoomRowAdapter roomListAdapter = new SettingsRoomRowAdapter(this, R.layout.settings_select_room_row, roomNames);
-	    l.setAdapter(roomListAdapter);
 	}
-
+	
 	@Override
 	public void onResume(){
 		super.onResume();
 		settings = getSharedPreferences(getString(R.string.PREFERENCES_NAME), Context.MODE_PRIVATE);
-		
 		unselectedRooms = new HashSet<String>(settings.getStringSet(getString(R.string.PREFERENCES_UNSELECTED_ROOMS), new HashSet<String>()));
-
-		// Set back the recorded settings
+		
+	    ListView l = (ListView) findViewById(R.id.roomListView);
+	    SettingsRoomRowAdapter roomListAdapter = new SettingsRoomRowAdapter(this, R.layout.settings_select_room_row, roomNames);
+	    l.setAdapter(roomListAdapter);
+		
+	    // Set back the recorded settings
 		serverAddressView = (EditText) findViewById(R.id.serverAddressEdit);
 		serverAddressView.setText(settings.getString(getString(R.string.PREFERENCES_SERVER_ADDRESS), "mail.futurice.com"));
 		roomNameView = (Spinner) findViewById(R.id.roomNameSpinner);
 		String roomName = settings.getString(getString(R.string.PREFERENCES_ROOM_NAME), "");
+
+		refreshRoomNamesSpinner();
 		
 		ArrayAdapter<String> adapter = (ArrayAdapter<String>) roomNameView.getAdapter();
 		int spinnerPosition = 0;
@@ -142,6 +131,29 @@ public class SettingsActivity extends ReservatorActivity {
 		Toast.makeText(getApplicationContext(), "Settings saved", Toast.LENGTH_SHORT).show();
 	}
 
+	private void refreshRoomNamesSpinner() {
+		// Populates the select box with list of rooms
+	    Spinner spinner = (Spinner) findViewById(R.id.roomNameSpinner);
+		
+	    String selected = null;
+	    if (roomNameView.getSelectedItem() != null) {
+	    	selected = (String) roomNameView.getSelectedItem();
+	    }
+	    
+	    ArrayAdapter<String> adapter;
+
+	    ArrayList<String> selectedRooms = new ArrayList<String>(roomNames);
+	    selectedRooms.removeAll(unselectedRooms);
+	    
+	    adapter = new ArrayAdapter<String>(
+	            this, android.R.layout.simple_spinner_item, selectedRooms);
+	    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+	    spinner.setAdapter(adapter);
+		if (selected != null && selectedRooms.contains(selected)) {
+			spinner.setSelection(selectedRooms.indexOf(selected));
+		}
+	}
+	
 	public void roomRowClicked(final View view) {
 		if (view instanceof CheckBox) {
 			Editor editor = settings.edit();
@@ -158,6 +170,8 @@ public class SettingsActivity extends ReservatorActivity {
 			// http://stackoverflow.com/questions/14034803/misbehavior-when-trying-to-store-a-string-set-using-sharedpreferences
 			editor.putStringSet(getString(R.string.PREFERENCES_UNSELECTED_ROOMS), new HashSet<String>(unselectedRooms));
 			editor.commit();
+			
+			refreshRoomNamesSpinner();
 		}
 	}
 }

@@ -55,10 +55,6 @@ public class FumAddressBook extends AddressBook {
 
 		String result = "";
 
-		// TODO: make configurable
-//		String user = "roomreservator";
-//		String password = "ako7Thar";
-
 		SharedPreferences settings = context.getSharedPreferences(context.getString(R.string.PREFERENCES_NAME), Context.MODE_PRIVATE);
 
 		String user = settings.getString(context.getString(R.string.PREFERENCES_FUM_USERNAME), "");
