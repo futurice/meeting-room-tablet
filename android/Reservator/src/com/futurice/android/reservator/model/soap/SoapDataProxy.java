@@ -123,7 +123,7 @@ public class SoapDataProxy extends DataProxy{
 		// http://msdn.microsoft.com/en-us/library/bb856547(v=exchg.80).aspx
 		// Authentication scheme ntlm not supported
 
-		Log.v("httpPost","credentials "+user+":"+password);
+		// Log.v("httpPost","credentials "+user+":"+password);
 		UsernamePasswordCredentials credentials = new UsernamePasswordCredentials(user, password);
 		httpclient.getCredentialsProvider().setCredentials(AuthScope.ANY, credentials);
 
