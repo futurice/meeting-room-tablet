@@ -1,7 +1,5 @@
 package com.futurice.android.reservator.view;
 
-import java.util.Vector;
-
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.content.Context;
@@ -96,8 +94,6 @@ public class LobbyReservationRowView extends FrameLayout implements
 			try {
 				nameField.setAdapter(new AddressBookAdapter(this.getContext(),
 					application.getAddressBook()));
-//				AddressBook a = application.getAddressBook();
-//				Toast.makeText(getContext(), a.toString(), Toast.LENGTH_SHORT).show();
 			} catch (ReservatorException e) {
 				reservatorException = e;
 			}

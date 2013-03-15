@@ -202,7 +202,6 @@ public class LobbyActivity extends ReservatorActivity implements OnMenuItemClick
 	private void processRoom(Room r) {
 		LobbyReservationRowView v = new LobbyReservationRowView(LobbyActivity.this);
 		if (v.getException() != null) {
-			//updateLoadingWindow(-1);
 			Log.d("LobbyReservator", "Exception in LobbyReservator: " + v.getException().getMessage());
 			// show only one dialog at time
 			if (alertDialog == null || !alertDialog.isShowing()) {

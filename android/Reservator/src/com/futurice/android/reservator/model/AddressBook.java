@@ -28,7 +28,6 @@ public abstract class AddressBook {
 
 	public void prefetchEntries() {
 		if (entries == null) {
-			// entries = fetchEntries();
 			new PrefetchEntriesTask().execute();
 		}
 	}

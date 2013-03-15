@@ -12,7 +12,6 @@ import com.futurice.android.reservator.model.soap.SoapDataProxy;
 public class ReservatorApplication extends Application {
 	private DataProxy proxy;
 	private AddressBook addressBook;
-	//private Activity runningActivity;
 
 	public DataProxy getDataProxy(){
 		return proxy;
@@ -24,16 +23,11 @@ public class ReservatorApplication extends Application {
 	
 	@Override
 	public void onCreate(){
-		String serverAddress = getSettingValue(R.string.PREFERENCES_SERVER_ADDRESS, "mail.futurice.com");// TODO: change to mail.futurice.com before delivery
+		String serverAddress = getSettingValue(R.string.PREFERENCES_SERVER_ADDRESS, "mail.futurice.com");
 		proxy = new SoapDataProxy(serverAddress);
 		//proxy = new DummyDataProxy();
 		proxy = new CachedDataProxy(proxy);
 		addressBook  = new FumAddressBook(this);
-//		try {
-//			addressBook.prefetchEntries();
-//		} catch (ReservatorException e) {
-//			// TODO: DIE!
-//		}
 	}
 	
 	public String getSettingValue(int settingNameId, String defaultValue){
