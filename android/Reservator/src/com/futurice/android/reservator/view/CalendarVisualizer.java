@@ -7,10 +7,10 @@ import java.util.List;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Canvas.VertexMode;
 import android.graphics.Color;
 import android.graphics.LinearGradient;
 import android.graphics.Paint;
-import android.graphics.Canvas.VertexMode;
 import android.graphics.Paint.Align;
 import android.graphics.RectF;
 import android.graphics.Shader;
@@ -204,7 +204,23 @@ public class CalendarVisualizer extends HorizontalScrollView implements Reservat
 			}
 			c.drawVertices(VertexMode.TRIANGLE_STRIP, points.length, points, 0,
 					points, 0, null, 0, indices, 0, indices.length, markerPaint);
-		
+
+			Paint linePaint = new Paint();
+			// linePaint.setARGB(200, 255, 255, 255);
+			linePaint.setColor(Color.WHITE);
+			
+			// Draw the separator line only if the next reservation is following this one immediately.			
+			for (int i = 0; i < reservations.length; i++) {
+				if ((i + 1) < reservations.length  &&
+ 						reservations[i].getEndTime().getTimeInMillis() == reservations[i+1].getStartTime().getTimeInMillis()) {
+					c.drawLine(getXForTime(reservations[i].getStartTime()), 
+							getProportionalEndY(reservations[i].getEndTime()) * height, 
+							getXForTime(reservations[i].getStartTime()) + dayWidth, 
+							getProportionalEndY(reservations[i].getEndTime()) * height, 
+							linePaint);
+				}
+			}
+			
 		}
 		c.restore();
 	}
@@ -227,7 +243,8 @@ public class CalendarVisualizer extends HorizontalScrollView implements Reservat
 	}
 	private void drawReservationSubjects(Canvas c, RectF area){
 		float textHeight = textPaint.getTextSize();
-		int padding = 4;
+		int paddingX = 4;
+		int paddingY = 0;
 		float height = area.height();
 		c.save();
 		c.clipRect(area.left + getScrollX(), area.top, area.right + getScrollX(), area.bottom);
@@ -235,7 +252,7 @@ public class CalendarVisualizer extends HorizontalScrollView implements Reservat
 
 
 		for(Reservation r : reservations){
-			c.drawText(r.getSubject(), getXForTime(r.getStartTime()) + padding,getProportionalY(r.getStartTime())*height + textHeight + padding, textPaint);
+			c.drawText(r.getSubject(), getXForTime(r.getStartTime()) + paddingX,getProportionalY(r.getStartTime())*height + textHeight + paddingY, textPaint);
 		}
 		c.restore();
 	}
