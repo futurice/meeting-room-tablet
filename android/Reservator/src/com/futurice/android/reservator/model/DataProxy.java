@@ -111,6 +111,14 @@ public abstract class DataProxy {
 			l.refreshFailed(e);
 		}
 	}
+	
+	/**
+	 * Checks if the data provider has a fatal external error and the application should refuse
+	 * to start.  
+	 * @author vsin
+	 */
+	public boolean hasFatalError() { return false; }
+	
 	/**
 	 * Private inner class for asynchronously refreshing list of all the rooms.
 	 * @author vman

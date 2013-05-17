@@ -37,6 +37,7 @@ import com.futurice.android.reservator.view.WeekView.OnFreeTimeClickListener;
 public class RoomActivity extends ReservatorActivity implements OnMenuItemClickListener,
 		DataUpdatedListener, AddressBookUpdatedListener {
 	public static final String ROOM_EXTRA = "room";
+	public static final long ROOMLIST_REFRESH_PERIOD = 60*1000;
 
 	DataProxy proxy;
 	Room currentRoom;
@@ -210,11 +211,15 @@ public class RoomActivity extends ReservatorActivity implements OnMenuItemClickL
 	
 	private void refreshData() {
 		//showLoading();
-		((CachedDataProxy) proxy).forceRefreshRoomReservations(currentRoom);
+		if (proxy instanceof CachedDataProxy) {
+			((CachedDataProxy) proxy).forceRefreshRoomReservations(currentRoom);
+		} else {
+			proxy.refreshRoomReservations(currentRoom);
+		}
 	}
 	
 	private void startAutoRefreshData(){
-		handler.postDelayed(refreshDataRunnable, 60000);
+		handler.postDelayed(refreshDataRunnable, ROOMLIST_REFRESH_PERIOD);
 	}
 	
 	private void stopAutoRefreshData(){

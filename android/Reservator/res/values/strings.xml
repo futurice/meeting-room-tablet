@@ -36,6 +36,14 @@
     <string name="PREFERENCES_FUM_USERNAME">fumUsername</string>
     <string name="PREFERENCES_FUM_PASSWORD">fumPassword</string>
     <string name="PREFERENCES_UNSELECTED_ROOMS">unselectedRooms</string>
+    <string name="PREFERENCES_GOOGLE_ACCOUNT">googleAccount</string>
     <string name="removeUserData">Remove login info and reset settings</string>
     <string name="lobbyRoomName">Lobby</string>
+    <string name="calendarError">Google Calendar error</string>
+    <string name="noCalendarsError">No meeting room calendars found. Please ensure that a Google Account has been configured on this device and that Google Calendar has been set to sync the meeting room calendars.</string>
+    <string name="close">Close</string>
+    <string name="calendarAccountGlob">futurice.com_*@resource.calendar.google.com</string>
+    <string name="used_google_account">Used Google Account</string>
+    <string name="allAccountsMagicWord">(All)</string>
+    <string name="shown_rooms">Visible rooms</string>
 </resources>

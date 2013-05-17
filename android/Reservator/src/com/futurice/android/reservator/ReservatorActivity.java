@@ -14,7 +14,7 @@ import android.widget.Toast;
 public class ReservatorActivity extends Activity {
 		
 	private final ReservatorAppHandler handler = new ReservatorAppHandler();
-	class ReservatorAppHandler extends Handler{
+	static class ReservatorAppHandler extends Handler{
 		@Override
 		public void handleMessage(Message msg){
 			return;
@@ -46,7 +46,7 @@ public class ReservatorActivity extends Activity {
 				RoomActivity.startWith(activity, room);
 			}
 			activity.onPrehended();
-		}		
+		}
 	}
 	
 	public void onCreate(Bundle savedInstanceState) {

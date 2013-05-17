@@ -1,7 +1,6 @@
 package com.futurice.android.reservator;
 
-import java.util.Vector;
-
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -14,48 +13,53 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.content.DialogInterface;
 
 import com.futurice.android.reservator.model.AddressBook;
 import com.futurice.android.reservator.model.AddressBookUpdatedListener;
-import com.futurice.android.reservator.model.DataProxy;
-import com.futurice.android.reservator.model.DataUpdatedListener;
 import com.futurice.android.reservator.model.ReservatorException;
-import com.futurice.android.reservator.model.Room;
 
 public class LoginActivity extends ReservatorActivity implements OnClickListener, 
-	DataUpdatedListener, AddressBookUpdatedListener {
+	AddressBookUpdatedListener {
 	
 	MenuItem settingsMenu;
-	private String username;
-	private String password;
 	private String fumUsername;
 	private String fumPassword;
 	
 	private ProgressDialog pd;
-	private boolean roomListOk = false;
 	private boolean addressBookOk = false;
+	private boolean roomListOk = false;
 	private SharedPreferences preferences;
 	private Editor editor;
+	
+	static final int REQUEST_LOBBY = 0;
 
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.login_activity);
-		((Button) findViewById(R.id.loginButton)).setOnClickListener(this);
 		
 		preferences = getSharedPreferences(this.getString(R.string.PREFERENCES_NAME), Context.MODE_PRIVATE);
 		editor = preferences.edit();
 		
-		if (preferences.contains(getString(R.string.PREFERENCES_USERNAME))
-				&& preferences.contains(getString(R.string.PREFERENCES_PASSWORD))
-				&& preferences.contains(getString(R.string.PREFERENCES_FUM_USERNAME))
-				&& preferences.contains(getString(R.string.PREFERENCES_FUM_PASSWORD))) {
-				login(preferences.getString(getString(R.string.PREFERENCES_USERNAME), null),
-						preferences.getString(getString(R.string.PREFERENCES_PASSWORD), null),
-						preferences.getString(getString(R.string.PREFERENCES_FUM_USERNAME), null),
-						preferences.getString(getString(R.string.PREFERENCES_FUM_PASSWORD), null)
-						);
+		// Check Google Calendar
+		if (getResApplication().getDataProxy().hasFatalError()) {
+			showFatalErrorDialog(
+					getString(R.string.calendarError), 
+					getString(R.string.noCalendarsError));
+			return;
+		} else {
+			roomListOk = true;
+		}
+		
+		// Login to FUM
+		((Button) findViewById(R.id.loginButton)).setOnClickListener(this);
+		
+		if (preferences.contains(getString(R.string.PREFERENCES_FUM_USERNAME)) && 
+				preferences.contains(getString(R.string.PREFERENCES_FUM_PASSWORD))) {
+				loginFum(preferences.getString(getString(R.string.PREFERENCES_FUM_USERNAME), null),
+						preferences.getString(getString(R.string.PREFERENCES_FUM_PASSWORD), null));
 			// do nothing, activity is changed after a successful login
 		} else {
 			if (pd != null)
@@ -66,16 +70,15 @@ public class LoginActivity extends ReservatorActivity implements OnClickListener
 	@Override
 	public void onResume() {
 		super.onResume();
-		DataProxy dataProxy = this.getResApplication().getDataProxy();
-		dataProxy.addDataUpdatedListener(this);
+		
 		AddressBook ab = this.getResApplication().getAddressBook();
 		ab.addDataUpdatedListener(this);
+		checkAndGo();
 	}
 	
 	public void onPause() {
 		super.onPause();
-		DataProxy dataProxy = this.getResApplication().getDataProxy();
-		dataProxy.removeDataUpdatedListener(this);
+		
 		AddressBook ab = this.getResApplication().getAddressBook();
 		ab.removeDataUpdatedListener(this);
 	}
@@ -83,50 +86,22 @@ public class LoginActivity extends ReservatorActivity implements OnClickListener
 	@Override
 	public void onClick(View v) {
 		v.setEnabled(false);
-		TextView currentPassword = (TextView) findViewById(R.id.password);
-		TextView currentUsername = (TextView) findViewById(R.id.username);
-		login(currentUsername.getText().toString(), 
-				currentPassword.getText().toString(),
-				((TextView)findViewById(R.id.fumUsername)).getText().toString(),
-				((TextView)findViewById(R.id.fumPassword)).getText().toString()
-				);
+		loginFum(((TextView)findViewById(R.id.fumUsername)).getText().toString(),
+				((TextView)findViewById(R.id.fumPassword)).getText().toString());
 		v.setEnabled(true);
 	}
 	
-	private void login(String username, String password, String fumUsername, String fumPassword) {
-		((TextView) findViewById(R.id.username)).setText(username);
+	private void loginFum(String fumUsername, String fumPassword) {
+		((TextView) findViewById(R.id.fumUsername)).setText(fumUsername);
 		pd = ProgressDialog.show(this, "Logging in...", null, true, true);
 		updateProgressDialogMessage();
-		
-		this.username = username;
-		this.password = password;
 		
 		this.fumUsername = fumUsername;
 		this.fumPassword = fumPassword;
 		
-		DataProxy dataProxy = this.getResApplication().getDataProxy();
-		dataProxy.setCredentials(username, password);
-		dataProxy.refreshRooms(); // checks the credentials with room query
-		
 		AddressBook ab = this.getResApplication().getAddressBook();
 		ab.setCredentials(fumUsername, fumPassword);
 		ab.prefetchEntries();
-	}
-	
-	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		finish();
-	}
-
-	@Override
-	public void roomListUpdated(Vector<Room> rooms) {
-		if (username == null || password == null) {
-			refreshFailed(new ReservatorException("Failed to find current exchange username or password for login"));
-		} else {
-			roomListOk = true;
-			updateProgressDialogMessage();
-			checkAndGo();
-		}
 	}
 	
 	private void updateProgressDialogMessage() {
@@ -134,10 +109,11 @@ public class LoginActivity extends ReservatorActivity implements OnClickListener
 			return;
 		
 		String s = "";
+		
 		if (roomListOk)
-			s += "Exchange login ok\n";
+			s += "Google Calendar ok\n";
 		else
-			s += "Exchange login pending...\n";
+			s += "Google Calendar pending...\n";
 		
 		if (addressBookOk)
 			s += "FUM login ok\n";
@@ -148,10 +124,7 @@ public class LoginActivity extends ReservatorActivity implements OnClickListener
 	}
 	
 	private void checkAndGo() {
-		if (roomListOk && addressBookOk) {
-			editor.putString(getString(R.string.PREFERENCES_USERNAME), username);
-			editor.putString(getString(R.string.PREFERENCES_PASSWORD), password);
-			
+		if (addressBookOk && roomListOk) {
 			// FUM
 			editor.putString(getString(R.string.PREFERENCES_FUM_USERNAME), fumUsername);
 			editor.putString(getString(R.string.PREFERENCES_FUM_PASSWORD), fumPassword);
@@ -160,27 +133,9 @@ public class LoginActivity extends ReservatorActivity implements OnClickListener
 			if (pd != null)
 				pd.dismiss();
 			
-			DataProxy dataProxy = this.getResApplication().getDataProxy();
-			dataProxy.removeDataUpdatedListener(this);
-
 			Intent i = new Intent(this, LobbyActivity.class);
-			startActivityForResult(i, 0);
+			startActivityForResult(i, REQUEST_LOBBY);
 		}
-	}
-
-	@Override
-	public void roomReservationsUpdated(Room room) {
-		// No operation
-	}
-
-	@Override
-	public void refreshFailed(ReservatorException ex) {
-		if (pd != null)
-			pd.dismiss();
-		Toast.makeText(getApplicationContext(), ex.getMessage(), Toast.LENGTH_LONG).show();
-		roomListOk = addressBookOk = false;
-		setContentView(R.layout.login_activity);
-		((Button) findViewById(R.id.loginButton)).setOnClickListener(this);
 	}
 
 	@Override
@@ -192,7 +147,26 @@ public class LoginActivity extends ReservatorActivity implements OnClickListener
 
 	@Override
 	public void addressBookUpdateFailed(ReservatorException e) {
-		refreshFailed(e);
+		addressBookOk = false;
+		
+		if (pd != null)
+			pd.dismiss();
+		Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+		setContentView(R.layout.login_activity);
+		((Button) findViewById(R.id.loginButton)).setOnClickListener(this);
 	}
-
+	
+	public void showFatalErrorDialog(String title, String errorMsg) {
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		
+		builder.setMessage(errorMsg)
+			.setTitle(title)
+			.setPositiveButton(R.string.close, new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface dialog, int id) {
+					LoginActivity.this.finish();
+				}
+			});
+		
+		builder.create().show();
+	}
 }

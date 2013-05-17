@@ -24,7 +24,8 @@
 	    android:paddingLeft="40dp"
 	    android:textColor="@color/TextColor"
 	    android:textSize="20sp"
-	    android:textStyle="bold" />
+	    android:textStyle="bold" 
+	    android:textIsSelectable="false" />
 
 	<Button
 	    android:id="@+id/seeAllRoomsButton"
