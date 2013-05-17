@@ -162,12 +162,13 @@ public class PlatformCalendarDataProxy extends DataProxy {
 		};
 		
 		String mSelectionClause = CalendarContract.Calendars.OWNER_ACCOUNT + " GLOB ?";
-		String[] mSelectionArgs = { roomAccountGlob };
 		
+		String[] mSelectionArgs;
 		if (this.account != null) {
 			mSelectionClause = mSelectionClause + " AND " + CalendarContract.Calendars.ACCOUNT_NAME + " = ?";
-			String[] mSelectionArgsAccount = { roomAccountGlob, account };
-			mSelectionArgs = mSelectionArgsAccount;
+			mSelectionArgs = new String[]{ roomAccountGlob, account };
+		} else {
+			mSelectionArgs = new String[]{ roomAccountGlob };
 		}
 		
 		String mSortOrder = null;

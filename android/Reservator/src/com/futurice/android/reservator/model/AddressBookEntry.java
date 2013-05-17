@@ -15,4 +15,8 @@ public class AddressBookEntry {
 	public String getEmail() {
 		return email;
 	}
+	
+	public String toString() {
+		return getName() + " <" + getEmail() + ">";
+	}
 }

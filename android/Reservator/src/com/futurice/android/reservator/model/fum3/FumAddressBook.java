@@ -22,7 +22,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
-import android.content.Context;
 import android.util.Log;
 
 import com.futurice.android.reservator.common.Helpers;
@@ -44,8 +43,8 @@ public class FumAddressBook extends AddressBook {
 	private String username;
 	private String password;
 
-	public FumAddressBook(Context c) {
-		super(c);
+	public FumAddressBook() {
+		super();
 	}
 	
 	public void setCredentials(String newUsername, String newPassword) {

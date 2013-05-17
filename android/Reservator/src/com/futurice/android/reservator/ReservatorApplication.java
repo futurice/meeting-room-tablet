@@ -4,15 +4,18 @@ import android.accounts.AccountManager;
 import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.Handler;
 
 import com.futurice.android.reservator.model.AddressBook;
 import com.futurice.android.reservator.model.DataProxy;
-import com.futurice.android.reservator.model.fum3.FumAddressBook;
 import com.futurice.android.reservator.model.platformcalendar.PlatformCalendarDataProxy;
+import com.futurice.android.reservator.model.platformcontacts.PlatformContactsAddressBook;
 
 public class ReservatorApplication extends Application {
 	private DataProxy proxy;
 	private AddressBook addressBook;
+	private Handler handler;
+	private final long ADDRESS_CACHE_CLEAR_INTERVAL = 6*60*60*1000; // Once every six hours
 
 	public DataProxy getDataProxy(){
 		return proxy;
@@ -24,7 +27,8 @@ public class ReservatorApplication extends Application {
 	
 	@Override
 	public void onCreate(){
-		addressBook  = new FumAddressBook(this);
+		addressBook  = new PlatformContactsAddressBook(
+				getContentResolver());
 		
 		proxy = new PlatformCalendarDataProxy(
 				getContentResolver(),
@@ -37,9 +41,16 @@ public class ReservatorApplication extends Application {
 	    
 		if (usedAccount.equals(getString(R.string.allAccountsMagicWord))) {
 			((PlatformCalendarDataProxy) proxy).setAccount(null);
+			((PlatformContactsAddressBook) addressBook).setAccount(null);
 		} else {
 			((PlatformCalendarDataProxy) proxy).setAccount(usedAccount);
+			((PlatformContactsAddressBook) addressBook).setAccount(usedAccount);
 		}
+		
+		addressBook.prefetchEntries();
+		
+		handler = new Handler();
+		clearCacheLater();
 	}
 	
 	public String getSettingValue(int settingNameId, String defaultValue){
@@ -50,4 +61,16 @@ public class ReservatorApplication extends Application {
 	public String getFavouriteRoomName(){
 		return this.getSettingValue(R.string.PREFERENCES_ROOM_NAME, getString(R.string.lobbyRoomName));
 	}
+	
+	private void clearCacheLater() {
+		handler.postDelayed(clearAddressCache, ADDRESS_CACHE_CLEAR_INTERVAL);
+	}
+	
+	Runnable clearAddressCache = new Runnable() {
+		@Override
+		public void run() {
+			getAddressBook().refetchEntries();
+			clearCacheLater();
+		}
+	};
 }

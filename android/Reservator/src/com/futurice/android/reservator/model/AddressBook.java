@@ -4,7 +4,6 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.Vector;
 
-import android.content.Context;
 import android.os.AsyncTask;
 
 public abstract class AddressBook {
@@ -13,13 +12,9 @@ public abstract class AddressBook {
 
 	protected abstract Vector<AddressBookEntry> fetchEntries() throws ReservatorException;
 
-	protected Context context;
-
 	public abstract void setCredentials(String username, String password);
 	
-	public AddressBook(Context c) {
-		context = c;
-	}
+	public AddressBook() {}
 	
 	public Vector<AddressBookEntry> getEntries() throws ReservatorException {
 		prefetchEntries();
@@ -68,15 +63,24 @@ public abstract class AddressBook {
 	}
 	
 	private void notifyEntriesUpdated(){
-		for(AddressBookUpdatedListener l : listeners){
-			l.addressBookUpdated();
+		synchronized (listeners) {
+			for(AddressBookUpdatedListener l : listeners){
+				l.addressBookUpdated();
+			}
 		}
 	}
 	
 	private void notifyAddressBookUpdateFailed(ReservatorException e) {
-		for(AddressBookUpdatedListener l : listeners) {
-			l.addressBookUpdateFailed(e);
+		synchronized (listeners) {
+			for(AddressBookUpdatedListener l : listeners) {
+				l.addressBookUpdateFailed(e);
+			}
 		}
+	}
+	
+	public void refetchEntries() {
+		entries = null;
+		prefetchEntries();
 	}
 	
 	private class PrefetchEntriesTask extends AsyncTask<Void, Void, Vector<AddressBookEntry>> {

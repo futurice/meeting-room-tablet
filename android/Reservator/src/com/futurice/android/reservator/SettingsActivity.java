@@ -21,8 +21,10 @@ import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.futurice.android.reservator.model.AddressBook;
 import com.futurice.android.reservator.model.DataProxy;
 import com.futurice.android.reservator.model.platformcalendar.PlatformCalendarDataProxy;
+import com.futurice.android.reservator.model.platformcontacts.PlatformContactsAddressBook;
 import com.futurice.android.reservator.model.ReservatorException;
 import com.futurice.android.reservator.view.SettingsRoomRowAdapter;
 
@@ -155,12 +157,21 @@ public class SettingsActivity extends ReservatorActivity {
 		
 		editor.apply();
 
-		// Update proxy
+		// Update proxies
 		if (proxy instanceof PlatformCalendarDataProxy) {
 			if (selectedAccount.equals(getString(R.string.allAccountsMagicWord))) {
 				((PlatformCalendarDataProxy) proxy).setAccount(null);
 			} else {
 				((PlatformCalendarDataProxy) proxy).setAccount(selectedAccount);
+			}
+		}
+		
+		AddressBook ab = getResApplication().getAddressBook(); 
+		if (ab instanceof PlatformContactsAddressBook) {
+			if (selectedAccount.equals(getString(R.string.allAccountsMagicWord))) {
+				((PlatformContactsAddressBook) ab).setAccount(null);
+			} else {
+				((PlatformContactsAddressBook) ab).setAccount(selectedAccount);
 			}
 		}
 		Toast.makeText(getApplicationContext(), "Settings saved", Toast.LENGTH_SHORT).show();

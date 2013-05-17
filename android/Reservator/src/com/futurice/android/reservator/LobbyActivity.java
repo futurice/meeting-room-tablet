@@ -20,6 +20,8 @@ import android.view.MenuItem.OnMenuItemClickListener;
 import android.widget.DigitalClock;
 import android.widget.LinearLayout;
 
+import com.futurice.android.reservator.model.AddressBook;
+import com.futurice.android.reservator.model.AddressBookUpdatedListener;
 import com.futurice.android.reservator.model.DataProxy;
 import com.futurice.android.reservator.model.DataUpdatedListener;
 import com.futurice.android.reservator.model.DateTime;
@@ -30,14 +32,16 @@ import com.futurice.android.reservator.view.LobbyReservationRowView;
 import com.futurice.android.reservator.view.LobbyReservationRowView.OnReserveListener;
 
 public class LobbyActivity extends ReservatorActivity implements OnMenuItemClickListener,
-		DataUpdatedListener {
+		DataUpdatedListener, AddressBookUpdatedListener {
 	MenuItem settingsMenu, refreshMenu;
 	LinearLayout container = null;
 	DataProxy proxy;
+	AddressBook ab;
 
 	private ProgressDialog progressDialog = null;
 	int showLoadingCount = 0;
 	private SharedPreferences settings;
+	private boolean waitingAddresses = false;
 
 	final Handler handler = new Handler();
 	
@@ -48,6 +52,7 @@ public class LobbyActivity extends ReservatorActivity implements OnMenuItemClick
 		super.onCreate(savedInstanceState);
 		this.setContentView(R.layout.lobby_activity);
 		proxy = this.getResApplication().getDataProxy();
+		ab = this.getResApplication().getAddressBook();
 		DigitalClock clock =  (DigitalClock)findViewById(R.id.digitalClock1);  //FIXME deprecated
         clock.setTypeface(Typeface.createFromAsset(getAssets(), "fonts/EHSMB.TTF"));
 	}
@@ -58,6 +63,7 @@ public class LobbyActivity extends ReservatorActivity implements OnMenuItemClick
 		settings = getSharedPreferences(getString(R.string.PREFERENCES_NAME), Context.MODE_PRIVATE);
 		showLoadingCount = 0; //TODO better fix
 		proxy.addDataUpdatedListener(this);
+		ab.addDataUpdatedListener(this);
 		refreshRoomInfo();
 	}
 
@@ -65,6 +71,7 @@ public class LobbyActivity extends ReservatorActivity implements OnMenuItemClick
 	public void onPause() {
 		super.onPause();
 		proxy.removeDataUpdatedListener(this);
+		ab.addDataUpdatedListener(this);
 		if(progressDialog != null){
 			progressDialog.dismiss();
 			showLoadingCount = 0;
@@ -148,6 +155,7 @@ public class LobbyActivity extends ReservatorActivity implements OnMenuItemClick
 			startActivity(i);
 		} else if (item == refreshMenu) {
 			refreshRoomInfo();
+			refetchAddressBook();
 		}
 		return true;
 	}
@@ -272,5 +280,27 @@ public class LobbyActivity extends ReservatorActivity implements OnMenuItemClick
 		if (!added) {
 			container.addView(v);
 		}
+	}
+
+	@Override
+	public void addressBookUpdated() {
+		if (waitingAddresses) {
+			waitingAddresses = false;
+			updateLoadingWindow(-1);
+		}
+	}
+
+	@Override
+	public void addressBookUpdateFailed(ReservatorException e) {
+		if (waitingAddresses) {
+			waitingAddresses = false;
+			updateLoadingWindow(-1);
+		}
+	}
+	
+	private void refetchAddressBook() {
+		waitingAddresses = true;
+		updateLoadingWindow(+1);
+		ab.refetchEntries();
 	}
 }
