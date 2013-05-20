@@ -152,6 +152,8 @@ public class PlatformCalendarDataProxy extends DataProxy {
 	
 	@Override
 	public Vector<Room> getRooms() throws ReservatorException {
+		setSyncOn();
+		
 		Vector<Room> rooms = new Vector<Room>(); 
 		
 		String[] mProjection = {
@@ -312,7 +314,9 @@ public class PlatformCalendarDataProxy extends DataProxy {
 
 	@Override
 	public boolean hasFatalError() {
-		// Make sure that we have the required room Calendars synced on some account 
+		// Make sure that we have the required room Calendars synced on some account
+		setSyncOn();
+		
 		String[] mProjection = {};
 		String mSelectionClause = 
 				CalendarContract.Calendars.OWNER_ACCOUNT + " GLOB ? AND " + 
@@ -338,6 +342,21 @@ public class PlatformCalendarDataProxy extends DataProxy {
 		
 		result.close();
 		return false;
+	}
+	
+	/**
+	 * Sets sync flag on for all calendars that match the room account glob pattern.
+	 */
+	private void setSyncOn() {
+		ContentValues mUpdateValues = new ContentValues();
+		String mSelectionClause =  CalendarContract.Calendars.OWNER_ACCOUNT + " GLOB ?";
+		String[] mSelectionArgs = { roomAccountGlob };
+		mUpdateValues.put("SYNC_EVENTS", 1);
+		resolver.update(
+				CalendarContract.Calendars.CONTENT_URI,
+				mUpdateValues,
+				mSelectionClause,
+				mSelectionArgs);
 	}
 	
 	public void setAccount(String account) {
