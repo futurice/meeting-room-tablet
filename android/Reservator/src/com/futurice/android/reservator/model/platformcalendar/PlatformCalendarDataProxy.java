@@ -1,9 +1,12 @@
 package com.futurice.android.reservator.model.platformcalendar;
 
+import java.util.Date;
 import java.util.Vector;
+import java.util.TimeZone;
 
 import android.content.ContentResolver;
 import android.content.ContentValues;
+import android.content.ContentUris;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.provider.CalendarContract;
@@ -19,6 +22,12 @@ import com.futurice.android.reservator.model.ReservatorException;
 import com.futurice.android.reservator.model.Room;
 import com.futurice.android.reservator.model.TimeSpan;
 
+/**
+ * Implements the DataProxy for getting meeting room info through
+ * the platform's Content Provider API.
+ * 
+ * @author vsin
+ */
 public class PlatformCalendarDataProxy extends DataProxy {
 	private ContentResolver resolver;
 	private AccountManager accountManager;
@@ -27,8 +36,15 @@ public class PlatformCalendarDataProxy extends DataProxy {
 	private final String DEFAULT_MEETING_NAME = "Reserved";
 	private final String GOOGLE_ACCOUNT_TYPE = "com.google";
 	private final String CALENDAR_SYNC_AUTHORITY = "com.android.calendar";
+	
+	// Event fetch window (if we try to query all events it's very, very slow)
+	private final long EVENT_SELECTION_PERIOD_BACKWARD = 24 * 60 * 60 * 1000; // One day 
+	private final long EVENT_SELECTION_PERIOD_FORWARD = 11 * 24 * 60 * 60 * 1000; // 11 days 
+
 	// Preferred account, or null if any account is good
 	String account = null;
+	
+	TimeZone SYSTEM_TZ = java.util.Calendar.getInstance().getTimeZone();
 	
 	/**
 	 * @param resolver From application context. Used to access the platform's Calendar Provider.
@@ -64,7 +80,7 @@ public class PlatformCalendarDataProxy extends DataProxy {
 		mNewValues.put(CalendarContract.Events.ORGANIZER, ownerEmail);
 		mNewValues.put(CalendarContract.Events.DTSTART, timeSpan.getStart().getTimeInMillis());
 		mNewValues.put(CalendarContract.Events.DTEND, timeSpan.getEnd().getTimeInMillis());
-		mNewValues.put(CalendarContract.Events.EVENT_TIMEZONE, java.util.Calendar.getInstance().getTimeZone().getID());
+		mNewValues.put(CalendarContract.Events.EVENT_TIMEZONE, SYSTEM_TZ.getID());
 		mNewValues.put(CalendarContract.Events.EVENT_LOCATION, room.getLocation());
 		mNewValues.put(CalendarContract.Events.TITLE, owner);
 		
@@ -190,7 +206,7 @@ public class PlatformCalendarDataProxy extends DataProxy {
 					
 					String location = result.getString(3);
 					if (location == null || location.isEmpty()) {
-						location = name; 
+						location = name;
 					}
 					
 					rooms.add(new PlatformCalendarRoom(
@@ -205,7 +221,7 @@ public class PlatformCalendarDataProxy extends DataProxy {
 		
 		return rooms;
 	}
-
+	
 	@Override
 	public Vector<Reservation> getRoomReservations(Room r) throws ReservatorException {
 		Vector<Reservation> reservations = new Vector<Reservation>();
@@ -217,18 +233,23 @@ public class PlatformCalendarDataProxy extends DataProxy {
 		PlatformCalendarRoom room = (PlatformCalendarRoom) r; 
 		
 		String[] mProjection = {
-				CalendarContract.Events._ID,
-				CalendarContract.Events.TITLE,
-				CalendarContract.Events.DTSTART,
-				CalendarContract.Events.DTEND
-		};
-		String mSelectionClause = 
-				CalendarContract.Events.CALENDAR_ID + " = " + room.getId(); 
+				CalendarContract.Instances.EVENT_ID,
+				CalendarContract.Instances.TITLE,
+				CalendarContract.Instances.BEGIN,
+				CalendarContract.Instances.END};
+		String mSelectionClause = CalendarContract.Instances.CALENDAR_ID + " = " + room.getId();
 		String[] mSelectionArgs = {};
 		String mSortOrder = null;
 		
+		long now =  new Date().getTime();
+		long minTime = now - EVENT_SELECTION_PERIOD_BACKWARD;
+		long maxTime = now + EVENT_SELECTION_PERIOD_FORWARD;
+		Uri.Builder builder = CalendarContract.Instances.CONTENT_URI.buildUpon();
+		ContentUris.appendId(builder, minTime);
+		ContentUris.appendId(builder, maxTime);
+		
 		Cursor result = resolver.query(
-				CalendarContract.Events.CONTENT_URI,
+				builder.build(),
 				mProjection,
 				mSelectionClause,
 				mSelectionArgs,
@@ -239,14 +260,16 @@ public class PlatformCalendarDataProxy extends DataProxy {
 				result.moveToFirst();
 				do {
 					long eventId = result.getLong(0);
+					String title = result.getString(1);
 					long start = result.getLong(2);
-					long end = result.getLong(3);
-					reservations.add(new Reservation(
-							Long.toString(eventId), 
-							makeEventTitle(eventId, result.getString(1), DEFAULT_MEETING_NAME),
-							new TimeSpan(
-									new DateTime(start),
-									new DateTime(Math.max(start, end)))));
+					long end = Math.max(start, result.getLong(3));
+					
+					Reservation res = new Reservation(
+							Long.toString(eventId) + "-" + Long.toString(start), 
+							makeEventTitle(room.getName(), eventId, title, DEFAULT_MEETING_NAME),
+							new TimeSpan(new DateTime(start), new DateTime(end)));
+					reservations.add(res);
+					
 				} while (result.moveToNext());
 			}
 			result.close();
@@ -257,17 +280,20 @@ public class PlatformCalendarDataProxy extends DataProxy {
 	
 	/**
 	 * Make a title. We first try to get some sort of an organizer, speaker or attendee name, 
-	 * preferring those who have accepted the invitation to those who are unknown/tentative, 
-	 * and those to those who have not declined. 
-	 * If that fails (there are 0 attendees), we use the stored meeting title.
+	 * ignoring empty names and the name of this room and preferring those who have accepted the 
+	 * invitation to those who are unknown/tentative, and those to those who have not declined.
+	 *  
+	 * If that fails to yield a name we use the stored meeting title.
+	 * 
 	 * As a last resort, a "default name" is returned.
 	 *   
 	 * @author vsin
 	 */
-	private String makeEventTitle(final long eventId, final String storedTitle, final String defaultTitle) {
-		Vector<String> attendees = getAuthoritySortedAttendees(eventId);
-		if (!attendees.isEmpty()) {
-			return attendees.firstElement();
+	private String makeEventTitle(final String name, final long eventId, final String storedTitle, final String defaultTitle) {
+		for (String attendee : getAuthoritySortedAttendees(eventId)) {
+			if (attendee != null && !attendee.isEmpty() && !attendee.equals(name))  {
+				return attendee;
+			}
 		}
 		
 		if (storedTitle != null && !storedTitle.isEmpty()) return storedTitle;
@@ -280,7 +306,8 @@ public class PlatformCalendarDataProxy extends DataProxy {
 			"WHEN " + CalendarContract.Attendees.RELATIONSHIP_ORGANIZER	+ " THEN 1 " + 
 			"WHEN " + CalendarContract.Attendees.RELATIONSHIP_SPEAKER 	+ " THEN 2 " +
 			"WHEN " + CalendarContract.Attendees.RELATIONSHIP_PERFORMER + " THEN 3 " +
-			"ELSE 4 END, "+
+			"WHEN " + CalendarContract.Attendees.RELATIONSHIP_ATTENDEE 	+ " THEN 4 " +
+			"ELSE 5 END, "+
 		"CASE " + CalendarContract.Attendees.ATTENDEE_STATUS + " " +
 			"WHEN " + CalendarContract.Attendees.ATTENDEE_STATUS_ACCEPTED + " THEN 1 " +
 			"WHEN " + CalendarContract.Attendees.ATTENDEE_STATUS_DECLINED + " THEN 3 " +
@@ -289,7 +316,7 @@ public class PlatformCalendarDataProxy extends DataProxy {
 	private Vector<String> getAuthoritySortedAttendees(final long eventId) {
 		Vector<String> attendees = new Vector<String>();
 		
-		String[] mProjection = { CalendarContract.Attendees.ATTENDEE_NAME };
+		String[] mProjection = { CalendarContract.Attendees.ATTENDEE_NAME, CalendarContract.Attendees.ATTENDEE_RELATIONSHIP, CalendarContract.Attendees.ATTENDEE_STATUS };
 		String mSelectionClause = CalendarContract.Attendees.EVENT_ID + " = " + eventId;
 		String[] mSelectionArgs = {};
 		String mSortOrder = TITLE_PREFERENCE_SORT_ORDER;
@@ -313,7 +340,7 @@ public class PlatformCalendarDataProxy extends DataProxy {
 		
 		return attendees;
 	}
-
+	
 	@Override
 	public boolean hasFatalError() {
 		// Make sure that we have the required room Calendars synced on some account
