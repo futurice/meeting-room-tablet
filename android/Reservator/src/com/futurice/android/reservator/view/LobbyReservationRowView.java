@@ -113,12 +113,14 @@ public class LobbyReservationRowView extends FrameLayout implements
 		// Room stuff
 		RoomsInfo info = RoomsInfo.getRoomsInfo(room);
 		roomNameView.setText(info.getRoomName());
-		if (info.getRoomNumber() == 0) {
-			roomInfoView.setText("for " + info.getRoomSize());
-		} else {
+		if (room.getCapacity() >= 0) { // Prefer non-static data
+			roomInfoView.setText("for " + room.getCapacity());
+		} else if (info.getRoomNumber() != 0) { 
 			// U+2022 is a dot
 			roomInfoView.setText(Integer.toString(info.getRoomNumber())
 					+ " \u2022 for " + info.getRoomSize());
+		} else {
+			roomInfoView.setText("");
 		}
 
 		// Reservation stuff

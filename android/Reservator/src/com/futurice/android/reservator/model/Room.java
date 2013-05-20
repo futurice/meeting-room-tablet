@@ -11,6 +11,7 @@ public class Room implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private String name, email;
 	private Vector<Reservation> reservations;
+	private int capacity = -1;
 
 	public Room(String name, String email) {
 		this.name = name;
@@ -133,5 +134,13 @@ public class Room implements Serializable {
 
 	public boolean equals(Room room) {
 		return email.equals(room.getEmail());
+	}
+	
+	public int getCapacity() {
+		return capacity;
+	}
+	
+	public void setCapacity(int capacity) {
+		this.capacity = capacity;
 	}
 }
