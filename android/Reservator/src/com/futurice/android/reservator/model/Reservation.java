@@ -42,4 +42,9 @@ public class Reservation implements Comparable<Reservation>, Serializable {
 	public int compareTo(Reservation another) {
 		return (int)(this.getStartTime().getTimeInMillis() - another.getStartTime().getTimeInMillis());
 	}
+	
+	@Override
+	public String toString() {
+		return subject + ": " + timeSpan; 
+	}
 }

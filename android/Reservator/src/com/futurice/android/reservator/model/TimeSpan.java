@@ -55,4 +55,9 @@ public class TimeSpan implements Serializable {
 	public TimeSpan clone(){
 		return new TimeSpan(start, end);
 	}
+	
+	@Override
+	public String toString() {
+		return "[" + start.toString() + "-" + end.toString() + "]";
+	}
 }
