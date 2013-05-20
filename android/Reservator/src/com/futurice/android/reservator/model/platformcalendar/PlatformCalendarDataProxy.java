@@ -239,12 +239,14 @@ public class PlatformCalendarDataProxy extends DataProxy {
 				result.moveToFirst();
 				do {
 					long eventId = result.getLong(0);
+					long start = result.getLong(2);
+					long end = result.getLong(3);
 					reservations.add(new Reservation(
 							Long.toString(eventId), 
 							makeEventTitle(eventId, result.getString(1), DEFAULT_MEETING_NAME),
 							new TimeSpan(
-									new DateTime(result.getLong(2)),
-									new DateTime(result.getLong(3)))));
+									new DateTime(start),
+									new DateTime(Math.max(start, end)))));
 				} while (result.moveToNext());
 			}
 			result.close();
