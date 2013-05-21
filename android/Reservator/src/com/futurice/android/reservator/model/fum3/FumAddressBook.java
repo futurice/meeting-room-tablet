@@ -52,7 +52,6 @@ public class FumAddressBook extends AddressBook {
 		password = newPassword;
 	}
 
-	
 	@Override
 	protected Vector<AddressBookEntry> fetchEntries() throws ReservatorException {
 		Vector<AddressBookEntry> entries = new Vector<AddressBookEntry>();
@@ -97,7 +96,7 @@ public class FumAddressBook extends AddressBook {
 			throw new ReservatorException("Error fetching FUM addressbook -- " + e.getMessage(), e);
 		}
 
-		Log.v("FUM3", result);
+		Log.v("FUM3", "Got result");
 
 		try {
 			JSONObject object = (JSONObject) new JSONTokener(result).nextValue();
