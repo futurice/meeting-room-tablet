@@ -8,6 +8,7 @@ public class Reservation implements Comparable<Reservation>, Serializable {
 	final private String id;
 	final private TimeSpan timeSpan;
 	final private String subject;
+	final long EQUAL_THRESHOLD = 2000;
 
 	public Reservation(String id, String subject, TimeSpan timeSpan){
 		this.id = id;
@@ -32,10 +33,9 @@ public class Reservation implements Comparable<Reservation>, Serializable {
 	}
 
 	public boolean equals(Reservation other) {
-		final long threshold = 2000;
 		return id.equals(other.id)
-			|| ( Math.abs(getStartTime().getTimeInMillis() - other.getStartTime().getTimeInMillis()) < threshold
-					&& Math.abs(getEndTime().getTimeInMillis() - other.getEndTime().getTimeInMillis()) < threshold);
+			|| ( Math.abs(getStartTime().getTimeInMillis() - other.getStartTime().getTimeInMillis()) < EQUAL_THRESHOLD
+					&& Math.abs(getEndTime().getTimeInMillis() - other.getEndTime().getTimeInMillis()) < EQUAL_THRESHOLD);
 	}
 
 	@Override
