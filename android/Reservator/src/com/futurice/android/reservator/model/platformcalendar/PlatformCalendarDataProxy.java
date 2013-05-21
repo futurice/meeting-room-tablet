@@ -236,8 +236,12 @@ public class PlatformCalendarDataProxy extends DataProxy {
 				CalendarContract.Instances.EVENT_ID,
 				CalendarContract.Instances.TITLE,
 				CalendarContract.Instances.BEGIN,
-				CalendarContract.Instances.END};
-		String mSelectionClause = CalendarContract.Instances.CALENDAR_ID + " = " + room.getId();
+				CalendarContract.Instances.END 
+		};
+		String mSelectionClause = 
+				CalendarContract.Instances.CALENDAR_ID + " = " + room.getId() + " AND " + 
+				CalendarContract.Instances.STATUS + " != " + CalendarContract.Instances.STATUS_CANCELED + " AND " +
+				CalendarContract.Instances.SELF_ATTENDEE_STATUS + " != " + CalendarContract.Attendees.STATUS_CANCELED;
 		String[] mSelectionArgs = {};
 		String mSortOrder = null;
 		
