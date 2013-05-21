@@ -1,6 +1,8 @@
 package com.futurice.android.reservator.model;
 
+import java.text.Collator;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
@@ -61,6 +63,7 @@ public abstract class DataProxy {
 			Room room = it.next();
 			roomNames.add(room.getName());
 		}
+		Collections.sort(roomNames, Collator.getInstance());
 		return roomNames;
 	}
 	
