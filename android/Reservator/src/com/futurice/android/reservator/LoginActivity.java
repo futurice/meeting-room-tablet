@@ -40,6 +40,10 @@ public class LoginActivity extends ReservatorActivity implements OnClickListener
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.login_activity);
 		
+		if (pd != null) {
+			pd.dismiss();
+		}
+		
 		preferences = getSharedPreferences(this.getString(R.string.PREFERENCES_NAME), Context.MODE_PRIVATE);
 		editor = preferences.edit();
 		
@@ -61,9 +65,6 @@ public class LoginActivity extends ReservatorActivity implements OnClickListener
 				loginFum(preferences.getString(getString(R.string.PREFERENCES_FUM_USERNAME), null),
 						preferences.getString(getString(R.string.PREFERENCES_FUM_PASSWORD), null));
 			// do nothing, activity is changed after a successful login
-		} else {
-			if (pd != null)
-				pd.dismiss();
 		}
 	}
 
@@ -103,7 +104,7 @@ public class LoginActivity extends ReservatorActivity implements OnClickListener
 		fumAb.setCredentials(fumUsername, fumPassword);
 		
 		AddressBook ab = this.getResApplication().getAddressBook();
-		ab.prefetchEntries();
+		ab.refetchEntries();
 	}
 	
 	private void updateProgressDialogMessage() {
