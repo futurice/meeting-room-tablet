@@ -17,7 +17,6 @@ public abstract class AddressBook {
 	public AddressBook() {}
 	
 	public Vector<AddressBookEntry> getEntries() throws ReservatorException {
-		prefetchEntries();
 		return entries;
 	}
 
