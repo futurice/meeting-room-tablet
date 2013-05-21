@@ -1,6 +1,7 @@
 package com.futurice.android.reservator;
 
 import java.util.Comparator;
+import java.text.Collator;
 import java.util.HashSet;
 import java.util.Vector;
 
@@ -27,7 +28,6 @@ import com.futurice.android.reservator.model.DataUpdatedListener;
 import com.futurice.android.reservator.model.DateTime;
 import com.futurice.android.reservator.model.ReservatorException;
 import com.futurice.android.reservator.model.Room;
-import com.futurice.android.reservator.model.rooms.RoomsInfo;
 import com.futurice.android.reservator.view.LobbyReservationRowView;
 import com.futurice.android.reservator.view.LobbyReservationRowView.OnReserveListener;
 
@@ -167,10 +167,6 @@ public class LobbyActivity extends ReservatorActivity implements OnMenuItemClick
 
 		//proceed to requesting room reservation data
 		for (Room r : rooms) {
-			RoomsInfo info = RoomsInfo.getRoomsInfo(r);
-			if (info.isProjectRoom()) {
-				continue; // skip project room
-			}
 			// Maybe: Move the filtering to the DataProxy
 			if (hiddenRooms.contains(r.getName())) {
 				continue;
@@ -207,6 +203,38 @@ public class LobbyActivity extends ReservatorActivity implements OnMenuItemClick
 		*/
 	}
 
+	private class RoomTimeComparator implements Comparator<Room> {
+		private DateTime now = new DateTime();
+
+		@Override
+		public int compare(Room room1, Room room2) {
+			boolean room1Free = room1.isFree() && room1.minutesFreeFromNow() >= 30;
+			boolean room2Free = room2.isFree() && room2.minutesFreeFromNow() >= 30;
+
+			if (room1Free && !room2Free) {
+				return -1;
+			} else if (!room1Free && room2Free) {
+				return 1;
+			} else if (room1Free && room2Free) {
+				// Log.d("Lobby", room1.toString() + " -- " + room2.toString());
+				return room2.minutesFreeFrom(now)
+						- room1.minutesFreeFrom(now);
+			} else {
+				return 0;
+				//return room1.reservedForFrom(now) - room2.reservedForFrom(now);
+			}
+		}
+	}
+	
+	private class RoomNameComparator implements Comparator<Room> {
+		private Collator collator = Collator.getInstance();
+
+		@Override
+		public int compare(Room room1, Room room2) {
+			return collator.compare(room1.getName(), room2.getName());
+		}
+	}
+	
 	private void processRoom(Room r) {
 		LobbyReservationRowView v = new LobbyReservationRowView(LobbyActivity.this);
 		if (v.getException() != null) {
@@ -231,28 +259,7 @@ public class LobbyActivity extends ReservatorActivity implements OnMenuItemClick
 		});
 
 		// This is ugly, adding views in order.
-		Comparator<Room> roomCmp = new Comparator<Room>() {
-			private DateTime now = new DateTime();
-
-			@Override
-			public int compare(Room room1, Room room2) {
-				boolean room1Free = room1.isFree() && room1.minutesFreeFromNow() >= 30;
-				boolean room2Free = room2.isFree() && room2.minutesFreeFromNow() >= 30;
-
-				if (room1Free && !room2Free) {
-					return -1;
-				} else if (!room1Free && room2Free) {
-					return 1;
-				} else if (room1Free && room2Free) {
-					// Log.d("Lobby", room1.toString() + " -- " + room2.toString());
-					return room2.minutesFreeFrom(now)
-							- room1.minutesFreeFrom(now);
-				} else {
-					return 0;
-					//return room1.reservedForFrom(now) - room2.reservedForFrom(now);
-				}
-			}
-		};
+		Comparator<Room> roomCmp = new RoomNameComparator();
 
 		int roomCount = container.getChildCount();
 		boolean added = false;

@@ -30,7 +30,6 @@ import com.futurice.android.reservator.model.DateTime;
 import com.futurice.android.reservator.model.ReservatorException;
 import com.futurice.android.reservator.model.Room;
 import com.futurice.android.reservator.model.TimeSpan;
-import com.futurice.android.reservator.model.rooms.RoomsInfo;
 
 public class LobbyReservationRowView extends FrameLayout implements
 		OnClickListener, OnItemClickListener {
@@ -111,14 +110,9 @@ public class LobbyReservationRowView extends FrameLayout implements
 		this.room = room;
 
 		// Room stuff
-		RoomsInfo info = RoomsInfo.getRoomsInfo(room);
-		roomNameView.setText(info.getRoomName());
-		if (room.getCapacity() >= 0) { // Prefer non-static data
+		roomNameView.setText(room.getName());
+		if (room.getCapacity() >= 0) {
 			roomInfoView.setText("for " + room.getCapacity());
-		} else if (info.getRoomNumber() != 0) { 
-			// U+2022 is a dot
-			roomInfoView.setText(Integer.toString(info.getRoomNumber())
-					+ " \u2022 for " + info.getRoomSize());
 		} else {
 			roomInfoView.setText("");
 		}

@@ -27,7 +27,6 @@ import com.futurice.android.reservator.model.DateTime;
 import com.futurice.android.reservator.model.ReservatorException;
 import com.futurice.android.reservator.model.Room;
 import com.futurice.android.reservator.model.TimeSpan;
-import com.futurice.android.reservator.model.rooms.RoomsInfo;
 import com.futurice.android.reservator.view.LobbyReservationRowView;
 import com.futurice.android.reservator.view.LobbyReservationRowView.OnReserveListener;
 import com.futurice.android.reservator.view.RoomReservationPopup;
@@ -168,7 +167,7 @@ public class RoomActivity extends ReservatorActivity implements OnMenuItemClickL
 	private void setRoom(Room r) {
 		currentRoom = r;
 		roomNameLabel
-				.setText(RoomsInfo.getRoomsInfo(currentRoom).getRoomName());
+				.setText(currentRoom.getName());
 		weekView.refreshData(currentRoom);
 	}
 
