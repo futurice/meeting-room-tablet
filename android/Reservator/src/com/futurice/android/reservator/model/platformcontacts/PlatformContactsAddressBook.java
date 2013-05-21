@@ -31,7 +31,7 @@ public class PlatformContactsAddressBook extends AddressBook {
 				ContactsContract.RawContacts._ID,
 				ContactsContract.RawContacts.DISPLAY_NAME_PRIMARY };
 		
-		String mSelectionClause =
+		String mSelectionClause = 
 				ContactsContract.RawContacts.ACCOUNT_TYPE + " = ? AND " +
 				ContactsContract.RawContacts.DELETED + " = 0";
 		
@@ -56,9 +56,12 @@ public class PlatformContactsAddressBook extends AddressBook {
 			if (result.getCount() > 0) {
 				result.moveToFirst();
 				do {
-					String contactEmail = fetchContactEmail(result.getLong(0));
+					long contactId = result.getLong(0);
+					String contactName = result.getString(1);
+					String contactEmail = fetchContactEmail(contactId);
+					
 					if (contactEmail != null) {
-						entries.add(new AddressBookEntry(result.getString(1), contactEmail));
+						entries.add(new AddressBookEntry(contactName, contactEmail));
 					}
 				} while (result.moveToNext());
 			}
