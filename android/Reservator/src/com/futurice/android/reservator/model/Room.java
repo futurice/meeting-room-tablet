@@ -132,6 +132,20 @@ public class Room implements Serializable {
 		return daysReservations;
 	}
 
+	
+	@Override
+	public int hashCode() {
+		return email.hashCode();
+	}
+	
+	@Override
+	public boolean equals(Object other) {
+		if (other instanceof Room) {
+			return equals((Room) other);
+		}
+		return super.equals(other);
+	}
+	
 	public boolean equals(Room room) {
 		return email.equals(room.getEmail());
 	}

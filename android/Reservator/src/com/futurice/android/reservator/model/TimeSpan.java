@@ -51,6 +51,13 @@ public class TimeSpan implements Serializable {
 		return endMillis - startMillis;
 	}
 
+	public boolean intersects(TimeSpan ts) {
+		if (end.compareTo(ts.getStart()) <= 0) return false;
+		if (start.compareTo(ts.getEnd()) >= 0) return false;
+		
+		return true;
+	}
+	
 	@Override
 	public TimeSpan clone(){
 		return new TimeSpan(start, end);

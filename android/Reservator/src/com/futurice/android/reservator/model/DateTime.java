@@ -42,6 +42,10 @@ public class DateTime implements Serializable {
 		return cal.before(other.cal);
 	}
 
+	public int compareTo(DateTime other) {
+		return cal.compareTo(other.cal);
+	}
+
 	public long getTimeInMillis() {
 		return cal.getTimeInMillis();
 	}

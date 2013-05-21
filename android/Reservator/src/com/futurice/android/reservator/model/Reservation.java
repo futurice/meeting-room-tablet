@@ -8,7 +8,6 @@ public class Reservation implements Comparable<Reservation>, Serializable {
 	final private String id;
 	final private TimeSpan timeSpan;
 	final private String subject;
-	final long EQUAL_THRESHOLD = 2000;
 
 	public Reservation(String id, String subject, TimeSpan timeSpan){
 		this.id = id;
@@ -20,6 +19,10 @@ public class Reservation implements Comparable<Reservation>, Serializable {
 		return this.subject;
 	}
 
+	public TimeSpan getTimeSpan(){
+		return timeSpan;
+	}
+	
 	public DateTime getStartTime(){
 		return timeSpan.getStart();
 	}
@@ -31,11 +34,22 @@ public class Reservation implements Comparable<Reservation>, Serializable {
 	public String getId() {
 		return id;
 	}
+	
+	@Override
+	public int hashCode() {
+		return id.hashCode();
+	}
 
+	@Override
+	public boolean equals(Object other) {
+		if (other instanceof Reservation) {
+			return equals((Reservation) other);
+		}
+		return super.equals(other);
+	}
+	
 	public boolean equals(Reservation other) {
-		return id.equals(other.id)
-			|| ( Math.abs(getStartTime().getTimeInMillis() - other.getStartTime().getTimeInMillis()) < EQUAL_THRESHOLD
-					&& Math.abs(getEndTime().getTimeInMillis() - other.getEndTime().getTimeInMillis()) < EQUAL_THRESHOLD);
+		return id.equals(other.id);
 	}
 
 	@Override
@@ -45,6 +59,6 @@ public class Reservation implements Comparable<Reservation>, Serializable {
 	
 	@Override
 	public String toString() {
-		return subject + ": " + timeSpan; 
+		return "Reservation<" + id + "," + hashCode() + "> " + subject + ": " + timeSpan; 
 	}
 }

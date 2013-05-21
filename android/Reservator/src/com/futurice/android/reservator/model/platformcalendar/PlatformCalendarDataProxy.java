@@ -1,7 +1,11 @@
 package com.futurice.android.reservator.model.platformcalendar;
 
 import java.util.Date;
+import java.util.HashSet;
+import java.util.HashMap;
 import java.util.Vector;
+import java.util.Collections;
+import java.util.Map;
 import java.util.TimeZone;
 
 import android.content.ContentResolver;
@@ -46,6 +50,12 @@ public class PlatformCalendarDataProxy extends DataProxy {
 	
 	TimeZone SYSTEM_TZ = java.util.Calendar.getInstance().getTimeZone();
 	
+	// Two-level data structure that stores locally created reservations 
+	// for each room until they get synced. Access but altering the Set objects 
+	// or modifying the structure of the Map must be within a synchronized block.  
+	private Map<Room, HashSet<Reservation>> locallyCreatedReservationCaches = 
+			Collections.synchronizedMap(new HashMap<Room, HashSet<Reservation>>());
+	
 	/**
 	 * @param resolver From application context. Used to access the platform's Calendar Provider.
 	 * @param accountManager From application context. Allows us to initiate a sync immediately after adding a reservation.
@@ -62,10 +72,9 @@ public class PlatformCalendarDataProxy extends DataProxy {
 	public void setCredentials(String user, String password) {}
 	@Override
 	public void setServer(String server) {}
-
+	
 	@Override
-	public void reserve(Room r, TimeSpan timeSpan, String owner,
-			String ownerEmail) throws ReservatorException {
+	public void reserve(Room r, TimeSpan timeSpan, String owner, String ownerEmail) throws ReservatorException {
 		if (!(r instanceof PlatformCalendarRoom)) {
 			throw new ReservatorException("Data type error (expecting PlatformCalendarRoom)");
 		}
@@ -102,8 +111,13 @@ public class PlatformCalendarDataProxy extends DataProxy {
 		if (attendeeUri == null) {
 			Log.w("reserve", "Could not add an attendeee");
 		}
-		
+	
 		syncGoogleCalendarAccount(accountName);
+		
+		putToLocalCache(room, new Reservation(
+				Long.toString(eventId) + "-" + Long.toString(timeSpan.getStart().getTimeInMillis()), 
+				owner, 
+				timeSpan));
 	}
 	
 	/**
@@ -176,8 +190,7 @@ public class PlatformCalendarDataProxy extends DataProxy {
 				CalendarContract.Calendars._ID,
 				CalendarContract.Calendars.OWNER_ACCOUNT,
 				CalendarContract.Calendars.NAME,
-				CalendarContract.Calendars.CALENDAR_LOCATION
-		};
+				CalendarContract.Calendars.CALENDAR_LOCATION };
 		
 		String mSelectionClause = CalendarContract.Calendars.OWNER_ACCOUNT + " GLOB ?";
 		
@@ -222,15 +235,78 @@ public class PlatformCalendarDataProxy extends DataProxy {
 		return rooms;
 	}
 	
+	private void putToLocalCache(Room room, Reservation reservation) {
+		synchronized (locallyCreatedReservationCaches) {
+			HashSet<Reservation> roomCache;
+
+			if (locallyCreatedReservationCaches.get(room) != null) {
+				roomCache = locallyCreatedReservationCaches.get(room);
+			} else {
+				roomCache = new HashSet<Reservation>();  
+			}
+			
+			roomCache.add(reservation);
+			locallyCreatedReservationCaches.put(room, roomCache);
+		}
+	}
+	
 	@Override
 	public Vector<Reservation> getRoomReservations(Room r) throws ReservatorException {
-		Vector<Reservation> reservations = new Vector<Reservation>();
-		
 		if (!(r instanceof PlatformCalendarRoom)) {
-			return reservations;
+			return new Vector<Reservation>();
 		}
 		
 		PlatformCalendarRoom room = (PlatformCalendarRoom) r; 
+		
+		long now =  new Date().getTime();
+		long minTime = now - EVENT_SELECTION_PERIOD_BACKWARD;
+		long maxTime = now + EVENT_SELECTION_PERIOD_FORWARD;
+		
+		HashSet<Reservation> roomCache = null;
+		if (locallyCreatedReservationCaches.containsKey(room)) {
+			roomCache = locallyCreatedReservationCaches.get(room);
+		}
+		
+		// Remove old locally cached reservations
+		// NB it's crucial that we do not alter the structure of any instance data here (it's not synchronized) 
+		if (roomCache != null && roomCache.size() > 0) {
+			TimeSpan interest = new TimeSpan(new DateTime(minTime), new DateTime(maxTime));
+			HashSet<Reservation> filteredRoomCache = new HashSet<Reservation>();
+			
+			for (Reservation cachedReservation : roomCache) {
+				if (cachedReservation.getTimeSpan().intersects(interest)) {
+					filteredRoomCache.add(cachedReservation);
+				}
+			}
+			
+			if (filteredRoomCache.size() != roomCache.size()) {
+				locallyCreatedReservationCaches.put(room, filteredRoomCache);
+				roomCache = filteredRoomCache;
+			}
+		}
+		
+		HashSet<Reservation> reservations = getInstancesTableReservations(room, minTime, maxTime);
+		
+		// Remove those that have now been synced
+		if (roomCache != null && roomCache.size() > 0) {
+			HashSet<Reservation> filteredRoomCache = new HashSet<Reservation>(roomCache);
+			
+			filteredRoomCache.removeAll(reservations);
+			
+			if (filteredRoomCache.size() != roomCache.size()) {
+				locallyCreatedReservationCaches.put(room, filteredRoomCache);
+				roomCache = filteredRoomCache;
+			}
+			
+			// Finally, add the cached reservations to the result set
+			reservations.addAll(roomCache);
+		}
+
+		return new Vector<Reservation>(reservations);
+	}
+	
+	private HashSet<Reservation> getInstancesTableReservations(PlatformCalendarRoom room, long minTime, long maxTime) {
+		HashSet<Reservation> reservations = new HashSet<Reservation>();
 		
 		String[] mProjection = {
 				CalendarContract.Instances.EVENT_ID,
@@ -245,9 +321,6 @@ public class PlatformCalendarDataProxy extends DataProxy {
 		String[] mSelectionArgs = {};
 		String mSortOrder = null;
 		
-		long now =  new Date().getTime();
-		long minTime = now - EVENT_SELECTION_PERIOD_BACKWARD;
-		long maxTime = now + EVENT_SELECTION_PERIOD_FORWARD;
 		Uri.Builder builder = CalendarContract.Instances.CONTENT_URI.buildUpon();
 		ContentUris.appendId(builder, minTime);
 		ContentUris.appendId(builder, maxTime);
