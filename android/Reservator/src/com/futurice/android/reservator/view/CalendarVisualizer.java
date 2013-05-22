@@ -31,8 +31,8 @@ import com.futurice.android.reservator.model.TimeSpan;
 public class CalendarVisualizer extends HorizontalScrollView implements ReservatorVisualizer,
 		OnTouchListener {
 	private Paint markerPaint, textPaint, weekTextPaint, gridPaint;
-	private int dayStartTime = 60 * 8, dayEndTime = 60 * 20; // minutes from
-																// midnight
+	private int dayStartTime; // minutes from midnight
+	private int dayEndTime;
 	private DateTime firstDayToShow;
 	private int daysToShow = 10;
 	private int dayWidth = 200;
@@ -48,14 +48,14 @@ public class CalendarVisualizer extends HorizontalScrollView implements Reservat
 	private Paint fadingEdgePaint;
 	private RectF calendarAreaRect, timeLabelRect, headerRect;
 	private FrameLayout contentFrame;
-	public CalendarVisualizer(Context context) {
-		this(context, null);
-	}
-
-	public CalendarVisualizer(Context context, AttributeSet attrs) {
-		super(context, attrs);
-		 firstDayToShow = new DateTime().stripTime();
-		 //forces scroll view to have scrollable content area
+	public CalendarVisualizer(Context context, int dayStartTime, int dayEndTime) {
+		super(context, null);
+		
+		this.dayStartTime = dayStartTime;
+		this.dayEndTime = dayEndTime;
+		
+		firstDayToShow = new DateTime().stripTime();
+		//forces scroll view to have scrollable content area
 		contentFrame = new FrameLayout(getContext());
 		contentFrame.setClickable(true);
 		contentFrame.setOnTouchListener(this);

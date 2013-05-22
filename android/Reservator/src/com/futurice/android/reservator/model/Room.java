@@ -122,10 +122,10 @@ public class Room implements Serializable {
 	}
 
 
-	public List<Reservation> getReservationsForDay(DateTime day) {
+	public List<Reservation> getReservationsForTimeSpan(TimeSpan ts) {
 		List<Reservation> daysReservations = new ArrayList<Reservation>();
 		for (Reservation r : reservations) {
-			if (r.getStartTime().sameDay(day)) {
+			if (r.getTimeSpan().intersects(ts)) {
 				daysReservations.add(r);
 			}
 		}

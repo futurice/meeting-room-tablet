@@ -20,6 +20,10 @@ import com.futurice.android.reservator.model.TimeSpan;
 public class WeekView extends RelativeLayout implements OnClickListener {
 
 	public static final int NUMBER_OF_DAYS_TO_SHOW = 10;
+	public static final int DAY_START_TIME = 60 * 8; // minutes from midnight 
+	public static final int DAY_END_TIME = 60 * 20; 
+
+	public static final int NORMALIZATION_START_HOUR = 20;
 
 	private FrameLayout calendarFrame = null;
 	public WeekView(Context context) {
@@ -40,14 +44,39 @@ public class WeekView extends RelativeLayout implements OnClickListener {
 		calendarFrame = (FrameLayout)findViewById(R.id.frameLayout1);
 		calendarFrame.removeAllViews();
 		List<Reservation> reservations = new ArrayList<Reservation>();
-		DateTime day = new DateTime();
+		
+		DateTime startOfToday = new DateTime().setTime(0, 0, 0);
+		TimeSpan day = new TimeSpan(
+				startOfToday.add(Calendar.MINUTE, DAY_START_TIME), 
+				startOfToday.add(Calendar.MINUTE, DAY_END_TIME));
+		
 		for (int i = 0; i < NUMBER_OF_DAYS_TO_SHOW; i++) {
-			reservations.addAll(room.getReservationsForDay(day));
-			day = day.add(Calendar.DAY_OF_YEAR, 1);
+			List<Reservation> dayReservations = room.getReservationsForTimeSpan(day);
+			List<Reservation> boundDayReservations = new ArrayList<Reservation>(dayReservations.size());
+			
+			// Change multi-day reservations to span only this day
+			for (Reservation res : dayReservations) {
+				if (res.getStartTime().before(day.getStart()) || res.getEndTime().after(day.getEnd())) {
+					boundDayReservations.add(new Reservation(
+							res.getId() + "-" + day.getStart(), 
+							res.getSubject(), 
+							new TimeSpan(
+									res.getStartTime().before(day.getStart()) ? day.getStart() : res.getStartTime(),
+									res.getEndTime().after(day.getEnd()) ? day.getEnd() : res.getEndTime())));
+				} else {
+					boundDayReservations.add(res);
+				}
+			}
+			
+			reservations.addAll(boundDayReservations);
+			
+			// Advance to next day
+			day = new TimeSpan(
+					day.getStart().add(Calendar.DAY_OF_YEAR, 1),
+					day.getEnd().add(Calendar.DAY_OF_YEAR, 1));
 		}
 		
-		
-		CalendarVisualizer cv = new CalendarVisualizer(getContext());
+		CalendarVisualizer cv = new CalendarVisualizer(getContext(), DAY_START_TIME, DAY_END_TIME);
 		cv.setReservations(reservations);
 		calendarFrame.addView(cv, LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
 		cv.setOnClickListener(this);
