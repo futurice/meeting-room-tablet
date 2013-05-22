@@ -366,9 +366,9 @@ public class PlatformCalendarDataProxy extends DataProxy {
 	 *   
 	 * @author vsin
 	 */
-	private String makeEventTitle(final String name, final long eventId, final String storedTitle, final String defaultTitle) {
+	private String makeEventTitle(final String roomName, final long eventId, final String storedTitle, final String defaultTitle) {
 		for (String attendee : getAuthoritySortedAttendees(eventId)) {
-			if (attendee != null && !attendee.isEmpty() && !attendee.equals(name))  {
+			if (attendee != null && !attendee.isEmpty() && !attendee.equals(roomName))  {
 				return attendee;
 			}
 		}
@@ -393,7 +393,10 @@ public class PlatformCalendarDataProxy extends DataProxy {
 	private Vector<String> getAuthoritySortedAttendees(final long eventId) {
 		Vector<String> attendees = new Vector<String>();
 		
-		String[] mProjection = { CalendarContract.Attendees.ATTENDEE_NAME, CalendarContract.Attendees.ATTENDEE_RELATIONSHIP, CalendarContract.Attendees.ATTENDEE_STATUS };
+		String[] mProjection = { 
+				CalendarContract.Attendees.ATTENDEE_NAME, 
+				CalendarContract.Attendees.ATTENDEE_RELATIONSHIP, 
+				CalendarContract.Attendees.ATTENDEE_STATUS };
 		String mSelectionClause = CalendarContract.Attendees.EVENT_ID + " = " + eventId;
 		String[] mSelectionArgs = {};
 		String mSortOrder = TITLE_PREFERENCE_SORT_ORDER;
