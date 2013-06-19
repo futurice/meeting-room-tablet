@@ -6,6 +6,7 @@ import java.util.List;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.FrameLayout;
@@ -143,14 +144,10 @@ public class WeekView extends RelativeLayout implements OnClickListener {
 
 		if (v instanceof CalendarMarker) {
 			final CalendarMarker marker = (CalendarMarker) v;
-			if (marker.isReserved()) {
-				return;
-			} else {
-				if (onFreeTimeClickListener != null) {
-					onFreeTimeClickListener.onFreeTimeClick(v, marker.getTimeSpan(), marker.getTouchedTime());
-				}
+			if (onFreeTimeClickListener != null) {
+				onFreeTimeClickListener.onFreeTimeClick(v, marker.getTimeSpan(), marker.getTouchedTime());
 			}
-		}else if(v instanceof ReservatorVisualizer) {
+		} else if (v instanceof ReservatorVisualizer) {
 			ReservatorVisualizer visualizer = (ReservatorVisualizer)v;
 			if(onFreeTimeClickListener != null) {
 				onFreeTimeClickListener.onFreeTimeClick(v, visualizer.getSelectedTimeSpan(), visualizer.getSelectedTime());

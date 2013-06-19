@@ -14,7 +14,6 @@ import android.widget.TextView;
 
 public class CalendarMarker extends FrameLayout{
 	private Reservation reservation = null;
-	private boolean reserved = false;
 	private TimeSpan timeSpan;
 	View content = null;
 	private float proportionalTouchYCoordinate = 0.0f;
@@ -47,17 +46,6 @@ public class CalendarMarker extends FrameLayout{
 		super.onLayout(changed, l, t, r, b);
 		if(content != null){
 			content.layout(0, 0, r-l, b-t);
-		}
-	}
-	public boolean isReserved(){
-		return this.reserved;
-	}
-	public void setReserved(boolean isReserved) {
-		this.reserved = isReserved;
-		if (isReserved) {
-			this.setBackgroundResource(R.color.CalendarMarkerReservedColor);
-		} else {
-			this.setBackgroundResource(R.color.CalendarMarkerFreeColor);
 		}
 	}
 
