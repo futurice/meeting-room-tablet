@@ -12,7 +12,6 @@ import android.view.View;
 
 public class RoomReservationPopup extends Dialog {
 	LobbyReservationRowView reservationView;
-	CalendarMarker marker;
 	public RoomReservationPopup(Context context, TimeSpan timeLimits, TimeSpan presetTime, Room room) {
 		super(context, R.style.Theme_Transparent);
 		setCancelable(true);

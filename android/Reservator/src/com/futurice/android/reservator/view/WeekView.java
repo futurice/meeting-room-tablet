@@ -142,12 +142,7 @@ public class WeekView extends RelativeLayout implements OnClickListener {
 	@Override
 	public void onClick(final View v) {
 
-		if (v instanceof CalendarMarker) {
-			final CalendarMarker marker = (CalendarMarker) v;
-			if (onFreeTimeClickListener != null) {
-				onFreeTimeClickListener.onFreeTimeClick(v, marker.getTimeSpan(), marker.getTouchedTime());
-			}
-		} else if (v instanceof ReservatorVisualizer) {
+		if (v instanceof ReservatorVisualizer) {
 			ReservatorVisualizer visualizer = (ReservatorVisualizer)v;
 			if(onFreeTimeClickListener != null) {
 				onFreeTimeClickListener.onFreeTimeClick(v, visualizer.getSelectedTimeSpan(), visualizer.getSelectedTime());
