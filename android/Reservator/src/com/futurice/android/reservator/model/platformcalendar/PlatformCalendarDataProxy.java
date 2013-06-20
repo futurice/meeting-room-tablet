@@ -5,8 +5,11 @@ import java.util.HashSet;
 import java.util.HashMap;
 import java.util.Vector;
 import java.util.Collections;
+import java.util.Set;
 import java.util.Map;
 import java.util.TimeZone;
+import java.util.regex.Pattern;
+import java.util.regex.Matcher;
 
 import android.content.ContentResolver;
 import android.content.ContentValues;
@@ -114,10 +117,12 @@ public class PlatformCalendarDataProxy extends DataProxy {
 	
 		syncGoogleCalendarAccount(accountName);
 		
-		putToLocalCache(room, new Reservation(
+		Reservation createdReservation = new Reservation(
 				Long.toString(eventId) + "-" + Long.toString(timeSpan.getStart().getTimeInMillis()), 
 				owner, 
-				timeSpan));
+				timeSpan);
+		createdReservation.setIsCancellable(true);
+		putToLocalCache(room, createdReservation);
 	}
 	
 	/**
@@ -152,6 +157,70 @@ public class PlatformCalendarDataProxy extends DataProxy {
 		result.close();
 		
 		return accountName;
+	}
+	
+	private static final Pattern idPattern = Pattern.compile("^(\\d+)(-.*)?");
+	private long getEventIdFromReservation(final Reservation r) throws ReservatorException {
+		Matcher idMatcher = idPattern.matcher(r.getId());
+		if (!idMatcher.matches()) {
+			throw new ReservatorException("Could not parse reservation ID");
+		}
+		
+		return Long.parseLong(idMatcher.group(1));
+	}
+	
+	@Override
+	public void cancelReservation(Reservation reservation) throws ReservatorException {
+		if (!reservation.isCancellable()) return;
+		long eventId = getEventIdFromReservation(reservation);
+		
+		Uri eventUri = ContentUris.withAppendedId(CalendarContract.Events.CONTENT_URI, eventId);
+		
+		// Get calendar ID
+		String[] mProjection = { CalendarContract.Events.CALENDAR_ID };
+		String mSelectionClause = "DELETED=0";
+		String[] mSelectionArgs = {};
+		String mSortOrder = null;
+		Cursor result = resolver.query(
+				eventUri,
+				mProjection,
+				mSelectionClause,
+				mSelectionArgs,
+				mSortOrder);
+		
+		if (result == null) {
+			return; // Event has already been deleted!
+		}
+		
+		if (result.getCount() == 0) {
+			result.close();
+			return; // Event has already been deleted!
+		}
+		
+		result.moveToFirst();
+		long calendarId = result.getLong(0);
+		result.close();
+		
+		// Remove from platform calendar
+		int nRows = resolver.delete(ContentUris.withAppendedId(CalendarContract.Events.CONTENT_URI, eventId), null, null);
+		// Remove from local caches
+		synchronized (locallyCreatedReservationCaches) {
+			for (Map.Entry<Room, HashSet<Reservation>> entry : locallyCreatedReservationCaches.entrySet()) {
+				if (entry.getValue().contains(reservation)) {
+					HashSet<Reservation> filtered = new HashSet<Reservation>(entry.getValue());
+					filtered.remove(reservation);
+					entry.setValue(filtered);
+				}
+			}
+		}
+		
+		if (nRows > 0) {
+			try {
+				syncGoogleCalendarAccount(getAccountName(calendarId));
+			} catch (ReservatorException e) {
+				; // Calendar has been deleted by user, can't sync. "Not a biggie"
+			}
+		}
 	}
 	
 	/**
@@ -256,7 +325,8 @@ public class PlatformCalendarDataProxy extends DataProxy {
 			return new Vector<Reservation>();
 		}
 		
-		PlatformCalendarRoom room = (PlatformCalendarRoom) r; 
+		PlatformCalendarRoom room = (PlatformCalendarRoom) r;
+		String calendarOwnerAccount = room.getEmail(); 
 		
 		long now =  new Date().getTime();
 		long minTime = now - EVENT_SELECTION_PERIOD_BACKWARD;
@@ -279,13 +349,15 @@ public class PlatformCalendarDataProxy extends DataProxy {
 				}
 			}
 			
-			if (filteredRoomCache.size() != roomCache.size()) {
-				locallyCreatedReservationCaches.put(room, filteredRoomCache);
-				roomCache = filteredRoomCache;
+				if (filteredRoomCache.size() != roomCache.size()) {
+					synchronized (locallyCreatedReservationCaches) {
+						locallyCreatedReservationCaches.put(room, filteredRoomCache);
+					}
+					roomCache = filteredRoomCache;
 			}
 		}
 		
-		HashSet<Reservation> reservations = getInstancesTableReservations(room, minTime, maxTime);
+		HashSet<Reservation> reservations = getInstancesTableReservations(room, minTime, maxTime, calendarOwnerAccount);
 		
 		// Remove those that have now been synced
 		if (roomCache != null && roomCache.size() > 0) {
@@ -294,7 +366,9 @@ public class PlatformCalendarDataProxy extends DataProxy {
 			filteredRoomCache.removeAll(reservations);
 			
 			if (filteredRoomCache.size() != roomCache.size()) {
-				locallyCreatedReservationCaches.put(room, filteredRoomCache);
+				synchronized (locallyCreatedReservationCaches) {
+					locallyCreatedReservationCaches.put(room, filteredRoomCache);
+				}
 				roomCache = filteredRoomCache;
 			}
 			
@@ -305,14 +379,16 @@ public class PlatformCalendarDataProxy extends DataProxy {
 		return new Vector<Reservation>(reservations);
 	}
 	
-	private HashSet<Reservation> getInstancesTableReservations(PlatformCalendarRoom room, long minTime, long maxTime) {
+	private HashSet<Reservation> getInstancesTableReservations(
+			PlatformCalendarRoom room, long minTime, long maxTime, String calendarAccount) {
 		HashSet<Reservation> reservations = new HashSet<Reservation>();
 		
 		String[] mProjection = {
 				CalendarContract.Instances.EVENT_ID,
 				CalendarContract.Instances.TITLE,
 				CalendarContract.Instances.BEGIN,
-				CalendarContract.Instances.END 
+				CalendarContract.Instances.END,
+				CalendarContract.Instances.ORGANIZER
 		};
 		String mSelectionClause = 
 				CalendarContract.Instances.CALENDAR_ID + " = " + room.getId() + " AND " + 
@@ -340,11 +416,15 @@ public class PlatformCalendarDataProxy extends DataProxy {
 					String title = result.getString(1);
 					long start = result.getLong(2);
 					long end = Math.max(start, result.getLong(3));
+					String eventOrganizerAccount = result.getString(4);
 					
 					Reservation res = new Reservation(
 							Long.toString(eventId) + "-" + Long.toString(start), 
 							makeEventTitle(room.getName(), eventId, title, DEFAULT_MEETING_NAME),
 							new TimeSpan(new DateTime(start), new DateTime(end)));
+					if (eventOrganizerAccount != null && calendarAccount.equals(eventOrganizerAccount.toLowerCase())) {
+						res.setIsCancellable(true);
+					}
 					reservations.add(res);
 					
 				} while (result.moveToNext());

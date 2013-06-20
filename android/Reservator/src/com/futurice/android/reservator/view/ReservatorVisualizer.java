@@ -27,4 +27,9 @@ public interface ReservatorVisualizer {
 	 * @return
 	 */
 	public TimeSpan getSelectedTimeSpan();
+	/**
+	 * Get selected Reservation after onClick. Returns null if the click was on empty space.
+	 * @return
+	 */
+	public Reservation getSelectedReservation();
 }

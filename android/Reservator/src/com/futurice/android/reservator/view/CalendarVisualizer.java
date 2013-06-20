@@ -39,6 +39,7 @@ public class CalendarVisualizer extends HorizontalScrollView implements Reservat
 	private int timeLabelWidth = 100;
 	private Reservation[] reservations;
 	TimeSpan touchedTimeSpan;
+	Reservation touchedReservation;
 	DateTime touchedTime;
 	Shader reservationShader, leftEdgeShader, rightEdgeShader;
 	int textColor, weekTextColor, gridColor;
@@ -342,9 +343,11 @@ public class CalendarVisualizer extends HorizontalScrollView implements Reservat
 		//TODO This causes a small slow down in scrolling animation when ACTION_UP occurs:/
 		if (e.getAction() == MotionEvent.ACTION_UP) {
 			touchedTime = getTimeForCoordinates(e.getX(), e.getY());
-			Reservation colliding = getReservationForTime(touchedTime);
-			if (colliding != null) {
-				return true; //cancel onClick if reserved marker is touched
+			touchedReservation = getReservationForTime(touchedTime);
+			if (touchedReservation != null) {
+				//touched a reservation
+				touchedTimeSpan = touchedReservation.getTimeSpan();
+				return false;
 			}
 			DateTime start;
 			Reservation before = findReservationBefore(touchedTime);
@@ -417,6 +420,10 @@ public class CalendarVisualizer extends HorizontalScrollView implements Reservat
 
 	public TimeSpan getSelectedTimeSpan() {
 		return touchedTimeSpan;
+	}
+
+	public Reservation getSelectedReservation() {
+		return touchedReservation;
 	}
 
 	private DateTime getFirstDayToShow() {

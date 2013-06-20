@@ -75,4 +75,8 @@ public class CachedDataProxy extends DataProxy {
 		this.reservationCache.clear();
 	}
 
+	@Override
+	public void cancelReservation(Reservation r) throws ReservatorException {
+		dataProxy.cancelReservation(r);
+	}
 }

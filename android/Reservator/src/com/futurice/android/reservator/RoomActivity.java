@@ -27,11 +27,14 @@ import com.futurice.android.reservator.model.DateTime;
 import com.futurice.android.reservator.model.ReservatorException;
 import com.futurice.android.reservator.model.Room;
 import com.futurice.android.reservator.model.TimeSpan;
+import com.futurice.android.reservator.model.Reservation;
 import com.futurice.android.reservator.view.LobbyReservationRowView;
 import com.futurice.android.reservator.view.LobbyReservationRowView.OnReserveListener;
 import com.futurice.android.reservator.view.RoomReservationPopup;
+import com.futurice.android.reservator.view.EditReservationPopup;
 import com.futurice.android.reservator.view.WeekView;
 import com.futurice.android.reservator.view.WeekView.OnFreeTimeClickListener;
+import com.futurice.android.reservator.view.WeekView.OnReservationClickListener;
 
 public class RoomActivity extends ReservatorActivity implements OnMenuItemClickListener,
 		DataUpdatedListener, AddressBookUpdatedListener {
@@ -88,7 +91,6 @@ public class RoomActivity extends ReservatorActivity implements OnMenuItemClickL
 			@Override
 			public void onFreeTimeClick(View v, TimeSpan timeSpan, DateTime touch) {
 
-
 				TimeSpan reservationTimeSpan = timeSpan;
 
 				// if time span is greater than hour do stuff
@@ -127,6 +129,20 @@ public class RoomActivity extends ReservatorActivity implements OnMenuItemClickL
 					}
 				});
 
+				d.show();
+			}
+		});
+		
+		weekView.setOnReservationClickListener(new OnReservationClickListener() {
+			@Override
+			public void onReservationClick(View v, Reservation reservation) {
+				final EditReservationPopup d = new EditReservationPopup(RoomActivity.this, reservation, currentRoom,
+					new EditReservationPopup.OnReservationCancelledListener() {
+						@Override
+						public void onReservationCancelled(Reservation r) {
+							refreshData();
+						}
+					});
 				d.show();
 			}
 		});

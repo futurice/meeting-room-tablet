@@ -29,6 +29,11 @@ public abstract class DataProxy {
 	 * @throws ReservatorException
 	 */
 	abstract public Vector<Reservation> getRoomReservations(Room r) throws ReservatorException;
+	
+	/**
+	 * Synchronously cancel a reservation.
+	 */
+	abstract public void cancelReservation(Reservation r) throws ReservatorException; 
 
 	private Set<DataUpdatedListener> listeners = new HashSet<DataUpdatedListener>();
 

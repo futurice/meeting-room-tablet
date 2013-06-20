@@ -46,4 +46,5 @@
     <string name="used_google_account">Used Google Account</string>
     <string name="allAccountsMagicWord">(All)</string>
     <string name="shown_rooms">Visible rooms</string>
+    <string name="reservationCancelInfo">You can cancel reservations that were originally made from a room tablet</string>
 </resources>

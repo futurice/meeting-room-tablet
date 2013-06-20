@@ -8,6 +8,7 @@ public class Reservation implements Comparable<Reservation>, Serializable {
 	final private String id;
 	final private TimeSpan timeSpan;
 	final private String subject;
+	private boolean cancellable = false;
 
 	public Reservation(String id, String subject, TimeSpan timeSpan){
 		this.id = id;
@@ -60,5 +61,13 @@ public class Reservation implements Comparable<Reservation>, Serializable {
 	@Override
 	public String toString() {
 		return "Reservation<" + id + "," + hashCode() + "> " + subject + ": " + timeSpan; 
+	}
+	
+	public void setIsCancellable(final boolean value) {
+		this.cancellable = value;
+	}
+	
+	public boolean isCancellable() {
+		return this.cancellable;
 	}
 }

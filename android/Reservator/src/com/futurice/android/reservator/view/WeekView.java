@@ -32,6 +32,7 @@ public class WeekView extends RelativeLayout implements OnClickListener {
 	}
 
 	private OnFreeTimeClickListener onFreeTimeClickListener = null;
+	private OnReservationClickListener onReservationClickListener = null;
 
 	public WeekView(Context context, AttributeSet attrs) {
 		this(context, attrs, 0);
@@ -136,7 +137,15 @@ public class WeekView extends RelativeLayout implements OnClickListener {
 	}
 
 	public void setOnFreeTimeClickListener(OnFreeTimeClickListener onFreeTimeClickListener) {
-		this.onFreeTimeClickListener  = onFreeTimeClickListener;
+		this.onFreeTimeClickListener = onFreeTimeClickListener;
+	}
+
+	public static interface OnReservationClickListener {
+		abstract void onReservationClick(View v, Reservation r);
+	}
+
+	public void setOnReservationClickListener(OnReservationClickListener onReservationClickListener) {
+		this.onReservationClickListener = onReservationClickListener;
 	}
 
 	@Override
@@ -144,8 +153,20 @@ public class WeekView extends RelativeLayout implements OnClickListener {
 
 		if (v instanceof ReservatorVisualizer) {
 			ReservatorVisualizer visualizer = (ReservatorVisualizer)v;
-			if(onFreeTimeClickListener != null) {
-				onFreeTimeClickListener.onFreeTimeClick(v, visualizer.getSelectedTimeSpan(), visualizer.getSelectedTime());
+			
+			final Reservation clickedReservation = visualizer.getSelectedReservation();
+			if (clickedReservation != null) {
+				// User clicked a reservation
+				if (onReservationClickListener != null) {
+					onReservationClickListener.onReservationClick(v, clickedReservation);
+				}
+			}
+			else {
+				// User clicked a free time slot
+				if(onFreeTimeClickListener != null) {
+					onFreeTimeClickListener.onFreeTimeClick(v, 
+							visualizer.getSelectedTimeSpan(), visualizer.getSelectedTime());
+				}
 			}
 		}
 	}
