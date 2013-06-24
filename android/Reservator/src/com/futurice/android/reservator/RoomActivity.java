@@ -32,6 +32,7 @@ import com.futurice.android.reservator.view.LobbyReservationRowView;
 import com.futurice.android.reservator.view.LobbyReservationRowView.OnReserveListener;
 import com.futurice.android.reservator.view.RoomReservationPopup;
 import com.futurice.android.reservator.view.EditReservationPopup;
+import com.futurice.android.reservator.view.RoomTrafficLights;
 import com.futurice.android.reservator.view.WeekView;
 import com.futurice.android.reservator.view.WeekView.OnFreeTimeClickListener;
 import com.futurice.android.reservator.view.WeekView.OnReservationClickListener;
@@ -46,6 +47,7 @@ public class RoomActivity extends ReservatorActivity implements OnMenuItemClickL
 
 	WeekView weekView;
 	TextView roomNameLabel;
+	RoomTrafficLights trafficLights;
 
 	MenuItem settingsMenu, refreshMenu;
 
@@ -69,6 +71,7 @@ public class RoomActivity extends ReservatorActivity implements OnMenuItemClickL
 		setContentView(R.layout.room_activity);
 		this.weekView = (WeekView) findViewById(R.id.weekView1);
 		this.roomNameLabel = (TextView) findViewById(R.id.roomNameLabel);
+		this.trafficLights = (RoomTrafficLights) findViewById(R.id.roomTrafficLights);
 		try {
 			currentRoom = (Room) getIntent().getSerializableExtra(ROOM_EXTRA);
 		} catch (ClassCastException e) {
@@ -185,8 +188,9 @@ public class RoomActivity extends ReservatorActivity implements OnMenuItemClickL
 		roomNameLabel
 				.setText(currentRoom.getName());
 		weekView.refreshData(currentRoom);
+		trafficLights.update(currentRoom);
 	}
-
+	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		refreshMenu = menu.add("Refresh").setOnMenuItemClickListener(this);

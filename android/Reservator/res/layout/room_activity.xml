@@ -27,6 +27,15 @@
 	    android:textStyle="bold" 
 	    android:textIsSelectable="false" />
 
+	<com.futurice.android.reservator.view.RoomTrafficLights
+	    android:id="@+id/roomTrafficLights"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_above="@id/seeAllRoomsButton"
+	    android:layout_alignTop="@id/weekView1"
+	    android:layout_alignParentLeft="true"
+	    android:layout_toLeftOf="@id/weekView1" />	    
+		
 	<Button
 	    android:id="@+id/seeAllRoomsButton"
 	    android:layout_width="wrap_content"

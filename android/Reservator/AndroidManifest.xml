@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
       package="com.futurice.android.reservator"
-      android:versionCode="7"
-      android:versionName="3.4 (Sans FUM)">
+      android:versionCode="8"
+      android:versionName="3.5 (Traffic Lights)">
     <uses-sdk android:minSdkVersion="14" android:targetSdkVersion="18" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />

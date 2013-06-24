@@ -129,25 +129,8 @@ public class LobbyReservationRowView extends FrameLayout implements
 		}
 		timePicker2.setEndTimeRelatively(60); // let book the room for an hour
 
-		boolean bookable = false;
-		if (room.isFree()) {
-			int freeMinutes = room.minutesFreeFromNow();
-			bookable = true;
-
-			if (freeMinutes > 180) {
-				roomStatusView.setText("Free");
-			} else if (freeMinutes < 30) {
-				roomStatusView.setText("Reserved");
-				bookable = false;
-			} else {
-				roomStatusView.setText("Free for "
-						+ Helpers.humanizeTimeSpan(freeMinutes));
-			}
-		} else {
-			roomStatusView.setText("Reserved");
-		}
-
-		if (bookable) {
+		roomStatusView.setText(room.getStatusText());
+		if (room.isBookable()) {
 			roomStatusView.setTextColor(getResources().getColor(
 					R.color.StatusFreeColor));
 			bookNowButton.setVisibility(View.VISIBLE);

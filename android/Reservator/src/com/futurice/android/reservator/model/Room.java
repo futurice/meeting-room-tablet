@@ -7,6 +7,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Vector;
 
+import com.futurice.android.reservator.common.Helpers;
+
 public class Room implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private String name, email;
@@ -156,5 +158,59 @@ public class Room implements Serializable {
 	
 	public void setCapacity(int capacity) {
 		this.capacity = capacity;
+	}
+
+	// Rooms that are free for this long to future are considered "free" (bookable)
+	static private final int FREE_THRESHOLD_MINUTES = 180;
+	// Rooms that are free for no more than this long to future are considered "reserved" (not-bookable)
+	static private final int RESERVED_THRESHOLD_MINUTES = 30;
+	
+	public boolean isBookable() {
+		if (this.isFree()) {
+			int freeMinutes = this.minutesFreeFromNow();
+
+			if (freeMinutes > FREE_THRESHOLD_MINUTES) {
+				return true;
+			} else if (freeMinutes < RESERVED_THRESHOLD_MINUTES) {
+				return false;
+			} else {
+				return true;
+			}
+		} else {
+			return false;
+		}
+	}
+	
+	// Returns true if room is free for a long period
+	public boolean isLongBookable() {
+		if (this.isFree()) {
+			int freeMinutes = this.minutesFreeFromNow();
+
+			if (freeMinutes > FREE_THRESHOLD_MINUTES) {
+				return true;
+			} else if (freeMinutes < RESERVED_THRESHOLD_MINUTES) {
+				return false;
+			} else {
+				return false;
+			}
+		} else {
+			return false;
+		}
+	}
+	
+	public String getStatusText() {
+		if (this.isFree()) {
+			int freeMinutes = this.minutesFreeFromNow();
+
+			if (freeMinutes > FREE_THRESHOLD_MINUTES) {
+				return "Free";
+			} else if (freeMinutes < RESERVED_THRESHOLD_MINUTES) {
+				return "Reserved";
+			} else {
+				return "Free for " + Helpers.humanizeTimeSpan(freeMinutes);
+			}
+		} else {
+			return "Reserved";
+		}
 	}
 }

@@ -7,16 +7,13 @@ import android.content.SharedPreferences;
 import android.os.Handler;
 
 import com.futurice.android.reservator.model.AddressBook;
-import com.futurice.android.reservator.model.CombinedAddressBook;
 import com.futurice.android.reservator.model.DataProxy;
 import com.futurice.android.reservator.model.platformcalendar.PlatformCalendarDataProxy;
 import com.futurice.android.reservator.model.platformcontacts.PlatformContactsAddressBook;
-import com.futurice.android.reservator.model.fum3.FumAddressBook;
 
 public class ReservatorApplication extends Application {
 	private DataProxy proxy;
 	private AddressBook addressBook;
-	private FumAddressBook fumAddressBook;
 	private Handler handler;
 	private final long ADDRESS_CACHE_CLEAR_INTERVAL = 6*60*60*1000; // Once every six hours
 
@@ -28,18 +25,9 @@ public class ReservatorApplication extends Application {
 		return addressBook;
 	}
 	
-	public FumAddressBook getFumAddressBook() {
-		return fumAddressBook;
-	}
-	
 	@Override
 	public void onCreate(){
-		fumAddressBook = new FumAddressBook();
 		PlatformContactsAddressBook googleAddressBook = new PlatformContactsAddressBook(getContentResolver());
-		
-		CombinedAddressBook combinedAddressBook = new CombinedAddressBook();
-		combinedAddressBook.addSource(fumAddressBook);
-		combinedAddressBook.addSource(googleAddressBook);
 		
 		proxy = new PlatformCalendarDataProxy(
 				getContentResolver(),
@@ -58,7 +46,7 @@ public class ReservatorApplication extends Application {
 			googleAddressBook.setAccount(usedAccount);
 		}
 		
-		addressBook = combinedAddressBook; 
+		addressBook = googleAddressBook; 
 		
 		handler = new Handler();
 		clearCacheLater();
