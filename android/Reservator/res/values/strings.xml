@@ -47,4 +47,6 @@
     <string name="allAccountsMagicWord">(All)</string>
     <string name="shown_rooms">Visible rooms</string>
     <string name="reservationCancelInfo">You can cancel reservations that were originally made from a room tablet</string>
+    <string name="touchToReserve">Tap to wake up</string>
+    <string name="freeIn"><![CDATA[ Free in <b>%s</b>]]></string>
 </resources>

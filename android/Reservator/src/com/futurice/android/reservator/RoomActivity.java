@@ -129,9 +129,11 @@ public class RoomActivity extends ReservatorActivity implements OnMenuItemClickL
 					public void call(LobbyReservationRowView v) {
 						d.dismiss();
 						refreshData();
+						RoomActivity.this.trafficLights.enable();
 					}
 				});
-
+				
+				RoomActivity.this.trafficLights.disable();
 				d.show();
 			}
 		});
@@ -144,8 +146,10 @@ public class RoomActivity extends ReservatorActivity implements OnMenuItemClickL
 						@Override
 						public void onReservationCancelled(Reservation r) {
 							refreshData();
+							RoomActivity.this.trafficLights.enable();
 						}
 					});
+				RoomActivity.this.trafficLights.disable();
 				d.show();
 			}
 		});

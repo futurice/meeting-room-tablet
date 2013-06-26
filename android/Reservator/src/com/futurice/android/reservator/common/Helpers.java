@@ -45,8 +45,10 @@ public class Helpers {
 			return "an hour";
 		} else if (minutes < 110) {
 			return "an hour and a half";
-		} else {
+		} else if (minutes < 24*60) {
 			return Integer.toString((minutes + 10)/60) + " hours";
+		} else {
+			return Integer.toString(minutes/(60*24)) + " days";
 		}
 	}
 }

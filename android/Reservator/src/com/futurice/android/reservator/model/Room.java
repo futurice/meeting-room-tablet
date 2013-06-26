@@ -54,6 +54,26 @@ public class Room implements Serializable {
 		return true;
 	}
 
+	public Reservation getCurrentReservation() {
+		DateTime now = new DateTime();
+		DateTime bookingThresholdEnd = now.add(Calendar.MINUTE, RESERVED_THRESHOLD_MINUTES);
+		
+		Reservation withinThreshold = null;
+		
+		for (Reservation r : reservations) {
+			if (r.getEndTime().after(now)) {
+				if (r.getStartTime().before(now)) {
+					return r;
+				}
+				if (r.getStartTime().before(bookingThresholdEnd)) {
+					withinThreshold = r;
+				}
+			}
+		}
+
+		return withinThreshold;
+	}
+
 	/**
 	 * Time in minutes the room is free
 	 * Precondition: room is free

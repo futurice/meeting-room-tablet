@@ -48,4 +48,8 @@
     <color name="TextInfoColor">#666</color>
     <color name="CalendarWeekTextColor">#999</color>
 
+    <color name="TrafficLightFree">#4ccb00</color>
+    <color name="TrafficLightYellow">#cee100</color>
+    <color name="TrafficLightReserved">#de1f00</color>
+    <color name="TrafficLightText">#fff</color>
 </resources>
