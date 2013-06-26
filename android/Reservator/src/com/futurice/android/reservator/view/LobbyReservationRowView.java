@@ -23,7 +23,6 @@ import android.widget.ViewSwitcher;
 import com.futurice.android.reservator.R;
 import com.futurice.android.reservator.ReservatorApplication;
 import com.futurice.android.reservator.RoomActivity;
-import com.futurice.android.reservator.common.Helpers;
 import com.futurice.android.reservator.model.AddressBookAdapter;
 import com.futurice.android.reservator.model.AddressBookEntry;
 import com.futurice.android.reservator.model.DateTime;
