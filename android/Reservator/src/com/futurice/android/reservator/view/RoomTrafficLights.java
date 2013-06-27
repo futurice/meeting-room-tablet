@@ -29,8 +29,8 @@ public class RoomTrafficLights extends RelativeLayout {
 	TextView reservationInfoView;
 	Button bookNowView;
 	Timer touchTimeoutTimer;
-	final long TOUCH_TIMEOUT = 5 * 1000; 
-	final long TOUCH_TIMER = 1 * 1000;
+	final long TOUCH_TIMEOUT = 30 * 1000; 
+	final long TOUCH_TIMER = 10 * 1000;
 	boolean enabled = true;
 	View.OnClickListener bookNowListener;
 
