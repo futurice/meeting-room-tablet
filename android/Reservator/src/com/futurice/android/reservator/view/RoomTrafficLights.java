@@ -3,6 +3,7 @@ package com.futurice.android.reservator.view;
 import com.futurice.android.reservator.R;
 
 import android.content.Context;
+import android.test.suitebuilder.annotation.Suppress;
 import android.text.Html;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
@@ -72,7 +73,8 @@ public class RoomTrafficLights extends RelativeLayout {
 			if (room.isFreeRestOfDay()) {
 				roomStatusInfoView.setText("for the day");
 				this.setBackgroundColor(getResources().getColor(R.color.TrafficLightFree));
-				bookNowView.setBackground(getResources().getDrawable(R.drawable.traffic_lights_button_green));
+				// Must use deprecated API for some reason or it crashes on older tablets
+				bookNowView.setBackgroundDrawable(getResources().getDrawable(R.drawable.traffic_lights_button_green));
 				bookNowView.setTextColor(getResources().getColorStateList(R.color.traffic_lights_button_green));
 			} else {
 				int freeMinutes = room.minutesFreeFromNow();
@@ -80,11 +82,11 @@ public class RoomTrafficLights extends RelativeLayout {
 				roomStatusInfoView.setText("for " + Helpers.humanizeTimeSpan2(freeMinutes));
 				if (freeMinutes >= Room.RESERVED_THRESHOLD_MINUTES) {
 					this.setBackgroundColor(getResources().getColor(R.color.TrafficLightFree));
-					bookNowView.setBackground(getResources().getDrawable(R.drawable.traffic_lights_button_green));
+					bookNowView.setBackgroundDrawable(getResources().getDrawable(R.drawable.traffic_lights_button_green));
 					bookNowView.setTextColor(getResources().getColorStateList(R.color.traffic_lights_button_green));
 				} else {
 					this.setBackgroundColor(getResources().getColor(R.color.TrafficLightYellow));
-					bookNowView.setBackground(getResources().getDrawable(R.drawable.traffic_lights_button_yellow));
+					bookNowView.setBackgroundDrawable(getResources().getDrawable(R.drawable.traffic_lights_button_yellow));
 					bookNowView.setTextColor(getResources().getColorStateList(R.color.traffic_lights_button_yellow));
 				}
 			}
