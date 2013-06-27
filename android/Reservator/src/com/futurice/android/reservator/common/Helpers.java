@@ -51,4 +51,25 @@ public class Helpers {
 			return Integer.toString(minutes/(60*24)) + " days";
 		}
 	}
+	
+	// For use in traffic lights
+	public static String humanizeTimeSpan2(int minutes) {
+		int hours = minutes / 60;
+		
+		if (minutes < 30) {
+			return Integer.toString(roundTo(minutes, 5)) + " minutes";
+		} else if (minutes < 60) {
+				return Integer.toString(roundTo(minutes, 15)) + " minutes";
+		} else if (minutes <= 60*4) {
+			return String.format("%dh:%02dmin", hours, roundTo(minutes - hours*60, 15));
+		} else if (minutes < 24*60) {
+			return String.format("%d hours", hours);
+		} else {
+			return String.format("%d days", hours/24);
+		}
+	}
+	
+	private static int roundTo(int in, int precision) {
+		return precision * ((int)Math.round(in / (1.0*precision)));
+	}
 }

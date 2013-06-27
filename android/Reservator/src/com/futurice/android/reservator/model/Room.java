@@ -58,20 +58,13 @@ public class Room implements Serializable {
 		DateTime now = new DateTime();
 		DateTime bookingThresholdEnd = now.add(Calendar.MINUTE, RESERVED_THRESHOLD_MINUTES);
 		
-		Reservation withinThreshold = null;
-		
 		for (Reservation r : reservations) {
-			if (r.getEndTime().after(now)) {
-				if (r.getStartTime().before(now)) {
-					return r;
-				}
-				if (r.getStartTime().before(bookingThresholdEnd)) {
-					withinThreshold = r;
-				}
+			if (r.getEndTime().after(now) && r.getStartTime().before(bookingThresholdEnd)) {
+				return r;
 			}
 		}
 
-		return withinThreshold;
+		return null;
 	}
 
 	/**
@@ -143,6 +136,31 @@ public class Room implements Serializable {
 		return null;
 	}
 
+	/**
+	 * Prerequisites: None
+	 * @param length Required slot length in minutes.
+	 * @return Next free slot today of at least the required length, if any.
+	 */
+	public TimeSpan getNextFreeSlot(int length) {
+		DateTime now = new DateTime();
+		DateTime max = now.add(Calendar.DAY_OF_YEAR, 1).stripTime();
+
+		TimeSpan candidateSlot = new TimeSpan(now, now.add(Calendar.MINUTE, length));
+
+		for (Reservation r : reservations) {
+			if (r.getStartTime().afterOrEqual(candidateSlot.getEnd())) return candidateSlot;
+			if (r.getTimeSpan().intersects(candidateSlot)) {
+				if (r.getEndTime().afterOrEqual(max)) return null;
+				candidateSlot = new TimeSpan(r.getEndTime(), r.getEndTime().add(Calendar.MINUTE, length));
+			}
+		}
+
+		return candidateSlot;
+	}
+
+	public TimeSpan getNextFreeSlot() {
+		return getNextFreeSlot(RESERVED_THRESHOLD_MINUTES);
+	}
 
 	public List<Reservation> getReservationsForTimeSpan(TimeSpan ts) {
 		List<Reservation> daysReservations = new ArrayList<Reservation>();
@@ -180,44 +198,47 @@ public class Room implements Serializable {
 		this.capacity = capacity;
 	}
 
-	// Rooms that are free for this long to future are considered "free" (bookable)
-	static private final int FREE_THRESHOLD_MINUTES = 180;
+	/**
+	 * @param threshold Minimum duration of reservation.
+	 * @return If room can be immediately booked with threshold long reservation.
+	 */
+	public boolean isBookable(final int threshold) {
+		if (this.isFree()) {
+			if (this.minutesFreeFromNow() < threshold) {
+				return false;
+			}
+			return true;
+		}
+		return false;
+	}
+	
 	// Rooms that are free for no more than this long to future are considered "reserved" (not-bookable)
-	static private final int RESERVED_THRESHOLD_MINUTES = 30;
+	static public final int RESERVED_THRESHOLD_MINUTES = 30;
 	
 	public boolean isBookable() {
-		if (this.isFree()) {
-			int freeMinutes = this.minutesFreeFromNow();
+		return isBookable(RESERVED_THRESHOLD_MINUTES);
+	}
 
-			if (freeMinutes > FREE_THRESHOLD_MINUTES) {
-				return true;
-			} else if (freeMinutes < RESERVED_THRESHOLD_MINUTES) {
-				return false;
-			} else {
-				return true;
-			}
-		} else {
-			return false;
+	/**
+	 * Prerequisite: isFree
+	 * @return true if room is continuously free now and for the rest of the day
+	 */
+	public boolean isFreeRestOfDay() {
+		DateTime now = new DateTime();
+		DateTime max = now.add(Calendar.DAY_OF_YEAR, 1).stripTime();
+		
+		TimeSpan restOfDay = new TimeSpan(now, max);
+
+		for (Reservation r : reservations) {
+			if (r.getTimeSpan().intersects(restOfDay)) return false;
+			if (r.getStartTime().after(max)) return true;
 		}
+
+		return true;
 	}
 	
-	// Returns true if room is free for a long period
-	public boolean isLongBookable() {
-		if (this.isFree()) {
-			int freeMinutes = this.minutesFreeFromNow();
-
-			if (freeMinutes > FREE_THRESHOLD_MINUTES) {
-				return true;
-			} else if (freeMinutes < RESERVED_THRESHOLD_MINUTES) {
-				return false;
-			} else {
-				return false;
-			}
-		} else {
-			return false;
-		}
-	}
-	
+	// Rooms that are free for this long to future are considered "free"
+	static private final int FREE_THRESHOLD_MINUTES = 180;
 	public String getStatusText() {
 		if (this.isFree()) {
 			int freeMinutes = this.minutesFreeFromNow();

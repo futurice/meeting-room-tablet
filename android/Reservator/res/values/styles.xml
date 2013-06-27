@@ -52,4 +52,9 @@
     <color name="TrafficLightYellow">#cee100</color>
     <color name="TrafficLightReserved">#de1f00</color>
     <color name="TrafficLightText">#fff</color>
+    <color name="TrafficLightYellowButtonText">#becf00</color>
+    <color name="TrafficLightYellowButtonPressed">#a0af00</color>
+    <color name="TrafficLightGreenButtonPressed">#03a021</color>
+    <color name="TrafficLightYellowButtonPressedText">#e4ec8c</color>
+    <color name="TrafficLightGreenButtonPressedText">#98dd6f</color>
 </resources>

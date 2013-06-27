@@ -52,10 +52,14 @@ public class TimeSpan implements Serializable {
 	}
 
 	public boolean intersects(TimeSpan ts) {
-		if (end.compareTo(ts.getStart()) <= 0) return false;
-		if (start.compareTo(ts.getEnd()) >= 0) return false;
+		if (end.beforeOrEqual(ts.getStart())) return false;
+		if (start.afterOrEqual(ts.getEnd())) return false;
 		
 		return true;
+	}
+	
+	public boolean contains(DateTime time) {
+		return start.before(time) && end.after(time); 
 	}
 	
 	@Override

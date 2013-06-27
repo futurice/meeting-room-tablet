@@ -42,6 +42,14 @@ public class DateTime implements Serializable {
 		return cal.before(other.cal);
 	}
 
+	public boolean afterOrEqual(DateTime other) {
+		return cal.compareTo(other.cal) >= 0;
+	}
+
+	public boolean beforeOrEqual(DateTime other) {
+		return cal.compareTo(other.cal) <= 0;
+	}
+
 	public int compareTo(DateTime other) {
 		return cal.compareTo(other.cal);
 	}
