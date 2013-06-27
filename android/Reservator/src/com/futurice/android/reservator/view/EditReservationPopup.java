@@ -21,7 +21,6 @@ import com.futurice.android.reservator.model.DateTime;;
 public class EditReservationPopup extends Dialog {
 	private ReservatorApplication application;
 	private String reservationInfo;
-	private String reservationDialogInfo;
 	private OnReservationCancelledListener cancelledListener;
 	private Reservation reservation;
 
