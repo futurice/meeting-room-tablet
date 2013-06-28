@@ -56,11 +56,13 @@ public class Helpers {
 	public static String humanizeTimeSpan2(int minutes) {
 		int hours = minutes / 60;
 		
-		if (minutes < 30) {
+		if (minutes < 15) {
+			return getUnits(minutes, "minute", "minutes");
+		} else if (minutes < 30) {
 			return getUnits(roundTo(minutes, 5), "minute", "minutes");
-		} else if (minutes < 53) {
+		} else if (minutes < 60) {
 			return getUnits(roundTo(minutes, 15), "minute", "minutes");
-		} else if (minutes <= 60*4) {
+		} else if (minutes < 60*4) {
 			int hourMins = roundTo(minutes - hours*60, 15);
 			if (hourMins == 60) {
 				hours++;
@@ -85,6 +87,6 @@ public class Helpers {
 	}
 	
 	private static int roundTo(int in, int precision) {
-		return precision * ((int)Math.round(in / (1.0*precision)));
+		return precision * ((int)Math.floor(in / (1.0*precision)));
 	}
 }
