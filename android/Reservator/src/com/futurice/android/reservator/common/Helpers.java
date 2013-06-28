@@ -57,16 +57,31 @@ public class Helpers {
 		int hours = minutes / 60;
 		
 		if (minutes < 30) {
-			return Integer.toString(roundTo(minutes, 5)) + " minutes";
-		} else if (minutes < 60) {
-				return Integer.toString(roundTo(minutes, 15)) + " minutes";
+			return getUnits(roundTo(minutes, 5), "minute", "minutes");
+		} else if (minutes < 53) {
+			return getUnits(roundTo(minutes, 15), "minute", "minutes");
 		} else if (minutes <= 60*4) {
-			return String.format("%dh:%02dmin", hours, roundTo(minutes - hours*60, 15));
+			int hourMins = roundTo(minutes - hours*60, 15);
+			if (hourMins == 60) {
+				hours++;
+				hourMins = 0;
+			}
+			
+			if (hourMins == 0) {
+				return getUnits(hours, "hour", "hours");
+			} else {
+				return String.format("%dh:%02dmin", hours, hourMins);
+			}
 		} else if (minutes < 24*60) {
-			return String.format("%d hours", hours);
+			return getUnits(hours, "hour", "hours");
 		} else {
-			return String.format("%d days", hours/24);
+			return getUnits(hours/24, "day", "days");
 		}
+	}
+	
+	private static String getUnits(int amount, String unitName, String unitNamePlural) {
+		if (amount == 1) return String.format("1 %s", unitName);
+		return String.format("%d %s", amount, unitNamePlural);
 	}
 	
 	private static int roundTo(int in, int precision) {
