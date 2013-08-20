@@ -49,4 +49,5 @@
     <string name="reservationCancelInfo">You can cancel reservations that were originally made from a room tablet</string>
     <string name="touchToReserve">Tap for reservations</string>
     <string name="bookNow">Book Now</string>
+    <string name="disconnectedWarning">Disconnected!</string>
 </resources>

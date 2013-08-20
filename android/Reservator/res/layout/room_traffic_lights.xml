@@ -60,6 +60,31 @@
 	        android:textSize="40sp"
 	        android:textStyle="bold"
 	        android:textIsSelectable="false" />
+		<LinearLayout 
+		    android:id="@+id/disconnected"
+		    android:orientation="vertical"
+	        android:layout_below="@id/bookNow"
+	    	android:layout_marginTop="30dp"
+	    	android:layout_centerHorizontal="true"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content">
+		    <ImageView
+		        android:layout_width="100dp"
+		        android:layout_height="100dp"
+		        android:layout_gravity="center_horizontal"
+		    	android:src="@drawable/disconnected" />
+			<TextView
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:layout_marginTop="10dp"
+		        android:layout_gravity="center_horizontal"
+		        android:text="@string/disconnectedWarning"
+		        android:textColor="@color/TrafficLightText"
+		        android:textSize="40sp"
+		        android:textIsSelectable="false"
+		        android:textStyle="bold"
+		        android:textAllCaps="true" />
+		</LinearLayout>
 	</RelativeLayout>
 	<TextView
         android:layout_width="fill_parent"

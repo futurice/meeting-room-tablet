@@ -3,11 +3,14 @@ package com.futurice.android.reservator.view;
 import com.futurice.android.reservator.R;
 
 import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.test.suitebuilder.annotation.Suppress;
 import android.text.Html;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Button;
@@ -28,6 +31,8 @@ public class RoomTrafficLights extends RelativeLayout {
 	TextView roomStatusInfoView;
 	TextView reservationInfoView;
 	Button bookNowView;
+	View disconnected;
+	
 	Timer touchTimeoutTimer;
 	final long TOUCH_TIMEOUT = 30 * 1000; 
 	final long TOUCH_TIMER = 10 * 1000;
@@ -46,6 +51,8 @@ public class RoomTrafficLights extends RelativeLayout {
 		roomStatusInfoView = (TextView) findViewById(R.id.roomStatusInfo);
 		reservationInfoView = (TextView) findViewById(R.id.reservationInfo);
 		bookNowView = (Button) findViewById(R.id.bookNow);
+		disconnected = findViewById(R.id.disconnected);
+		updateConnected();
 		
 		setClickable(true);
 		setVisibility(INVISIBLE);
@@ -64,8 +71,10 @@ public class RoomTrafficLights extends RelativeLayout {
 		this.bookNowListener = l;
 	}
 	
-	final int QUICK_BOOK_THRESHOLD = 5; // 5 minutes
+	final int QUICK_BOOK_THRESHOLD = 5; // minutes
 	public void update(Room room) {
+		updateConnected();
+		
 		roomTitleView.setText(room.getName());
 		
 		if (room.isBookable(QUICK_BOOK_THRESHOLD)) {
@@ -98,6 +107,36 @@ public class RoomTrafficLights extends RelativeLayout {
 			roomStatusView.setText("Reserved");
 			bookNowView.setVisibility(GONE);
 			setReservationInfo(room.getCurrentReservation(), room.getNextFreeSlot());
+		}
+	}
+	
+	// Show "disconnected" warning icon on screen when disconnected for more than 5 minutes
+	private final long DISCONNECTED_WARNING_ICON_THRESHOLD = 5 * 60 * 1000; 
+	private static Date lastTimeConnected = new Date(0);
+	private void updateConnected() {
+		ConnectivityManager cm = null;
+		try {
+			cm = (ConnectivityManager) getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+		} catch (ClassCastException cce) {
+			return;
+		}
+		if (cm == null) return;
+		
+		NetworkInfo ni = cm.getActiveNetworkInfo();
+		
+		if (ni != null && ni.isConnectedOrConnecting()) {
+			// Connected
+			lastTimeConnected = new Date();
+			if (disconnected.getVisibility() != GONE) {
+				disconnected.setVisibility(GONE);
+			}
+		} else {
+			// Disconnected
+			if (lastTimeConnected.before(new Date(new Date().getTime() - DISCONNECTED_WARNING_ICON_THRESHOLD))) {
+				if (disconnected.getVisibility() != VISIBLE) {
+					disconnected.setVisibility(VISIBLE);
+				}
+			}
 		}
 	}
 	
