@@ -4,7 +4,7 @@ DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
-		('Oleg Grenrus', 'oleg.grenrus@futurice.com'),
+    #('Your Name', 'your_name@domain.com'),
 )
 
 MANAGERS = ADMINS
@@ -58,7 +58,7 @@ MEDIA_URL = ''
 ADMIN_MEDIA_PREFIX = '/media/'
 
 # Make this unique, and don't share it with anybody.
-SECRET_KEY = 'euppi7j8yctlnbc&$6153%_%uxp@^c7s%anznmupmiknlyn!oh'
+SECRET_KEY = ''
 
 # List of callables that know how to import templates from various sources.
 TEMPLATE_LOADERS = (
@@ -110,11 +110,15 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 )
 
 STATIC_URL = "/static/"
-CDN_URL = 'https://cdn.futurice.com/'
+CDN_URL = ''
 
 RESERVATOR = {
-		"server": "10.4.2.214",
-		"username": "test",
-		"password": "Password1",
+		"server": "",
+		"username": "",
+		"password": "",
 }
 
+try:
+    from local_settings import *
+except ImportError:
+    pass

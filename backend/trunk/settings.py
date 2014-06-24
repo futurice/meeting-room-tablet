@@ -60,7 +60,7 @@ MEDIA_URL = ''
 ADMIN_MEDIA_PREFIX = '/media/'
 
 # Make this unique, and don't share it with anybody.
-SECRET_KEY = '=!ullrt1s9gnf0_a@oz3)%+u)+fr)kuz7o-vy48&u*2kv6v=fu'
+SECRET_KEY = ''
 
 # List of callables that know how to import templates from various sources.
 TEMPLATE_LOADERS = (
@@ -101,3 +101,8 @@ INSTALLED_APPS = (
 AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.RemoteUserBackend',
 )
+
+try:
+    from local_settings import *
+except ImportError:
+    pass
