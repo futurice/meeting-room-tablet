@@ -1,9 +1,0 @@
-{% extends "base_generic.html" %}
-
-{% block content %}
-<ul class="room-list">
-{% for room in rooms %}
-<li><a href="{% url reservations room_address=room.address %}">{{ room.name }}</a></li>
-{% endfor %}
-</ul>
-{% endblock %}
