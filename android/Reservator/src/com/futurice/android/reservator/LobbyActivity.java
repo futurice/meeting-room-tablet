@@ -7,19 +7,27 @@ import java.util.Vector;
 
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
+import android.app.Dialog;
+import android.app.DialogFragment;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Handler;
+import android.text.Html;
+import android.text.SpannableString;
+import android.text.method.LinkMovementMethod;
+import android.text.util.Linkify;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MenuItem.OnMenuItemClickListener;
 import android.widget.DigitalClock;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.futurice.android.reservator.model.AddressBook;
 import com.futurice.android.reservator.model.AddressBookUpdatedListener;
@@ -33,7 +41,7 @@ import com.futurice.android.reservator.view.LobbyReservationRowView.OnReserveLis
 
 public class LobbyActivity extends ReservatorActivity implements OnMenuItemClickListener,
 		DataUpdatedListener, AddressBookUpdatedListener {
-	MenuItem settingsMenu, refreshMenu;
+	MenuItem settingsMenu, refreshMenu, aboutMenu;
 	LinearLayout container = null;
 	DataProxy proxy;
 	AddressBook ab;
@@ -145,6 +153,7 @@ public class LobbyActivity extends ReservatorActivity implements OnMenuItemClick
 		refreshMenu.setIcon(android.R.drawable.ic_popup_sync);
 		settingsMenu = menu.add("Settings").setOnMenuItemClickListener(this);
 		settingsMenu.setIcon(android.R.drawable.ic_menu_preferences);
+		aboutMenu = menu.add("About").setOnMenuItemClickListener(this);
 		return true;
 	}
 
@@ -156,6 +165,18 @@ public class LobbyActivity extends ReservatorActivity implements OnMenuItemClick
 		} else if (item == refreshMenu) {
 			refreshRoomInfo();
 			refetchAddressBook();
+		} else if (item == aboutMenu) {
+			SpannableString s = new SpannableString(getString(R.string.aboutInfo));
+		    Linkify.addLinks(s, Linkify.ALL);
+
+			Builder aboutBuilder = new AlertDialog.Builder(this);
+			aboutBuilder.setTitle(R.string.aboutTitle);
+			aboutBuilder.setMessage(s);
+			aboutBuilder.setNegativeButton(R.string.close, null);
+			alertDialog = aboutBuilder.show();
+
+			//	Makes links clickable.
+			((TextView) alertDialog.findViewById(android.R.id.message)).setMovementMethod(LinkMovementMethod.getInstance());
 		}
 		return true;
 	}
