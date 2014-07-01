@@ -29,7 +29,7 @@ import com.futurice.android.reservator.model.TimeSpan;
 
 public class CalendarVisualizer extends HorizontalScrollView implements ReservatorVisualizer,
 		OnTouchListener {
-	private Paint markerPaint, textPaint, weekTextPaint, gridPaint;
+	private Paint markerPaint, textPaint, weekTextPaint, gridPaint, reservationTextPaint;
 	private int dayStartTime; // minutes from midnight
 	private int dayEndTime;
 	private DateTime firstDayToShow;
@@ -41,7 +41,7 @@ public class CalendarVisualizer extends HorizontalScrollView implements Reservat
 	Reservation touchedReservation;
 	DateTime touchedTime;
 	Shader reservationShader, leftEdgeShader, rightEdgeShader;
-	int textColor, weekTextColor, gridColor;
+	int textColor, weekTextColor, gridColor, reservationTextColor;
 	int weekStartDay = Calendar.MONDAY;
 	String dayLabels[], weekLabels[];
 	private SimpleDateFormat dayLabelFormatter, weekLabelFormatter;
@@ -65,10 +65,15 @@ public class CalendarVisualizer extends HorizontalScrollView implements Reservat
 		this.textColor = getResources().getColor(R.color.CalendarTextColor);
 		this.weekTextColor = getResources().getColor(R.color.CalendarWeekTextColor);
 		this.gridColor = getResources().getColor(R.color.CalendarBorderColor);
+		this.reservationTextColor = getResources().getColor(R.color.CalendarResTextColor);
 
 		this.textPaint = new Paint();
 		textPaint.setColor(textColor);
 		textPaint.setAntiAlias(true);
+		
+		this.reservationTextPaint = new Paint();
+		reservationTextPaint.setColor(reservationTextColor);
+		reservationTextPaint.setAntiAlias(true);
 
 		this.weekTextPaint = new Paint();
 		weekTextPaint.setColor(weekTextColor);
@@ -252,7 +257,7 @@ public class CalendarVisualizer extends HorizontalScrollView implements Reservat
 
 
 		for(Reservation r : reservations){
-			c.drawText(r.getSubject(), getXForTime(r.getStartTime()) + paddingX,getProportionalY(r.getStartTime())*height + textHeight + paddingY, textPaint);
+			c.drawText(r.getSubject(), getXForTime(r.getStartTime()) + paddingX,getProportionalY(r.getStartTime())*height + textHeight + paddingY, reservationTextPaint);
 		}
 		c.restore();
 	}
