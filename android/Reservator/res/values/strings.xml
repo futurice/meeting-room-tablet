@@ -50,4 +50,6 @@
     <string name="touchToReserve">Tap for reservations</string>
     <string name="bookNow">Book Now</string>
     <string name="disconnectedWarning">Disconnected!</string>
+    <string name="aboutInfo">Meeting Room Tablet is made by Futurice, a lean service creation company with offices in Helsinki, Tampere, Berlin and London. More information at: <a href="http://www.futurice.com">www.futurice.com</a></string>
+    <string name="aboutTitle">About</string>
 </resources>

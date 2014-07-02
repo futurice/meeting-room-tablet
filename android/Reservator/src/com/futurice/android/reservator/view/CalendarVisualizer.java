@@ -41,7 +41,7 @@ public class CalendarVisualizer extends HorizontalScrollView implements Reservat
 	Reservation touchedReservation;
 	DateTime touchedTime;
 	Shader reservationShader, leftEdgeShader, rightEdgeShader;
-	int textColor, weekTextColor, gridColor;
+	int textColor, weekTextColor, gridColor, reservationTextColor;
 	int weekStartDay = Calendar.MONDAY;
 	String dayLabels[], weekLabels[];
 	private SimpleDateFormat dayLabelFormatter, weekLabelFormatter;
@@ -65,6 +65,7 @@ public class CalendarVisualizer extends HorizontalScrollView implements Reservat
 		this.textColor = getResources().getColor(R.color.CalendarTextColor);
 		this.weekTextColor = getResources().getColor(R.color.CalendarWeekTextColor);
 		this.gridColor = getResources().getColor(R.color.CalendarBorderColor);
+		this.reservationTextColor = getResources().getColor(R.color.CalendarResTextColor);
 
 		this.textPaint = new Paint();
 		textPaint.setColor(textColor);
@@ -250,10 +251,11 @@ public class CalendarVisualizer extends HorizontalScrollView implements Reservat
 		c.clipRect(area.left + getScrollX(), area.top, area.right + getScrollX(), area.bottom);
 		c.translate(area.left, area.top);
 
-
+		textPaint.setColor(reservationTextColor);
 		for(Reservation r : reservations){
 			c.drawText(r.getSubject(), getXForTime(r.getStartTime()) + paddingX,getProportionalY(r.getStartTime())*height + textHeight + paddingY, textPaint);
 		}
+		textPaint.setColor(textColor);
 		c.restore();
 	}
 	private void drawFadingEdges(Canvas c, RectF area){
