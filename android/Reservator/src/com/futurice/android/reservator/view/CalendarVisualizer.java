@@ -29,7 +29,7 @@ import com.futurice.android.reservator.model.TimeSpan;
 
 public class CalendarVisualizer extends HorizontalScrollView implements ReservatorVisualizer,
 		OnTouchListener {
-	private Paint markerPaint, textPaint, weekTextPaint, gridPaint, reservationTextPaint;
+	private Paint markerPaint, textPaint, weekTextPaint, gridPaint;
 	private int dayStartTime; // minutes from midnight
 	private int dayEndTime;
 	private DateTime firstDayToShow;
@@ -70,10 +70,6 @@ public class CalendarVisualizer extends HorizontalScrollView implements Reservat
 		this.textPaint = new Paint();
 		textPaint.setColor(textColor);
 		textPaint.setAntiAlias(true);
-		
-		this.reservationTextPaint = new Paint();
-		reservationTextPaint.setColor(reservationTextColor);
-		reservationTextPaint.setAntiAlias(true);
 
 		this.weekTextPaint = new Paint();
 		weekTextPaint.setColor(weekTextColor);
@@ -255,10 +251,11 @@ public class CalendarVisualizer extends HorizontalScrollView implements Reservat
 		c.clipRect(area.left + getScrollX(), area.top, area.right + getScrollX(), area.bottom);
 		c.translate(area.left, area.top);
 
-
+		textPaint.setColor(reservationTextColor);
 		for(Reservation r : reservations){
-			c.drawText(r.getSubject(), getXForTime(r.getStartTime()) + paddingX,getProportionalY(r.getStartTime())*height + textHeight + paddingY, reservationTextPaint);
+			c.drawText(r.getSubject(), getXForTime(r.getStartTime()) + paddingX,getProportionalY(r.getStartTime())*height + textHeight + paddingY, textPaint);
 		}
+		textPaint.setColor(textColor);
 		c.restore();
 	}
 	private void drawFadingEdges(Canvas c, RectF area){
