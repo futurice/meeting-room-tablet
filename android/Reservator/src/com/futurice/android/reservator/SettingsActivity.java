@@ -112,26 +112,6 @@ public class SettingsActivity extends ReservatorActivity {
 				finish();
 			}
 		});
-		Builder builder = new AlertDialog.Builder(this);
-		builder.setTitle(getString(R.string.doNotModify));
-		builder.setMessage(getString(R.string.onlyItTeamShouldModify));
-		builder.setCancelable(false);
-		DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener() {
-			
-			@Override
-			public void onClick(DialogInterface dialog, int which) {
-				if(which == AlertDialog.BUTTON_NEGATIVE){
-					dialog.dismiss();
-					finish();
-				} else {
-					dialog.dismiss();
-				}
-				
-			}
-		}; 
-		builder.setPositiveButton(getString(R.string.continueBtn), listener);
-		builder.setNegativeButton(getString(R.string.goBackBtn), listener);
-		builder.show();
 	}
 
 	@Override
