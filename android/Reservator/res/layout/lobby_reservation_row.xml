@@ -51,7 +51,7 @@
 			    android:background="@drawable/button_background"
 			    android:focusable="true"
 			    android:text="@string/book_now"
-			    android:textColor="#000" >
+			    android:textColor="#fff" >
 			</Button>
 			
 			<TextView android:layout_height="wrap_content" android:id="@+id/roomStatusLabel"
@@ -74,7 +74,7 @@
 				android:layout_marginBottom="30dp" android:layout_marginTop="30sp" />
 			<AutoCompleteTextView android:id="@+id/autoCompleteTextView1"
 				android:layout_height="wrap_content" android:lines="1" android:hint="Your name"
-				android:completionHint="Your name" android:inputType="textFilter"
+				android:completionHint="Your name" android:inputType="textFilter" android:textColor="@color/button_color"
 				android:maxLines="1" android:imeOptions="actionDone"
 				android:layout_width="230dp" android:layout_gravity="center"
 				android:completionThreshold="2" android:layout_marginRight="10dp"
