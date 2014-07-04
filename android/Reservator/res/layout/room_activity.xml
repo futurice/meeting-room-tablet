@@ -34,9 +34,10 @@
 		    android:layout_height="wrap_content"
 		    android:layout_alignRight="@+id/roomNameLabel"
 		    android:layout_alignParentRight="true"
+		    android:layout_marginRight="10dp"
 		    android:background="@drawable/button_background"
 		    android:text="@string/seeAllRooms"
-		    android:textColor="#000" />
+		    android:textColor="#fff" />
 	</RelativeLayout>
 	<com.futurice.android.reservator.view.RoomTrafficLights
 		android:layout_width="fill_parent" 

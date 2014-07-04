@@ -3,13 +3,19 @@ package com.futurice.android.reservator;
 import java.util.Calendar;
 import java.util.Vector;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.app.AlertDialog.Builder;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnDismissListener;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.text.SpannableString;
+import android.text.method.LinkMovementMethod;
+import android.text.util.Linkify;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -51,7 +57,9 @@ public class RoomActivity extends ReservatorActivity implements OnMenuItemClickL
 	TextView roomNameLabel;
 	RoomTrafficLights trafficLights;
 
-	MenuItem settingsMenu, refreshMenu;
+	MenuItem settingsMenu, refreshMenu, aboutMenu;
+	
+	AlertDialog alertDialog;
 
 	private ProgressDialog progressDialog = null;
 	int showLoadingCount = 0;
@@ -255,6 +263,7 @@ public class RoomActivity extends ReservatorActivity implements OnMenuItemClickL
 		refreshMenu.setIcon(android.R.drawable.ic_popup_sync);
 		settingsMenu = menu.add("Settings").setOnMenuItemClickListener(this);
 		settingsMenu.setIcon(android.R.drawable.ic_menu_preferences);
+		aboutMenu = menu.add("About").setOnMenuItemClickListener(this);
 		return true;
 	}
 
@@ -265,6 +274,18 @@ public class RoomActivity extends ReservatorActivity implements OnMenuItemClickL
 			startActivity(i);
 		} else if (item == refreshMenu) {
 			refreshData();
+		} else if (item == aboutMenu) {
+			SpannableString s = new SpannableString(getString(R.string.aboutInfo));
+		    Linkify.addLinks(s, Linkify.ALL);
+
+			Builder aboutBuilder = new AlertDialog.Builder(this);
+			aboutBuilder.setTitle(R.string.aboutTitle);
+			aboutBuilder.setMessage(s);
+			aboutBuilder.setNegativeButton(R.string.close, null);
+			alertDialog = aboutBuilder.show();
+
+			//	Makes links clickable.
+			((TextView) alertDialog.findViewById(android.R.id.message)).setMovementMethod(LinkMovementMethod.getInstance());
 		}
 		return true;
 	}

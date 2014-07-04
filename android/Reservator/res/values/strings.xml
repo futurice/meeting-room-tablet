@@ -50,6 +50,6 @@
     <string name="touchToReserve">Tap for reservations</string>
     <string name="bookNow">Book Now</string>
     <string name="disconnectedWarning">Disconnected!</string>
-    <string name="aboutInfo">Meeting Room Tablet is made by Futurice, a lean service creation company with offices in Helsinki, Tampere, Berlin and London. More information at: <a href="http://www.futurice.com">www.futurice.com</a></string>
+    <string name="aboutInfo">Reservator is made by Futurice, a lean service creation company with offices in Helsinki, Tampere, Berlin and London. More information at: www.futurice.com.\n\nThis application is published under the MIT license. You can find the source code at: http://github.com/futuriceit/meeting-room-tablet</string>
     <string name="aboutTitle">About</string>
 </resources>

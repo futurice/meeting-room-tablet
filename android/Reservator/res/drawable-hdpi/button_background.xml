@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <selector xmlns:android="http://schemas.android.com/apk/res/android"><item 
 		android:state_enabled="false"
-        android:drawable="@drawable/button_disabled" />
+        android:drawable="@drawable/menu_button_inactive" />
     <item 
     	android:state_pressed="true" 
     	android:state_enabled="true"
-        android:drawable="@drawable/button_downstate" />
+        android:drawable="@drawable/menu_button_pressed" />
     <item 
     	android:state_focused="true" 
     	android:state_enabled="true"
-        android:drawable="@drawable/button_downstate" />
+        android:drawable="@drawable/menu_button_pressed" />
     <item 
     	android:state_enabled="true"
-        android:drawable="@drawable/button_upstate" />
+        android:drawable="@drawable/menu_button_normal" />
 </selector>
