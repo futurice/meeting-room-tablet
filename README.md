@@ -29,7 +29,7 @@ Peole who have contributed to Reservator:
 * <a href="https://github.com/Pyppe">Pyry-Samuli Lahti</a>
 * <a href="https://github.com/jkar">Juho Kolehmainen</a>
 * <a href="https://github.com/ykarikos">Yrjö Kari-Koskinen</a>
-* Anu Sallinen
+* <a href="https://github.com/anttis/">Antti Salminen</a>
 * <a href="https://github.com/mikkomultanen">Mikko Multanen</a>
 * Mats Malmstén
 * <a href="https://github.com/ojarva">Olli Jarva</a>
