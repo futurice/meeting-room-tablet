@@ -33,7 +33,7 @@ Peole who have contributed to Reservator:
 * <a href="https://github.com/mikkomultanen">Mikko Multanen</a>
 * Mats Malmstén
 * <a href="https://github.com/ojarva">Olli Jarva</a>
-* Pekka Pulli
+* <a href="https://github.com/pekkapulli">Pekka Pulli</a>
 * <a href="https://github.com/Wisheri">Ville Tainio</a>
 
 Support
