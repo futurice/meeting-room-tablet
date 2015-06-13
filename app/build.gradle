@@ -1,0 +1,22 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 17
+    buildToolsVersion "23.0.0 rc2"
+
+    defaultConfig {
+        applicationId "com.futurice.android.reservator"
+        minSdkVersion 14
+        targetSdkVersion 18
+
+        testApplicationId "com.futurice.android.reservator.test"
+        testInstrumentationRunner "android.test.InstrumentationTestRunner"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
+        }
+    }
+}
