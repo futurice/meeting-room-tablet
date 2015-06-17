@@ -161,12 +161,15 @@ public class RoomActivity extends ReservatorActivity implements OnMenuItemClickL
 			public void onClick(View v) {
 				if (!currentRoom.isFree()) return;
 				TimeSpan limits = currentRoom.getNextFreeTime();
-				if (limits == null) return;
 
 				DateTime now = new DateTime();
 				TimeSpan suggested = new TimeSpan(now, now.add(Calendar.MINUTE, DEFAULT_BOOK_NOW_DURATION));
 
-				if (limits.getEnd().before(suggested.getEnd())) {
+				if (limits == null) {
+					// No next free time was found. Use the suggested time.
+					limits = suggested;
+				} else if (limits.getEnd().before(suggested.getEnd())) {
+					// The next free time ends before the suggested time.
 					suggested = limits;
 				}
 
