@@ -6,35 +6,35 @@ Reservator
 
 Description
 -----------
-Reservator is an Android application for displaying and reserving meeting rooms. The application uses Google’s resources as meeting rooms. If you want to add a room to the application, you have to create a calendar for your resource and sync your account with the tablet. See help for sharing resources at https://support.google.com/a/answer/1034381?hl=en. You can also find help for creating calendars for shared resources at https://support.google.com/calendar/answer/34584?hl=en. We recommend setting up a unique Google account for the tablet itself.
+Reservator is an Android application for displaying and reserving meeting rooms. The application uses Google’s resources as meeting rooms. If you want to add a room to the application, you have to create a calendar for your resource and sync your account with the tablet. [Help for sharing resources](https://support.google.com/a/answer/1034381?hl=en) and [for creating calendars for shared resources](https://support.google.com/calendar/answer/34584?hl=en). We recommend setting up a unique Google account for the tablet itself.
 
 This application is meant for tablets so there are a few layout problems when using it on mobile.
 
 Background
 ----------
-This application was created as an internal project for <a href="http://www.futurice.com">Futurice's</a> office in Helsinki and nowadays it is used at every Futurice office. It was open sourced as a part of the <a href="http://blog.futurice.com/summer-of-love-of-open-source">Summer of Love program</a>.
+This application was created as an internal project for [Futurice's](http://www.futurice.com) office in Helsinki and nowadays it is used at every Futurice office. It was open sourced as a part of the [Summer of Love program](http://blog.futurice.com/summer-of-love-of-open-source).
 
 Reservator is now [available for free on Google Play](https://play.google.com/store/apps/details?id=com.futurice.android.reservator),
 and we've [written about it in Futurice blog](http://blog.futurice.com/reservator) too.
 
 About Futurice
 --------------
-<a href="http://www.futurice.com">Futurice</a> is a lean service creation company with offices in Helsinki, Tampere, Berlin and London.
+[Futurice](http://www.futurice.com) is a lean service creation company with offices in Helsinki, Tampere, Berlin and London.
 
 Peole who have contributed to Reservator:
-* <a href="https://github.com/villesinisalo">Ville Sinisalo</a>
-* <a href="https://github.com/joelmertanen">Joel Mertanen</a>
-* <a href="https://github.com/sebpiq">Sébastien Piquemal</a>
+* [Ville Sinisalo](https://github.com/villesinisalo)
+* [Joel Mertanen](https://github.com/joelmertanen)
+* [Sébastien Piquemal](https://github.com/sebpiq)
 * Vihtori Mäntylä
-* <a href="https://github.com/Pyppe">Pyry-Samuli Lahti</a>
-* <a href="https://github.com/jkar">Juho Kolehmainen</a>
-* <a href="https://github.com/ykarikos">Yrjö Kari-Koskinen</a>
-* <a href="https://github.com/anttis/">Antti Salminen</a>
-* <a href="https://github.com/mikkomultanen">Mikko Multanen</a>
+* [Pyry-Samuli Lahti](https://github.com/Pyppe)
+* [Juho Kolehmainen](https://github.com/jkar)
+* [Yrjö Kari-Koskinen](https://github.com/ykarikos)
+* [Antti Salminen](https://github.com/anttis)
+* [Mikko Multanen](https://github.com/mikkomultanen)
 * Mats Malmstén
-* <a href="https://github.com/ojarva">Olli Jarva</a>
-* <a href="https://github.com/pekkapulli">Pekka Pulli</a>
-* <a href="https://github.com/Wisheri">Ville Tainio</a>
+* [Olli Jarva](https://github.com/ojarva)
+* [Pekka Pulli](https://github.com/pekkapulli)
+* [Ville Tainio](https://github.com/Wisheri)
 
 Support
 -------
