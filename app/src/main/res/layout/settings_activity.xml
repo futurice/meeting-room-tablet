@@ -15,9 +15,45 @@
         android:paddingRight="20dp" >
 
         <TextView
+            android:id="@+id/addressBookOptionLabel"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/addressBookOptionLabel"
+            style="@android:style/TextAppearance.Medium"
+            android:textColor="#000" />
+
+        <ToggleButton
+            android:id="@+id/usedAddressBookOption"
+            android:layout_width="20dp"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/addressBookOptionLabel"
+            android:layout_alignRight="@+id/addressBookOptionLabel"
+            android:layout_below="@+id/addressBookOptionLabel"
+            android:onClick="onToggleClicked" />
+
+        <TextView
+            android:id="@+id/defaultReservationAccountLabel"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/usedAddressBookOption"
+            android:text="@string/settingsDefaultAccountForReservation"
+            style="@android:style/TextAppearance.Medium"
+            android:textColor="#000" />
+
+        <Spinner
+            android:id="@+id/defaultReservationAccount"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/defaultReservationAccountLabel"
+            android:inputType="text"
+            android:maxLines="1"
+            android:layout_marginBottom="20dp" />
+
+        <TextView
             android:id="@+id/usedAccountLabel"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+            android:layout_below="@+id/defaultReservationAccount"
             android:text="@string/used_google_account"
             style="@android:style/TextAppearance.Medium"
             android:textColor="#000" />
@@ -61,7 +97,6 @@
             android:layout_marginTop="20dp"
             android:layout_marginBottom="20dp"
             android:text="@string/removeUserData" />
-        
         <TextView
             android:id="@+id/roomListLabel"
             android:layout_below="@+id/removeUserDataButton"
@@ -71,12 +106,12 @@
             android:text="@string/shown_rooms"
             style="@android:style/TextAppearance.Medium"
             android:textColor="#000" />
-        
+
         <ListView
             android:id="@+id/roomListView"
             android:layout_below="@+id/roomListLabel"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" 
+            android:layout_height="wrap_content"
             android:cacheColorHint="@android:color/transparent" />
     </RelativeLayout>
 

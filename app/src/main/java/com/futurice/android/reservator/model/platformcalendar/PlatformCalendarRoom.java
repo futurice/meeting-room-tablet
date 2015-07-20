@@ -6,14 +6,14 @@ public class PlatformCalendarRoom extends Room {
 	private static final long serialVersionUID = 1L;
 	private long id; 
 	private String location;
-	
+
 	public PlatformCalendarRoom(String name, String email, long id, String location) {
-		super(name, email);
-		this.id = id; 
-		this.location = location;
-	}
-	
-	public long getId() {
+        super(name, email);
+        this.id = id;
+        this.location = location;
+    }
+
+    public long getId() {
 		return id;
 	}
 	

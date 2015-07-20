@@ -19,6 +19,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.ViewSwitcher;
+import android.content.SharedPreferences;
 
 import com.futurice.android.reservator.R;
 import com.futurice.android.reservator.ReservatorApplication;
@@ -42,10 +43,11 @@ public class LobbyReservationRowView extends FrameLayout implements
 	ViewSwitcher modeSwitcher;
 	OnReserveListener onReserveCallback = null;
 	OnCancellListener onCancellListener = null;
+	SharedPreferences settings;
 	private Room room;
 	private int animationDuration = 300;
 	private ReservatorException reservatorException;
-	
+
 	public LobbyReservationRowView(Context context) {
 		this(context, null);
 	}
@@ -53,7 +55,8 @@ public class LobbyReservationRowView extends FrameLayout implements
 	private OnFocusChangeListener userNameFocusChangeListener = new OnFocusChangeListener() {
 		@Override
 		public void onFocusChange(View v, boolean hasFocus) {
-			if (hasFocus) {
+			Boolean addressBookOption = settings.getBoolean("addressBookOption", false);
+			if (hasFocus && addressBookOption) {
 				reserveButton.setEnabled(false);
 			}
 
@@ -82,7 +85,8 @@ public class LobbyReservationRowView extends FrameLayout implements
 		roomStatusView = (TextView) findViewById(R.id.roomStatusLabel);
 		modeSwitcher = (ViewSwitcher) findViewById(R.id.modeSwitcher);
 		switchToNormalModeContent();
-		
+		settings = context.getSharedPreferences(context.getString(R.string.PREFERENCES_NAME), context.MODE_PRIVATE);
+
 		application = (ReservatorApplication) this.getContext()
 				.getApplicationContext();
 		nameField.setOnFocusChangeListener(userNameFocusChangeListener);
@@ -97,14 +101,15 @@ public class LobbyReservationRowView extends FrameLayout implements
 			}
 		}
 	}
-	public void setAnimationDuration(int millis){
+
+	public void setAnimationDuration(int millis) {
 		animationDuration = millis;
 	}
-	
+
 	public ReservatorException getException() {
 		return reservatorException;
 	}
-	
+
 	public void setRoom(Room room) {
 		this.room = room;
 
@@ -151,7 +156,7 @@ public class LobbyReservationRowView extends FrameLayout implements
 			setReserveMode();
 		} else if (v == cancelButton) {
 			setNormalMode();
-			if(this.onCancellListener != null){
+			if (this.onCancellListener != null) {
 				this.onCancellListener.onCancel(this);
 			}
 		} else if (v == reserveButton) {
@@ -170,33 +175,45 @@ public class LobbyReservationRowView extends FrameLayout implements
 				.getSystemService(Context.INPUT_METHOD_SERVICE);
 		imm.hideSoftInputFromWindow(nameField.getRootView().getWindowToken(), 0);
 	}
-	
-	private class MakeReservationTask extends AsyncTask<Void, Void, Void>{
 
+	private class MakeReservationTask extends AsyncTask<Void, Void, Void> {
 		@Override
 		protected Void doInBackground(Void... arg0) {
 			AddressBookEntry entry = application.getAddressBook().getEntryByName(
 					nameField.getText().toString());
-			if (entry == null) {
+			Boolean addressBookOption = application.getBooleanSettingsValue("addressBookOption", false);
+
+			if (entry == null && addressBookOption) {
 				reservatorError(new ReservatorException("No such user, try again"));
 			}
 			try {
-				application.getDataProxy().reserve(room, timePicker2.getTimeSpan(),
-						entry.getName(), entry.getEmail());
+				if (entry != null) {
+					application.getDataProxy().reserve(room, timePicker2.getTimeSpan(),
+							entry.getName(), entry.getEmail());
+				} else {
+					// Address book option is off so reserve the room with the selected account in settings.
+					String accountEmail = application.getSettingValue(R.string.accountForServation, "");
+					if (accountEmail.equals("")) {
+						reservatorError(new ReservatorException("No account for reservation stored. Check your settings."));
+					}
+					String title = nameField.getText().toString();
+					application.getDataProxy().reserve(room, timePicker2.getTimeSpan(),
+							title, accountEmail);
+				}
 			} catch (ReservatorException e) {
 				reservatorError(e);
 			}
-			
+
 			// Void requires "return null;". Java blah.
 			return null;
 		}
-		
+
 		@Override
-		protected void onPostExecute(Void v){
+		protected void onPostExecute(Void v) {
 			onReserveCallback.call(LobbyReservationRowView.this);
 		}
 	}
-	
+
 	private void reservatorError(ReservatorException e) {
 		Builder alertBuilder = new AlertDialog.Builder(getContext());
 		alertBuilder.setTitle("Failed to put reservation").setMessage(
@@ -213,67 +230,84 @@ public class LobbyReservationRowView extends FrameLayout implements
 	}
 
 	public void setNormalMode() {
-		if(animationDuration > 0){
-		Animation scale = new ScaleAnimation(1.0f, 1.0f, 1.0f, 0.0f,  ScaleAnimation.RELATIVE_TO_SELF, 0.5f,  ScaleAnimation.RELATIVE_TO_SELF, 0.5f);
-		scale.setDuration(animationDuration);
-		scale.setAnimationListener(new AnimationListener() {
-			@Override
-			public void onAnimationStart(Animation animation) {}
-			@Override
-			public void onAnimationRepeat(Animation animation) {}
-			@Override
-			public void onAnimationEnd(Animation animation) {
-				switchToNormalModeContent();
-				Animation scale = new ScaleAnimation(1.0f, 1.0f, 0.0f, 1.0f,  ScaleAnimation.RELATIVE_TO_SELF, 0.5f,  ScaleAnimation.RELATIVE_TO_SELF, 0.5f);
-				scale.setDuration(animationDuration);
-				startAnimation(scale);
-			}
-		});
-		startAnimation(scale);
-		}else{
+		if (animationDuration > 0) {
+			Animation scale = new ScaleAnimation(1.0f, 1.0f, 1.0f, 0.0f, ScaleAnimation.RELATIVE_TO_SELF, 0.5f, ScaleAnimation.RELATIVE_TO_SELF, 0.5f);
+			scale.setDuration(animationDuration);
+			scale.setAnimationListener(new AnimationListener() {
+				@Override
+				public void onAnimationStart(Animation animation) {
+				}
+
+				@Override
+				public void onAnimationRepeat(Animation animation) {
+				}
+
+				@Override
+				public void onAnimationEnd(Animation animation) {
+					switchToNormalModeContent();
+					Animation scale = new ScaleAnimation(1.0f, 1.0f, 0.0f, 1.0f, ScaleAnimation.RELATIVE_TO_SELF, 0.5f, ScaleAnimation.RELATIVE_TO_SELF, 0.5f);
+					scale.setDuration(animationDuration);
+					startAnimation(scale);
+				}
+			});
+			startAnimation(scale);
+		} else {
 			switchToNormalModeContent();
 		}
 	}
 
-	private void switchToNormalModeContent(){
+	private void switchToNormalModeContent() {
 		modeSwitcher.setDisplayedChild(modeSwitcher.indexOfChild(normalMode));
-		if(modeSwitcher.indexOfChild(bookingMode) >= 0){
+		if (modeSwitcher.indexOfChild(bookingMode) >= 0) {
 			modeSwitcher.removeView(bookingMode);
 		}
 		reserveButton.setEnabled(false);
 		setBackgroundColor(getResources().getColor(R.color.Transparent));
 	}
+
 	public void setReserveMode() {
-		if(animationDuration > 0){
-		Animation scale = new ScaleAnimation(1.0f, 1.0f, 1.0f, 0.0f,  ScaleAnimation.RELATIVE_TO_SELF, 0.5f,  ScaleAnimation.RELATIVE_TO_SELF, 0.5f);
-		scale.setDuration(animationDuration);
-		scale.setAnimationListener(new AnimationListener() {
-			@Override
-			public void onAnimationStart(Animation animation) {}
-			@Override
-			public void onAnimationRepeat(Animation animation) {}
-			@Override
-			public void onAnimationEnd(Animation animation) {
-				switchToReserveModeContent();
-				Animation scale = new ScaleAnimation(1.0f, 1.0f, 0.0f, 1.0f,  ScaleAnimation.RELATIVE_TO_SELF, 0.5f,  ScaleAnimation.RELATIVE_TO_SELF, 0.5f);
-				scale.setDuration(animationDuration);
-				startAnimation(scale);
-			}
-		});
-		startAnimation(scale);
-		}else{
+		if (animationDuration > 0) {
+			Animation scale = new ScaleAnimation(1.0f, 1.0f, 1.0f, 0.0f, ScaleAnimation.RELATIVE_TO_SELF, 0.5f, ScaleAnimation.RELATIVE_TO_SELF, 0.5f);
+			scale.setDuration(animationDuration);
+			scale.setAnimationListener(new AnimationListener() {
+				@Override
+				public void onAnimationStart(Animation animation) {
+				}
+
+				@Override
+				public void onAnimationRepeat(Animation animation) {
+				}
+
+				@Override
+				public void onAnimationEnd(Animation animation) {
+					switchToReserveModeContent();
+					Animation scale = new ScaleAnimation(1.0f, 1.0f, 0.0f, 1.0f, ScaleAnimation.RELATIVE_TO_SELF, 0.5f, ScaleAnimation.RELATIVE_TO_SELF, 0.5f);
+					scale.setDuration(animationDuration);
+					startAnimation(scale);
+				}
+			});
+			startAnimation(scale);
+		} else {
 			switchToReserveModeContent();
 		}
 	}
-	private void switchToReserveModeContent(){
-		if(modeSwitcher.indexOfChild(bookingMode) < 0){
+
+	private void switchToReserveModeContent() {
+		if (modeSwitcher.indexOfChild(bookingMode) < 0) {
 			modeSwitcher.addView(bookingMode);
 		}
 		modeSwitcher.setDisplayedChild(modeSwitcher.indexOfChild(bookingMode));
 		setBackgroundColor(getResources().getColor(R.color.ReserveBackground));
-		reserveButton.setEnabled(false);
-		
+
+		// Initial state for the "Reserve" button.
+		if (application.getBooleanSettingsValue("addressBookOption", false)) {
+			reserveButton.setEnabled(false);
+		} else {
+			reserveButton.setEnabled(true);
+		}
+
 	}
+
 	public void resetTimeSpan() {
 		timePicker2.reset();
 	}
@@ -294,11 +328,11 @@ public class LobbyReservationRowView extends FrameLayout implements
 		this.onReserveCallback = onReserveCallback;
 	}
 
-	public void setOnCancellListener(OnCancellListener l){
+	public void setOnCancellListener(OnCancellListener l) {
 		this.onCancellListener = l;
 	}
 
-	public interface OnCancellListener{
+	public interface OnCancellListener {
 		public void onCancel(LobbyReservationRowView view);
 	}
 
