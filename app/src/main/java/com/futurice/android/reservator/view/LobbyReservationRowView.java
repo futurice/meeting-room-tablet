@@ -197,6 +197,9 @@ public class LobbyReservationRowView extends FrameLayout implements
 						reservatorError(new ReservatorException("No account for reservation stored. Check your settings."));
 					}
 					String title = nameField.getText().toString();
+					if (title.equals("")) {
+						title = application.getString(R.string.defaultTitleForReservation);
+					}
 					application.getDataProxy().reserve(room, timePicker2.getTimeSpan(),
 							title, accountEmail);
 				}
