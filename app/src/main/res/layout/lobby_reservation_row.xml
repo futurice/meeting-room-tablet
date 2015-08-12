@@ -65,6 +65,9 @@
 				android:id="@+id/timeSpanPicker2" android:layout_height="wrap_content"
 				android:layout_gravity="center" android:layout_width="wrap_content"
 				android:layout_marginBottom="30dp" android:layout_marginTop="30sp" />
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" >
 			<AutoCompleteTextView android:id="@+id/autoCompleteTextView1"
 				android:layout_height="wrap_content" android:lines="1" android:hint="Your name"
 				android:completionHint="Your name" android:inputType="textFilter" android:textColor="@color/button_color"
@@ -73,11 +76,19 @@
 				android:completionThreshold="2" android:layout_marginRight="10dp"
 				android:layout_marginLeft="10dp" android:layout_marginBottom="30dp"
 				android:layout_marginTop="30dp"></AutoCompleteTextView>
-			<Button android:layout_height="wrap_content"
-				android:layout_width="wrap_content" android:id="@+id/reserveButton"
-				android:focusable="true" android:text="Reserve" android:background="@drawable/button_background"
-				android:layout_gravity="center" android:textColor="@color/button_color"
-				android:layout_marginTop="30dp" android:layout_marginBottom="30dp"></Button>
+            <TextView
+                android:id="@+id/hintText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/autoCompleteTextView1"
+                android:text="@string/hintText" />
+                <Button android:layout_height="wrap_content"
+                        android:layout_width="wrap_content" android:id="@+id/reserveButton"
+                        android:layout_toRightOf="@+id/autoCompleteTextView1"
+                        android:focusable="true" android:text="Reserve" android:background="@drawable/button_background"
+                        android:layout_gravity="center" android:textColor="@color/button_color"
+                        android:layout_marginTop="30dp" android:layout_marginBottom="30dp"></Button>
+            </RelativeLayout>
 			<FrameLayout android:layout_width="1dp"
 				android:layout_weight="1" android:layout_height="match_parent" />
 			<ImageButton android:layout_width="wrap_content"

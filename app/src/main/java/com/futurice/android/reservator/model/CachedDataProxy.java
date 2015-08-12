@@ -69,7 +69,7 @@ public class CachedDataProxy extends DataProxy {
 		this.reservationCache.remove(room.getEmail());
 		this.refreshRoomReservations(room);
 	}
-	
+
 	public void clearCache() {
 		this.rooms = null;
 		this.reservationCache.clear();

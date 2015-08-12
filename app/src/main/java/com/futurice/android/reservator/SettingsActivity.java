@@ -6,10 +6,7 @@ import java.util.Map;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
-import android.app.AlertDialog;
-import android.app.AlertDialog.Builder;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
@@ -20,6 +17,7 @@ import android.widget.CheckBox;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
 import com.futurice.android.reservator.model.AddressBook;
 import com.futurice.android.reservator.model.DataProxy;
@@ -31,72 +29,94 @@ import com.futurice.android.reservator.view.SettingsRoomRowAdapter;
 public class SettingsActivity extends ReservatorActivity {
 	Spinner usedAccountView;
 	Spinner roomNameView;
+	ToggleButton addressBookOptionView;
+	Spinner usedReservationAccount;
 	DataProxy proxy;
 
 	SharedPreferences settings;
 	HashSet<String> unselectedRooms;
 	ArrayList<String> roomNames;
-	
+
 	private final String GOOGLE_ACCOUNT_TYPE = "com.google";
-	
+
 	@Override
-	public void onCreate(Bundle savedInstanceState){
+	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.settings_activity);
-	    proxy = getResApplication().getDataProxy();
-	    
-	    try {
-	    	roomNames = proxy.getRoomNames();
-	    	roomNames.add(getString(R.string.lobbyRoomName));
-	    } catch (ReservatorException e) {
+		proxy = getResApplication().getDataProxy();
+
+		try {
+			roomNames = proxy.getRoomNames();
+			roomNames.add(getString(R.string.lobbyRoomName));
+		} catch (ReservatorException e) {
 			Toast err = Toast.makeText(getResApplication(), e.getMessage(),
 					Toast.LENGTH_LONG);
 			err.show();
-	    }
+		}
 	}
-	
+
 	@Override
-	public void onResume(){
+	public void onResume() {
 		super.onResume();
 		settings = getSharedPreferences(getString(R.string.PREFERENCES_NAME), Context.MODE_PRIVATE);
 		unselectedRooms = new HashSet<String>(settings.getStringSet(getString(R.string.PREFERENCES_UNSELECTED_ROOMS), new HashSet<String>()));
-		
-	    ListView l = (ListView) findViewById(R.id.roomListView);
-	    SettingsRoomRowAdapter roomListAdapter = new SettingsRoomRowAdapter(this, R.layout.settings_select_room_row, roomNames);
-	    l.setAdapter(roomListAdapter);
-		
-	    
-	    // Set back the recorded settings
-	    usedAccountView = (Spinner) findViewById(R.id.usedAccountSpinner);
-	    String usedAccount = settings.getString(
-	    		getString(R.string.PREFERENCES_GOOGLE_ACCOUNT), 
-	    		getString(R.string.allAccountsMagicWord));
-	    
-	    refreshGoogleAccountsSpinner();
-	    
+
+		ListView l = (ListView) findViewById(R.id.roomListView);
+		SettingsRoomRowAdapter roomListAdapter = new SettingsRoomRowAdapter(this, R.layout.settings_select_room_row, roomNames);
+		l.setAdapter(roomListAdapter);
+
+
+		// Set back the recorded settings
+		usedAccountView = (Spinner) findViewById(R.id.usedAccountSpinner);
+		String usedAccount = settings.getString(
+				getString(R.string.PREFERENCES_GOOGLE_ACCOUNT),
+				getString(R.string.allAccountsMagicWord));
+		refreshGoogleAccountsSpinner();
+
+		// Require weather reservation requires address book contacts or not
+		addressBookOptionView = (ToggleButton) findViewById(R.id.usedAddressBookOption);
+		addressBookOptionView.setChecked(settings.getBoolean("addressBookOption", false));
+
+		usedReservationAccount = (Spinner) findViewById(R.id.defaultReservationAccount);
+		String usedResAccount = settings.getString(
+				getString(R.string.accountForServation),
+				"");
+		if (addressBookOptionView.isChecked()) {
+			usedReservationAccount.setVisibility(View.GONE);
+			findViewById(R.id.defaultReservationAccountLabel).setVisibility(View.GONE);
+		}
+		refreshResAccountSpinner();
+
 		@SuppressWarnings("unchecked")
 		ArrayAdapter<String> usedAccountAdapter = (ArrayAdapter<String>) usedAccountView.getAdapter();
 		int spinnerPosition = 0;
-		if (usedAccountAdapter != null && usedAccountAdapter.getPosition(usedAccount) >= 0){
-			spinnerPosition = usedAccountAdapter.getPosition(usedAccount); 
+		if (usedAccountAdapter != null && usedAccountAdapter.getPosition(usedAccount) >= 0) {
+			spinnerPosition = usedAccountAdapter.getPosition(usedAccount);
 		}
 		usedAccountView.setSelection(spinnerPosition);
-		
-		
+
+		ArrayAdapter<String> usedResAccountAdapter = (ArrayAdapter<String>) usedReservationAccount.getAdapter();
+		spinnerPosition = 0;
+		if (usedResAccountAdapter != null && usedResAccountAdapter.getPosition(usedResAccount) >= 0) {
+			spinnerPosition = usedResAccountAdapter.getPosition(usedResAccount);
+		}
+		usedReservationAccount.setSelection(spinnerPosition);
+
+
 		roomNameView = (Spinner) findViewById(R.id.roomNameSpinner);
 		String roomName = settings.getString(getString(R.string.PREFERENCES_ROOM_NAME), "");
 
 		refreshRoomNamesSpinner();
-		
+
 		@SuppressWarnings("unchecked")
 		ArrayAdapter<String> roomNameAdapter = (ArrayAdapter<String>) roomNameView.getAdapter();
 		spinnerPosition = 0;
-		if (roomNameAdapter != null){
+		if (roomNameAdapter != null) {
 			spinnerPosition = roomNameAdapter.getPosition(roomName);
 		}
 		roomNameView.setSelection(spinnerPosition);
-		
-		
+
+
 		// Setup button for removing log
 		findViewById(R.id.removeUserDataButton).setOnClickListener(new OnClickListener() {
 			@Override
@@ -115,26 +135,33 @@ public class SettingsActivity extends ReservatorActivity {
 	}
 
 	@Override
-	public void onPause(){
+	public void onPause() {
 		super.onPause();
 		// TODO: save button?
 		// Save the settings
 		Object selectedAccountName = usedAccountView.getSelectedItem();
 		String selectedAccount = "";
-		if (selectedAccountName != null){
+		if (selectedAccountName != null) {
 			selectedAccount = selectedAccountName.toString().trim();
 		}
-		
+
 		Object selectedRoomName = roomNameView.getSelectedItem();
 		String roomName = "";
-		if (selectedRoomName != null){
+		if (selectedRoomName != null) {
 			roomName = selectedRoomName.toString().trim();
 		}
-		
+
+		Object selectedResAccountName = usedReservationAccount.getSelectedItem();
+		String selectedResAccount = "";
+		if (selectedResAccountName != null) {
+			selectedResAccount = selectedResAccountName.toString().trim();
+		}
 		Editor editor = settings.edit();
 		editor.putString(getString(R.string.PREFERENCES_GOOGLE_ACCOUNT), selectedAccount);
 		editor.putString(getString(R.string.PREFERENCES_ROOM_NAME), roomName);
-		
+		editor.putBoolean("addressBookOption", addressBookOptionView.isChecked());
+		editor.putString(getString(R.string.accountForServation), selectedResAccount);
+
 		editor.apply();
 
 		// Update proxies
@@ -145,8 +172,8 @@ public class SettingsActivity extends ReservatorActivity {
 				((PlatformCalendarDataProxy) proxy).setAccount(selectedAccount);
 			}
 		}
-		
-		AddressBook ab = getResApplication().getAddressBook(); 
+
+		AddressBook ab = getResApplication().getAddressBook();
 		if (ab instanceof PlatformContactsAddressBook) {
 			if (selectedAccount.equals(getString(R.string.allAccountsMagicWord))) {
 				((PlatformContactsAddressBook) ab).setAccount(null);
@@ -158,55 +185,76 @@ public class SettingsActivity extends ReservatorActivity {
 	}
 
 	private void refreshGoogleAccountsSpinner() {
-	    String selected = null;
-	    if (usedAccountView.getSelectedItem() != null) {
-	    	selected = (String) usedAccountView.getSelectedItem();
-	    }
-	    
-	    ArrayAdapter<String> adapter;
-	    ArrayList<String> accounts = new ArrayList<String>();
-	    
-	    accounts.add(getString(R.string.allAccountsMagicWord));
+		String selected = null;
+		if (usedAccountView.getSelectedItem() != null) {
+			selected = (String) usedAccountView.getSelectedItem();
+		}
+
+		ArrayAdapter<String> adapter;
+		ArrayList<String> accounts = new ArrayList<String>();
+		accounts.add(getString(R.string.allAccountsMagicWord));
 		for (Account account : AccountManager.get(this).getAccountsByType(GOOGLE_ACCOUNT_TYPE)) {
 			accounts.add(account.name);
 		}
-		
-	    adapter = new ArrayAdapter<String>(
-	            this, android.R.layout.simple_spinner_item, accounts);
-	    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-	    usedAccountView.setAdapter(adapter);
+
+		adapter = new ArrayAdapter<String>(
+				this, android.R.layout.simple_spinner_item, accounts);
+		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		usedAccountView.setAdapter(adapter);
 		if (selected != null && accounts.contains(selected)) {
 			usedAccountView.setSelection(accounts.indexOf(selected));
 		} else {
 			usedAccountView.setSelection(0);
 		}
 	}
-	
-	private void refreshRoomNamesSpinner() {
-	    String selected = null;
-	    if (roomNameView.getSelectedItem() != null) {
-	    	selected = (String) roomNameView.getSelectedItem();
-	    }
-	    
-	    ArrayAdapter<String> adapter;
 
-	    ArrayList<String> selectedRooms = new ArrayList<String>(roomNames);
-	    selectedRooms.removeAll(unselectedRooms);
-	    
-	    adapter = new ArrayAdapter<String>(
-	            this, android.R.layout.simple_spinner_item, selectedRooms);
-	    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-	    roomNameView.setAdapter(adapter);
+	private void refreshResAccountSpinner() {
+		String selected = null;
+		if (usedReservationAccount.getSelectedItem() != null) {
+			selected = (String) usedReservationAccount.getSelectedItem();
+		}
+
+		ArrayAdapter<String> adapter;
+		ArrayList<String> accounts = new ArrayList<String>();
+		for (Account account : AccountManager.get(this).getAccountsByType(GOOGLE_ACCOUNT_TYPE)) {
+			accounts.add(account.name);
+		}
+
+		adapter = new ArrayAdapter<String>(
+				this, android.R.layout.simple_spinner_item, accounts);
+		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		usedReservationAccount.setAdapter(adapter);
+		if (selected != null && accounts.contains(selected)) {
+			usedReservationAccount.setSelection(accounts.indexOf(selected));
+		} else {
+			usedReservationAccount.setSelection(0);
+		}
+	}
+
+	private void refreshRoomNamesSpinner() {
+		String selected = null;
+		if (roomNameView.getSelectedItem() != null) {
+			selected = (String) roomNameView.getSelectedItem();
+		}
+		ArrayAdapter<String> adapter;
+
+		ArrayList<String> selectedRooms = new ArrayList<String>(roomNames);
+		selectedRooms.removeAll(unselectedRooms);
+
+		adapter = new ArrayAdapter<String>(
+				this, android.R.layout.simple_spinner_item, selectedRooms);
+		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		roomNameView.setAdapter(adapter);
 		if (selected != null && selectedRooms.contains(selected)) {
 			roomNameView.setSelection(selectedRooms.indexOf(selected));
 		}
 	}
-	
+
 	public void roomRowClicked(final View view) {
 		if (view instanceof CheckBox) {
 			Editor editor = settings.edit();
 
-			CheckBox c = (CheckBox)view;
+			CheckBox c = (CheckBox) view;
 			// checked = "not unselected". sorry!
 			if (c.isChecked()) {
 				unselectedRooms.remove(c.getText().toString());
@@ -218,8 +266,22 @@ public class SettingsActivity extends ReservatorActivity {
 			// http://stackoverflow.com/questions/14034803/misbehavior-when-trying-to-store-a-string-set-using-sharedpreferences
 			editor.putStringSet(getString(R.string.PREFERENCES_UNSELECTED_ROOMS), new HashSet<String>(unselectedRooms));
 			editor.commit();
-			
+
 			refreshRoomNamesSpinner();
+		}
+	}
+
+	public void onToggleClicked(final View view) {
+		if (view instanceof ToggleButton) {
+			Boolean checked = ((ToggleButton) addressBookOptionView).isChecked();
+
+			if (checked) {
+				usedReservationAccount.setVisibility(View.GONE);
+				findViewById(R.id.defaultReservationAccountLabel).setVisibility(View.INVISIBLE);
+			} else {
+				usedReservationAccount.setVisibility(View.VISIBLE);
+				findViewById(R.id.defaultReservationAccountLabel).setVisibility(View.VISIBLE);
+			}
 		}
 	}
 }

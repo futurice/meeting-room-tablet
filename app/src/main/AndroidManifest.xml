@@ -30,6 +30,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".AccountSelection"
+                  android:screenOrientation="landscape"
+                  android:configChanges="orientation|screenSize"
+                  android:hardwareAccelerated="false">
+        </activity>
         <!-- Hardware acceleration breaks the drawing of the vertices -->
         <activity android:name="RoomActivity" 
 			      android:screenOrientation="landscape"
