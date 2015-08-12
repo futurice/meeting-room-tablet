@@ -61,5 +61,5 @@
     <string name="addressBookHelpText">If this option is enabled, reserving with the tablet requires entering a valid name that is synced to the accounts address book contacts.</string>
     <string name="googleAccountHelp">Account or accounts used for searching rooms.</string>
     <string name="defaultTitleForReservation">Reserved</string>
-    <string name="hintText">Hint: You can use your tablet's address book contacts for reserving.</string>
+    <string name="hintText">Hint: You can use your tablet\'s address book contacts for reserving.</string>
 </resources>
