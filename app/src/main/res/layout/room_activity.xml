@@ -1,8 +1,8 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	android:layout_width="fill_parent" 
+	android:layout_width="fill_parent"
 	android:layout_height="fill_parent">
 	<RelativeLayout android:id="@+id/relativeLayout"
-		android:layout_width="fill_parent" 
+		android:layout_width="fill_parent"
 		android:layout_height="fill_parent"
 		android:layout_gravity="center"
 		android:background="#fff" android:padding="10dip">
@@ -17,31 +17,31 @@
 			android:layout_marginBottom="0dp"
 			android:id="@+id/frameLayout1"></FrameLayout>
 		</com.futurice.android.reservator.view.WeekView>
-	
+
 		<TextView
-		    android:id="@+id/roomNameLabel"
-		    android:layout_width="wrap_content"
-		    android:layout_height="wrap_content"
-		    android:layout_alignParentLeft="true"
-		    android:textColor="@color/TextColor"
-		    android:textSize="20sp"
-		    android:textStyle="bold" 
-		    android:textIsSelectable="false" />
-	
+			android:id="@+id/roomNameLabel"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_alignParentLeft="true"
+			android:textColor="@color/TextColor"
+			android:textSize="20sp"
+			android:textStyle="bold"
+			android:textIsSelectable="false" />
+
 		<Button
-		    android:id="@+id/seeAllRoomsButton"
-		    android:layout_width="wrap_content"
-		    android:layout_height="wrap_content"
-		    android:layout_alignRight="@+id/roomNameLabel"
-		    android:layout_alignParentRight="true"
-		    android:layout_marginRight="10dp"
-		    android:background="@drawable/button_background"
-		    android:text="@string/seeAllRooms"
-		    android:textColor="#fff" />
+			android:id="@+id/seeAllRoomsButton"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_alignRight="@+id/roomNameLabel"
+			android:layout_alignParentRight="true"
+			android:layout_marginRight="10dp"
+			android:background="@drawable/button_background"
+			android:text="@string/seeAllRooms"
+			android:textColor="#fff" />
 	</RelativeLayout>
 	<com.futurice.android.reservator.view.RoomTrafficLights
-		android:layout_width="fill_parent" 
+		android:layout_width="fill_parent"
 		android:layout_height="fill_parent"
 		android:layout_gravity="center"
-	   	android:id="@+id/roomTrafficLights" />	    
+		android:id="@+id/roomTrafficLights" />
 </FrameLayout>

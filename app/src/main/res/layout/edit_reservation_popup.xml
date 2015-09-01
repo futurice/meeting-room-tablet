@@ -1,72 +1,72 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:background="#6666"
-    android:isScrollContainer="false">
-	<FrameLayout 
+		android:layout_width="fill_parent"
+		android:layout_height="fill_parent"
+		android:background="#6666"
+		android:isScrollContainer="false">
+	<FrameLayout
 		android:layout_height="wrap_content"
 		android:layout_width="fill_parent"
 		android:layout_centerVertical="true"
 		android:background="#fff">
 		<RelativeLayout
-	   		android:layout_width="fill_parent"
-	    	android:layout_height="fill_parent"
+			android:layout_width="fill_parent"
+			android:layout_height="fill_parent"
 			android:padding="10dp"
-	    	android:background="@color/ReserveBackground">
-	  	    <TextView
-			    android:id="@+id/textView1"
-			    android:layout_width="wrap_content"
-			    android:layout_height="wrap_content"
-			    android:layout_alignParentTop="true"
+			android:background="@color/ReserveBackground">
+			<TextView
+				android:id="@+id/textView1"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_alignParentTop="true"
 				android:layout_alignLeft="@id/linearLayout1"
 				android:layout_alignRight="@id/linearLayout1"
 				android:text="@string/reservationCancelInfo"
-				android:textColor="#333" 
+				android:textColor="#333"
 				android:gravity="center" />
-	   	   	<LinearLayout 
-	   	    	android:id="@+id/linearLayout1"
-			    android:layout_marginTop="10dp"
+			<LinearLayout
+				android:id="@+id/linearLayout1"
+				android:layout_marginTop="10dp"
 				android:layout_height="wrap_content"
 				android:layout_width="wrap_content"
 				android:layout_below="@id/textView1"
 				android:layout_centerHorizontal="true"
-		        android:orientation="horizontal"
-		        android:gravity="center_vertical">
-		   	    <LinearLayout
+				android:orientation="horizontal"
+				android:gravity="center_vertical">
+				<LinearLayout
 					android:layout_height="wrap_content"
 					android:layout_width="wrap_content"
-		        	android:orientation="vertical"
-		        	android:gravity="left"
-		        	android:layout_marginRight="10dp">
-					<TextView 
-					    android:id="@+id/roomName"
-						android:layout_width="wrap_content" 
+					android:orientation="vertical"
+					android:gravity="left"
+					android:layout_marginRight="10dp">
+					<TextView
+						android:id="@+id/roomName"
+						android:layout_width="wrap_content"
 						android:layout_height="wrap_content"
 						android:text="Room Name"
 						android:textStyle="bold"
 						android:textColor="@color/TextColor" />
-					<TextView 
-					    android:id="@+id/reservationInfo"
-						android:layout_width="wrap_content" 
+					<TextView
+						android:id="@+id/reservationInfo"
+						android:layout_width="wrap_content"
 						android:layout_height="wrap_content"
 						android:text="XX:YY-ZZ:NN John Smith"
 						android:textColor="@color/TextColor" />
 				</LinearLayout>
-				
-				<Button 
-				    android:id="@+id/cancelReservationButton"
-				    android:layout_height="wrap_content"
+
+				<Button
+					android:id="@+id/cancelReservationButton"
+					android:layout_height="wrap_content"
 					android:layout_width="wrap_content"
-					android:focusable="true" 
-					android:text="Cancel reservation" 
+					android:focusable="true"
+					android:text="Cancel reservation"
 					android:background="@drawable/button_background"
 					android:textStyle="bold"
 					android:enabled="false"
 					android:textColor="@color/button_color" />
 			</LinearLayout>
-		    <ImageButton
+			<ImageButton
 				android:id="@+id/cancelButton"
-		    	android:layout_width="wrap_content"
+				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
 				android:layout_alignParentTop="true"
 				android:layout_alignParentRight="true"

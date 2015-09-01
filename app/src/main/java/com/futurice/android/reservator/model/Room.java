@@ -57,7 +57,7 @@ public class Room implements Serializable {
 	public Reservation getCurrentReservation() {
 		DateTime now = new DateTime();
 		DateTime bookingThresholdEnd = now.add(Calendar.MINUTE, RESERVED_THRESHOLD_MINUTES);
-		
+
 		for (Reservation r : reservations) {
 			if (r.getEndTime().after(now) && r.getStartTime().before(bookingThresholdEnd)) {
 				return r;
@@ -172,12 +172,12 @@ public class Room implements Serializable {
 		return daysReservations;
 	}
 
-	
+
 	@Override
 	public int hashCode() {
 		return email.hashCode();
 	}
-	
+
 	@Override
 	public boolean equals(Object other) {
 		if (other instanceof Room) {
@@ -185,15 +185,15 @@ public class Room implements Serializable {
 		}
 		return super.equals(other);
 	}
-	
+
 	public boolean equals(Room room) {
 		return email.equals(room.getEmail());
 	}
-	
+
 	public int getCapacity() {
 		return capacity;
 	}
-	
+
 	public void setCapacity(int capacity) {
 		this.capacity = capacity;
 	}
@@ -211,10 +211,10 @@ public class Room implements Serializable {
 		}
 		return false;
 	}
-	
+
 	// Rooms that are free for no more than this long to future are considered "reserved" (not-bookable)
 	static public final int RESERVED_THRESHOLD_MINUTES = 30;
-	
+
 	public boolean isBookable() {
 		return isBookable(RESERVED_THRESHOLD_MINUTES);
 	}
@@ -226,7 +226,7 @@ public class Room implements Serializable {
 	public boolean isFreeRestOfDay() {
 		DateTime now = new DateTime();
 		DateTime max = now.add(Calendar.DAY_OF_YEAR, 1).stripTime();
-		
+
 		TimeSpan restOfDay = new TimeSpan(now, max);
 
 		for (Reservation r : reservations) {
@@ -236,7 +236,7 @@ public class Room implements Serializable {
 
 		return true;
 	}
-	
+
 	// Rooms that are free for this long to future are considered "free"
 	static private final int FREE_THRESHOLD_MINUTES = 180;
 	public String getStatusText() {

@@ -124,7 +124,7 @@ public class DateTime implements Serializable {
 			throw new IllegalArgumentException("Not implemented with unit " + unit);
 		}
 	}
-	
+
 	@Override
 	public String toString() {
 		return toGMTString();

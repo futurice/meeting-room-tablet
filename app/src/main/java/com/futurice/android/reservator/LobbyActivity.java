@@ -52,9 +52,9 @@ public class LobbyActivity extends ReservatorActivity implements OnMenuItemClick
 	private boolean waitingAddresses = false;
 
 	final Handler handler = new Handler();
-	
+
 	AlertDialog alertDialog;
-	
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -86,23 +86,23 @@ public class LobbyActivity extends ReservatorActivity implements OnMenuItemClick
 			progressDialog = null;
 		}
 	}
-	
+
 	@Override
 	protected Boolean isPrehensible() {
 		String favouriteRoomName = getResApplication().getFavouriteRoomName();
 		return !(favouriteRoomName.equals(getString(R.string.lobbyRoomName)));
 	}
-	
+
 	private void refreshRoomInfo() {
 		updateLoadingWindow(1);
 		container = (LinearLayout) findViewById(R.id.linearLayout1);
 		container.removeAllViews();
 		proxy.refreshRooms();
 	}
-	
+
 	/*
-	 * @param howMuch If howMuch > 0, an item has been added to our ProgressDialog and 
-	 * we need to increase the number of max items. If howMuch is less than zero, 
+	 * @param howMuch If howMuch > 0, an item has been added to our ProgressDialog and
+	 * we need to increase the number of max items. If howMuch is less than zero,
 	 * something has been completed and we can increase the progress. This should be
 	 * split to two different functions, incrementMaxItems() and itemFinished(),
 	 * because (at least in the current version) there is always only one increment
@@ -117,7 +117,7 @@ public class LobbyActivity extends ReservatorActivity implements OnMenuItemClick
 			progressDialog = null;
 			return;
 		}
-		
+
 		if (showLoadingCount > 0 && (progressDialog == null || !progressDialog.isShowing())) {
 			if (progressDialog != null)
 				progressDialog.dismiss();
@@ -125,7 +125,7 @@ public class LobbyActivity extends ReservatorActivity implements OnMenuItemClick
 			progressDialog.setMax(showLoadingCount);
 			progressDialog.show();
 		}
-		
+
 		if (progressDialog != null) {
 			// Increment the maximum number of items if needed
 			if (showLoadingCount > progressDialog.getMax()) {
@@ -137,7 +137,7 @@ public class LobbyActivity extends ReservatorActivity implements OnMenuItemClick
 			}
 		}
 	}
-	
+
 	private ProgressDialog constructNewProgressDialog() {
 		ProgressDialog d = new ProgressDialog(this);
 		d.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
@@ -183,7 +183,7 @@ public class LobbyActivity extends ReservatorActivity implements OnMenuItemClick
 
 	@Override
 	public void roomListUpdated(Vector<Room> rooms) {
-		HashSet<String> hiddenRooms = (HashSet<String>) 
+		HashSet<String> hiddenRooms = (HashSet<String>)
 				settings.getStringSet(getString(R.string.PREFERENCES_UNSELECTED_ROOMS), new HashSet<String>());
 
 		//proceed to requesting room reservation data
@@ -205,16 +205,16 @@ public class LobbyActivity extends ReservatorActivity implements OnMenuItemClick
 	}
 
 /*	This is never used?
- * 
- **/ 
+ *
+ **/
 	@Override
 	public void refreshFailed(ReservatorException e) {
-	/*	
+	/*
 		if (alertDialog != null) {
 			Toast.makeText(this, "dismissed an alert", Toast.LENGTH_SHORT).show();
 			alertDialog.dismiss();
 		}
-			
+
 		hideLoading();
 		Builder alertBuilder = new AlertDialog.Builder(this);
 		alertDialog = alertBuilder.setTitle("Error")
@@ -246,7 +246,7 @@ public class LobbyActivity extends ReservatorActivity implements OnMenuItemClick
 			}
 		}
 	}
-	
+
 	private class RoomNameComparator implements Comparator<Room> {
 		private Collator collator = Collator.getInstance();
 
@@ -255,7 +255,7 @@ public class LobbyActivity extends ReservatorActivity implements OnMenuItemClick
 			return collator.compare(room1.getName(), room2.getName());
 		}
 	}
-	
+
 	private void processRoom(Room r) {
 		LobbyReservationRowView v = new LobbyReservationRowView(LobbyActivity.this);
 		if (v.getException() != null) {
@@ -270,7 +270,7 @@ public class LobbyActivity extends ReservatorActivity implements OnMenuItemClick
 				alertDialog = alertBuilder.show();
 			}
 		}
-		
+
 		v.setRoom(r);
 		v.setOnReserveCallback(new OnReserveListener() {
 			@Override
@@ -325,7 +325,7 @@ public class LobbyActivity extends ReservatorActivity implements OnMenuItemClick
 			updateLoadingWindow(-1);
 		}
 	}
-	
+
 	private void refetchAddressBook() {
 		waitingAddresses = true;
 		updateLoadingWindow(+1);

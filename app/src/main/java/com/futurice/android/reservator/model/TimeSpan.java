@@ -54,19 +54,19 @@ public class TimeSpan implements Serializable {
 	public boolean intersects(TimeSpan ts) {
 		if (end.beforeOrEqual(ts.getStart())) return false;
 		if (start.afterOrEqual(ts.getEnd())) return false;
-		
+
 		return true;
 	}
-	
+
 	public boolean contains(DateTime time) {
-		return start.before(time) && end.after(time); 
+		return start.before(time) && end.after(time);
 	}
-	
+
 	@Override
 	public TimeSpan clone(){
 		return new TimeSpan(start, end);
 	}
-	
+
 	@Override
 	public String toString() {
 		return "[" + start.toString() + "-" + end.toString() + "]";

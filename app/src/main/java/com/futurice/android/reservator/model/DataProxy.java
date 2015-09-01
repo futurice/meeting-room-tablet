@@ -21,7 +21,7 @@ public abstract class DataProxy {
 	 * @throws ReservatorException
 	 */
 	abstract public Vector<Room> getRooms() throws ReservatorException;
-	
+
 	/**
 	 * Synchronously get a list of reservations mapped to a room. The reservations are not updated to the room.
 	 * Listeners are not notified when done.
@@ -29,11 +29,11 @@ public abstract class DataProxy {
 	 * @throws ReservatorException
 	 */
 	abstract public Vector<Reservation> getRoomReservations(Room r) throws ReservatorException;
-	
+
 	/**
 	 * Synchronously cancel a reservation.
 	 */
-	abstract public void cancelReservation(Reservation r) throws ReservatorException; 
+	abstract public void cancelReservation(Reservation r) throws ReservatorException;
 
 	private Set<DataUpdatedListener> listeners = new HashSet<DataUpdatedListener>();
 
@@ -54,7 +54,7 @@ public abstract class DataProxy {
 		}
 		throw new ReservatorException("Can't find room " + roomName);
 	}
-	
+
 	/**
 	 * Returns an array of all room names
 	 * @return array of all room names
@@ -71,7 +71,7 @@ public abstract class DataProxy {
 		Collections.sort(roomNames, Collator.getInstance());
 		return roomNames;
 	}
-	
+
 	/**
 	 * Asynchronously request a room list refresh.
 	 * Listener's roomListUpdated is called when done.
@@ -79,7 +79,7 @@ public abstract class DataProxy {
 	public void refreshRooms() {
 		new RoomListRefreshTask().execute();
 	}
-	
+
 	/**
 	 * Asynchronously request room's reservations and updates them to the room object.
 	 * Listener's roomReservationsUpdated is called when done.
@@ -119,14 +119,14 @@ public abstract class DataProxy {
 			l.refreshFailed(e);
 		}
 	}
-	
+
 	/**
 	 * Checks if the data provider has a fatal external error and the application should refuse
-	 * to start.  
+	 * to start.
 	 * @author vsin
 	 */
 	public boolean hasFatalError() { return false; }
-	
+
 	/**
 	 * Private inner class for asynchronously refreshing list of all the rooms.
 	 * @author vman

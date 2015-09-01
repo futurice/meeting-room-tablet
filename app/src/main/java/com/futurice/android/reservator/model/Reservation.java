@@ -23,7 +23,7 @@ public class Reservation implements Comparable<Reservation>, Serializable {
 	public TimeSpan getTimeSpan(){
 		return timeSpan;
 	}
-	
+
 	public DateTime getStartTime(){
 		return timeSpan.getStart();
 	}
@@ -35,7 +35,7 @@ public class Reservation implements Comparable<Reservation>, Serializable {
 	public String getId() {
 		return id;
 	}
-	
+
 	@Override
 	public int hashCode() {
 		return id.hashCode();
@@ -48,7 +48,7 @@ public class Reservation implements Comparable<Reservation>, Serializable {
 		}
 		return super.equals(other);
 	}
-	
+
 	public boolean equals(Reservation other) {
 		return id.equals(other.id);
 	}
@@ -57,16 +57,16 @@ public class Reservation implements Comparable<Reservation>, Serializable {
 	public int compareTo(Reservation another) {
 		return (int)(this.getStartTime().getTimeInMillis() - another.getStartTime().getTimeInMillis());
 	}
-	
+
 	@Override
 	public String toString() {
-		return "Reservation<" + id + "," + hashCode() + "> " + subject + ": " + timeSpan; 
+		return "Reservation<" + id + "," + hashCode() + "> " + subject + ": " + timeSpan;
 	}
-	
+
 	public void setIsCancellable(final boolean value) {
 		this.cancellable = value;
 	}
-	
+
 	public boolean isCancellable() {
 		return this.cancellable;
 	}

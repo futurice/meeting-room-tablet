@@ -51,11 +51,11 @@ public class Helpers {
 			return Integer.toString(minutes/(60*24)) + " days";
 		}
 	}
-	
+
 	// For use in traffic lights
 	public static String humanizeTimeSpan2(int minutes) {
 		int hours = minutes / 60;
-		
+
 		if (minutes < 15) {
 			return getUnits(minutes, "minute", "minutes");
 		} else if (minutes < 30) {
@@ -68,7 +68,7 @@ public class Helpers {
 				hours++;
 				hourMins = 0;
 			}
-			
+
 			if (hourMins == 0) {
 				return getUnits(hours, "hour", "hours");
 			} else {
@@ -80,12 +80,12 @@ public class Helpers {
 			return getUnits(hours/24, "day", "days");
 		}
 	}
-	
+
 	private static String getUnits(int amount, String unitName, String unitNamePlural) {
 		if (amount == 1) return String.format("1 %s", unitName);
 		return String.format("%d %s", amount, unitNamePlural);
 	}
-	
+
 	private static int roundTo(int in, int precision) {
 		return precision * ((int)Math.floor(in / (1.0*precision)));
 	}
