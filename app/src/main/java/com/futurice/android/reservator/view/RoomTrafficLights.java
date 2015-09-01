@@ -32,9 +32,9 @@ public class RoomTrafficLights extends RelativeLayout {
 	TextView reservationInfoView;
 	Button bookNowView;
 	View disconnected;
-	
+
 	Timer touchTimeoutTimer;
-	final long TOUCH_TIMEOUT = 30 * 1000; 
+	final long TOUCH_TIMEOUT = 30 * 1000;
 	final long TOUCH_TIMER = 10 * 1000;
 	boolean enabled = true;
 	View.OnClickListener bookNowListener;
@@ -42,7 +42,7 @@ public class RoomTrafficLights extends RelativeLayout {
 	public RoomTrafficLights(Context context) {
 		this(context, null);
 	}
-	
+
 	public RoomTrafficLights(Context context, AttributeSet attrs) {
 		super(context, attrs);
 		inflate(context, R.layout.room_traffic_lights, this);
@@ -53,10 +53,10 @@ public class RoomTrafficLights extends RelativeLayout {
 		bookNowView = (Button) findViewById(R.id.bookNow);
 		disconnected = findViewById(R.id.disconnected);
 		updateConnected();
-		
+
 		setClickable(true);
 		setVisibility(INVISIBLE);
-		
+
 		bookNowView.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -66,17 +66,17 @@ public class RoomTrafficLights extends RelativeLayout {
 			}
 		});
 	}
-	
+
 	public void setBookNowListener(View.OnClickListener l) {
 		this.bookNowListener = l;
 	}
-	
+
 	final int QUICK_BOOK_THRESHOLD = 5; // minutes
 	public void update(Room room) {
 		updateConnected();
-		
+
 		roomTitleView.setText(room.getName());
-		
+
 		if (room.isBookable(QUICK_BOOK_THRESHOLD)) {
 			roomStatusView.setText("Free");
 			if (room.isFreeRestOfDay()) {
@@ -109,9 +109,9 @@ public class RoomTrafficLights extends RelativeLayout {
 			setReservationInfo(room.getCurrentReservation(), room.getNextFreeSlot());
 		}
 	}
-	
+
 	// Show "disconnected" warning icon on screen when disconnected for more than 5 minutes
-	private final long DISCONNECTED_WARNING_ICON_THRESHOLD = 5 * 60 * 1000; 
+	private final long DISCONNECTED_WARNING_ICON_THRESHOLD = 5 * 60 * 1000;
 	private static Date lastTimeConnected = new Date(0);
 	private void updateConnected() {
 		ConnectivityManager cm = null;
@@ -121,9 +121,9 @@ public class RoomTrafficLights extends RelativeLayout {
 			return;
 		}
 		if (cm == null) return;
-		
+
 		NetworkInfo ni = cm.getActiveNetworkInfo();
-		
+
 		if (ni != null && ni.isConnectedOrConnecting()) {
 			// Connected
 			lastTimeConnected = new Date();
@@ -139,7 +139,7 @@ public class RoomTrafficLights extends RelativeLayout {
 			}
 		}
 	}
-	
+
 	private void setReservationInfo(Reservation r, TimeSpan nextFreeSlot) {
 		if (r == null) {
 			roomStatusInfoView.setVisibility(GONE);
@@ -147,18 +147,18 @@ public class RoomTrafficLights extends RelativeLayout {
 			roomStatusInfoView.setText(r.getSubject());
 			roomStatusInfoView.setVisibility(VISIBLE);
 		}
-		
+
 		if (nextFreeSlot == null) {
 			// More than a day away
 			reservationInfoView.setVisibility(GONE);
 		} else {
-			reservationInfoView.setText(Html.fromHtml(String.format("Free at <b>%02d:%02d</b>", 
+			reservationInfoView.setText(Html.fromHtml(String.format("Free at <b>%02d:%02d</b>",
 					nextFreeSlot.getStart().get(Calendar.HOUR_OF_DAY),
 					nextFreeSlot.getStart().get(Calendar.MINUTE))));
 			reservationInfoView.setVisibility(VISIBLE);
 		}
 	}
-	
+
 	private long lastTouched = 0;
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
@@ -171,27 +171,27 @@ public class RoomTrafficLights extends RelativeLayout {
 		lastTouched = new Date().getTime();
 		return capture;
 	}
-	
+
 	public void disable() {
 		enabled = false;
 		setVisibility(INVISIBLE);
 		lastTouched = new Date().getTime();
 		descheduleTimer();
 	}
-	
+
 	public void enable() {
 		enabled = true;
 		lastTouched = new Date().getTime();
 		scheduleTimer();
 	}
-	
+
 	private void scheduleTimer() {
 		if (touchTimeoutTimer == null) {
 			touchTimeoutTimer = new Timer();
 			touchTimeoutTimer.schedule(new TimerTask() {
 				@Override
 				public void run() {
-					if (RoomTrafficLights.this.enabled && 
+					if (RoomTrafficLights.this.enabled &&
 							new Date().getTime() >= RoomTrafficLights.this.lastTouched + TOUCH_TIMEOUT) {
 						RoomTrafficLights.this.post(new Runnable() {
 							public void run() {
@@ -204,7 +204,7 @@ public class RoomTrafficLights extends RelativeLayout {
 			}, TOUCH_TIMER, TOUCH_TIMEOUT);
 		}
 	}
-	
+
 	private void descheduleTimer() {
 		if (touchTimeoutTimer != null) {
 			touchTimeoutTimer.cancel();

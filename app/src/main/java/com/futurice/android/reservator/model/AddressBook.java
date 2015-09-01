@@ -13,9 +13,9 @@ public abstract class AddressBook {
 	protected abstract Vector<AddressBookEntry> fetchEntries() throws ReservatorException;
 
 	public abstract void setCredentials(String username, String password);
-	
+
 	public AddressBook() {}
-	
+
 	public Vector<AddressBookEntry> getEntries() throws ReservatorException {
 		return entries;
 	}
@@ -38,13 +38,13 @@ public abstract class AddressBook {
 		}
 		return null;
 	}
-	
+
 	public String toString() {
 		if (entries != null)
 			return entries.toString();
 		return "";
 	}
-	
+
 	/**
 	 * Add a listener for this proxy. The listener will be notified after calls to refreshRooms and refreshRoomReservations finish or fail.
 	 * @param listener
@@ -60,7 +60,7 @@ public abstract class AddressBook {
 	public void removeDataUpdatedListener(AddressBookUpdatedListener listener){
 		listeners.remove(listener);
 	}
-	
+
 	private void notifyEntriesUpdated(){
 		synchronized (listeners) {
 			for(AddressBookUpdatedListener l : listeners){
@@ -68,7 +68,7 @@ public abstract class AddressBook {
 			}
 		}
 	}
-	
+
 	private void notifyAddressBookUpdateFailed(ReservatorException e) {
 		synchronized (listeners) {
 			for(AddressBookUpdatedListener l : listeners) {
@@ -76,15 +76,15 @@ public abstract class AddressBook {
 			}
 		}
 	}
-	
+
 	public void refetchEntries() {
 		entries = null;
 		prefetchEntries();
 	}
-	
+
 	private class PrefetchEntriesTask extends AsyncTask<Void, Void, Vector<AddressBookEntry>> {
 		ReservatorException e = null;
-		
+
 		@Override
 		protected Vector<AddressBookEntry> doInBackground(Void... params) {
 			try {
@@ -94,7 +94,7 @@ public abstract class AddressBook {
 				return null;
 			}
 		}
-		
+
 		@Override
 		protected void onPostExecute(Vector<AddressBookEntry> entries){
 			if (entries != null) {

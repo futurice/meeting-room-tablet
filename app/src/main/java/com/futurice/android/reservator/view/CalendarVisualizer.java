@@ -50,10 +50,10 @@ public class CalendarVisualizer extends HorizontalScrollView implements Reservat
 	private FrameLayout contentFrame;
 	public CalendarVisualizer(Context context, int dayStartTime, int dayEndTime) {
 		super(context, null);
-		
+
 		this.dayStartTime = dayStartTime;
 		this.dayEndTime = dayEndTime;
-		
+
 		firstDayToShow = new DateTime().stripTime();
 		//forces scroll view to have scrollable content area
 		contentFrame = new FrameLayout(getContext());
@@ -209,19 +209,19 @@ public class CalendarVisualizer extends HorizontalScrollView implements Reservat
 			Paint linePaint = new Paint();
 			// linePaint.setARGB(200, 255, 255, 255);
 			linePaint.setColor(Color.WHITE);
-			
-			// Draw the separator line only if the next reservation is following this one immediately.			
+
+			// Draw the separator line only if the next reservation is following this one immediately.
 			for (int i = 0; i < reservations.length; i++) {
 				if ((i + 1) < reservations.length  &&
  						reservations[i].getEndTime().getTimeInMillis() == reservations[i+1].getStartTime().getTimeInMillis()) {
-					c.drawLine(getXForTime(reservations[i].getStartTime()), 
-							getProportionalEndY(reservations[i].getEndTime()) * height, 
-							getXForTime(reservations[i].getStartTime()) + dayWidth, 
-							getProportionalEndY(reservations[i].getEndTime()) * height, 
+					c.drawLine(getXForTime(reservations[i].getStartTime()),
+							getProportionalEndY(reservations[i].getEndTime()) * height,
+							getXForTime(reservations[i].getStartTime()) + dayWidth,
+							getProportionalEndY(reservations[i].getEndTime()) * height,
 							linePaint);
 				}
 			}
-			
+
 		}
 		c.restore();
 	}
@@ -276,34 +276,34 @@ public class CalendarVisualizer extends HorizontalScrollView implements Reservat
 		}
 		c.restore();
 	}
-	
+
 	private void drawCurrentTimeIndicators(Canvas c, RectF area) {
 		c.save();
 		c.clipRect(area.left + getScrollX(), area.top, area.right + getScrollX(), area.bottom);
 		c.translate(area.left, area.top);
 		int height = (int) area.height();
-		
+
 		DateTime now = new DateTime();
-		
+
 		int startX = getXForTime(now);
 		int endX = startX + dayWidth;
 		int currentY = (int) (getProportionalY(now) * height);
 
 		Paint fillPaint = new Paint();
 		fillPaint.setARGB(128, 192, 192, 192); // #C0C0C0 = semialpha grey
-		
+
 		// the rectangle
 		c.drawRect(startX, 0, endX, currentY, fillPaint);
-		
+
 		Paint linePaint = new Paint();
 		linePaint.setColor(Color.RED);
-		
+
 		// the red line
 		c.drawLine(startX, currentY, endX, currentY, linePaint);
-		
+
 		c.restore();
 	}
-	
+
 	@Override
 	protected void onDraw(Canvas c) {
 		long start = System.currentTimeMillis();
@@ -319,7 +319,7 @@ public class CalendarVisualizer extends HorizontalScrollView implements Reservat
 		drawFadingEdges(c, calendarAreaRect);
 		drawTimeLabels(c, timeLabelRect);
 		drawCurrentTimeIndicators(c, calendarAreaRect);
-		
+
 		Log.d("Performance", "Drew CalendarVisualizer in " + (System.currentTimeMillis() - start) + "ms");
 	}
 

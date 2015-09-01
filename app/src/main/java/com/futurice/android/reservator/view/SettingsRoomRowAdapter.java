@@ -40,7 +40,7 @@ public class SettingsRoomRowAdapter extends ArrayAdapter<String> {
 		HashSet<String> unselectedRooms = (HashSet<String>) preferences.getStringSet(
 				context.getString(R.string.PREFERENCES_UNSELECTED_ROOMS),
 				new HashSet<String>());
-		
+
 		CheckBox t = (CheckBox) rowView.findViewById(R.id.checkBox1);
 		String current = values.get(position);
 		t.setText(current);
