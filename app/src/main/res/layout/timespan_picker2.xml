@@ -38,8 +38,7 @@
         android:textColor="#000" >
 
     </TextView>
- -->
- 
+
     <TextView
         android:id="@+id/startTimeLabel"
         android:layout_width="70sp"
