@@ -17,7 +17,7 @@
     <string name="default_exchange_username">reserve@futurice.com</string>
     <string name="reservationTextTemplate">Reserved: ^1</string>
     <string name="book_now">Book now</string>
-    <string name="dateLabelFormat">EEEE d.M.</string>
+    <string name="dateLabelFormat">EEEE, MMM. d</string>
     <string name="weekLabelFormat">\'Week\' w</string>
     <string name="from">From </string>
     <string name="to">To </string>
