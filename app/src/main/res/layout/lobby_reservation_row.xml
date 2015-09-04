@@ -1,100 +1,177 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout android:layout_width="fill_parent"
-	xmlns:android="http://schemas.android.com/apk/res/android"
-	android:gravity="center_vertical" android:layout_height="wrap_content"
-	android:layout_gravity="center">
-	<FrameLayout android:layout_marginLeft="120dp" android:layout_marginRight="20dp"
-		android:id="@+id/outerTitleLayout" android:layout_gravity="center"
-		android:layout_width="170dp" android:layout_height="wrap_content">
-		<LinearLayout android:layout_height="wrap_content"
-			android:orientation="horizontal" android:id="@+id/middleTitleLayout"
-			android:layout_width="wrap_content" android:layout_gravity="center_vertical">
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:gravity="center_vertical">
+
+    <FrameLayout
+        android:id="@+id/outerTitleLayout"
+        android:layout_width="170dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginLeft="120dp"
+        android:layout_marginRight="20dp">
+
+        <LinearLayout
+            android:id="@+id/middleTitleLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:orientation="horizontal">
 
 
-			<LinearLayout android:layout_height="wrap_content"
-				android:orientation="vertical" android:id="@+id/titleLayout"
-				android:layout_width="wrap_content" android:layout_gravity="center_vertical|left"
-				android:layout_marginLeft="10dp">
-				<TextView android:id="@+id/roomNameLabel"
-					android:layout_width="wrap_content" android:layout_height="wrap_content"
-					android:text="Room name XXX" android:textStyle="bold"
-					android:textColor="@color/TextColor"></TextView>
-				<TextView android:id="@+id/roomInfoLabel"
-					android:layout_width="wrap_content" android:layout_height="wrap_content"
-					android:text="(42 persons)" android:textColor="@color/TextInfoColor"></TextView>
-			</LinearLayout>
-		</LinearLayout>
-	</FrameLayout>
-	<ViewSwitcher android:id="@+id/modeSwitcher"
-		android:layout_height="wrap_content"
-		android:inAnimation="@animator/fadein" android:outAnimation="@animator/fadeout"
-		android:layout_gravity="center_vertical" android:layout_width="fill_parent">
-		<LinearLayout android:layout_width="fill_parent"
-			android:layout_gravity="center_vertical" android:layout_marginRight="0dp"
-			android:visibility="visible" android:layout_marginBottom="10dp"
-			android:layout_marginTop="10dp" android:layout_height="wrap_content"
-			android:id="@+id/normalMode">
+            <LinearLayout
+                android:id="@+id/titleLayout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical|left"
+                android:layout_marginLeft="10dp"
+                android:orientation="vertical">
 
-			<Button
-				android:id="@+id/bookNowButton"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:layout_gravity="center"
-				android:layout_marginLeft="20dp"
-				android:background="@drawable/button_background"
-				android:focusable="true"
-				android:text="@string/book_now"
-				android:textColor="#fff" >
-			</Button>
+                <TextView
+                    android:id="@+id/roomNameLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Room name XXX"
+                    android:textColor="@color/TextColor"
+                    android:textStyle="bold"></TextView>
 
-			<TextView android:layout_height="wrap_content" android:id="@+id/roomStatusLabel"
-				android:width="200px" android:layout_marginLeft="20dp"
-				android:layout_gravity="center" android:text="&lt;status&gt;"
-				android:layout_width="wrap_content"></TextView>
-			<FrameLayout android:layout_height="match_parent"
-				android:layout_width="wrap_content" android:layout_weight="1"></FrameLayout>
-			<Button android:layout_height="wrap_content"
-				android:visibility="gone" android:background="@drawable/calendar_small_grey"
-				android:id="@+id/calendarButton" android:focusable="true"
-				android:layout_gravity="center" android:layout_width="wrap_content"></Button>
-		</LinearLayout>
-		<LinearLayout android:id="@+id/bookingMode"
-			android:gravity="center_vertical" android:layout_height="wrap_content"
-			android:layout_width="fill_parent" android:layout_gravity="center_vertical">
-			<com.futurice.android.reservator.view.CustomTimeSpanPicker2
-				android:id="@+id/timeSpanPicker2" android:layout_height="wrap_content"
-				android:layout_gravity="center" android:layout_width="wrap_content"
-				android:layout_marginBottom="30dp" android:layout_marginTop="30sp" />
-			<RelativeLayout
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content">
-				<AutoCompleteTextView android:id="@+id/autoCompleteTextView1"
-					android:layout_height="wrap_content" android:lines="1" android:hint="Your name"
-					android:completionHint="Your name" android:inputType="textFilter" android:textColor="@color/button_color"
-					android:maxLines="1" android:imeOptions="actionDone"
-					android:layout_width="230dp" android:layout_gravity="center"
-					android:completionThreshold="2" android:layout_marginRight="10dp"
-					android:layout_marginLeft="10dp" android:layout_marginBottom="30dp"
-					android:layout_marginTop="30dp"></AutoCompleteTextView>
-				<TextView
-					android:id="@+id/hintText"
-					android:layout_width="wrap_content"
-					android:layout_height="wrap_content"
-					android:layout_below="@+id/autoCompleteTextView1"
-					android:text="@string/hintText" />
-				<Button android:layout_height="wrap_content"
-					android:layout_width="wrap_content" android:id="@+id/reserveButton"
-					android:layout_toRightOf="@+id/autoCompleteTextView1"
-					android:focusable="true" android:text="Reserve" android:background="@drawable/button_background"
-					android:layout_gravity="center" android:textColor="@color/button_color"
-					android:layout_marginTop="30dp" android:layout_marginBottom="30dp"></Button>
-				</RelativeLayout>
-			<FrameLayout android:layout_width="1dp"
-				android:layout_weight="1" android:layout_height="match_parent" />
-			<ImageButton android:layout_width="wrap_content"
-				android:layout_height="wrap_content" android:id="@+id/cancelButton"
-				android:layout_gravity="top" android:background="@drawable/close_button_states"
-				android:layout_marginTop="10dp" android:layout_marginRight="10dp"></ImageButton>
-		</LinearLayout>
-	</ViewSwitcher>
+                <TextView
+                    android:id="@+id/roomInfoLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="(42 persons)"
+                    android:textColor="@color/TextInfoColor"></TextView>
+            </LinearLayout>
+        </LinearLayout>
+    </FrameLayout>
+
+    <ViewSwitcher
+        android:id="@+id/modeSwitcher"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:inAnimation="@animator/fadein"
+        android:outAnimation="@animator/fadeout">
+
+        <LinearLayout
+            android:id="@+id/normalMode"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginBottom="10dp"
+            android:layout_marginRight="0dp"
+            android:layout_marginTop="10dp"
+            android:visibility="visible">
+
+            <Button
+                android:id="@+id/bookNowButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="20dp"
+                android:background="@drawable/button_background"
+                android:focusable="true"
+                android:text="@string/book_now"
+                android:textColor="#fff"></Button>
+
+            <TextView
+                android:id="@+id/roomStatusLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="20dp"
+                android:width="200px"
+                android:text="&lt;status&gt;"></TextView>
+
+            <FrameLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"></FrameLayout>
+
+            <Button
+                android:id="@+id/calendarButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:background="@drawable/calendar_small_grey"
+                android:focusable="true"
+                android:visibility="gone"></Button>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/bookingMode"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:gravity="center_vertical">
+
+            <com.futurice.android.reservator.view.CustomTimeSpanPicker2
+                android:id="@+id/timeSpanPicker2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginBottom="30dp"
+                android:layout_marginTop="30sp" />
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <AutoCompleteTextView
+                    android:id="@+id/autoCompleteTextView1"
+                    android:layout_width="230dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginBottom="30dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginTop="30dp"
+                    android:completionHint="Your name"
+                    android:completionThreshold="2"
+                    android:hint="Your name"
+                    android:imeOptions="actionDone"
+                    android:inputType="textCapWords|textFilter"
+                    android:lines="1"
+                    android:maxLines="1"
+                    android:textColor="@color/button_color"></AutoCompleteTextView>
+
+                <TextView
+                    android:id="@+id/hintText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/autoCompleteTextView1"
+                    android:text="@string/hintText" />
+
+                <Button
+                    android:id="@+id/reserveButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginBottom="30dp"
+                    android:layout_marginTop="30dp"
+                    android:layout_toRightOf="@+id/autoCompleteTextView1"
+                    android:background="@drawable/button_background"
+                    android:focusable="true"
+                    android:text="Reserve"
+                    android:textColor="@color/button_color"></Button>
+            </RelativeLayout>
+
+            <FrameLayout
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1" />
+
+            <ImageButton
+                android:id="@+id/cancelButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="top"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/close_button_states"></ImageButton>
+        </LinearLayout>
+    </ViewSwitcher>
 </LinearLayout>
