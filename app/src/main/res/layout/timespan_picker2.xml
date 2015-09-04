@@ -3,16 +3,17 @@
     android:id="@+id/relativeLayout1"
     android:layout_width="wrap_content"
     android:layout_height="fill_parent"
-    android:paddingBottom="40dp">
+    android:paddingBottom="40dp" >
 
     <ImageButton
         android:id="@+id/startMinus"
-        android:layout_width="56dp"
-        android:layout_height="56dp"
+        android:layout_width="31sp"
+        android:layout_height="31sp"
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/startInfoLabel"
         android:background="@drawable/button_background"
-        android:src="@drawable/minus_icon"></ImageButton>
+        android:src="@drawable/minus_icon" >
+    </ImageButton>
 
     <com.futurice.android.reservator.view.TimeBarView
         android:id="@+id/timeBarView"
@@ -22,7 +23,8 @@
         android:layout_alignRight="@+id/endPlus"
         android:layout_below="@+id/startMinus"
         android:layout_marginBottom="5dp"
-        android:layout_marginTop="5dp"></com.futurice.android.reservator.view.TimeBarView>
+        android:layout_marginTop="5dp" >
+    </com.futurice.android.reservator.view.TimeBarView>
 
     <TextView
         android:id="@+id/startInfoLabel"
@@ -33,31 +35,32 @@
         android:layout_centerVertical="false"
         android:gravity="center"
         android:text="@string/start"
-        android:textAllCaps="true"
-        android:textColor="#000">
+        android:textColor="#000" >
 
     </TextView>
 
     <TextView
         android:id="@+id/startTimeLabel"
-        android:layout_width="80sp"
+        android:layout_width="70sp"
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/startMinus"
         android:layout_alignTop="@+id/startMinus"
         android:layout_toRightOf="@+id/startMinus"
         android:gravity="center"
         android:text="12:00"
-        android:textAppearance="@style/TimeSpanTimeStyle"></TextView>
+        android:textAppearance="@style/TimeSpanTimeStyle" >
+    </TextView>
 
     <ImageButton
         android:id="@+id/startPlus"
-        android:layout_width="56dp"
-        android:layout_height="56dp"
+        android:layout_width="31sp"
+        android:layout_height="31sp"
         android:layout_alignBottom="@+id/startTimeLabel"
         android:layout_alignTop="@+id/startTimeLabel"
         android:layout_toRightOf="@+id/startTimeLabel"
         android:background="@drawable/button_background"
-        android:src="@drawable/plus_icon"></ImageButton>
+        android:src="@drawable/plus_icon" >
+    </ImageButton>
 
     <TextView
         android:id="@+id/separatorLabel"
@@ -67,28 +70,31 @@
         android:layout_alignTop="@+id/startPlus"
         android:layout_toRightOf="@+id/startPlus"
         android:gravity="center"
-        android:textAppearance="@style/TimeSpanTimeStyle"></TextView>
+        android:textAppearance="@style/TimeSpanTimeStyle" >
+    </TextView>
 
     <ImageButton
         android:id="@+id/endMinus"
-        android:layout_width="56dp"
-        android:layout_height="56dp"
+        android:layout_width="31sp"
+        android:layout_height="31sp"
         android:layout_alignBottom="@+id/separatorLabel"
         android:layout_alignTop="@+id/separatorLabel"
         android:layout_toRightOf="@+id/separatorLabel"
         android:background="@drawable/button_background"
-        android:src="@drawable/minus_icon"></ImageButton>
+        android:src="@drawable/minus_icon" >
+    </ImageButton>
 
     <TextView
         android:id="@+id/endTimeLabel"
-        android:layout_width="80sp"
+        android:layout_width="70sp"
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/endMinus"
         android:layout_alignTop="@+id/endMinus"
         android:layout_toRightOf="@+id/endMinus"
         android:gravity="center"
         android:text="13:00"
-        android:textAppearance="@style/TimeSpanTimeStyle"></TextView>
+        android:textAppearance="@style/TimeSpanTimeStyle" >
+    </TextView>
 
     <TextView
         android:id="@+id/endInfoLabel"
@@ -99,19 +105,19 @@
         android:layout_alignRight="@+id/endTimeLabel"
         android:gravity="center"
         android:text="@string/end"
-        android:textAllCaps="true"
-        android:textColor="#000">
+        android:textColor="#000" >
 
     </TextView>
 
     <ImageButton
         android:id="@+id/endPlus"
-        android:layout_width="56dp"
-        android:layout_height="56dp"
+        android:layout_width="31sp"
+        android:layout_height="31sp"
         android:layout_alignBottom="@+id/endTimeLabel"
         android:layout_alignTop="@+id/endTimeLabel"
         android:layout_toRightOf="@+id/endTimeLabel"
         android:background="@drawable/button_background"
-        android:src="@drawable/plus_icon"></ImageButton>
+        android:src="@drawable/plus_icon" >
+    </ImageButton>
 
 </RelativeLayout>
