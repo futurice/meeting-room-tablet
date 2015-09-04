@@ -133,7 +133,7 @@
                     android:completionThreshold="2"
                     android:hint="Your name"
                     android:imeOptions="actionDone"
-                    android:inputType="textFilter"
+                    android:inputType="textCapWords|textFilter"
                     android:lines="1"
                     android:maxLines="1"
                     android:textColor="@color/button_color"></AutoCompleteTextView>
