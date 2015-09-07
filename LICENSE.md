@@ -1,6 +1,6 @@
 BSD 3-clause license
 
-Copyright (c) 2014, Futurice Ltd
+Copyright (c) 2014-2015, Futurice Ltd and [contributors](https://github.com/futurice/meeting-room-tablet/graphs/contributors)
 
 All rights reserved.
 
