@@ -1,6 +1,6 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent" >
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent">
 
     <FrameLayout
         android:id="@+id/topLeftEmptyBox"
@@ -9,7 +9,7 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
         android:layout_alignRight="@+id/hourColumn"
-        android:minWidth="50dp" >
+        android:minWidth="50dp">
     </FrameLayout>
 
     <com.futurice.android.reservator.view.CalendarDayLayout
@@ -19,7 +19,7 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/topLeftEmptyBox"
-        android:minWidth="20dp" >
+        android:minWidth="20dp">
     </com.futurice.android.reservator.view.CalendarDayLayout>
 
     <HorizontalScrollView
@@ -29,12 +29,12 @@
         android:layout_alignBottom="@+id/hourColumn"
         android:layout_alignParentRight="true"
         android:layout_alignTop="@+id/topLeftEmptyBox"
-        android:layout_toRightOf="@+id/hourColumn" >
+        android:layout_toRightOf="@+id/hourColumn">
 
         <RelativeLayout
             android:id="@+id/relativeLayout1"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" >
+            android:layout_height="match_parent">
         </RelativeLayout>
     </HorizontalScrollView>
 

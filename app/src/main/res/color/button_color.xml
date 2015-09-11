@@ -1,6 +1,6 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
-   <item android:state_focused="true" android:color="@color/ButtonTextActive"/>
-   <item android:state_pressed="true" android:state_enabled="false" android:color="@color/ButtonTextActive" />
-   <item android:state_enabled="false" android:color="@color/ButtonTextDisabled" />
-   <item android:color="@color/ButtonTextNormal"/>
+    <item android:state_focused="true" android:color="@color/ButtonTextActive"/>
+    <item android:state_pressed="true" android:state_enabled="false" android:color="@color/ButtonTextActive"/>
+    <item android:state_enabled="false" android:color="@color/ButtonTextDisabled"/>
+    <item android:color="@color/ButtonTextNormal"/>
 </selector>

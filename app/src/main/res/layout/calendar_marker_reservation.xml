@@ -1,25 +1,46 @@
+<RelativeLayout
+    android:id="@+id/relativeLayout1"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
-<RelativeLayout android:id="@+id/relativeLayout1"
-	android:layout_width="fill_parent" android:layout_height="fill_parent"
-	xmlns:android="http://schemas.android.com/apk/res/android">
-	<ImageButton android:layout_width="wrap_content"
-		android:layout_centerHorizontal="true" android:id="@+id/beginDragger"
-		android:background="@drawable/drag_button_background"
-		android:layout_height="wrap_content"></ImageButton>
-	<FrameLayout android:id="@+id/frameLayout1"
-		android:layout_width="fill_parent" android:layout_above="@+id/endDragger" android:layout_height="fill_parent"
-		android:layout_below="@+id/beginDragger" android:background="#40518d02">
-	</FrameLayout>
-	<ImageButton android:layout_centerHorizontal="true"
-		android:layout_width="wrap_content" android:id="@+id/endDragger"
-		android:background="@drawable/drag_button_background"
-		android:layout_alignParentBottom="true" android:layout_height="wrap_content"></ImageButton>
-	<ImageButton android:layout_width="wrap_content"
-		android:id="@+id/okButton" android:background="@drawable/ok_button_background"
-		android:layout_alignParentBottom="true" android:layout_height="wrap_content"
-		android:layout_alignParentRight="true"></ImageButton>
-	<ImageButton android:layout_width="wrap_content"
-		android:id="@+id/cancelButton" android:background="@drawable/cancel_button_background"
-		android:layout_alignParentBottom="true" android:layout_height="wrap_content"
-		android:layout_alignParentLeft="true"></ImageButton>
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/beginDragger"
+        android:background="@drawable/drag_button_background"
+        android:layout_height="wrap_content"></ImageButton>
+
+    <FrameLayout
+        android:id="@+id/frameLayout1"
+        android:layout_width="fill_parent"
+        android:layout_above="@+id/endDragger"
+        android:layout_height="fill_parent"
+        android:layout_below="@+id/beginDragger"
+        android:background="#40518d02">
+    </FrameLayout>
+
+    <ImageButton
+        android:layout_centerHorizontal="true"
+        android:layout_width="wrap_content"
+        android:id="@+id/endDragger"
+        android:background="@drawable/drag_button_background"
+        android:layout_alignParentBottom="true"
+        android:layout_height="wrap_content"></ImageButton>
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:id="@+id/okButton"
+        android:background="@drawable/ok_button_background"
+        android:layout_alignParentBottom="true"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"></ImageButton>
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:id="@+id/cancelButton"
+        android:background="@drawable/cancel_button_background"
+        android:layout_alignParentBottom="true"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"></ImageButton>
 </RelativeLayout>

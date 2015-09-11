@@ -46,288 +46,282 @@ import com.futurice.android.reservator.view.WeekView.OnFreeTimeClickListener;
 import com.futurice.android.reservator.view.WeekView.OnReservationClickListener;
 
 public class RoomActivity extends ReservatorActivity implements OnMenuItemClickListener,
-		DataUpdatedListener, AddressBookUpdatedListener {
-	public static final String ROOM_EXTRA = "room";
-	public static final long ROOMLIST_REFRESH_PERIOD = 60*1000;
+    DataUpdatedListener, AddressBookUpdatedListener {
+    public static final String ROOM_EXTRA = "room";
+    public static final long ROOMLIST_REFRESH_PERIOD = 60 * 1000;
+    final Handler handler = new Handler();
+    final Runnable refreshDataRunnable = new Runnable() {
+        @Override
+        public void run() {
+            Log.v("Refresh", "refreshing room info");
+            refreshData();
+            startAutoRefreshData();
+        }
+    };
+    final int DEFAULT_BOOK_NOW_DURATION = 30; // mins
+    DataProxy proxy;
+    Room currentRoom;
+    WeekView weekView;
+    TextView roomNameLabel;
+    RoomTrafficLights trafficLights;
+    MenuItem settingsMenu, refreshMenu, aboutMenu;
+    AlertDialog alertDialog;
+    int showLoadingCount = 0;
+    private ProgressDialog progressDialog = null;
 
-	DataProxy proxy;
-	Room currentRoom;
+    /**
+     * Helper for starting a RoomActivity
+     *
+     * @param context
+     * @param room
+     */
+    public static void startWith(Context context, Room room) {
+        Intent i = new Intent(context, RoomActivity.class);
+        i.putExtra(ROOM_EXTRA, room);
+        context.startActivity(i);
+    }
 
-	WeekView weekView;
-	TextView roomNameLabel;
-	RoomTrafficLights trafficLights;
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        setContentView(R.layout.room_activity);
+        this.weekView = (WeekView) findViewById(R.id.weekView1);
+        this.roomNameLabel = (TextView) findViewById(R.id.roomNameLabel);
+        this.trafficLights = (RoomTrafficLights) findViewById(R.id.roomTrafficLights);
+        try {
+            currentRoom = (Room) getIntent().getSerializableExtra(ROOM_EXTRA);
+        } catch (ClassCastException e) {
+            throw new IllegalArgumentException("No room found as Serializable extra " + ROOM_EXTRA);
+        }
+        if (currentRoom == null) {
+            throw new IllegalArgumentException(
+                "No room found as Serializable extra " + ROOM_EXTRA);
+        }
 
-	MenuItem settingsMenu, refreshMenu, aboutMenu;
-	
-	AlertDialog alertDialog;
+        findViewById(R.id.seeAllRoomsButton).setOnClickListener(
+            new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    RoomActivity.this.finish();
+                }
+            });
 
-	private ProgressDialog progressDialog = null;
-	int showLoadingCount = 0;
+        weekView.setOnFreeTimeClickListener(new OnFreeTimeClickListener() {
+            @Override
+            public void onFreeTimeClick(View v, TimeSpan timeSpan, DateTime touch) {
 
-	final Handler handler = new Handler();
-	final Runnable refreshDataRunnable = new Runnable() {
-		@Override
-		public void run() {
-			Log.v("Refresh", "refreshing room info");
-			refreshData();
-			startAutoRefreshData();
-		}
-	};
-	
-	final int DEFAULT_BOOK_NOW_DURATION = 30; // mins 
+                TimeSpan reservationTimeSpan = timeSpan;
 
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		requestWindowFeature(Window.FEATURE_NO_TITLE);
-		setContentView(R.layout.room_activity);
-		this.weekView = (WeekView) findViewById(R.id.weekView1);
-		this.roomNameLabel = (TextView) findViewById(R.id.roomNameLabel);
-		this.trafficLights = (RoomTrafficLights) findViewById(R.id.roomTrafficLights);
-		try {
-			currentRoom = (Room) getIntent().getSerializableExtra(ROOM_EXTRA);
-		} catch (ClassCastException e) {
-			throw new IllegalArgumentException("No room found as Serializable extra " + ROOM_EXTRA);
-		}
-		if (currentRoom == null) {
-			throw new IllegalArgumentException(
-					"No room found as Serializable extra " + ROOM_EXTRA);
-		}
+                // if time span is greater than hour do stuff
+                if (timeSpan.getLength() > 60 * 60000) {
+                    DateTime start = timeSpan.getStart();
+                    DateTime end = timeSpan.getEnd();
 
-		findViewById(R.id.seeAllRoomsButton).setOnClickListener(
-				new OnClickListener() {
-					@Override
-					public void onClick(View v) {
-						RoomActivity.this.finish();
-					}
-				});
+                    DateTime now = new DateTime();
 
-		weekView.setOnFreeTimeClickListener(new OnFreeTimeClickListener() {
-			@Override
-			public void onFreeTimeClick(View v, TimeSpan timeSpan, DateTime touch) {
+                    touch = touch.stripMinutes();
 
-				TimeSpan reservationTimeSpan = timeSpan;
+                    if (touch.before(start)) {
+                        touch = start;
+                    }
+                    if (touch.before(now) && now.before(end)) {
+                        touch = now;
+                    }
 
-				// if time span is greater than hour do stuff
-				if (timeSpan.getLength() > 60*60000) {
-					DateTime start = timeSpan.getStart();
-					DateTime end = timeSpan.getEnd();
+                    reservationTimeSpan = new TimeSpan(touch, Calendar.HOUR, 1);
+                    DateTime touchend = reservationTimeSpan.getEnd();
 
-					DateTime now = new DateTime();
+                    // quantize end to 15min steps
+                    touchend = touchend.set(Calendar.MINUTE, (touchend.get(Calendar.MINUTE) / 15) * 15);
 
-					touch = touch.stripMinutes();
+                    if (touchend.after(end)) {
+                        reservationTimeSpan.setEnd(end);
+                    }
+                }
 
-					if (touch.before(start)) {
-						touch = start;
-					}
-					if (touch.before(now) && now.before(end)) {
-						touch = now;
-					}
+                final RoomReservationPopup d = new RoomReservationPopup(RoomActivity.this, timeSpan, reservationTimeSpan, currentRoom);
+                d.setOnReserveCallback(new OnReserveListener() {
+                    @Override
+                    public void call(LobbyReservationRowView v) {
+                        d.dismiss();
+                        refreshData();
+                    }
+                });
 
-					reservationTimeSpan = new TimeSpan(touch, Calendar.HOUR, 1);
-					DateTime touchend = reservationTimeSpan.getEnd();
+                RoomActivity.this.trafficLights.disable();
+                d.setOnDismissListener(new OnDismissListener() {
+                    @Override
+                    public void onDismiss(DialogInterface dialog) {
+                        RoomActivity.this.trafficLights.enable();
+                    }
+                });
 
-					// quantize end to 15min steps
-					touchend = touchend.set(Calendar.MINUTE, (touchend.get(Calendar.MINUTE) / 15) * 15);
+                d.show();
+            }
+        });
 
-					if (touchend.after(end)) {
-						reservationTimeSpan.setEnd(end);
-					}
-				}
+        trafficLights.setBookNowListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!currentRoom.isFree()) return;
+                TimeSpan limits = currentRoom.getNextFreeTime();
 
-				final RoomReservationPopup d = new RoomReservationPopup(RoomActivity.this, timeSpan, reservationTimeSpan, currentRoom);
-				d.setOnReserveCallback(new OnReserveListener() {
-					@Override
-					public void call(LobbyReservationRowView v) {
-						d.dismiss();
-						refreshData();
-					}
-				});
+                DateTime now = new DateTime();
+                TimeSpan suggested = new TimeSpan(now, now.add(Calendar.MINUTE, DEFAULT_BOOK_NOW_DURATION));
 
-				RoomActivity.this.trafficLights.disable();
-				d.setOnDismissListener(new OnDismissListener() {
-					@Override
-					public void onDismiss(DialogInterface dialog) {
-						RoomActivity.this.trafficLights.enable();
-					}
-				});
+                if (limits == null) {
+                    // No next free time was found. Use the suggested time.
+                    limits = suggested;
+                } else if (limits.getEnd().before(suggested.getEnd())) {
+                    // The next free time ends before the suggested time.
+                    suggested = limits;
+                }
 
-				d.show();
-			}
-		});
-		
-		trafficLights.setBookNowListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				if (!currentRoom.isFree()) return;
-				TimeSpan limits = currentRoom.getNextFreeTime();
+                final RoomReservationPopup d = new RoomReservationPopup(RoomActivity.this, limits, suggested, currentRoom);
+                d.setOnReserveCallback(new OnReserveListener() {
+                    @Override
+                    public void call(LobbyReservationRowView v) {
+                        d.dismiss();
+                        refreshData();
+                    }
+                });
 
-				DateTime now = new DateTime();
-				TimeSpan suggested = new TimeSpan(now, now.add(Calendar.MINUTE, DEFAULT_BOOK_NOW_DURATION));
+                RoomActivity.this.trafficLights.disable();
+                d.setOnDismissListener(new OnDismissListener() {
+                    @Override
+                    public void onDismiss(DialogInterface dialog) {
+                        RoomActivity.this.trafficLights.enable();
+                    }
+                });
 
-				if (limits == null) {
-					// No next free time was found. Use the suggested time.
-					limits = suggested;
-				} else if (limits.getEnd().before(suggested.getEnd())) {
-					// The next free time ends before the suggested time.
-					suggested = limits;
-				}
+                d.show();
+            }
+        });
 
-				final RoomReservationPopup d = new RoomReservationPopup(RoomActivity.this, limits, suggested, currentRoom);
-				d.setOnReserveCallback(new OnReserveListener() {
-					@Override
-					public void call(LobbyReservationRowView v) {
-						d.dismiss();
-						refreshData();
-					}
-				});
+        weekView.setOnReservationClickListener(new OnReservationClickListener() {
+            @Override
+            public void onReservationClick(View v, Reservation reservation) {
+                final EditReservationPopup d = new EditReservationPopup(RoomActivity.this, reservation, currentRoom,
+                    new EditReservationPopup.OnReservationCancelledListener() {
+                        @Override
+                        public void onReservationCancelled(Reservation r) {
+                            refreshData();
+                        }
+                    });
 
-				RoomActivity.this.trafficLights.disable();
-				d.setOnDismissListener(new OnDismissListener() {
-					@Override
-					public void onDismiss(DialogInterface dialog) {
-						RoomActivity.this.trafficLights.enable();
-					}
-				});
+                RoomActivity.this.trafficLights.disable();
+                d.setOnDismissListener(new OnDismissListener() {
+                    @Override
+                    public void onDismiss(DialogInterface dialog) {
+                        RoomActivity.this.trafficLights.enable();
+                    }
+                });
 
-				d.show();
-			}
-		});
+                d.show();
+            }
+        });
+    }
 
-		weekView.setOnReservationClickListener(new OnReservationClickListener() {
-			@Override
-			public void onReservationClick(View v, Reservation reservation) {
-				final EditReservationPopup d = new EditReservationPopup(RoomActivity.this, reservation, currentRoom,
-					new EditReservationPopup.OnReservationCancelledListener() {
-						@Override
-						public void onReservationCancelled(Reservation r) {
-							refreshData();
-						}
-					});
+    @Override
+    public void onResume() {
+        proxy = this.getResApplication().getDataProxy();
+        proxy.addDataUpdatedListener(this);
+        refreshData();
+        startAutoRefreshData();
+        super.onResume();
+        trafficLights.enable();
+    }
 
-				RoomActivity.this.trafficLights.disable();
-				d.setOnDismissListener(new OnDismissListener() {
-					@Override
-					public void onDismiss(DialogInterface dialog) {
-						RoomActivity.this.trafficLights.enable();
-					}
-				});
-				
-				d.show();
-			}
-		});
-	}
+    @Override
+    public void onPause() {
+        stopAutoRefreshData();
+        super.onPause();
+        this.getResApplication().getDataProxy().removeDataUpdatedListener(this);
+        if (progressDialog != null) {
+            progressDialog.dismiss();
+            progressDialog = null;
+        }
+        showLoadingCount = 0;
+        trafficLights.disable();
+    }
 
-	/**
-	 * Helper for starting a RoomActivity 
-	 * @param context
-	 * @param room
-	 */
-	public static void startWith(Context context, Room room) {
-		Intent i = new Intent(context, RoomActivity.class);
-		i.putExtra(ROOM_EXTRA, room);
-		context.startActivity(i);
-	}
-	
-	@Override
-	public void onResume() {
-		proxy = this.getResApplication().getDataProxy();
-		proxy.addDataUpdatedListener(this);
-		refreshData();
-		startAutoRefreshData();
-		super.onResume();
-		trafficLights.enable();
-	}
+    private void setRoom(Room r) {
+        currentRoom = r;
+        roomNameLabel
+            .setText(currentRoom.getName());
+        weekView.refreshData(currentRoom);
+        trafficLights.update(currentRoom);
+    }
 
-	@Override
-	public void onPause() {
-		stopAutoRefreshData();
-		super.onPause();
-		this.getResApplication().getDataProxy().removeDataUpdatedListener(this);
-		if (progressDialog != null) {
-			progressDialog.dismiss();
-			progressDialog = null;
-		}
-		showLoadingCount = 0;
-		trafficLights.disable();
-	}
-	
-	private void setRoom(Room r) {
-		currentRoom = r;
-		roomNameLabel
-				.setText(currentRoom.getName());
-		weekView.refreshData(currentRoom);
-		trafficLights.update(currentRoom);
-	}
-	
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		refreshMenu = menu.add("Refresh").setOnMenuItemClickListener(this);
-		refreshMenu.setIcon(android.R.drawable.ic_popup_sync);
-		settingsMenu = menu.add("Settings").setOnMenuItemClickListener(this);
-		settingsMenu.setIcon(android.R.drawable.ic_menu_preferences);
-		aboutMenu = menu.add("About").setOnMenuItemClickListener(this);
-		return true;
-	}
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        refreshMenu = menu.add("Refresh").setOnMenuItemClickListener(this);
+        refreshMenu.setIcon(android.R.drawable.ic_popup_sync);
+        settingsMenu = menu.add("Settings").setOnMenuItemClickListener(this);
+        settingsMenu.setIcon(android.R.drawable.ic_menu_preferences);
+        aboutMenu = menu.add("About").setOnMenuItemClickListener(this);
+        return true;
+    }
 
-	@Override
-	public boolean onMenuItemClick(MenuItem item) {
-		if (item == settingsMenu) {
-			Intent i = new Intent(this, SettingsActivity.class);
-			startActivity(i);
-		} else if (item == refreshMenu) {
-			refreshData();
-		} else if (item == aboutMenu) {
-			SpannableString s = new SpannableString(getString(R.string.aboutInfo));
-		    Linkify.addLinks(s, Linkify.ALL);
+    @Override
+    public boolean onMenuItemClick(MenuItem item) {
+        if (item == settingsMenu) {
+            Intent i = new Intent(this, SettingsActivity.class);
+            startActivity(i);
+        } else if (item == refreshMenu) {
+            refreshData();
+        } else if (item == aboutMenu) {
+            SpannableString s = new SpannableString(getString(R.string.aboutInfo));
+            Linkify.addLinks(s, Linkify.ALL);
 
-			Builder aboutBuilder = new AlertDialog.Builder(this);
-			aboutBuilder.setTitle(R.string.aboutTitle);
-			aboutBuilder.setMessage(s);
-			aboutBuilder.setNegativeButton(R.string.close, null);
-			alertDialog = aboutBuilder.show();
+            Builder aboutBuilder = new AlertDialog.Builder(this);
+            aboutBuilder.setTitle(R.string.aboutTitle);
+            aboutBuilder.setMessage(s);
+            aboutBuilder.setNegativeButton(R.string.close, null);
+            alertDialog = aboutBuilder.show();
 
-			//	Makes links clickable.
-			((TextView) alertDialog.findViewById(android.R.id.message)).setMovementMethod(LinkMovementMethod.getInstance());
-		}
-		return true;
-	}
+            //	Makes links clickable.
+            ((TextView) alertDialog.findViewById(android.R.id.message)).setMovementMethod(LinkMovementMethod.getInstance());
+        }
+        return true;
+    }
 
-	public void onUserInteraction() {
-		super.onUserInteraction();
-		stopAutoRefreshData();
-		startAutoRefreshData();
-	}
-	
-	@Override
-	protected Boolean isPrehensible() {
-		String favouriteRoomName = getResApplication().getFavouriteRoomName();
-		return !(currentRoom.getName().equals(favouriteRoomName));
-	}
-	
-	@Override
-	public void onPrehended(){
-		this.finish();
-	}
-	
-	private void refreshData() {
-		//showLoading();
-		if (proxy instanceof CachedDataProxy) {
-			((CachedDataProxy) proxy).forceRefreshRoomReservations(currentRoom);
-		} else {
-			proxy.refreshRoomReservations(currentRoom);
-		}
-	}
-	
-	private void startAutoRefreshData(){
-		handler.postDelayed(refreshDataRunnable, ROOMLIST_REFRESH_PERIOD);
-	}
-	
-	private void stopAutoRefreshData(){
-		handler.removeCallbacks(refreshDataRunnable);
-	}
-	/*
-	 * 
+    public void onUserInteraction() {
+        super.onUserInteraction();
+        stopAutoRefreshData();
+        startAutoRefreshData();
+    }
+
+    @Override
+    protected Boolean isPrehensible() {
+        String favouriteRoomName = getResApplication().getFavouriteRoomName();
+        return !(currentRoom.getName().equals(favouriteRoomName));
+    }
+
+    @Override
+    public void onPrehended() {
+        this.finish();
+    }
+
+    private void refreshData() {
+        //showLoading();
+        if (proxy instanceof CachedDataProxy) {
+            ((CachedDataProxy) proxy).forceRefreshRoomReservations(currentRoom);
+        } else {
+            proxy.refreshRoomReservations(currentRoom);
+        }
+    }
+
+    private void startAutoRefreshData() {
+        handler.postDelayed(refreshDataRunnable, ROOMLIST_REFRESH_PERIOD);
+    }
+
+    private void stopAutoRefreshData() {
+        handler.removeCallbacks(refreshDataRunnable);
+    }
+    /*
+     *
 	 * These do no create any extra value for the user.
 	 * 
 
@@ -350,9 +344,9 @@ public class RoomActivity extends ReservatorActivity implements OnMenuItemClickL
 		}
 	}*/
 
-	@Override
-	public void roomListUpdated(Vector<Room> rooms) {
-		// XXX: todo
+    @Override
+    public void roomListUpdated(Vector<Room> rooms) {
+        // XXX: todo
 		/*
 		for (Room r : rooms) {
 			if (r.getEmail().equals(roomEmail)) {
@@ -364,37 +358,37 @@ public class RoomActivity extends ReservatorActivity implements OnMenuItemClickL
 		// TODO what if the room is not in the list?
 		throw new RuntimeException("Requested room not in the list.");
 		*/
-	}
+    }
 
-	@Override
-	public void roomReservationsUpdated(Room room) {
-		if (currentRoom != null && room.equals(currentRoom)) {
-			setRoom(room);
-		}
-		// let's update the cache (otherwise the changes (eg. new employees) won't be shown in the lists before restart)
-		AddressBook ab = getResApplication().getAddressBook();
-		ab.prefetchEntries();
-		//hideLoading();
-	}
+    @Override
+    public void roomReservationsUpdated(Room room) {
+        if (currentRoom != null && room.equals(currentRoom)) {
+            setRoom(room);
+        }
+        // let's update the cache (otherwise the changes (eg. new employees) won't be shown in the lists before restart)
+        AddressBook ab = getResApplication().getAddressBook();
+        ab.prefetchEntries();
+        //hideLoading();
+    }
 
-	@Override
-	public void refreshFailed(ReservatorException e) {
-		//hideLoading();
-		stopAutoRefreshData();
-		Toast err = Toast.makeText(this, e.getMessage(),
-				Toast.LENGTH_LONG);
-		err.show();
-		startAutoRefreshData();
-		return;
-	}
+    @Override
+    public void refreshFailed(ReservatorException e) {
+        //hideLoading();
+        stopAutoRefreshData();
+        Toast err = Toast.makeText(this, e.getMessage(),
+            Toast.LENGTH_LONG);
+        err.show();
+        startAutoRefreshData();
+        return;
+    }
 
-	@Override
-	public void addressBookUpdated() {
-		// No operation, because the update operation is executed only to refresh the cache.
-	}
+    @Override
+    public void addressBookUpdated() {
+        // No operation, because the update operation is executed only to refresh the cache.
+    }
 
-	@Override
-	public void addressBookUpdateFailed(ReservatorException e) {
-		refreshFailed(e);
-	}
+    @Override
+    public void addressBookUpdateFailed(ReservatorException e) {
+        refreshFailed(e);
+    }
 }
