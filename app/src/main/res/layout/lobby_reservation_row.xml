@@ -114,7 +114,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginBottom="30dp"
-                android:layout_marginTop="30sp" />
+                android:layout_marginTop="30sp"/>
 
             <RelativeLayout
                 android:layout_width="wrap_content"
@@ -143,7 +143,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/autoCompleteTextView1"
-                    android:text="@string/hintText" />
+                    android:text="@string/hintText"/>
 
                 <Button
                     android:id="@+id/reserveButton"
@@ -162,7 +162,7 @@
             <FrameLayout
                 android:layout_width="1dp"
                 android:layout_height="match_parent"
-                android:layout_weight="1" />
+                android:layout_weight="1"/>
 
             <ImageButton
                 android:id="@+id/cancelButton"

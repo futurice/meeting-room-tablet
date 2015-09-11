@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <selector xmlns:android="http://schemas.android.com/apk/res/android"
-    android:constantSize="true">
+          android:constantSize="true">
     <item
-        android:state_pressed="true" 
-        android:drawable="@drawable/traffic_lights_button_shape_pressed_yellow" />
-	<item 
-	    android:drawable="@drawable/traffic_lights_button_shape_normal" />
+        android:state_pressed="true"
+        android:drawable="@drawable/traffic_lights_button_shape_pressed_yellow"/>
+    <item
+        android:drawable="@drawable/traffic_lights_button_shape_normal"/>
 </selector>

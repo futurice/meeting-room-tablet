@@ -1,17 +1,17 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/relativeLayout1"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:layout_gravity="center"
-    android:background="#6666"
-    android:isScrollContainer="false" >
+                android:id="@+id/relativeLayout1"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_gravity="center"
+                android:background="#6666"
+                android:isScrollContainer="false">
 
     <FrameLayout
         android:id="@+id/frameLayout1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:background="#fff" >
+        android:background="#fff">
 
         <com.futurice.android.reservator.view.LobbyReservationRowView
             android:id="@+id/roomReservationView1"
@@ -19,7 +19,7 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:background="@drawable/popup_background"
-            android:padding="10dp" />
+            android:padding="10dp"/>
     </FrameLayout>
 
 </RelativeLayout>

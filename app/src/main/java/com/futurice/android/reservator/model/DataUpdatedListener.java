@@ -4,11 +4,13 @@ import java.util.Vector;
 
 /**
  * Callbacks for DataProxy updates and exceptions. All callbacks are in separate threads (non-ui).
- * @author vman
  *
+ * @author vman
  */
 public interface DataUpdatedListener {
-	public void roomListUpdated(Vector<Room> rooms);
-	public void roomReservationsUpdated(Room room);
-	public void refreshFailed(ReservatorException ex);
+    public void roomListUpdated(Vector<Room> rooms);
+
+    public void roomReservationsUpdated(Room room);
+
+    public void refreshFailed(ReservatorException ex);
 }

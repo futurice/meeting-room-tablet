@@ -13,95 +13,96 @@ import android.widget.Toast;
 
 public class ReservatorActivity extends Activity {
 
-	private final ReservatorAppHandler handler = new ReservatorAppHandler();
-	static class ReservatorAppHandler extends Handler{
-		@Override
-		public void handleMessage(Message msg){
-			return;
-		}
-	}
+    private final ReservatorAppHandler handler = new ReservatorAppHandler();
+    private GoToFavouriteRoom goToFavouriteRoomRunable;
 
-	private GoToFavouriteRoom goToFavouriteRoomRunable;
-	class GoToFavouriteRoom implements Runnable {
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        this.getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN | WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        goToFavouriteRoomRunable = new GoToFavouriteRoom(this);
+    }
 
-		ReservatorActivity activity;
+    public void onResume() {
+        super.onResume();
+        startAutoGoToFavouriteRoom();
+    }
 
-		public GoToFavouriteRoom(ReservatorActivity anAct){
-			activity = anAct;
-		}
+    public void onPause() {
+        super.onPause();
+        stopAutoGoToFavouriteRoom();
+    }
 
-		@Override
-		public void run() {
-			String roomName = activity.getResApplication().getFavouriteRoomName();
-			if (roomName != getString(R.string.lobbyRoomName)){
-				Room room;
-				try {
-					room = activity.getResApplication().getDataProxy().getRoomWithName(roomName);
-				} catch (ReservatorException ex) {
-					Toast err = Toast.makeText(activity, ex.getMessage(),
-							Toast.LENGTH_LONG);
-					err.show();
-					return;
-				}
-				RoomActivity.startWith(activity, room);
-			}
-			activity.onPrehended();
-		}
-	}
+    public void onUserInteraction() {
+        super.onUserInteraction();
+        stopAutoGoToFavouriteRoom();
+        startAutoGoToFavouriteRoom();
+    }
 
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		this.getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN | WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-		goToFavouriteRoomRunable = new GoToFavouriteRoom(this);
-	}
+    /**
+     * @return Identical to getApplication, but returns a ReservatorApplication.
+     */
+    public ReservatorApplication getResApplication() {
+        return (ReservatorApplication) getApplication();
+    }
 
-	public void onResume() {
-		super.onResume();
-		startAutoGoToFavouriteRoom();
-	}
+    /**
+     * Hook to execute actions when the activity has been prehended
+     */
+    public void onPrehended() {
 
-	public void onPause() {
-		super.onPause();
-		stopAutoGoToFavouriteRoom();
-	}
+    }
 
-	public void onUserInteraction() {
-		super.onUserInteraction();
-		stopAutoGoToFavouriteRoom();
-		startAutoGoToFavouriteRoom();
-	}
+    /**
+     * @return false to forbid the application to prehend the activity and go to favourite room, true to allow that.
+     */
+    protected Boolean isPrehensible() {
+        return false;
+    }
 
-	/**
-	 * @return Identical to getApplication, but returns a ReservatorApplication.
-	 */
-	public ReservatorApplication getResApplication(){
-		return (ReservatorApplication) getApplication();
-	}
+    private void startAutoGoToFavouriteRoom() {
+        if (isPrehensible()) {
+            handler.postDelayed(goToFavouriteRoomRunable, 60000);
+        }
+    }
 
-	/**
-	 * Hook to execute actions when the activity has been prehended
-	 */
-	public void onPrehended(){
+    private void stopAutoGoToFavouriteRoom() {
+        if (isPrehensible()) {
+            handler.removeCallbacks(goToFavouriteRoomRunable);
+        }
+    }
 
-	}
+    static class ReservatorAppHandler extends Handler {
+        @Override
+        public void handleMessage(Message msg) {
+            return;
+        }
+    }
 
-	/**
-	 * @return false to forbid the application to prehend the activity and go to favourite room, true to allow that.
-	 */
-	protected Boolean isPrehensible(){
-		return false;
-	}
+    class GoToFavouriteRoom implements Runnable {
 
-	private void startAutoGoToFavouriteRoom() {
-		if (isPrehensible()){
-			handler.postDelayed(goToFavouriteRoomRunable, 60000);
-		}
-	}
+        ReservatorActivity activity;
 
-	private void stopAutoGoToFavouriteRoom() {
-		if (isPrehensible()){
-			handler.removeCallbacks(goToFavouriteRoomRunable);
-		}
-	}
+        public GoToFavouriteRoom(ReservatorActivity anAct) {
+            activity = anAct;
+        }
+
+        @Override
+        public void run() {
+            String roomName = activity.getResApplication().getFavouriteRoomName();
+            if (roomName != getString(R.string.lobbyRoomName)) {
+                Room room;
+                try {
+                    room = activity.getResApplication().getDataProxy().getRoomWithName(roomName);
+                } catch (ReservatorException ex) {
+                    Toast err = Toast.makeText(activity, ex.getMessage(),
+                        Toast.LENGTH_LONG);
+                    err.show();
+                    return;
+                }
+                RoomActivity.startWith(activity, room);
+            }
+            activity.onPrehended();
+        }
+    }
 
 }
