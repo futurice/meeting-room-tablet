@@ -62,4 +62,6 @@
     <string name="googleAccountHelp">Account or accounts used for searching rooms.</string>
     <string name="defaultTitleForReservation">Reserved</string>
     <string name="hintText">Hint: You can use your tablet\'s address book contacts for reserving.</string>
+    <string name="quick_book">Quick Book</string>
+    <string name="last_synced">Last synced:</string>
 </resources>
