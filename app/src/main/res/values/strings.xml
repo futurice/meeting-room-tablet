@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="hello">Hello World, Reservator!</string>
-    <string name="app_name">Reservator</string>
+    <string name="app_name">PowerDMS Reservator</string>
     <string name="get_a_room">Get a room!</string>
     <string name="start">start</string>
     <string name="end">end</string>
