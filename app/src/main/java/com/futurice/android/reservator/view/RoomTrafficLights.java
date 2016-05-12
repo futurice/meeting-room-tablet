@@ -82,6 +82,7 @@ public class RoomTrafficLights extends RelativeLayout {
         this.bookNowListener = l;
     }
 
+    //set color for status view
     public void update(Room room) {
         updateConnected();
 

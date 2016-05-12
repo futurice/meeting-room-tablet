@@ -1,5 +1,7 @@
 package com.futurice.android.reservator.model;
 
+import com.futurice.android.reservator.common.Helpers;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -7,11 +9,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Vector;
 
-import com.futurice.android.reservator.common.Helpers;
-
 public class Room implements Serializable {
     // Rooms that are free for no more than this long to future are considered "reserved" (not-bookable)
-    static public final int RESERVED_THRESHOLD_MINUTES = 30;
+    static public final int RESERVED_THRESHOLD_MINUTES = 15;
     private static final long serialVersionUID = 1L;
     // Rooms that are free for this long to future are considered "free"
     static private final int FREE_THRESHOLD_MINUTES = 180;
