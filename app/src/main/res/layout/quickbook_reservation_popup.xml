@@ -1,48 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent" android:layout_height="match_parent"
-    android:background="@color/MenuButtonBackgroundColor">
+    android:background="@color/MenuButtonBackgroundColor"
+    android:id="@+id/quickRelativeLayout" >
 
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true"
-        android:id="@+id/relativeLayout2">
+        android:id="@+id/quickRelativeLayout2">
 
         <Button
-            android:layout_width="140dp"
-            android:layout_height="80dp"
+            android:layout_width="240dp"
+            android:layout_height="100dp"
             android:text="15"
             android:id="@+id/fifteenMinutes"
-            android:layout_alignParentTop="true" />
+            android:layout_alignParentTop="true"
+            android:layout_marginRight="20dp"
+            android:layout_marginBottom="20dp" />
 
         <Button
-            android:layout_width="140dp"
-            android:layout_height="80dp"
+            android:layout_width="240dp"
+            android:layout_height="100dp"
             android:text="30"
             android:id="@+id/thirtyMinutes"
             android:layout_alignParentTop="true"
             android:layout_toRightOf="@+id/fifteenMinutes"
-            android:layout_toEndOf="@+id/fifteenMinutes" />
+            android:layout_toEndOf="@+id/fifteenMinutes"
+            android:layout_marginLeft="20dp"
+            android:layout_marginBottom="20dp" />
 
         <Button
-            android:layout_width="140dp"
-            android:layout_height="80dp"
+            android:layout_width="240dp"
+            android:layout_height="100dp"
             android:text="45"
             android:id="@+id/fortyFiveMinutes"
             android:layout_below="@+id/fifteenMinutes"
             android:layout_toLeftOf="@+id/thirtyMinutes"
-            android:layout_toStartOf="@+id/thirtyMinutes" />
+            android:layout_toStartOf="@+id/thirtyMinutes"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="20dp" />
 
         <Button
-            android:layout_width="140dp"
-            android:layout_height="80dp"
+            android:layout_width="240dp"
+            android:layout_height="100dp"
             android:text="60"
             android:id="@+id/sixtyMinutes"
             android:layout_alignTop="@+id/fortyFiveMinutes"
             android:layout_toRightOf="@+id/fortyFiveMinutes"
-            android:layout_toEndOf="@+id/fortyFiveMinutes" />
+            android:layout_toEndOf="@+id/fortyFiveMinutes"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="20dp" />
 
     </RelativeLayout>
 
@@ -51,9 +60,9 @@
         android:layout_height="wrap_content"
         android:text="Select Time: "
         android:id="@+id/textView"
-        android:layout_above="@+id/relativeLayout2"
-        android:layout_alignLeft="@+id/relativeLayout2"
-        android:layout_alignStart="@+id/relativeLayout2"
+        android:layout_above="@+id/quickRelativeLayout2"
+        android:layout_alignLeft="@+id/quickRelativeLayout2"
+        android:layout_alignStart="@+id/quickRelativeLayout2"
         android:layout_marginBottom="43dp" />
 
     <Button
@@ -61,12 +70,10 @@
         android:layout_height="wrap_content"
         android:text="Book Now"
         android:id="@+id/submitQuickMeeting"
-        android:layout_below="@+id/relativeLayout2"
-        android:layout_alignLeft="@+id/relativeLayout2"
-        android:layout_alignStart="@+id/relativeLayout2"
+        android:layout_below="@+id/quickRelativeLayout2"
+        android:layout_alignLeft="@+id/quickRelativeLayout2"
+        android:layout_alignStart="@+id/quickRelativeLayout2"
         android:layout_marginTop="34dp" />
-
-
 
 </RelativeLayout>
 
