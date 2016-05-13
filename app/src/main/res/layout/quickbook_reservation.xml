@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="match_parent">
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:background="@color/MenuButtonBackgroundColor">
 
     <RelativeLayout
         android:layout_width="wrap_content"
@@ -59,10 +60,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Book Now"
-        android:id="@+id/button5"
+        android:id="@+id/submitQuickMeeting"
         android:layout_below="@+id/relativeLayout2"
         android:layout_alignLeft="@+id/relativeLayout2"
         android:layout_alignStart="@+id/relativeLayout2"
         android:layout_marginTop="34dp" />
 
+
+
 </RelativeLayout>
+

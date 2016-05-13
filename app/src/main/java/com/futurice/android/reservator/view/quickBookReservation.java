@@ -20,6 +20,7 @@ public class QuickBookReservation extends RelativeLayout implements View.OnClick
     Button thirtyMinutes;
     Button fortyFiveMinutes;
     Button sixtyMinutes;
+    Button submitQuickMeeting;
 
     int currentTimeStart;
     int currentTimeEnd;
@@ -47,6 +48,7 @@ public class QuickBookReservation extends RelativeLayout implements View.OnClick
         thirtyMinutes = (Button) findViewById(R.id.thirtyMinutes);
         fortyFiveMinutes = (Button) findViewById(R.id.fortyFiveMinutes);
         sixtyMinutes = (Button) findViewById(R.id.sixtyMinutes);
+        submitQuickMeeting = (Button) findViewById(R.id.submitQuickMeeting);
 
         fifteenMinutes.setOnClickListener(this);
         thirtyMinutes.setOnClickListener(this);
@@ -103,6 +105,8 @@ public class QuickBookReservation extends RelativeLayout implements View.OnClick
             currentTimeEnd = Math.max(end, currentTimeStart + minimumDuration * 4);
 
             DateTime endTime = t.add(Calendar.MINUTE, 60);
+        } else if(v == submitQuickMeeting){
+
         }
 
 
