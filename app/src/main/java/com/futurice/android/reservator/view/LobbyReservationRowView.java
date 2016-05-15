@@ -34,6 +34,8 @@ import com.futurice.android.reservator.model.TimeSpan;
 public class LobbyReservationRowView extends FrameLayout implements
     OnClickListener, OnItemClickListener {
 
+    // TODO: do something
+
     View cancelButton, bookNowButton, reserveButton, calendarButton,
         bookingMode, normalMode, titleView;
     AutoCompleteTextView nameField;

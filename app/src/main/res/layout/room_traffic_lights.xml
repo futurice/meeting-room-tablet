@@ -56,13 +56,13 @@
             android:textIsSelectable="false"/>
 
         <Button
-            android:id="@+id/bookNow"
+            android:id="@+id/quickBook"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="30dp"
             android:layout_centerHorizontal="true"
             android:layout_below="@id/reservationInfo"
-            android:text="@string/bookNow"
+            android:text="@string/quick_book"
             android:textSize="40sp"
             android:textStyle="bold"
             android:textIsSelectable="false"/>
@@ -70,7 +70,7 @@
         <LinearLayout
             android:id="@+id/disconnected"
             android:orientation="vertical"
-            android:layout_below="@id/bookNow"
+            android:layout_below="@id/quickBook"
             android:layout_marginTop="30dp"
             android:layout_centerHorizontal="true"
             android:layout_width="wrap_content"
@@ -97,14 +97,26 @@
     </RelativeLayout>
 
     <TextView
-        android:layout_width="fill_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
         android:textColor="@color/TrafficLightText"
         android:gravity="right"
         android:text="@string/touchToReserve"
         android:textSize="30sp"
         android:textStyle="bold"
         android:textAllCaps="true"
-        android:textIsSelectable="false"/>
+        android:textIsSelectable="false"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="@string/last_synced"
+        android:id="@+id/lastSync"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:textColor="#ffffff" />
 </RelativeLayout>

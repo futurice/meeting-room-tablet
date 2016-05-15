@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="hello">Hello World, Reservator!</string>
-    <string name="app_name">Reservator</string>
+    <string name="app_name">PowerDMS Reservator</string>
     <string name="get_a_room">Get a room!</string>
     <string name="start">start</string>
     <string name="end">end</string>
@@ -62,4 +62,6 @@
     <string name="googleAccountHelp">Account or accounts used for searching rooms.</string>
     <string name="defaultTitleForReservation">Reserved</string>
     <string name="hintText">Hint: You can use your tablet\'s address book contacts for reserving.</string>
+    <string name="quick_book">Quick Book</string>
+    <string name="last_synced">Last synced:</string>
 </resources>

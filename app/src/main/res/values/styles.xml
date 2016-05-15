@@ -48,7 +48,7 @@
     <color name="ButtonTextDisabled">#999</color>
     <color name="TextInfoColor">#666</color>
     <color name="CalendarWeekTextColor">#999</color>
-    <color name="MenuButtonBackgroundColor">#005C99</color>
+    <color name="MenuButtonBackgroundColor">#005c99</color>
     <color name="MenuButtonPressedColor">#00436E</color>
     <color name="MenuButtonInactiveColor">#E3E3E9</color>
 

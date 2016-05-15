@@ -1,12 +1,8 @@
 package com.futurice.android.reservator;
 
-import java.util.Calendar;
-import java.util.Vector;
-
 import android.app.AlertDialog;
-import android.app.Dialog;
-import android.app.ProgressDialog;
 import android.app.AlertDialog.Builder;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnDismissListener;
@@ -32,24 +28,29 @@ import com.futurice.android.reservator.model.CachedDataProxy;
 import com.futurice.android.reservator.model.DataProxy;
 import com.futurice.android.reservator.model.DataUpdatedListener;
 import com.futurice.android.reservator.model.DateTime;
+import com.futurice.android.reservator.model.Reservation;
 import com.futurice.android.reservator.model.ReservatorException;
 import com.futurice.android.reservator.model.Room;
 import com.futurice.android.reservator.model.TimeSpan;
-import com.futurice.android.reservator.model.Reservation;
-import com.futurice.android.reservator.view.LobbyReservationRowView;
-import com.futurice.android.reservator.view.LobbyReservationRowView.OnReserveListener;
-import com.futurice.android.reservator.view.RoomReservationPopup;
 import com.futurice.android.reservator.view.EditReservationPopup;
+import com.futurice.android.reservator.view.QuickBookReservationView;
+import com.futurice.android.reservator.view.RoomQuickReservationPopup;
 import com.futurice.android.reservator.view.RoomTrafficLights;
 import com.futurice.android.reservator.view.WeekView;
 import com.futurice.android.reservator.view.WeekView.OnFreeTimeClickListener;
 import com.futurice.android.reservator.view.WeekView.OnReservationClickListener;
 
+import java.util.Calendar;
+import java.util.Vector;
+
 public class RoomActivity extends ReservatorActivity implements OnMenuItemClickListener,
     DataUpdatedListener, AddressBookUpdatedListener {
+
     public static final String ROOM_EXTRA = "room";
     public static final long ROOMLIST_REFRESH_PERIOD = 60 * 1000;
+
     final Handler handler = new Handler();
+
     final Runnable refreshDataRunnable = new Runnable() {
         @Override
         public void run() {
@@ -58,15 +59,27 @@ public class RoomActivity extends ReservatorActivity implements OnMenuItemClickL
             startAutoRefreshData();
         }
     };
-    final int DEFAULT_BOOK_NOW_DURATION = 30; // mins
+
+    final int DEFAULT_BOOK_NOW_DURATION = 15; // mins
+
     DataProxy proxy;
+
     Room currentRoom;
+
     WeekView weekView;
     TextView roomNameLabel;
+
     RoomTrafficLights trafficLights;
+
+    // Quick book screen
+    // QuickBookReservation quickBookReservation;
+
     MenuItem settingsMenu, refreshMenu, aboutMenu;
+
     AlertDialog alertDialog;
+
     int showLoadingCount = 0;
+
     private ProgressDialog progressDialog = null;
 
     /**
@@ -89,6 +102,12 @@ public class RoomActivity extends ReservatorActivity implements OnMenuItemClickL
         this.weekView = (WeekView) findViewById(R.id.weekView1);
         this.roomNameLabel = (TextView) findViewById(R.id.roomNameLabel);
         this.trafficLights = (RoomTrafficLights) findViewById(R.id.roomTrafficLights);
+
+        // Quick book screen
+        // this.quickBookReservation = (QuickBookReservation) findViewById(R.id.quickBookReservation);
+
+        //quickBookReservation.setVisibility(View.VISIBLE);
+
         try {
             currentRoom = (Room) getIntent().getSerializableExtra(ROOM_EXTRA);
         } catch (ClassCastException e) {
@@ -110,6 +129,8 @@ public class RoomActivity extends ReservatorActivity implements OnMenuItemClickL
         weekView.setOnFreeTimeClickListener(new OnFreeTimeClickListener() {
             @Override
             public void onFreeTimeClick(View v, TimeSpan timeSpan, DateTime touch) {
+
+                // when screen shows FREE room
 
                 TimeSpan reservationTimeSpan = timeSpan;
 
@@ -140,16 +161,29 @@ public class RoomActivity extends ReservatorActivity implements OnMenuItemClickL
                     }
                 }
 
-                final RoomReservationPopup d = new RoomReservationPopup(RoomActivity.this, timeSpan, reservationTimeSpan, currentRoom);
-                d.setOnReserveCallback(new OnReserveListener() {
+//                final RoomReservationPopup d = new RoomReservationPopup(RoomActivity.this, timeSpan, reservationTimeSpan, currentRoom);
+//                d.setOnReserveCallback(new LobbyReservationRowView.OnReserveListener() {
+//                    @Override
+//                    public void call(LobbyReservationRowView v) {
+//                        d.dismiss();
+//                        refreshData();
+//                    }
+//                });
+
+                final RoomQuickReservationPopup d = new RoomQuickReservationPopup(RoomActivity.this, timeSpan, reservationTimeSpan, currentRoom);
+                d.setOnQuickReserveCallback(new QuickBookReservationView.OnQuickReserveListener() {
                     @Override
-                    public void call(LobbyReservationRowView v) {
+                    public void call(QuickBookReservationView v) {
                         d.dismiss();
                         refreshData();
                     }
                 });
 
                 RoomActivity.this.trafficLights.disable();
+
+                // Disable quickbook
+                // RoomActivity.this.quickBookReservation.setVisibility(View.VISIBLE);
+
                 d.setOnDismissListener(new OnDismissListener() {
                     @Override
                     public void onDismiss(DialogInterface dialog) {
@@ -178,10 +212,19 @@ public class RoomActivity extends ReservatorActivity implements OnMenuItemClickL
                     suggested = limits;
                 }
 
-                final RoomReservationPopup d = new RoomReservationPopup(RoomActivity.this, limits, suggested, currentRoom);
-                d.setOnReserveCallback(new OnReserveListener() {
+//                final RoomReservationPopup d = new RoomReservationPopup(RoomActivity.this, limits, suggested, currentRoom);
+//                d.setOnReserveCallback(new OnReserveListener() {
+//                    @Override
+//                    public void call(LobbyReservationRowView v) {
+//                        d.dismiss();
+//                        refreshData();
+//                    }
+//                });
+
+                final RoomQuickReservationPopup d = new RoomQuickReservationPopup(RoomActivity.this, limits, suggested, currentRoom);
+                d.setOnQuickReserveCallback(new QuickBookReservationView.OnQuickReserveListener() {
                     @Override
-                    public void call(LobbyReservationRowView v) {
+                    public void call(QuickBookReservationView v) {
                         d.dismiss();
                         refreshData();
                     }
