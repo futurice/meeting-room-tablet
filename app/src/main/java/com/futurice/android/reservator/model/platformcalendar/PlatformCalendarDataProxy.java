@@ -300,7 +300,6 @@ public class PlatformCalendarDataProxy extends DataProxy {
                     if (location == null || location.isEmpty()) {
                         location = name;
                     }
-
                     rooms.add(new PlatformCalendarRoom(
                         name,
                         result.getString(1),
@@ -427,10 +426,11 @@ public class PlatformCalendarDataProxy extends DataProxy {
                     long start = result.getLong(2);
                     long end = Math.max(start, result.getLong(3));
                     String eventOrganizerAccount = result.getString(4);
+                  //  Log.d("ReservationDetails", "id=" + eventId + ", title=" + title + ", organizer=" + eventOrganizerAccount);
 
                     Reservation res = new Reservation(
                         Long.toString(eventId) + "-" + Long.toString(start),
-                        makeEventTitle(room.getName(), eventId, title, DEFAULT_MEETING_NAME),
+                        makeEventTitle(room.getName(), eventId, title, eventOrganizerAccount, DEFAULT_MEETING_NAME),
                         new TimeSpan(new DateTime(start), new DateTime(end)));
                     if (eventOrganizerAccount != null && calendarAccount.equals(eventOrganizerAccount.toLowerCase())) {
                         res.setIsCancellable(true);
@@ -449,21 +449,29 @@ public class PlatformCalendarDataProxy extends DataProxy {
      * Make a title. We first try to get some sort of an organizer, speaker or attendee name,
      * ignoring empty names and the name of this room and preferring those who have accepted the
      * invitation to those who are unknown/tentative, and those to those who have not declined.
+     * If the name is empty but the email address is not we use the email address
      * <p/>
-     * If that fails to yield a name we use the stored meeting title.
+     * If that fails to yield a name we use the event owner, unless it starts with "futurice.com_"
      * <p/>
      * As a last resort, a "default name" is returned.
      *
      * @author vsin
      */
-    private String makeEventTitle(final String roomName, final long eventId, final String storedTitle, final String defaultTitle) {
+    private String makeEventTitle(final String roomName, final long eventId, final String storedTitle, final String organizer,
+                                  final String defaultTitle) {
         for (String attendee : getAuthoritySortedAttendees(eventId)) {
+          //  Log.d("Attendee", attendee + ", room name = " + roomName + ", organizer = " + organizer);
             if (attendee != null && !attendee.isEmpty() && !attendee.equals(roomName)) {
                 return attendee;
             }
         }
 
-        if (storedTitle != null && !storedTitle.isEmpty()) return storedTitle;
+        if (organizer != null && !organizer.isEmpty() && !organizer.startsWith("futurice.com_")) {
+           // Log.d("Organizer", organizer);
+            return organizer;
+        }
+
+       /// if (storedTitle != null && !storedTitle.isEmpty()) return storedTitle;
         return defaultTitle;
     }
 
@@ -472,6 +480,7 @@ public class PlatformCalendarDataProxy extends DataProxy {
 
         String[] mProjection = {
             CalendarContract.Attendees.ATTENDEE_NAME,
+                CalendarContract.Attendees.ATTENDEE_EMAIL,
             CalendarContract.Attendees.ATTENDEE_RELATIONSHIP,
             CalendarContract.Attendees.ATTENDEE_STATUS};
         String mSelectionClause = CalendarContract.Attendees.EVENT_ID + " = " + eventId;
@@ -488,8 +497,14 @@ public class PlatformCalendarDataProxy extends DataProxy {
         if (result != null) {
             if (result.getCount() > 0) {
                 result.moveToFirst();
+               // Log.d("SortedAttendees", "eventId=" + eventId + ", attendeeName=" + result.getString(0) + ", attendeeEmail=" +
+               //         result.getString(1)+ ", " + result.getCount());
                 do {
-                    attendees.add(result.getString(0));
+                    if (result.getString(0) != null && !result.getString(0).isEmpty()) {
+                        attendees.add(result.getString(0));
+                    } else {
+                        attendees.add(result.getString(1));
+                    }
                 } while (result.moveToNext());
             }
             result.close();
