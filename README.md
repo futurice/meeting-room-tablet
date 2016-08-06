@@ -35,6 +35,7 @@ People who have contributed to Reservator:
 * [Olli Jarva](https://github.com/ojarva)
 * [Pekka Pulli](https://github.com/pekkapulli)
 * [Ville Tainio](https://github.com/Wisheri)
+* [Vera Izrailit](https://github.com/izrailit)
 
 Support
 -------
