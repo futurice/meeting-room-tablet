@@ -39,6 +39,7 @@ public class PlatformCalendarDataProxy extends DataProxy {
     private final String DEFAULT_MEETING_NAME = "Reserved";
     private final String GOOGLE_ACCOUNT_TYPE = "com.google";
     private final String CALENDAR_SYNC_AUTHORITY = "com.android.calendar";
+    private final String RESOURCE_CALENDAR_TYPE = "resource.calendar.google.com";
     // Event fetch window (if we try to query all events it's very, very slow)
     private final long EVENT_SELECTION_PERIOD_BACKWARD = 24 * 60 * 60 * 1000; // One day
     private final long EVENT_SELECTION_PERIOD_FORWARD = 11 * 24 * 60 * 60 * 1000; // 11 days
@@ -451,7 +452,7 @@ public class PlatformCalendarDataProxy extends DataProxy {
      * invitation to those who are unknown/tentative, and those to those who have not declined.
      * If the name is empty but the email address is not we use the email address
      * <p/>
-     * If that fails to yield a name we use the event owner, unless it starts with "futurice.com_"
+     * If that fails to yield a name we use the event owner, unless it ends with "resource.calendar.google.com"
      * <p/>
      * As a last resort, a "default name" is returned.
      *
@@ -460,15 +461,19 @@ public class PlatformCalendarDataProxy extends DataProxy {
     private String makeEventTitle(final String roomName, final long eventId, final String storedTitle, final String organizer,
                                   final String defaultTitle) {
         for (String attendee : getAuthoritySortedAttendees(eventId)) {
-          //  Log.d("Attendee", attendee + ", room name = " + roomName + ", organizer = " + organizer);
             if (attendee != null && !attendee.isEmpty() && !attendee.equals(roomName)) {
                 return attendee;
             }
         }
 
-        if (organizer != null && !organizer.isEmpty() && !organizer.startsWith("futurice.com_")) {
-           // Log.d("Organizer", organizer);
-            return organizer;
+        if (organizer != null && !organizer.isEmpty()) {
+            final int atIndex = organizer.indexOf("@");
+            final String domain = organizer.substring(atIndex + 1);
+
+            // Do not show resource calendar as an organizer.
+            if (!domain.equals(RESOURCE_CALENDAR_TYPE)) {
+                return organizer;
+            }
         }
 
        /// if (storedTitle != null && !storedTitle.isEmpty()) return storedTitle;
