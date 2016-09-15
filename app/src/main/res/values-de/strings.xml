@@ -63,4 +63,8 @@
     <string name="googleAccountHelp">Konto oder Konten, welche benutzt werden um Räume zu suchen.</string>
     <string name="defaultTitleForReservation">reserviert</string>
     <string name="hintText">Tipp: Sie können die Kontakte aus dem Adressbuch Ihres/Ihrer Tablet/ -s zum reservieren benutzen.</string>
+
+    <string name="language">Sprache:</string>
+    <string name="language_De">Deutsch</string>
+    <string name="language_En">Englisch</string>
 </resources>
