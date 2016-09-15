@@ -2,32 +2,47 @@
 <resources>
     <string name="hello">Hello World, Reservator!</string>
     <string name="app_name">Reservator</string>
-    <string name="get_a_room">Get a room!</string>
-    <string name="start">start</string>
-    <string name="end">end</string>
-    <string name="reserve">reserve</string>
+
+    <!--Login-->
     <string name="login">Login</string>
     <string name="username_hint">username</string>
     <string name="password_hint">password</string>
     <string name="exchange_username">Exchange username:</string>
     <string name="exchange_password">Exchange password:</string>
+    <string name="googleCalendarOk">Google Calendar OK</string>
+    <string name="googleCalendarPending">Google Calendar pending…</string>
+    <string name="googleContactsOk">Google Contacts OK</string>
+    <string name="googleContactsPending">Google Contacts pending…</string>
     <string name="fum_username">FUM3 username:</string>
     <string name="fum_password">FUM3 password:</string>
     <string name="default_fum_username">roomreservator</string>
     <string name="default_exchange_username">reserve@futurice.com</string>
-    <string name="reservationTextTemplate">Reserved: ^1</string>
-    <string name="book_now">Book now</string>
-    <string name="dateLabelFormat">EEEE, MMM. d</string>
-    <string name="weekLabelFormat">\'Week\' w</string>
-    <string name="from">From </string>
-    <string name="to">To </string>
-    <string name="goBackBtn">Go back!</string>
-    <string name="continueBtn">Continue</string>
-    <string name="doNotModify">Do not modify these settings, go away!</string>
-    <string name="onlyItTeamShouldModify">Only IT team should modify these settings.</string>
-    <string name="seeAllRooms">All rooms</string>
     <string name="exchange_server_address">Exchange server address</string>
-    <string name="room_name">Name of the default room</string>
+    <string name="calendarError">Google Calendar error</string>
+    <string name="noCalendarsError">No meeting room calendars found. Please ensure that a Google Account has been configured on this device and that Google Calendar has been set to sync the meeting room calendars.</string>
+    <string name="loadingText">Loading</string>
+
+    <!--AccountSelection-->
+    <string name="selectGoogleAccount">Select Google Account</string>
+    <string name="accountForServation">reservationAccount</string>
+    <string name="googleAccountType">com.google</string>
+
+    <!-- Lobby-->
+    <string name="lobbyRoomName">Lobby</string>
+    <string name="refresh">Refresh</string>
+    <string name="refreshRoomList">Refreshing room list…</string>
+    <string name="setting">Settings</string>
+    <string name="aboutTitle">About</string>
+    <string name="aboutInfo">Reservator is made by Futurice, a lean service creation company with offices in Helsinki, Tampere, Berlin and London. More information at: www.futurice.com.\n\nThis application is published under the BSD license. You can find the source code at: http://github.com/futurice/meeting-room-tablet</string>
+    <string name="hintText">Hint: You can use your tablet\'s address book contacts for reserving.</string>
+    <string name="book_now">Book now</string>
+    <string name="faildUser">No such user, try again</string>
+    <string name="faildCheckSettings">No account for reservation stored. Check your settings.</string>
+
+    <!--Settings-->
+    <string name="language">Language:</string>
+    <string name="language_De">german</string>
+    <string name="language_En">english</string>
     <string name="PREFERENCES_NAME">ReservatorPreferences</string>
     <string name="PREFERENCES_SERVER_ADDRESS">serverAddress</string>
     <string name="PREFERENCES_ROOM_NAME">roomName</string>
@@ -37,35 +52,88 @@
     <string name="PREFERENCES_FUM_PASSWORD">fumPassword</string>
     <string name="PREFERENCES_UNSELECTED_ROOMS">unselectedRooms</string>
     <string name="PREFERENCES_GOOGLE_ACCOUNT">googleAccount</string>
+    <string name="PREFERENCES_LANGUAGE">language</string>
     <string name="removeUserData">Remove login info and reset settings</string>
-    <string name="lobbyRoomName">Lobby</string>
-    <string name="calendarError">Google Calendar error</string>
-    <string name="noCalendarsError">No meeting room calendars found. Please ensure that a Google Account has been configured on this device and that Google Calendar has been set to sync the meeting room calendars.</string>
+    <string name="settingsDefaultAccountForReservation">Select account for reserving</string>
+    <string name="settingsReset">Removed credentials and reseted settings</string>
+    <string name="settingsSaved">Settings saved</string>
+    <string name="addressBookHelpText">If this option is enabled, reserving with the tabletrequires entering a valid name that is synced to the accounts address book contacts.</string>
+    <string name="googleAccountHelp">Account or accounts used for searching rooms.</string>
+    <string name="addressBookOptionLabel">Require address book contacts for reserving</string>
+    <string name="continueBtn">Continue</string>
+    <string name="doNotModify">Do not modify these settings, go away!</string>
+    <string name="onlyItTeamShouldModify">Only IT team should modify these settings.</string>
+    <string name="goBackBtn">Go back!</string>
+    <string name="room_name">Name of the default room</string>
     <string name="close">Close</string>
-    <string name="calendarAccountGlob">*@resource.calendar.google.com</string>
     <string name="used_google_account">Used Google Account</string>
     <string name="allAccountsMagicWord">(All)</string>
     <string name="shown_rooms">Visible rooms</string>
+
+    <!--Room-->
+    <string name="refreshRoom">refreshing room info</string>
+    <string name="defaultTitleForReservation">Reserved</string>
+    <string name="from">From </string>
+    <string name="forX">for </string>
+    <string name="to">To </string>
+    <string name="free">Free </string>
+    <string name="freeFor">Free for </string>
+    <string name="freeIn">Free in </string>
+    <string name="freeAt">Free at </string>
+    <string name="freeDay">for the day</string>
+    <string name="get_a_room">Get a room!</string>
+    <string name="reserve">reserve</string>
+    <string name="reservationTextTemplate">Reserved: ^1</string>
+    <string name="seeAllRooms">All rooms</string>
+    <string name="faildReservation">Failed to put reservation</string>
+
+    <!--Calendar-->
+    <string name="dateLabelFormat">EEEE, MMM. d</string>
+    <string name="weekLabelFormat">\'Week\' w</string>
+    <string name="visualizer">Drew CalendarVisualizer in </string>
+    <string name="visualizerTime">Calendar visualizer touched time: </string>
+    <string name="timeSpan">timespan: </string>
+    <string name="reservationDone">Set reservations done in </string>
+
+    <!--Time-->
+    <string name="minutes"> minutes</string>
+    <string name="minute"> minute</string>
+    <string name="halfHour"> half an hour</string>
+    <string name="hour"> an hour</string>
+    <string name="threeQuartershour"> 45 minuten</string>
+    <string name="hourAndHalf"> an hour and a half</string>
+    <string name="hours"> hours</string>
+    <string name="day"> day</string>
+    <string name="days"> days</string>
+
+    <!--TimeSpan-->
+    <string name="start">start</string>
+    <string name="end">end</string>
+    <string name="negativeTime">No negative time allowed</string>
+    <string name="negativeTimeMinus">No negative time allowed — </string>
+    <string name="negativeTimeCount">No negative time allowed — count: </string>
+    <string name="negativeTimeStart">No negative time allowed — setStart</string>
+    <string name="negativeTimeEnd">No negative time allowed — setEnd</string>
+    <string name="startTimeAfterEndTime">setting startTime after endTime</string>
+    <string name="startTimeOutsideMinMax">setting startTime outside of minmax</string>
+    <string name="endTimeOutsideMinMax">setting endTime outside of minmax</string>
+    <string name="endTimeBeforeStartTime">setting endTime before startTime</string>
+    <string name="maximumBeforeMin">setting maximumTime to be before the minimum</string>
+    <string name="minumumAfterMax">setting minimumTime to be after the maximum</string>
+
+    <!--ReservatorExceptions-->
+    <string name="roomDeleted">Room calendar has been deleted</string>
+    <string name="parsID">Could not parse reservation ID</string>
+    <string name="syncGoogleCalRequest">Calendar sync requested on </string>
+    <string name="syncGoogleCalActiv">Calendar sync was active on</string>
+    <string name="syncGoogleCalNotSync">Calendar is not syncable on </string>
+    <string name="initiateNot">Could not initiate sync on account  </string>
+
+    <string name="calendarAccountGlob">*@resource.calendar.google.com</string>
     <string name="reservationCancelInfo">You can cancel reservations that were originally made from a room tablet</string>
     <string name="touchToReserve">Tap for reservations</string>
     <string name="bookNow">Book Now</string>
     <string name="disconnectedWarning">Disconnected!</string>
-    <string name="aboutInfo">Reservator is made by Futurice, a lean service creation company with offices in Helsinki, Tampere, Berlin and London. More information at: www.futurice.com.\n\nThis application is published under the BSD license. You can find the source code at: http://github.com/futurice/meeting-room-tablet</string>
-    <string name="aboutTitle">About</string>
-    <string name="loadingText">Loading</string>
-    <string name="addressBookOptionLabel">Require address book contacts for reserving</string>
-    <string name="googleAccountType">com.google</string>
-    <string name="selectGoogleAccount">Select Google Account</string>
-    <string name="settingsDefaultAccountForReservation">Select account for reserving</string>
-    <string name="settingsReset">Removed credentials and reseted settings</string>
-    <string name="settingsSaved">Settings saved</string>
-    <string name="accountForServation">reservationAccount</string>
-    <string name="addressBookHelpText">If this option is enabled, reserving with the tablet requires entering a valid name that is synced to the accounts address book contacts.</string>
-    <string name="googleAccountHelp">Account or accounts used for searching rooms.</string>
-    <string name="defaultTitleForReservation">Reserved</string>
-    <string name="hintText">Hint: You can use your tablet\'s address book contacts for reserving.</string>
+    <string name="cancleTitle">Cancel reservation?</string>
 
-    <string name="language">Language:</string>
-    <string name="language_De">german</string>
-    <string name="language_En">english</string>
 </resources>
