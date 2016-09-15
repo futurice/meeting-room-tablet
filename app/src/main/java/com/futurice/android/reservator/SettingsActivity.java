@@ -9,9 +9,11 @@ import android.accounts.AccountManager;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.ListView;
@@ -130,6 +132,9 @@ public class SettingsActivity extends ReservatorActivity {
                 finish();
             }
         });
+
+        Locale currentLocal = this.getResources().getConfiguration().locale;
+        setLanguageSpinner(currentLocal);
     }
 
     @Override
@@ -281,5 +286,53 @@ public class SettingsActivity extends ReservatorActivity {
                 findViewById(R.id.defaultReservationAccountLabel).setVisibility(View.VISIBLE);
             }
         }
+    }
+
+    private void setLanguageSpinner(Locale currentLocal) {
+        Spinner languageSpinner = (Spinner) findViewById(R.id.languageSpinner);
+        List<String> laguages = new ArrayList<>();
+        laguages.add(getString(R.string.language_De));
+        laguages.add(getString(R.string.language_En));
+
+        ArrayAdapter<String> laguageAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, laguages);
+        laguageAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        languageSpinner.setAdapter(laguageAdapter);
+
+        String currentLanguage = currentLocal.getLanguage();
+        if (currentLanguage.equals("en")) {
+            languageSpinner.setSelection(1);
+        }
+
+        final int selectedItem = languageSpinner.getSelectedItemPosition();
+
+        languageSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int itemPosition, long l) {
+                if (itemPosition == selectedItem) {
+                    return;
+                } else {
+                    if (itemPosition == 0) {
+                        setLocale("de");
+                    } else {
+                        setLocale("en");
+                    }
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+    }
+
+    private void setLocale(String language) {
+        Locale locale = new Locale(language);
+        Locale.setDefault(locale);
+        Configuration config = new Configuration();
+        config.locale = locale;
+        this.getBaseContext().getResources().updateConfiguration(config, getBaseContext().getResources().getDisplayMetrics());
+        this.setContentView(R.layout.settings_activity);
+        onResume();
     }
 }
