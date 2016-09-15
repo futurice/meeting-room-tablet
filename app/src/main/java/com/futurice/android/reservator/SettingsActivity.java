@@ -28,6 +28,9 @@ import com.futurice.android.reservator.model.platformcontacts.PlatformContactsAd
 import com.futurice.android.reservator.model.ReservatorException;
 import com.futurice.android.reservator.view.SettingsRoomRowAdapter;
 
+import java.util.List;
+import java.util.Locale;
+
 public class SettingsActivity extends ReservatorActivity {
     private final String GOOGLE_ACCOUNT_TYPE = "com.google";
     Spinner usedAccountView;
