@@ -1,9 +1,5 @@
 package com.futurice.android.reservator;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Map;
-
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.content.Context;
@@ -23,13 +19,16 @@ import android.widget.ToggleButton;
 
 import com.futurice.android.reservator.model.AddressBook;
 import com.futurice.android.reservator.model.DataProxy;
+import com.futurice.android.reservator.model.ReservatorException;
 import com.futurice.android.reservator.model.platformcalendar.PlatformCalendarDataProxy;
 import com.futurice.android.reservator.model.platformcontacts.PlatformContactsAddressBook;
-import com.futurice.android.reservator.model.ReservatorException;
 import com.futurice.android.reservator.view.SettingsRoomRowAdapter;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 public class SettingsActivity extends ReservatorActivity {
     private final String GOOGLE_ACCOUNT_TYPE = "com.google";
@@ -41,6 +40,8 @@ public class SettingsActivity extends ReservatorActivity {
     SharedPreferences settings;
     HashSet<String> unselectedRooms;
     ArrayList<String> roomNames;
+    private  Spinner languageSpinner;
+    private Spinner meetingDesignationView;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -137,7 +138,21 @@ public class SettingsActivity extends ReservatorActivity {
         });
 
         Locale currentLocal = this.getResources().getConfiguration().locale;
-        setLanguageSpinner(currentLocal);
+        languageSpinner = (Spinner) findViewById(R.id.languageSpinner);
+        refreshLanguageSpinner(currentLocal);
+
+        meetingDesignationView = (Spinner) findViewById(R.id.meetingDesignationSpinner);
+        String designation = settings.getString("meetingDesignation","");
+        refreshMeetingTitleSpinner();
+
+        @SuppressWarnings("unchecked")
+        ArrayAdapter<String> meetingDesignationAdapter = (ArrayAdapter<String>) meetingDesignationView.getAdapter();
+        spinnerPosition = 0;
+        if (meetingDesignationAdapter != null) {
+            spinnerPosition = meetingDesignationAdapter.getPosition(designation);
+        }
+        meetingDesignationView.setSelection(spinnerPosition);
+
     }
 
     @Override
@@ -162,11 +177,25 @@ public class SettingsActivity extends ReservatorActivity {
         if (selectedResAccountName != null) {
             selectedResAccount = selectedResAccountName.toString().trim();
         }
+        Object selectedLocal = languageSpinner.getSelectedItem();
+        String selectedLocalLanguage = "";
+        if (selectedResView != null){
+            selectedLocalLanguage = selectedLocal.toString().trim();
+        }
+
+        Object selectedMeetingTitle = meetingDesignationView.getSelectedItem();
+        String selectedmeetingTitelDesignation = "";
+        if (selectedResView != null){
+            selectedmeetingTitelDesignation = selectedMeetingTitle.toString().trim();
+        }
+
         Editor editor = settings.edit();
         editor.putString(getString(R.string.PREFERENCES_GOOGLE_ACCOUNT), selectedAccount);
         editor.putString(getString(R.string.PREFERENCES_ROOM_NAME), roomName);
         editor.putBoolean("addressBookOption", addressBookOptionView.isChecked());
         editor.putString(getString(R.string.accountForServation), selectedResAccount);
+        editor.putString("local",selectedLocalLanguage);
+        editor.putString("meetingDesignation",selectedmeetingTitelDesignation);
 
         editor.apply();
 
@@ -291,8 +320,7 @@ public class SettingsActivity extends ReservatorActivity {
         }
     }
 
-    private void setLanguageSpinner(Locale currentLocal) {
-        Spinner languageSpinner = (Spinner) findViewById(R.id.languageSpinner);
+    private void refreshLanguageSpinner(Locale currentLocal) {
         List<String> laguages = new ArrayList<>();
         laguages.add(getString(R.string.language_De));
         laguages.add(getString(R.string.language_En));
@@ -308,7 +336,7 @@ public class SettingsActivity extends ReservatorActivity {
 
         final int selectedItem = languageSpinner.getSelectedItemPosition();
 
-        languageSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        languageSpinner.setOnItemSelectedListener( new AdapterView.OnItemSelectedListener(){
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int itemPosition, long l) {
                 if (itemPosition == selectedItem) {
@@ -338,4 +366,16 @@ public class SettingsActivity extends ReservatorActivity {
         this.setContentView(R.layout.settings_activity);
         onResume();
     }
+    private void refreshMeetingTitleSpinner() {
+        List<String> views = new ArrayList<>();
+        views.add(getString(R.string.meetingTitlePersonName));
+        views.add(getString(R.string.meetingTitleMeetingName));
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, views);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        meetingDesignationView.setAdapter(adapter);
+
+        meetingDesignationView.setSelection(0);
+    }
+
 }
