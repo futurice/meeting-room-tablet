@@ -81,7 +81,7 @@ public class CalendarVisualizer extends HorizontalScrollView implements Reservat
         gridPaint.setColor(gridColor);
 
         this.markerPaint = new Paint();
-        this.reservationShader = new LinearGradient(0, 0, 1, 1, getResources().getColor(R.color.CalendarMarkerReservedColor), getResources().getColor(R.color.CalendarMarkerReservedColor), TileMode.REPEAT);
+        this.reservationShader = new LinearGradient(0, 0, 1, 1, getResources().getColor(R.color.GreenColor), getResources().getColor(R.color.GreenColor), TileMode.REPEAT);
         markerPaint.setShader(reservationShader);
 
         this.fadingEdgePaint = new Paint();
