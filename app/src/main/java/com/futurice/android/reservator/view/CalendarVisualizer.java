@@ -1,10 +1,5 @@
 package com.futurice.android.reservator.view;
 
-import java.text.SimpleDateFormat;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.List;
-
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Canvas.VertexMode;
@@ -27,6 +22,10 @@ import com.futurice.android.reservator.model.DateTime;
 import com.futurice.android.reservator.model.Reservation;
 import com.futurice.android.reservator.model.TimeSpan;
 
+import java.text.SimpleDateFormat;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.List;
 
 public class CalendarVisualizer extends HorizontalScrollView implements ReservatorVisualizer,
     OnTouchListener {
@@ -42,7 +41,7 @@ public class CalendarVisualizer extends HorizontalScrollView implements Reservat
     private int dayEndTime;
     private DateTime firstDayToShow;
     private int daysToShow = 10;
-    private int dayWidth = 200;
+    private int dayWidth = 700;
     private int timeLabelWidth = 100;
     private Reservation[] reservations;
     private SimpleDateFormat dayLabelFormatter, weekLabelFormatter;
@@ -375,9 +374,9 @@ public class CalendarVisualizer extends HorizontalScrollView implements Reservat
             }
             touchedTimeSpan = new TimeSpan(start,end);
             Log.d("CalendarVisualize", getResources().getString(R.string.visualizerTime)
-                    + touchedTime.toGMTString() + "\n" + getResources().getString(R.string.timeSpan)
-                    + touchedTimeSpan.getStart().toGMTString() + "-"
-                    + touchedTimeSpan.getEnd().toGMTString());
+                + touchedTime.toGMTString() + "\n" + getResources().getString(R.string.timeSpan)
+                + touchedTimeSpan.getStart().toGMTString() + "-"
+                + touchedTimeSpan.getEnd().toGMTString());
             invalidate();
         }
         return false; // do not interfere with onClick logic
