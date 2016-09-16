@@ -61,6 +61,10 @@
         <activity
             android:name=".view.RoomReservationPopup"
             android:theme="@style/Theme.Transparent"></activity>
+        <activity
+            android:name=".ReservationActivity"
+            android:screenOrientation="sensorLandscape"
+            android:configChanges="orientation|screenSize"></activity>
 
     </application>
 </manifest>

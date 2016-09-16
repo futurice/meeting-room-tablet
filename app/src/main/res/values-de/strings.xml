@@ -38,6 +38,8 @@
     <string name="book_now">Jetzt buchen</string>
     <string name="faildUser">Bitte versuchen Sie es erneut, denn diesen Benutzer gibt es nicht</string>
     <string name="faildCheckSettings">Kein Konto für eine Reservierung vorhanden. Bitte prüfen Sie Ihre Einstellungen.</string>
+    <string name="reservation_alternativ_infoLabel">Bitte wählen Sie die Zeit aus, welche Sie
+        verändern wollen.</string>
 
     <!--Settings-->
     <string name="language">Sprache:</string>
@@ -68,6 +70,10 @@
     <string name="used_google_account">Benutzer Google Konto</string>
     <string name="allAccountsMagicWord">(Alle)</string>
     <string name="shown_rooms">Sichtbare Räume</string>
+    <string name="reserv_view_alternativ_label">Ansicht der Reservierungen</string>
+    <string name="reserv_view_spinner_default">Reservierungsansicht mit Zeitbalken</string>
+    <string name="reserv_view_spinner_change">Reservierungsansicht mit 6 Zeitbuttons</string>
+    <string name="infoText_reservPopup_select">Tipp: Tippen Sie die Zeit an, die Sie ändern wollen</string>
     <string name="meetingTitleLabel">Meeting Bezeichnung</string>
     <string name="meetingTitlePersonName">Name der Person, die reserviert hat</string>
     <string name="meetingTitleMeetingName">Name des Meetings</string>

@@ -38,6 +38,7 @@
     <string name="book_now">Book now</string>
     <string name="faildUser">No such user, try again</string>
     <string name="faildCheckSettings">No account for reservation stored. Check your settings.</string>
+    <string name="reservation_alternativ_infoLabel">Please select the time you want to change.</string>
 
     <!--Settings-->
     <string name="language">Language:</string>
@@ -69,6 +70,10 @@
     <string name="used_google_account">Used Google Account</string>
     <string name="allAccountsMagicWord">(All)</string>
     <string name="shown_rooms">Visible rooms</string>
+    <string name="reserv_view_alternativ_label">Reservation view</string>
+    <string name="reserv_view_spinner_default">reservation view with timespan picker</string>
+    <string name="reserv_view_spinner_change">reservation view with different time buttons</string>
+    <string name="infoText_reservPopup_select">Tipp: Please tipp the time you want to change</string>
     <string name="meetingTitleLabel">Meeting designation</string>
     <string name="meetingTitlePersonName">is person name who reservated</string>
     <string name="meetingTitleMeetingName">is meeting name</string>

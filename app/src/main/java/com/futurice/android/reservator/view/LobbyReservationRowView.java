@@ -5,6 +5,8 @@ import android.app.AlertDialog.Builder;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.util.AttributeSet;
 import android.view.View;
@@ -19,9 +21,9 @@ import android.widget.AutoCompleteTextView;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.ViewSwitcher;
-import android.content.SharedPreferences;
 
 import com.futurice.android.reservator.R;
+import com.futurice.android.reservator.ReservationActivity;
 import com.futurice.android.reservator.ReservatorApplication;
 import com.futurice.android.reservator.RoomActivity;
 import com.futurice.android.reservator.model.AddressBookAdapter;
@@ -176,9 +178,9 @@ public class LobbyReservationRowView extends FrameLayout implements
     }
 
     private void reservatorError(ReservatorException e) {
-        Builder alertBuilder = new AlertDialog.Builder(getContext());
+        Builder alertBuilder = new Builder(getContext());
         alertBuilder.setTitle(getContext().getString(R.string.faildReservation)).setMessage(
-                e.getMessage());
+            e.getMessage());
         alertBuilder.setOnCancelListener(new OnCancelListener() {
             public void onCancel(DialogInterface dialog) {
                 if (onReserveCallback != null) {
@@ -254,21 +256,26 @@ public class LobbyReservationRowView extends FrameLayout implements
     }
 
     private void switchToReserveModeContent() {
-        if (modeSwitcher.indexOfChild(bookingMode) < 0) {
-            modeSwitcher.addView(bookingMode);
-        }
-        modeSwitcher.setDisplayedChild(modeSwitcher.indexOfChild(bookingMode));
-        setBackgroundColor(getResources().getColor(R.color.ReserveBackground));
+        String otherReservationView = application.getApplicationContext().getString(R.string.reserv_view_spinner_change);
 
-        // Initial state for the "Reserve" button.
-        if (application.getBooleanSettingsValue("addressBookOption", false)) {
-            reserveButton.setEnabled(false);
-            findViewById(R.id.hintText).setVisibility(View.GONE);
+        if (settings.getString("reservationView","").equals(otherReservationView)){
+            useReservationActivity();
         } else {
-            reserveButton.setEnabled(true);
-            findViewById(R.id.hintText).setVisibility(View.VISIBLE);
-        }
+            if (modeSwitcher.indexOfChild(bookingMode) < 0) {
+                modeSwitcher.addView(bookingMode);
+            }
+            modeSwitcher.setDisplayedChild(modeSwitcher.indexOfChild(bookingMode));
+            setBackgroundColor(getResources().getColor(R.color.ReserveBackground));
 
+            // Initial state for the "Reserve" button.
+            if (application.getBooleanSettingsValue("addressBookOption", false)) {
+                reserveButton.setEnabled(false);
+                findViewById(R.id.hintText).setVisibility(View.GONE);
+            } else {
+                reserveButton.setEnabled(true);
+                findViewById(R.id.hintText).setVisibility(View.VISIBLE);
+            }
+        }
     }
 
     public void resetTimeSpan() {
@@ -305,9 +312,9 @@ public class LobbyReservationRowView extends FrameLayout implements
 
     private class MakeReservationTask extends AsyncTask<Void, Void, Void> {
         @Override
-        protected Void doInBackground(Void... arg0) {
-            AddressBookEntry entry = application.getAddressBook().getEntryByName(
-                nameField.getText().toString());
+        protected Void doInBackground(Void... voids) {
+            publishProgress();
+            AddressBookEntry entry = application.getAddressBook().getEntryByName(nameField.getText().toString());
             Boolean addressBookOption = application.getBooleanSettingsValue("addressBookOption", false);
 
             if (entry == null && addressBookOption) {
@@ -316,7 +323,7 @@ public class LobbyReservationRowView extends FrameLayout implements
             try {
                 if (entry != null) {
                     application.getDataProxy().reserve(room, timePicker2.getTimeSpan(),
-                        entry.getName(), entry.getEmail());
+                            entry.getName(), entry.getEmail());
                 } else {
                     // Address book option is off so reserve the room with the selected account in settings.
                     String accountEmail = application.getSettingValue(R.string.accountForServation, "");
@@ -327,8 +334,7 @@ public class LobbyReservationRowView extends FrameLayout implements
                     if (title.equals("")) {
                         title = application.getString(R.string.defaultTitleForReservation);
                     }
-                    application.getDataProxy().reserve(room, timePicker2.getTimeSpan(),
-                        title, accountEmail);
+                    application.getDataProxy().reserve(room, timePicker2.getTimeSpan(),title, accountEmail);
                 }
             } catch (ReservatorException e) {
                 reservatorError(e);
@@ -343,4 +349,21 @@ public class LobbyReservationRowView extends FrameLayout implements
             onReserveCallback.call(LobbyReservationRowView.this);
         }
     }
+
+    private void useReservationActivity(){
+        SharedPreferences.Editor editor = settings.edit();
+        String roomName = this.room.getName().trim();
+        String roomEmail = this.room.getEmail().trim();
+        editor.putString("roomName", roomName);
+        editor.putString("roomEmail", roomEmail);
+        editor.putLong("resTimestart",timePicker2.getTimeSpan().getStart().getTimeInMillis());
+        editor.putLong("resTimeend",timePicker2.getTimeSpan().getEnd().getTimeInMillis());
+
+        editor.apply();
+
+        Intent intent = new Intent(getContext(),ReservationActivity.class);
+        getContext().startActivity(intent);
+
+    }
+
 }

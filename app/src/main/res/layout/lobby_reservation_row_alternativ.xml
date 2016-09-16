@@ -1,0 +1,287 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="match_parent"
+    android:background="@color/Transparent"
+    android:clickable="true"
+    android:id="@+id/alternativLayoutLinear"
+    android:onClick="onClick"
+    android:visibility="visible"
+    android:weightSum="1">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:background="@color/ReserveLine"
+        android:layout_weight="0.58"
+        android:layout_height="0dp">
+
+        <TextView
+            android:id="@+id/roomNameLabelAlternat"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Room name XXX"
+            android:textColor="@color/TextColor"
+            android:textStyle="bold"
+            android:layout_centerHorizontal="true"
+            android:textSize="20sp"
+            android:layout_marginTop="10dp"
+            android:editable="true"
+            android:enabled="false"
+            android:layout_gravity="center_horizontal" />
+
+        <ImageButton
+            android:id="@+id/cancelButtonAlternativ"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/close_button_states"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:longClickable="false" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="false"
+            android:layout_alignParentStart="false"
+            android:layout_below="@+id/roomNameLabelAlternat"
+            android:layout_marginTop="5dp">
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/plusButtonsGroup"
+                android:visibility="visible"
+                android:baselineAligned="false"
+                android:layout_gravity="left"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true">
+            <!--android:layout_alignTop="@+id/relativeLayout3"-->
+                <Button
+                    android:id="@+id/plus15button"
+                    android:layout_width="125dp"
+                    android:layout_height="50dp"
+                    android:layout_gravity="center"
+                    android:background="@drawable/button_background"
+                    android:focusable="true"
+                    android:text="+15min"
+                    android:textColor="@color/button_color"
+                    android:layout_margin="5dp"
+                    android:maxHeight="10dp"
+                    android:textSize="14dp"
+                    android:textStyle="normal" />
+
+                <Button
+                    android:id="@+id/plus30button"
+                    android:layout_width="125dp"
+                    android:layout_height="50dp"
+                    android:layout_gravity="center"
+                    android:background="@drawable/button_background"
+                    android:focusable="true"
+                    android:text="+30min"
+                    android:textColor="@color/button_color"
+                    android:layout_margin="5dp"
+                    android:maxHeight="10dp"
+                    android:textSize="14dp"
+                    android:textStyle="normal" />
+
+                <Button
+                    android:id="@+id/plus60button"
+                    android:layout_width="125dp"
+                    android:layout_height="50dp"
+                    android:layout_gravity="center"
+                    android:background="@drawable/button_background"
+                    android:focusable="true"
+                    android:text="+60Min"
+                    android:textColor="@color/button_color"
+                    android:layout_margin="5dp"
+                    android:maxHeight="10dp"
+                    android:textSize="14dp"
+                    android:textStyle="normal" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/textfieldGroup"
+                android:layout_below="@+id/timeGroup"
+                android:layout_centerHorizontal="true">
+
+                <AutoCompleteTextView
+                    android:id="@+id/meetingTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:completionHint="Meetingtitle"
+                    android:completionThreshold="2"
+                    android:hint="Meetingtitle"
+                    android:imeOptions="actionDone"
+                    android:inputType="textCapWords|textFilter"
+                    android:lines="1"
+                    android:maxLines="1"
+                    android:textColor="@color/TextColor" />
+
+                <AutoCompleteTextView
+                    android:id="@+id/yourNameAutoComplete"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:completionHint="Your name"
+                    android:completionThreshold="2"
+                    android:hint="Your name"
+                    android:imeOptions="actionDone"
+                    android:inputType="textCapWords|textFilter"
+                    android:lines="1"
+                    android:maxLines="1"
+                    android:textColor="@color/TextColor"
+                    android:layout_marginLeft="30dp"
+                    android:editable="false" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/minusButtonGroup"
+                android:visibility="visible"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true">
+
+                <Button
+                    android:id="@+id/minus15button"
+                    android:layout_width="125dp"
+                    android:layout_height="50dp"
+                    android:layout_gravity="center"
+                    android:background="@drawable/button_background"
+                    android:focusable="true"
+                    android:text="-15min"
+                    android:textColor="@color/button_color"
+                    android:layout_margin="5dp"
+                    android:maxHeight="10dp"
+                    android:textSize="14dp"
+                    android:textStyle="normal" />
+
+                <Button
+                    android:id="@+id/minus30button"
+                    android:layout_width="125dp"
+                    android:layout_height="50dp"
+                    android:layout_gravity="center"
+                    android:background="@drawable/button_background"
+                    android:focusable="true"
+                    android:text="-30min"
+                    android:textColor="@color/button_color"
+                    android:layout_margin="5dp"
+                    android:maxHeight="10dp"
+                    android:textSize="14dp"
+                    android:textStyle="normal" />
+
+                <Button
+                    android:id="@+id/minus60button"
+                    android:layout_width="125dp"
+                    android:layout_height="50dp"
+                    android:layout_gravity="center"
+                    android:background="@drawable/button_background"
+                    android:focusable="true"
+                    android:text="-60Min"
+                    android:textColor="@color/button_color"
+                    android:layout_margin="5dp"
+                    android:maxHeight="10dp"
+                    android:textSize="14dp"
+                    android:textStyle="normal" />
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/infoText_reservationPopup"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/infoText_reservPopup_select"
+                android:textColor="@color/TextInfoColor"
+                android:textSize="20sp"
+                android:editable="true"
+                android:textAlignment="center"
+                android:textStyle="italic"
+                android:layout_gravity="center_horizontal"
+                android:layout_below="@+id/textfieldGroup"
+                android:layout_centerHorizontal="true" />
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:weightSum="1"
+                android:id="@+id/timeGroup"
+                android:baselineAligned="true"
+                android:layout_alignTop="@+id/plusButtonsGroup"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="0dp">
+
+                <TextView
+                    android:id="@+id/startTimeAlternative"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="12:00"
+                    android:textColor="@color/TextInfoColor"
+                    android:layout_centerVertical="true"
+                    android:focusable="true"
+                    android:focusableInTouchMode="false"
+                    android:textSize="25sp"
+                    android:onClick="onClick"
+                    android:editable="true" />
+
+                <TextView
+                    android:id="@+id/textView5"
+                    android:layout_width="18dp"
+                    android:layout_height="wrap_content"
+                    android:text="-"
+                    android:textColor="@color/TextInfoColor"
+                    android:layout_centerVertical="true"
+                    android:layout_toRightOf="@+id/textView3"
+                    android:layout_toEndOf="@+id/textView3"
+                    android:layout_marginLeft="20dp"
+                    android:textSize="25sp" />
+
+                <TextView
+                    android:id="@+id/endTimeAlternative"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="13:00"
+                    android:textColor="@color/TextInfoColor"
+                    android:layout_alignParentBottom="true"
+                    android:layout_toRightOf="@+id/textView5"
+                    android:layout_toEndOf="@+id/textView5"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginStart="10dp"
+                    android:focusable="true"
+                    android:textSize="25sp"
+                    android:onClick="onClick"
+                    android:editable="true" />
+
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/reserveButtonAlternativ"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:background="@drawable/button_background"
+                android:focusable="true"
+                android:text="@string/reserve"
+                android:textColor="@color/button_color"
+                android:textSize="14sp"
+                android:layout_alignBottom="@+id/minusButtonGroup"
+                android:layout_centerHorizontal="true" />
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+</LinearLayout>

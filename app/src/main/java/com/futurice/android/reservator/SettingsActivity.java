@@ -42,6 +42,7 @@ public class SettingsActivity extends ReservatorActivity {
     ArrayList<String> roomNames;
     private  Spinner languageSpinner;
     private Spinner meetingDesignationView;
+    private Spinner reservationViewSpinner;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -153,6 +154,19 @@ public class SettingsActivity extends ReservatorActivity {
         }
         meetingDesignationView.setSelection(spinnerPosition);
 
+        reservationViewSpinner = (Spinner) findViewById(R.id.reservationViewSpinner);
+        String resView = settings.getString("reservationView","");
+        refreshReservationSpinner();
+
+        @SuppressWarnings("unchecked")
+        ArrayAdapter<String> resViewAdapter = (ArrayAdapter<String>) reservationViewSpinner.getAdapter();
+        spinnerPosition = 0;
+        if (resViewAdapter != null) {
+            spinnerPosition = resViewAdapter.getPosition(resView);
+        }
+        reservationViewSpinner.setSelection(spinnerPosition);
+
+        findViewById(R.id.saveSettings).setOnClickListener(getSaveClickListener());
     }
 
     @Override
@@ -177,6 +191,13 @@ public class SettingsActivity extends ReservatorActivity {
         if (selectedResAccountName != null) {
             selectedResAccount = selectedResAccountName.toString().trim();
         }
+
+        Object selectedResView = reservationViewSpinner.getSelectedItem();
+        String selectedReservationView = "";
+        if (selectedResView != null){
+            selectedReservationView = selectedResView.toString().trim();
+        }
+
         Object selectedLocal = languageSpinner.getSelectedItem();
         String selectedLocalLanguage = "";
         if (selectedResView != null){
@@ -194,6 +215,7 @@ public class SettingsActivity extends ReservatorActivity {
         editor.putString(getString(R.string.PREFERENCES_ROOM_NAME), roomName);
         editor.putBoolean("addressBookOption", addressBookOptionView.isChecked());
         editor.putString(getString(R.string.accountForServation), selectedResAccount);
+        editor.putString("reservationView",selectedReservationView);
         editor.putString("local",selectedLocalLanguage);
         editor.putString("meetingDesignation",selectedmeetingTitelDesignation);
 
@@ -366,6 +388,7 @@ public class SettingsActivity extends ReservatorActivity {
         this.setContentView(R.layout.settings_activity);
         onResume();
     }
+
     private void refreshMeetingTitleSpinner() {
         List<String> views = new ArrayList<>();
         views.add(getString(R.string.meetingTitlePersonName));
@@ -378,4 +401,25 @@ public class SettingsActivity extends ReservatorActivity {
         meetingDesignationView.setSelection(0);
     }
 
+    private void refreshReservationSpinner() {
+        List<String> views = new ArrayList<>();
+        views.add(getString(R.string.reserv_view_spinner_default));
+        views.add(getString(R.string.reserv_view_spinner_change));
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, views);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        reservationViewSpinner.setAdapter(adapter);
+
+        reservationViewSpinner.setSelection(0);
+    }
+
+    private OnClickListener getSaveClickListener(){
+        return new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onPause();
+                finish();
+            }
+        };
+    }
 }
