@@ -81,17 +81,17 @@ public class RoomTrafficLights extends RelativeLayout {
         roomTitleView.setText(room.getName());
 
         if (room.isBookable(QUICK_BOOK_THRESHOLD)) {
-            roomStatusView.setText("Free");
+            roomStatusView.setText(this.getContext().getString(R.string.free));
             if (room.isFreeRestOfDay()) {
-                roomStatusInfoView.setText("for the day");
+                roomStatusInfoView.setText(this.getContext().getString(R.string.freeDay));
                 this.setBackgroundColor(getResources().getColor(R.color.TrafficLightFree));
                 // Must use deprecated API for some reason or it crashes on older tablets
                 bookNowView.setBackgroundDrawable(getResources().getDrawable(R.drawable.traffic_lights_button_green));
                 bookNowView.setTextColor(getResources().getColorStateList(R.color.traffic_lights_button_green));
             } else {
                 int freeMinutes = room.minutesFreeFromNow();
-                roomStatusView.setText("Free");
-                roomStatusInfoView.setText("for " + Helpers.humanizeTimeSpan2(freeMinutes));
+                roomStatusView.setText(this.getContext().getString(R.string.free));
+                roomStatusInfoView.setText(this.getContext().getString(R.string.forX) + Helpers.humanizeTimeSpan2(freeMinutes, this.getContext()));
                 if (freeMinutes >= Room.RESERVED_THRESHOLD_MINUTES) {
                     this.setBackgroundColor(getResources().getColor(R.color.TrafficLightFree));
                     bookNowView.setBackgroundDrawable(getResources().getDrawable(R.drawable.traffic_lights_button_green));
@@ -107,7 +107,7 @@ public class RoomTrafficLights extends RelativeLayout {
             bookNowView.setVisibility(VISIBLE);
         } else {
             this.setBackgroundColor(getResources().getColor(R.color.TrafficLightReserved));
-            roomStatusView.setText("Reserved");
+            roomStatusView.setText(this.getContext().getString(R.string.defaultTitleForReservation));
             bookNowView.setVisibility(GONE);
             setReservationInfo(room.getCurrentReservation(), room.getNextFreeSlot());
         }
@@ -152,9 +152,9 @@ public class RoomTrafficLights extends RelativeLayout {
             // More than a day away
             reservationInfoView.setVisibility(GONE);
         } else {
-            reservationInfoView.setText(Html.fromHtml(String.format("Free at <b>%02d:%02d</b>",
-                nextFreeSlot.getStart().get(Calendar.HOUR_OF_DAY),
-                nextFreeSlot.getStart().get(Calendar.MINUTE))));
+            reservationInfoView.setText(Html.fromHtml(R.string.freeAt + String.format("<b>%02d:%02d</b>",
+                    nextFreeSlot.getStart().get(Calendar.HOUR_OF_DAY),
+                    nextFreeSlot.getStart().get(Calendar.MINUTE))));
             reservationInfoView.setVisibility(VISIBLE);
         }
     }

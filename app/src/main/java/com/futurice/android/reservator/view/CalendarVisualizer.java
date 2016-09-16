@@ -27,6 +27,7 @@ import com.futurice.android.reservator.model.DateTime;
 import com.futurice.android.reservator.model.Reservation;
 import com.futurice.android.reservator.model.TimeSpan;
 
+
 public class CalendarVisualizer extends HorizontalScrollView implements ReservatorVisualizer,
     OnTouchListener {
     TimeSpan touchedTimeSpan;
@@ -104,7 +105,7 @@ public class CalendarVisualizer extends HorizontalScrollView implements Reservat
         Arrays.sort(this.reservations);
         generateDayHeaderLabels();
         contentFrame.setPadding(Math.max(getWidth(), daysToShow * dayWidth + timeLabelWidth), 0, 0, 0);
-        Log.d("Performance", "Set reservations done in " + (System.currentTimeMillis() - start) + "ms");
+        Log.d("Performance", getResources().getString(R.string.reservationDone) + (System.currentTimeMillis() - start) + "ms");
     }
 
     private void generateDayHeaderLabels() {
@@ -326,7 +327,7 @@ public class CalendarVisualizer extends HorizontalScrollView implements Reservat
         drawTimeLabels(c, timeLabelRect);
         drawCurrentTimeIndicators(c, calendarAreaRect);
 
-        Log.d("Performance", "Drew CalendarVisualizer in " + (System.currentTimeMillis() - start) + "ms");
+        Log.d("Performance", getResources().getString(R.string.visualizer) + (System.currentTimeMillis() - start) + "ms");
     }
 
     private int getDaysFromStart(DateTime day) {
@@ -372,11 +373,11 @@ public class CalendarVisualizer extends HorizontalScrollView implements Reservat
             } else {
                 end = after.getStartTime();
             }
-            touchedTimeSpan = new TimeSpan(start, end);
-            Log.d("CalendarVisualize", "Calendar visualizer touched time: "
-                + touchedTime.toGMTString() + "\n timespan: "
-                + touchedTimeSpan.getStart().toGMTString() + "-"
-                + touchedTimeSpan.getEnd().toGMTString());
+            touchedTimeSpan = new TimeSpan(start,end);
+            Log.d("CalendarVisualize", getResources().getString(R.string.visualizerTime)
+                    + touchedTime.toGMTString() + "\n" + getResources().getString(R.string.timeSpan)
+                    + touchedTimeSpan.getStart().toGMTString() + "-"
+                    + touchedTimeSpan.getEnd().toGMTString());
             invalidate();
         }
         return false; // do not interfere with onClick logic

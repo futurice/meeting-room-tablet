@@ -1,5 +1,9 @@
 package com.futurice.android.reservator.model;
 
+import android.content.Context;
+
+import com.futurice.android.reservator.R;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -243,14 +247,14 @@ public class Room implements Serializable {
             int freeMinutes = this.minutesFreeFromNow();
 
             if (freeMinutes > FREE_THRESHOLD_MINUTES) {
-                return "Free";
+                return context.getString(R.string.free);
             } else if (freeMinutes < RESERVED_THRESHOLD_MINUTES) {
-                return "Reserved";
+                return context.getString(R.string.defaultTitleForReservation);
             } else {
-                return "Free for " + Helpers.humanizeTimeSpan(freeMinutes);
+                return context.getString(R.string.freeFor)+ Helpers.humanizeTimeSpan(freeMinutes, context);
             }
         } else {
-            return "Reserved";
+            return context.getString(R.string.defaultTitleForReservation);
         }
     }
 }

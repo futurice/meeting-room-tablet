@@ -131,7 +131,7 @@ public class SettingsActivity extends ReservatorActivity {
                     editor.remove(entry.getKey());
                 }
                 editor.apply();
-                Toast.makeText(getApplicationContext(), "Removed credentials and reseted settings", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), getString(R.string.removeUserData), Toast.LENGTH_SHORT).show();
                 finish();
             }
         });
@@ -187,7 +187,7 @@ public class SettingsActivity extends ReservatorActivity {
                 ((PlatformContactsAddressBook) ab).setAccount(selectedAccount);
             }
         }
-        Toast.makeText(getApplicationContext(), "Settings saved", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getApplicationContext(), getString(R.string.settingsSaved), Toast.LENGTH_SHORT).show();
     }
 
     private void refreshGoogleAccountsSpinner() {

@@ -1,5 +1,8 @@
 package com.futurice.android.reservator.common;
 
+import android.content.Context;
+import com.futurice.android.reservator.R;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -35,34 +38,34 @@ public class Helpers {
     }
 
     // TODO: an hour and a half - and other common expressions
-    public static String humanizeTimeSpan(int minutes) {
+    public static String humanizeTimeSpan(int minutes, Context context) {
         if (minutes < 30) {
-            return Integer.toString(minutes) + " minutes";
+            return Integer.toString(minutes) + context.getString(R.string.minutes);
         } else if (minutes < 45) {
-            return "half an hour";
+            return context.getString(R.string.halfHour);
         } else if (minutes < 60) {
-            return "45 minutes";
+            return context.getString(R.string.threeQuartershour);
         } else if (minutes < 85) {
-            return "an hour";
+            return context.getString(R.string.hour);
         } else if (minutes < 110) {
-            return "an hour and a half";
+            return context.getString(R.string.hourAndHalf);
         } else if (minutes < 24 * 60) {
-            return Integer.toString((minutes + 10) / 60) + " hours";
+            return Integer.toString((minutes + 10) / 60) + context.getString(R.string.hours);
         } else {
-            return Integer.toString(minutes / (60 * 24)) + " days";
+            return Integer.toString(minutes / (60 * 24)) + context.getString(R.string.days);
         }
     }
 
     // For use in traffic lights
-    public static String humanizeTimeSpan2(int minutes) {
+    public static String humanizeTimeSpan2(int minutes, Context context) {
         int hours = minutes / 60;
 
         if (minutes < 15) {
-            return getUnits(minutes, "minute", "minutes");
+            return getUnits(minutes, context.getString(R.string.minute), context.getString(R.string.minutes));
         } else if (minutes < 30) {
-            return getUnits(roundTo(minutes, 5), "minute", "minutes");
+            return getUnits(roundTo(minutes, 5),  context.getString(R.string.minute), context.getString(R.string.minutes));
         } else if (minutes < 60) {
-            return getUnits(roundTo(minutes, 15), "minute", "minutes");
+            return getUnits(roundTo(minutes, 15),  context.getString(R.string.minute), context.getString(R.string.minutes));
         } else if (minutes < 60 * 4) {
             int hourMins = roundTo(minutes - hours * 60, 15);
             if (hourMins == 60) {
@@ -71,14 +74,14 @@ public class Helpers {
             }
 
             if (hourMins == 0) {
-                return getUnits(hours, "hour", "hours");
+                return getUnits(hours, context.getString(R.string.hour), context.getString(R.string.hours));
             } else {
                 return String.format("%dh:%02dmin", hours, hourMins);
             }
         } else if (minutes < 24 * 60) {
-            return getUnits(hours, "hour", "hours");
+            return getUnits(hours, context.getString(R.string.hour), context.getString(R.string.hours));
         } else {
-            return getUnits(hours / 24, "day", "days");
+            return getUnits(hours / 24, context.getString(R.string.day), context.getString(R.string.days));
         }
     }
 

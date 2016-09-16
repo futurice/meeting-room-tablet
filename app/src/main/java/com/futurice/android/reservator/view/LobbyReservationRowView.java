@@ -119,7 +119,7 @@ public class LobbyReservationRowView extends FrameLayout implements
         // Room stuff
         roomNameView.setText(room.getName());
         if (room.getCapacity() >= 0) {
-            roomInfoView.setText("for " + room.getCapacity());
+            roomInfoView.setText(R.string.forX + room.getCapacity());
         } else {
             roomInfoView.setText("");
         }
@@ -136,7 +136,7 @@ public class LobbyReservationRowView extends FrameLayout implements
         }
         timePicker2.setEndTimeRelatively(60); // let book the room for an hour
 
-        roomStatusView.setText(room.getStatusText());
+        roomStatusView.setText(room.getStatusText(this.getContext()));
         if (room.isBookable()) {
             roomStatusView.setTextColor(getResources().getColor(
                 R.color.StatusFreeColor));
@@ -177,8 +177,8 @@ public class LobbyReservationRowView extends FrameLayout implements
 
     private void reservatorError(ReservatorException e) {
         Builder alertBuilder = new AlertDialog.Builder(getContext());
-        alertBuilder.setTitle("Failed to put reservation").setMessage(
-            e.getMessage());
+        alertBuilder.setTitle(getContext().getString(R.string.faildReservation)).setMessage(
+                e.getMessage());
         alertBuilder.setOnCancelListener(new OnCancelListener() {
             public void onCancel(DialogInterface dialog) {
                 if (onReserveCallback != null) {
@@ -311,7 +311,7 @@ public class LobbyReservationRowView extends FrameLayout implements
             Boolean addressBookOption = application.getBooleanSettingsValue("addressBookOption", false);
 
             if (entry == null && addressBookOption) {
-                reservatorError(new ReservatorException("No such user, try again"));
+                reservatorError(new ReservatorException(getResources().getString(R.string.faildUser)));
             }
             try {
                 if (entry != null) {
@@ -321,7 +321,7 @@ public class LobbyReservationRowView extends FrameLayout implements
                     // Address book option is off so reserve the room with the selected account in settings.
                     String accountEmail = application.getSettingValue(R.string.accountForServation, "");
                     if (accountEmail.equals("")) {
-                        reservatorError(new ReservatorException("No account for reservation stored. Check your settings."));
+                        reservatorError(new ReservatorException(getResources().getString(R.string.faildCheckSettings)));
                     }
                     String title = nameField.getText().toString();
                     if (title.equals("")) {

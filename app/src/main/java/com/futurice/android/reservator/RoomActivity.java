@@ -4,7 +4,7 @@ import java.util.Calendar;
 import java.util.Vector;
 
 import android.app.AlertDialog;
-import android.app.Dialog;
+import android.app.AlertDialog.Builder;
 import android.app.ProgressDialog;
 import android.app.AlertDialog.Builder;
 import android.content.Context;
@@ -53,11 +53,12 @@ public class RoomActivity extends ReservatorActivity implements OnMenuItemClickL
     final Runnable refreshDataRunnable = new Runnable() {
         @Override
         public void run() {
-            Log.v("Refresh", "refreshing room info");
+            Log.v("Refresh", getString(R.string.refreshRoom));
             refreshData();
             startAutoRefreshData();
         }
     };
+
     final int DEFAULT_BOOK_NOW_DURATION = 30; // mins
     DataProxy proxy;
     Room currentRoom;
@@ -256,11 +257,11 @@ public class RoomActivity extends ReservatorActivity implements OnMenuItemClickL
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        refreshMenu = menu.add("Refresh").setOnMenuItemClickListener(this);
+        refreshMenu = menu.add(getString(R.string.refresh)).setOnMenuItemClickListener(this);
         refreshMenu.setIcon(android.R.drawable.ic_popup_sync);
-        settingsMenu = menu.add("Settings").setOnMenuItemClickListener(this);
+        settingsMenu = menu.add(getString(R.string.setting)).setOnMenuItemClickListener(this);
         settingsMenu.setIcon(android.R.drawable.ic_menu_preferences);
-        aboutMenu = menu.add("About").setOnMenuItemClickListener(this);
+        aboutMenu = menu.add(getString(R.string.aboutTitle)).setOnMenuItemClickListener(this);
         return true;
     }
 
