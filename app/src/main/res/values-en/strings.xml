@@ -38,6 +38,7 @@
     <string name="book_now">Book now</string>
     <string name="faildUser">No such user, try again</string>
     <string name="faildCheckSettings">No account for reservation stored. Check your settings.</string>
+    <string name="reservation_alternativ_infoLabel">Please select the time you want to change.</string>
 
     <!--Settings-->
     <string name="language">Language:</string>
@@ -135,6 +136,7 @@
     <string name="bookNow">Book Now</string>
     <string name="disconnectedWarning">Disconnected!</string>
     <string name="cancleTitle">Cancel reservation?</string>
+    <string name="infoText_reservPopup_select">Tipp: Please tipp the time you want to change</string>
     <string name="seeRoomTrafficLights">room status</string>
     <string name="resExaptionErrorCancel">It is not possible to cancle this reservation</string>
     <string name="meetingTitlePersonName" />
