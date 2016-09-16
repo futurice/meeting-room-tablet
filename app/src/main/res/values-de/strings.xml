@@ -53,7 +53,7 @@
     <string name="PREFERENCES_UNSELECTED_ROOMS">Nicht ausgewählte Räume</string>
     <string name="PREFERENCES_GOOGLE_ACCOUNT">Google Konto</string>
     <string name="removeUserData">Login Informationen entfernen und Einstellungen zurückstellen</string>
-    <string name="settingsDefaultAccountForReservation">Wähle ein Konto für die Reservierung aus</string>
+    <string name="settings_Default_Account_For_Reservation">Wähle ein Konto für die Reservierung aus</string>
     <string name="settingsReset">Einstellungen zurückgesetzt und Konten gelöscht</string>
     <string name="settingsSaved">Einstellungen gespeichert</string>
     <string name="addressBookHelpText">Wenn diese Option aktiv ist, erfordet das Reservieren mit dem Tablet die Eingabe eines gültigen Kontaktes, welcher sich im Adressbuch befindet.</string>
@@ -68,6 +68,10 @@
     <string name="used_google_account">Benutzer Google Konto</string>
     <string name="allAccountsMagicWord">(Alle)</string>
     <string name="shown_rooms">Sichtbare Räume</string>
+    <string name="meetingTitleLabel">Meeting Bezeichnung</string>
+    <string name="meetingTitlePersonName">Name der Person, die reserviert hat</string>
+    <string name="meetingTitleMeetingName">Name des Meetings</string>
+    <string name="saveSettings">Einstellungen speichern</string>
 
     <!--Room-->
     <string name="refreshRoom">Rauminformationen aktualisierten</string>
@@ -98,9 +102,9 @@
     <string name="minutes"> Minuten</string>
     <string name="minute"> Minute</string>
     <string name="halfHour"> eine halbe Stunde</string>
-    <string name="hour"> eine Stunde</string>
+    <string name="hour"> einer Stunde</string>
     <string name="threeQuartershour"> 45 Minuten</string>
-    <string name="hourAndHalf"> ein Stunde und eine halbe</string>
+    <string name="hourAndHalf"> 1:30 Stunden</string>
     <string name="hours"> Stunden</string>
     <string name="day"> Tag</string>
     <string name="days"> Tage</string>
@@ -135,5 +139,7 @@
     <string name="bookNow">Jetzt buchen</string>
     <string name="disconnectedWarning">Verbindung ist getrennt!</string>
     <string name="cancleTitle">Reservierung abbrechen?</string>
+    <string name="seeRoomTrafficLights">Raum Status</string>
+    <string name="resExaptionErrorCancel">Es ist nicht möglich diese Reservierung zu stonieren.</string>
 
 </resources>

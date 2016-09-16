@@ -1,25 +1,16 @@
 package com.futurice.android.reservator.model.platformcalendar;
 
-import java.util.Date;
-import java.util.HashSet;
-import java.util.HashMap;
-import java.util.Vector;
-import java.util.Collections;
-import java.util.Map;
-import java.util.TimeZone;
-import java.util.regex.Pattern;
-import java.util.regex.Matcher;
-
+import android.accounts.Account;
+import android.accounts.AccountManager;
 import android.content.ContentResolver;
+import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.provider.CalendarContract;
-import android.net.Uri;
 import android.util.Log;
-import android.accounts.AccountManager;
-import android.accounts.Account;
 
 import com.futurice.android.reservator.R;
 import com.futurice.android.reservator.model.DataProxy;
@@ -28,6 +19,17 @@ import com.futurice.android.reservator.model.Reservation;
 import com.futurice.android.reservator.model.ReservatorException;
 import com.futurice.android.reservator.model.Room;
 import com.futurice.android.reservator.model.TimeSpan;
+
+import java.util.Collections;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.TimeZone;
+import java.util.Vector;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Implements the DataProxy for getting meeting room info through
@@ -69,6 +71,8 @@ public class PlatformCalendarDataProxy extends DataProxy {
     private Map<Room, HashSet<Reservation>> locallyCreatedReservationCaches =
         Collections.synchronizedMap(new HashMap<Room, HashSet<Reservation>>());
 
+    private boolean designationMeetingName;
+
     /**
      * @param resolver       From application context. Used to access the platform's Calendar Provider.
      * @param accountManager From application context. Allows us to initiate a sync immediately after adding a reservation.
@@ -79,6 +83,11 @@ public class PlatformCalendarDataProxy extends DataProxy {
         this.accountManager = accountManager;
         this.roomAccountGlob = roomAccountGlob;
         this.context = context;
+        setDesignationMeetingName(context);
+    }
+    private void setDesignationMeetingName(Context context) {
+        String settingMeetingDesignation = context.getSharedPreferences(context.getString(R.string.PREFERENCES_NAME), context.MODE_PRIVATE).getString("meetingDesignation","");
+        this.designationMeetingName = settingMeetingDesignation.equals(context.getString(R.string.meetingTitleMeetingName));
     }
 
     // Non-ops
@@ -463,6 +472,11 @@ public class PlatformCalendarDataProxy extends DataProxy {
      */
     private String makeEventTitle(final String roomName, final long eventId, final String storedTitle, final String organizer,
                                   final String defaultTitle) {
+
+        if (storedTitle != null && !storedTitle.isEmpty() && designationMeetingName){
+            return storedTitle;
+        }
+
         for (String attendee : getAuthoritySortedAttendees(eventId)) {
             if (attendee != null && !attendee.isEmpty() && !attendee.equals(roomName)) {
                 return attendee;

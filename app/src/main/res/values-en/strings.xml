@@ -54,7 +54,7 @@
     <string name="PREFERENCES_GOOGLE_ACCOUNT">googleAccount</string>
     <string name="PREFERENCES_LANGUAGE">language</string>
     <string name="removeUserData">Remove login info and reset settings</string>
-    <string name="settingsDefaultAccountForReservation">Select account for reserving</string>
+    <string name="settings_Default_Account_For_Reservation">Select account for reserving</string>
     <string name="settingsReset">Removed credentials and reseted settings</string>
     <string name="settingsSaved">Settings saved</string>
     <string name="addressBookHelpText">If this option is enabled, reserving with the tabletrequires entering a valid name that is synced to the accounts address book contacts.</string>
@@ -135,5 +135,10 @@
     <string name="bookNow">Book Now</string>
     <string name="disconnectedWarning">Disconnected!</string>
     <string name="cancleTitle">Cancel reservation?</string>
+    <string name="seeRoomTrafficLights">room status</string>
+    <string name="resExaptionErrorCancel">It is not possible to cancle this reservation</string>
+    <string name="meetingTitlePersonName" />
+    <string name="meetingTitleMeetingName" />
+    <string name="saveSettings">save settings</string>
 
 </resources>
