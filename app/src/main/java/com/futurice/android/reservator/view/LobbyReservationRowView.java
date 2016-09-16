@@ -117,7 +117,7 @@ public class LobbyReservationRowView extends FrameLayout implements
         this.room = room;
 
         // Room stuff
-        roomNameView.setText(room.getName());
+        roomNameView.setText(room.getShownRoomName());
         if (room.getCapacity() >= 0) {
             roomInfoView.setText(R.string.forX + room.getCapacity());
         } else {

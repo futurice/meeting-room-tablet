@@ -257,8 +257,7 @@ public class RoomActivity extends ReservatorActivity implements OnMenuItemClickL
 
     private void setRoom(Room r) {
         currentRoom = r;
-        roomNameLabel
-            .setText(currentRoom.getName());
+        roomNameLabel.setText(currentRoom.getShownRoomName());
         weekView.refreshData(currentRoom);
         trafficLights.update(currentRoom);
     }
