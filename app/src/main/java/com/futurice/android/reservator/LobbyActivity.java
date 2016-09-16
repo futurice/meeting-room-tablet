@@ -1,10 +1,5 @@
 package com.futurice.android.reservator;
 
-import java.util.Comparator;
-import java.text.Collator;
-import java.util.HashSet;
-import java.util.Vector;
-
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.app.ProgressDialog;
@@ -35,6 +30,11 @@ import com.futurice.android.reservator.model.Room;
 import com.futurice.android.reservator.view.LobbyReservationRowView;
 import com.futurice.android.reservator.view.LobbyReservationRowView.OnReserveListener;
 
+import java.text.Collator;
+import java.util.Comparator;
+import java.util.HashSet;
+import java.util.Vector;
+
 public class LobbyActivity extends ReservatorActivity implements OnMenuItemClickListener,
     DataUpdatedListener, AddressBookUpdatedListener {
     final Handler handler = new Handler();
@@ -47,6 +47,7 @@ public class LobbyActivity extends ReservatorActivity implements OnMenuItemClick
     private ProgressDialog progressDialog = null;
     private SharedPreferences settings;
     private boolean waitingAddresses = false;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -162,7 +163,7 @@ public class LobbyActivity extends ReservatorActivity implements OnMenuItemClick
             SpannableString s = new SpannableString(getString(R.string.aboutInfo));
             Linkify.addLinks(s, Linkify.ALL);
 
-            Builder aboutBuilder = new AlertDialog.Builder(this);
+            Builder aboutBuilder = new Builder(this);
             aboutBuilder.setTitle(R.string.aboutTitle);
             aboutBuilder.setMessage(s);
             aboutBuilder.setNegativeButton(R.string.close, null);
@@ -225,7 +226,7 @@ public class LobbyActivity extends ReservatorActivity implements OnMenuItemClick
             if (alertDialog == null || !alertDialog.isShowing()) {
                 if (alertDialog != null)
                     alertDialog.dismiss();
-                Builder alertBuilder = new AlertDialog.Builder(this);
+                Builder alertBuilder = new Builder(this);
                 alertBuilder.setTitle("Error!");
                 alertBuilder.setMessage(v.getException().getMessage());
                 alertDialog = alertBuilder.show();
