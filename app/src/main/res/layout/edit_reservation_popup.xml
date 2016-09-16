@@ -7,8 +7,8 @@
     <FrameLayout
         android:layout_height="wrap_content"
         android:layout_width="fill_parent"
-        android:layout_centerVertical="true"
-        android:background="#fff">
+        android:background="#fff"
+        android:layout_alignParentTop="true">
 
         <RelativeLayout
             android:layout_width="fill_parent"
@@ -25,7 +25,8 @@
                 android:layout_alignRight="@id/linearLayout1"
                 android:text="@string/reservationCancelInfo"
                 android:textColor="#333"
-                android:gravity="center"/>
+                android:gravity="center"
+                android:singleLine="false" />
 
             <LinearLayout
                 android:id="@+id/linearLayout1"

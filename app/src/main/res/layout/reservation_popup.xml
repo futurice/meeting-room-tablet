@@ -1,25 +1,36 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:id="@+id/relativeLayout1"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:layout_gravity="center"
                 android:background="#6666"
                 android:isScrollContainer="false">
 
-    <FrameLayout
-        android:id="@+id/frameLayout1"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:background="#fff">
-
-        <com.futurice.android.reservator.view.LobbyReservationRowView
-            android:id="@+id/roomReservationView1"
+    <ScrollView
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:background="@drawable/popup_background"
-            android:padding="10dp"/>
-    </FrameLayout>
+            android:id="@+id/defaultLayout"
+            android:foregroundGravity="fill">
+
+            <FrameLayout
+                android:id="@+id/frameLayout1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#fff"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true">
+
+                <com.futurice.android.reservator.view.LobbyReservationRowView
+                    android:id="@+id/roomReservationView1"
+                    android:layout_width="fill_parent"
+                    android:layout_height="425dp"
+                    android:background="@drawable/popup_background"
+                    android:padding="10dp"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true" />
+            </FrameLayout>
+    </ScrollView>
 
 </RelativeLayout>
