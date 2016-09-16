@@ -90,6 +90,14 @@ public class RoomActivity extends ReservatorActivity implements OnMenuItemClickL
         this.weekView = (WeekView) findViewById(R.id.weekView1);
         this.roomNameLabel = (TextView) findViewById(R.id.roomNameLabel);
         this.trafficLights = (RoomTrafficLights) findViewById(R.id.roomTrafficLights);
+
+        this.findViewById(R.id.seeRoomTrafficLightsButton).setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                trafficLights.setVisibility(View.VISIBLE);
+            }
+        });
+
         try {
             currentRoom = (Room) getIntent().getSerializableExtra(ROOM_EXTRA);
         } catch (ClassCastException e) {
