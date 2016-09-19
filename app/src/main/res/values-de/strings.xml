@@ -139,8 +139,8 @@
 
 
     <string name="calendarAccountGlob">*@resource.calendar.google.com</string>
-    <string name="touchToReserve">Tippen Sie um zu reservieren</string>
     <string name="reservationCancelInfo">Du kannst Reservierungen löschen, welche ursprünglisch von einem Raum - Tablet erstellt wurde.</string>
+    <string name="touchToReturn">Tippe um zu reservieren</string>
     <string name="bookNow">Jetzt buchen</string>
     <string name="disconnectedWarning">Verbindung ist getrennt!</string>
     <string name="cancleTitle">Reservierung abbrechen?</string>

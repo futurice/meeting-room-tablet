@@ -116,7 +116,7 @@
         android:layout_alignParentBottom="true"
         android:textColor="@color/TrafficLightText"
         android:gravity="right"
-        android:text="@string/touchToReserve"
+        android:text="@string/touchToReturn"
         android:textSize="30sp"
         android:textStyle="bold"
         android:textAllCaps="true"

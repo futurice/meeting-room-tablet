@@ -139,7 +139,7 @@
 
     <string name="calendarAccountGlob">*@resource.calendar.google.com</string>
     <string name="reservationCancelInfo">You can cancel reservations that were originally made from a room tablet</string>
-    <string name="touchToReserve">Tap for reservations</string>
+    <string name="touchToReturn">Tap for reservations</string>
     <string name="bookNow">Book Now</string>
     <string name="disconnectedWarning">Disconnected!</string>
     <string name="cancleTitle">Cancel reservation?</string>
