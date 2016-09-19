@@ -219,7 +219,6 @@ public class RoomActivity extends ReservatorActivity implements OnMenuItemClickL
             }
         });
 
-        trafficLights.setBookNowListener(this);
         weekView.setOnReservationClickListener(new OnReservationClickListener() {
             @Override
             public void onReservationClick(View v, Reservation reservation) {
