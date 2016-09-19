@@ -147,5 +147,6 @@
     <string name="seeRoomTrafficLights">room status</string>
     <string name="resExaptionErrorCancel">It is not possible to cancle this reservation</string>
     <string name="saveSettings">save settings</string>
+    <string name="calendarInfo">Tipp: Tap free time space to reserve</string>
 
 </resources>
