@@ -37,7 +37,6 @@ public class ReservationActivity extends ReservatorActivity implements View.OnCl
     private Room room;
     private ReservatorApplication application;
     private DateTime startTime, endTime, changeTime;
-    private DateTime endeMeeting;
     private TextView startTimeView;
     private TextView endTimeView;
     private TextView infoLabel;
@@ -57,6 +56,8 @@ public class ReservationActivity extends ReservatorActivity implements View.OnCl
         }
     };
     private DataProxy proxy;
+    private int plusDiff;
+    private int negDiff;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -70,7 +71,7 @@ public class ReservationActivity extends ReservatorActivity implements View.OnCl
         setBothTimes(settings.getLong("resTimestart",0),settings.getLong("resTimeend",0));
 
         TextView roomLabel = (TextView) findViewById(R.id.roomNameLabelAlternat);
-        roomLabel.setText(room.getShownRoomName());
+        roomLabel.setText(settings.getString("roomShownName",""));
 
         infoLabel = (TextView) findViewById(R.id.infoText_reservationPopup);
         plusButton = findViewById(R.id.plusButtonsGroup);
@@ -139,10 +140,6 @@ public class ReservationActivity extends ReservatorActivity implements View.OnCl
 
         // Reservation stuff
         TimeSpan nextFreeTime = room.getNextFreeTime();
-        Reservation reservation = room.getCurrentReservation();
-        if (reservation != null) {
-            this.endeMeeting = reservation.getEndTime();
-        }
 
         if (startTimeInput != 0 && endTimeInput != 0) {
             this.startTime = new DateTime(startTimeInput);
@@ -186,41 +183,41 @@ public class ReservationActivity extends ReservatorActivity implements View.OnCl
                 break;
 
             case R.id.startTimeAlternative:
+                refreshButtonEnabled();
                 changeTime = startTime;
-                enableButton(true,true);
-                enableButton(true,false);
+                checkBookable(true);
                 setButtonGroupVisible();
                 break;
 
             case R.id.endTimeAlternative:
+                refreshButtonEnabled();
                 changeTime = endTime;
-                enableButton(false,true);
-                enableButton(false,false);
+                checkBookable(false);
                 setButtonGroupVisible();
                 break;
+
             case R.id.plus15button:
                 setChangedTime(addTime(15));
-                changeDependentTime(true,15);
                 break;
+
             case R.id.plus30button:
                 setChangedTime(addTime(30));
-                changeDependentTime(true,30);
                 break;
+
             case R.id.plus60button:
                 setChangedTime(addTime(60));
-                changeDependentTime(true,60);
                 break;
+
             case R.id.minus15button:
-                setChangedTime(reduzeTime(15));
-                changeDependentTime(false,15);
+                setChangedTime(addTime(-15));
                 break;
+
             case R.id.minus30button:
-                setChangedTime(reduzeTime(30));
-                changeDependentTime(false,30);
+                setChangedTime(addTime(-30));
                 break;
+
             case R.id.minus60button:
-                setChangedTime(reduzeTime(60));
-                changeDependentTime(false,60);
+                setChangedTime(addTime(-60));
                 break;
         }
     }
@@ -248,37 +245,26 @@ public class ReservationActivity extends ReservatorActivity implements View.OnCl
             if (startTime == changeTime){
                 startTime = new DateTime(time);
                 changeTime = startTime;
-                enableButton(true,true);
-                enableButton(true,false);
             }
             else if (endTime == changeTime){
                 endTime = new DateTime(time);
                 changeTime = endTime;
-                enableButton(false,true);
-                enableButton(false,false);
             }
             refreshTimeLabels();
         }
     }
 
-    private void changeDependentTime(boolean isAdded, int value){
-        if (checkSecondTimeChange(isAdded)){
-             changeTime = endTime;
-            setChangedTime(addTime(value));
-            changeTime = startTime;
-        }
-    }
-
-    private boolean checkSecondTimeChange(boolean isAdded){
-        return startTime == changeTime && isAdded;
-    }
 
     private long addTime(int value) {
-        return changeTime.getTimeInMillis()+(value*minToMS);
-    }
+        if (plusDiff != 0){
+            return changeTime.getTimeInMillis()+(plusDiff*minToMS);
+        }
 
-    private long reduzeTime(int value){
-        return changeTime.getTimeInMillis() - (value*minToMS);
+        else if (negDiff != 0){
+            return changeTime.getTimeInMillis()+(negDiff*minToMS);
+        }
+
+        return changeTime.getTimeInMillis()+(value*minToMS);
     }
 
     private class MakeReservationTask extends AsyncTask<Void, Void, Void> {
@@ -349,6 +335,11 @@ public class ReservationActivity extends ReservatorActivity implements View.OnCl
         date = new Date(endTime.getTimeInMillis());
         endTimeView = (TextView) findViewById(R.id.endTimeAlternative);
         endTimeView.setText(String.format("%02d:%02d",date.getHours(),date.getMinutes()));
+
+        negDiff = 0;
+        plusDiff = 0;
+        checkBookable(true);
+        checkBookable(false);
     }
 
     private void setButtonGroupVisible(){
@@ -375,37 +366,42 @@ public class ReservationActivity extends ReservatorActivity implements View.OnCl
         }, 5000);
     }
 
-    private void enableButton(boolean isStartTime, boolean isAdded){
+    public void checkBookable(boolean isStartTime){
         long diff;
-        if (isStartTime && !isAdded){
-            if (endeMeeting!=null){
-                    diff = startTime.subtract(endeMeeting,Calendar.MILLISECOND)/minToMS;
-                    setButtonEnable(false, (int) diff);
+        if (isStartTime){
+            //test end of meeting <= startTime
+            Reservation reservation = room.getCurrentReservation();
+            if (reservation!=null){
+                diff = startTime.subtract(reservation.getEndTime(),Calendar.MILLISECOND)/minToMS;
+                setButtonEnable(false, (int) diff);
+                System.out.println("IN USE :D");
             }
-        }
+            //test timediff between end and start time if startTime add time not greater endtime
+            diff = endTime.subtract(startTime,Calendar.MILLISECOND)/minToMS;
+            setButtonEnable(true,(int)diff-MIN_MEETING_TIME);
 
-        else if (!isAdded){
+        } else {
+            //test timediff between end and start time if endtimeTime add time not smaller starttime
             diff = endTime.subtract(startTime,Calendar.MILLISECOND)/minToMS;
             setButtonEnable(false,(int)diff-MIN_MEETING_TIME);
         }
 
+        //test end or starttime of mieetings, endMeeting >= startTime or startMeeting >= endTime
         if (reservationList.size() >= 0){
             for (Reservation r : reservationList){
                 if (isStartTime){
-                    if (!isAdded){
-                        if (r.getEndTime().getTimeInMillis() <= startTime.getTimeInMillis()){
+                    if (r.getEndTime().getTimeInMillis() <= startTime.getTimeInMillis()){
                             diff = startTime.subtract(r.getEndTime(),Calendar.MILLISECOND)/minToMS;
                             setButtonEnable(false, (int) diff);
-                        }
-                    }else {
-                        if (r.getStartTime().getTimeInMillis() >= endTime.getTimeInMillis()) {
+                    }
+
+                    if (r.getStartTime().getTimeInMillis() >= endTime.getTimeInMillis()) {
                             diff = r.getStartTime().subtract(endTime, Calendar.MILLISECOND) / minToMS;
                             setButtonEnable(true, (int) diff);
-                        }
                     }
                 }
 
-                if (!isStartTime && isAdded){
+                if (!isStartTime){
                     if (r.getStartTime().getTimeInMillis() >= endTime.getTimeInMillis()) {
                         diff = r.getEndTime().subtract(endTime,Calendar.MILLISECOND)/minToMS;
                         setButtonEnable(true,(int)diff);
@@ -417,36 +413,46 @@ public class ReservationActivity extends ReservatorActivity implements View.OnCl
     }
 
     private void setButtonEnable(boolean isPlusButton, int value){
-        switch (value){
-            case 15:
-                if (isPlusButton){
-                    findViewById(R.id.plus15button).setEnabled(false);
-                }else {
-                    findViewById(R.id.minus15button).setEnabled(false);
-                }
-            case 30:
-                if (isPlusButton){
-                    findViewById(R.id.plus30button).setEnabled(false);
-                }else {
-                    findViewById(R.id.minus30button).setEnabled(false);
-                }
-            case 60:
-                if (isPlusButton){
-                    findViewById(R.id.plus60button).setEnabled(false);
-                }else {
-                    findViewById(R.id.minus60button).setEnabled(false);
-                }
-                break;
-            default:
-                if (isPlusButton){
-                    findViewById(R.id.plus15button).setEnabled(true);
-                    findViewById(R.id.plus30button).setEnabled(true);
-                    findViewById(R.id.plus60button).setEnabled(true);
-                }else {
-                    findViewById(R.id.minus15button).setEnabled(true);
-                    findViewById(R.id.minus30button).setEnabled(true);
-                    findViewById(R.id.minus60button).setEnabled(true);
-                }
+        if (isPlusButton){
+            if (value == 0){
+                findViewById(R.id.plus15button).setEnabled(false);
+                findViewById(R.id.plus30button).setEnabled(false);
+                findViewById(R.id.plus60button).setEnabled(false);
+            } else if (value < 15) {
+                plusDiff = value;
+                findViewById(R.id.plus30button).setEnabled(false);
+                findViewById(R.id.plus60button).setEnabled(false);
+            } else  if (value < 30){
+                findViewById(R.id.plus30button).setEnabled(false);
+                findViewById(R.id.plus60button).setEnabled(false);
+            } else if (value < 60) {
+                findViewById(R.id.plus60button).setEnabled(false);
+            }
+        } else {
+            if (value == 0){
+                findViewById(R.id.minus15button).setEnabled(false);
+                findViewById(R.id.minus30button).setEnabled(false);
+                findViewById(R.id.minus60button).setEnabled(false);
+            } else if (value < 15) {
+                negDiff = - value;
+                findViewById(R.id.minus30button).setEnabled(false);
+                findViewById(R.id.minus60button).setEnabled(false);
+            } else  if (value < 30){
+                findViewById(R.id.minus30button).setEnabled(false);
+                findViewById(R.id.minus60button).setEnabled(false);
+            } else if (value < 60) {
+                findViewById(R.id.minus60button).setEnabled(false);
+            }
+
         }
+    }
+
+    public void refreshButtonEnabled(){
+        findViewById(R.id.plus15button).setEnabled(true);
+        findViewById(R.id.plus30button).setEnabled(true);
+        findViewById(R.id.plus60button).setEnabled(true);
+        findViewById(R.id.minus15button).setEnabled(true);
+        findViewById(R.id.minus30button).setEnabled(true);
+        findViewById(R.id.minus60button).setEnabled(true);
     }
 }
