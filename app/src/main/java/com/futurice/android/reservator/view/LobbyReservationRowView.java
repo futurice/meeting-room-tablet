@@ -352,12 +352,10 @@ public class LobbyReservationRowView extends FrameLayout implements
 
     private void useReservationActivity(){
         SharedPreferences.Editor editor = settings.edit();
-        String roomName = this.room.getName().trim();
-        String roomEmail = this.room.getEmail().trim();
-        editor.putString("roomName", roomName);
-        editor.putString("roomEmail", roomEmail);
-        editor.putLong("resTimestart",timePicker2.getTimeSpan().getStart().getTimeInMillis());
-        editor.putLong("resTimeend",timePicker2.getTimeSpan().getEnd().getTimeInMillis());
+        editor.putString("roomName", this.room.getName().trim());
+        editor.putString("roomShownName", this.room.getShownRoomName().trim());
+        editor.putLong("resTimestart",this.timePicker2.getTimeSpan().getStart().getTimeInMillis());
+        editor.putLong("resTimeend",this.timePicker2.getTimeSpan().getEnd().getTimeInMillis());
 
         editor.apply();
 
