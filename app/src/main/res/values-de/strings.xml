@@ -140,11 +140,12 @@
 
     <string name="calendarAccountGlob">*@resource.calendar.google.com</string>
     <string name="reservationCancelInfo">Du kannst Reservierungen löschen, welche ursprünglisch von einem Raum - Tablet erstellt wurde.</string>
-    <string name="touchToReturn">Tippe um zu reservieren</string>
+    <string name="touchToReturn">Tippe um zu der Wochenansicht zurückzukehren</string>
     <string name="bookNow">Jetzt buchen</string>
     <string name="disconnectedWarning">Verbindung ist getrennt!</string>
     <string name="cancleTitle">Reservierung abbrechen?</string>
     <string name="seeRoomTrafficLights">Raum Status</string>
     <string name="resExaptionErrorCancel">Es ist nicht möglich diese Reservierung zu stonieren.</string>
+    <string name="calendarInfo">Tipp: Tippe einen freien Zeitraum an um zu reservieren.</string>
 
 </resources>

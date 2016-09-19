@@ -14,7 +14,7 @@
             android:layout_width="fill_parent"
             android:id="@+id/weekView1"
             android:layout_height="fill_parent"
-            android:layout_below="@+id/roomNameLabel"
+            android:layout_below="@+id/tippCalenderLabel"
             android:layout_marginLeft="0dp"
             android:layout_marginRight="0dp"
             android:layout_marginBottom="0dp"
@@ -37,6 +37,18 @@
             android:textSize="20sp"
             android:textStyle="bold"
             android:textIsSelectable="false"/>
+
+        <TextView
+            android:id="@+id/tippCalenderLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:textColor="@color/TextInfoColor"
+            android:textSize="20sp"
+            android:textIsSelectable="false"
+            android:textStyle="normal"
+            android:text="@string/calendarInfo"
+            android:layout_below="@+id/seeRoomTrafficLightsButton"/>
 
         <Button
             android:id="@+id/seeAllRoomsButton"

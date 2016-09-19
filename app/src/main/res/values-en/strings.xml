@@ -142,5 +142,6 @@
     <string name="meetingTitlePersonName" />
     <string name="meetingTitleMeetingName" />
     <string name="saveSettings">save settings</string>
+    <string name="calendarInfo">Tipp: Tap free time space to reserve</string>
 
 </resources>

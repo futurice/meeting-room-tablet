@@ -122,7 +122,7 @@
         android:textAllCaps="true"
         android:textIsSelectable="false"
         android:id="@+id/textViewToReserveTrafficlights"
-        android:clickable="true"
+        android:clickable="false"
         android:layout_alignParentEnd="true"
         android:onClick="onClick" />
 </RelativeLayout>
