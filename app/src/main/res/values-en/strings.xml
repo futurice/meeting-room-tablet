@@ -70,6 +70,8 @@
     <string name="used_google_account">Used Google Account</string>
     <string name="allAccountsMagicWord">(All)</string>
     <string name="shown_rooms">Visible rooms</string>
+    <string name="meetingTitlePersonName">is person name who reservated</string>
+    <string name="meetingTitleMeetingName">is meeting name</string>
 
     <!--Room-->
     <string name="refreshRoom">refreshing room info</string>
@@ -139,8 +141,6 @@
     <string name="infoText_reservPopup_select">Tipp: Please tipp the time you want to change</string>
     <string name="seeRoomTrafficLights">room status</string>
     <string name="resExaptionErrorCancel">It is not possible to cancle this reservation</string>
-    <string name="meetingTitlePersonName" />
-    <string name="meetingTitleMeetingName" />
     <string name="saveSettings">save settings</string>
     <string name="calendarInfo">Tipp: Tap free time space to reserve</string>
 

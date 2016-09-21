@@ -172,7 +172,6 @@ public class SettingsActivity extends ReservatorActivity {
     @Override
     public void onPause() {
         super.onPause();
-        // TODO: save button?
         // Save the settings
         Object selectedAccountName = usedAccountView.getSelectedItem();
         String selectedAccount = "";
