@@ -1,16 +1,16 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 22
-    buildToolsVersion "23.0.1"
+    compileSdkVersion 24
+    buildToolsVersion "24.0.2"
 
     defaultConfig {
         applicationId "com.futurice.android.reservator"
         minSdkVersion 14
         targetSdkVersion 22
 
-        testApplicationId "com.futurice.android.reservator.test"
-        testInstrumentationRunner "android.test.InstrumentationTestRunner"
+        testInstrumentationRunner 'android.support.test.runner.AndroidJUnitRunner'
+    }
     }
 
     buildTypes {
