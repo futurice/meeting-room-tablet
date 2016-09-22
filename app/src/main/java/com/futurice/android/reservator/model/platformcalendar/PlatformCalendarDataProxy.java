@@ -272,6 +272,13 @@ public class PlatformCalendarDataProxy extends DataProxy {
             Log.w("SYNC", String.format("%s %s", context.getString(R.string.initiateNot) , accountName));
         }
     }
+
+    public void synchronize(Room r) {
+        PlatformCalendarRoom room = (PlatformCalendarRoom) r;
+        try {
+            syncGoogleCalendarAccount(getAccountName(room.getId()));
+        } catch (ReservatorException e) {
+            e.printStackTrace();
         }
     }
 
