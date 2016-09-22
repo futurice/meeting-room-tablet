@@ -10,23 +10,30 @@
         android:background="#fff"
         android:padding="10dip">
 
-        <com.futurice.android.reservator.view.WeekView
-            android:layout_width="fill_parent"
-            android:id="@+id/weekView1"
-            android:layout_height="fill_parent"
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:layout_below="@+id/tippCalenderLabel"
-            android:layout_marginLeft="0dp"
-            android:layout_marginRight="0dp"
-            android:layout_marginBottom="0dp"
-            android:layout_marginTop="10dp">
+            android:fillViewport="true">
 
-            <FrameLayout
+            <com.futurice.android.reservator.view.WeekView
                 android:layout_width="fill_parent"
+                android:id="@+id/weekView1"
                 android:layout_height="fill_parent"
-                android:layout_marginRight="10dp"
+                android:layout_below="@+id/tippCalenderLabel"
+                android:layout_marginLeft="0dp"
+                android:layout_marginRight="0dp"
                 android:layout_marginBottom="0dp"
-                android:id="@+id/frameLayout1"></FrameLayout>
-        </com.futurice.android.reservator.view.WeekView>
+                android:layout_marginTop="10dp">
+
+                <FrameLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginBottom="0dp"
+                    android:id="@+id/frameLayout1"></FrameLayout>
+            </com.futurice.android.reservator.view.WeekView>
+        </ScrollView>
 
         <TextView
             android:id="@+id/roomNameLabel"
