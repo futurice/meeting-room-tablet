@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
@@ -135,6 +136,10 @@ public class ReservationActivity extends ReservatorActivity implements View.OnCl
         this.room = iteratorRoom;
     }
 
+    public Room getRoom() {
+        return room;
+    }
+
     private void setBothTimes(long startTimeInput, long endTimeInput){
         setTimetoCurrentTime();
 
@@ -154,7 +159,6 @@ public class ReservationActivity extends ReservatorActivity implements View.OnCl
                 setTimetoCurrentTime();
             }
         }
-        reservationList = room.getReservationsForTimeSpan(new TimeSpan(new DateTime(startTime.getTime()).setTime(0,0,0),new DateTime(endTime.getTime()).setTime(23,0,0)));
     }
 
     private void setButtons(){
@@ -253,7 +257,6 @@ public class ReservationActivity extends ReservatorActivity implements View.OnCl
             refreshTimeLabels();
         }
     }
-
 
     private long addTime(int value) {
         if (plusDiff != 0){
@@ -374,7 +377,6 @@ public class ReservationActivity extends ReservatorActivity implements View.OnCl
             if (reservation!=null){
                 diff = startTime.subtract(reservation.getEndTime(),Calendar.MILLISECOND)/minToMS;
                 setButtonEnable(false, (int) diff);
-                System.out.println("IN USE :D");
             }
             //test timediff between end and start time if startTime add time not greater endtime
             diff = endTime.subtract(startTime,Calendar.MILLISECOND)/minToMS;
@@ -387,6 +389,7 @@ public class ReservationActivity extends ReservatorActivity implements View.OnCl
         }
 
         //test end or starttime of mieetings, endMeeting >= startTime or startMeeting >= endTime
+        reservationList = room.getReservationsForTimeSpan(new TimeSpan(new DateTime(startTime.getTime()).setTime(0,0,0),new DateTime(endTime.getTime()).setTime(23,0,0)));
         if (reservationList.size() >= 0){
             for (Reservation r : reservationList){
                 if (isStartTime){
@@ -403,7 +406,7 @@ public class ReservationActivity extends ReservatorActivity implements View.OnCl
 
                 if (!isStartTime){
                     if (r.getStartTime().getTimeInMillis() >= endTime.getTimeInMillis()) {
-                        diff = r.getEndTime().subtract(endTime,Calendar.MILLISECOND)/minToMS;
+                        diff = r.getStartTime().subtract(endTime,Calendar.MILLISECOND)/minToMS;
                         setButtonEnable(true,(int)diff);
                     }
                 }
@@ -443,7 +446,6 @@ public class ReservationActivity extends ReservatorActivity implements View.OnCl
             } else if (value < 60) {
                 findViewById(R.id.minus60button).setEnabled(false);
             }
-
         }
     }
 
