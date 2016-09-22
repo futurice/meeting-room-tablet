@@ -135,7 +135,8 @@
             android:layout_below="@+id/roomListLabel"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
-            android:nestedScrollingEnabled="true">
+            android:nestedScrollingEnabled="true"
+            android:fillViewport="true">
 
             <ListView
                 android:id="@+id/roomListView"
