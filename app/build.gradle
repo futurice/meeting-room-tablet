@@ -7,11 +7,11 @@ android {
     defaultConfig {
         applicationId "com.futurice.android.reservator"
         minSdkVersion 14
-        targetSdkVersion 22
+        targetSdkVersion 24
 
         testInstrumentationRunner 'android.support.test.runner.AndroidJUnitRunner'
     }
-    }
+
 
     buildTypes {
         release {
