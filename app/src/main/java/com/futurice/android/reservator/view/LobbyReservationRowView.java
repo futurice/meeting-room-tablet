@@ -164,7 +164,7 @@ public class LobbyReservationRowView extends FrameLayout implements
             reserveButton.setEnabled(false);
             new MakeReservationTask().execute();
         } else if (v == calendarButton || v == titleView) {
-            RoomActivity.startWith(getContext(), getRoom());
+            RoomActivity.startWith(getContext(), getRoom(), application.getDataProxy());
         }
     }
 

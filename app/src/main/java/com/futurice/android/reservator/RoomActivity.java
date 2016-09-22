@@ -56,13 +56,12 @@ public class RoomActivity extends ReservatorActivity implements OnMenuItemClickL
             Log.v("Refresh", getString(R.string.refreshRoom));
             refreshData();
             startAutoRefreshData();
-            ReservatorApplication application = (ReservatorApplication) getApplicationContext();
-            application.getDataProxy().synchronize(currentRoom);
+            proxy.synchronize(currentRoom);
         }
     };
 
     final int DEFAULT_BOOK_NOW_DURATION = 30; // mins
-    DataProxy proxy;
+    static DataProxy proxy;
     Room currentRoom;
     WeekView weekView;
     TextView roomNameLabel;
@@ -79,10 +78,11 @@ public class RoomActivity extends ReservatorActivity implements OnMenuItemClickL
      * @param context
      * @param room
      */
-    public static void startWith(Context context, Room room) {
+    public static void startWith(Context context, Room room, DataProxy dataProxy) {
         Intent i = new Intent(context, RoomActivity.class);
         i.putExtra(ROOM_EXTRA, room);
         context.startActivity(i);
+        proxy = dataProxy;
     }
 
     @Override
@@ -247,7 +247,6 @@ public class RoomActivity extends ReservatorActivity implements OnMenuItemClickL
 
     @Override
     public void onResume() {
-        proxy = this.getResApplication().getDataProxy();
         proxy.addDataUpdatedListener(this);
         refreshData();
         startAutoRefreshData();

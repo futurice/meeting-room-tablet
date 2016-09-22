@@ -1,15 +1,15 @@
 package com.futurice.android.reservator;
 
-import com.futurice.android.reservator.ReservatorApplication;
-import com.futurice.android.reservator.model.ReservatorException;
-import com.futurice.android.reservator.model.Room;
-
 import android.app.Activity;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.view.WindowManager;
 import android.widget.Toast;
+
+import com.futurice.android.reservator.model.DataProxy;
+import com.futurice.android.reservator.model.ReservatorException;
+import com.futurice.android.reservator.model.Room;
 
 public class ReservatorActivity extends Activity {
 
@@ -89,17 +89,18 @@ public class ReservatorActivity extends Activity {
         @Override
         public void run() {
             String roomName = activity.getResApplication().getFavouriteRoomName();
+            DataProxy dataProxy = activity.getResApplication().getDataProxy();
             if (roomName != getString(R.string.lobbyRoomName)) {
                 Room room;
                 try {
-                    room = activity.getResApplication().getDataProxy().getRoomWithName(roomName);
+                    room = dataProxy.getRoomWithName(roomName);
                 } catch (ReservatorException ex) {
                     Toast err = Toast.makeText(activity, ex.getMessage(),
                         Toast.LENGTH_LONG);
                     err.show();
                     return;
                 }
-                RoomActivity.startWith(activity, room);
+                RoomActivity.startWith(activity, room, dataProxy);
             }
             activity.onPrehended();
         }
