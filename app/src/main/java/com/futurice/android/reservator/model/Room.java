@@ -23,10 +23,6 @@ public class Room implements Serializable {
     private String name, email;
     private Vector<Reservation> reservations;
     private String shownRoomName;
-
-    //public Vector<Reservation> getReservations(){
-    //	return this.reservations;
-    //}
     private int capacity = -1;
 
     public Room(String name, String email) {
@@ -55,7 +51,7 @@ public class Room implements Serializable {
 
     @Override
     public String toString() {
-        return name; // + " " + (isFree() ? "(free)" : "(reserved)");
+        return name;
     }
 
     public boolean isFree() {
@@ -258,7 +254,7 @@ public class Room implements Serializable {
             } else if (freeMinutes < RESERVED_THRESHOLD_MINUTES) {
                 return context.getString(R.string.defaultTitleForReservation);
             } else {
-                return (context.getString(R.string.freeFor)+ " " + Helpers.humanizeTimeSpan(freeMinutes, context));
+                return String.format("%s %s", context.getString(R.string.freeFor), Helpers.humanizeTimeSpan(freeMinutes, context));
             }
         } else {
             return context.getString(R.string.defaultTitleForReservation);
@@ -287,7 +283,6 @@ public class Room implements Serializable {
 
         return TimeUnit.MILLISECONDS.toMinutes(timeDifference) % 60;
     }
-
 
     private void setShownRoomName() {
         if (!reservations.isEmpty()) {
