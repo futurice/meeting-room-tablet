@@ -130,6 +130,8 @@ public abstract class DataProxy {
         }
     }
 
+    abstract public void synchronize(Room r);
+
     /**
      * Checks if the data provider has a fatal external error and the application should refuse
      * to start.

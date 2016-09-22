@@ -48,7 +48,7 @@ import java.util.Vector;
 public class RoomActivity extends ReservatorActivity implements OnMenuItemClickListener,
     DataUpdatedListener, AddressBookUpdatedListener {
     public static final String ROOM_EXTRA = "room";
-    public static final long ROOMLIST_REFRESH_PERIOD = 60 * 1000;
+    public static final long ROOMLIST_REFRESH_PERIOD = 30 * 1000;
     final Handler handler = new Handler();
     final Runnable refreshDataRunnable = new Runnable() {
         @Override
@@ -56,6 +56,8 @@ public class RoomActivity extends ReservatorActivity implements OnMenuItemClickL
             Log.v("Refresh", getString(R.string.refreshRoom));
             refreshData();
             startAutoRefreshData();
+            ReservatorApplication application = (ReservatorApplication) getApplicationContext();
+            application.getDataProxy().synchronize(currentRoom);
         }
     };
 
