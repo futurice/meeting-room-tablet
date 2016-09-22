@@ -1,10 +1,8 @@
 package com.futurice.android.reservator.view;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.text.Html;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
@@ -89,7 +87,7 @@ public class RoomTrafficLights extends RelativeLayout {
             } else {
                 int freeMinutes = room.minutesFreeFromNow();
                 roomStatusView.setText(this.getContext().getString(R.string.free));
-                String statusText = this.getContext().getString(R.string.forX) +" " + Helpers.humanizeTimeSpan2(freeMinutes, this.getContext());
+                String statusText = String.format("%s %s", this.getContext().getString(R.string.forX),Helpers.humanizeTimeSpan2(freeMinutes, this.getContext()));
                 roomStatusInfoView.setText(statusText);
 
                 if (freeMinutes >= Room.RESERVED_THRESHOLD_MINUTES) {
@@ -114,6 +112,12 @@ public class RoomTrafficLights extends RelativeLayout {
     }
 
     private void updateConnected() {
+
+        if(isInEditMode()){
+            disconnected.setVisibility(GONE);
+            return;
+        }
+
         ConnectivityManager cm = null;
         try {
             cm = (ConnectivityManager) getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -153,9 +157,8 @@ public class RoomTrafficLights extends RelativeLayout {
             // More than a day away
             reservationInfoView.setVisibility(GONE);
         } else {
-            String text = getContext().getString(R.string.freeAt);
-            text += String.format("<b>%02d:%02d</b>",nextFreeSlot.getStart().get(Calendar.HOUR_OF_DAY), nextFreeSlot.getStart().get(Calendar.MINUTE));
-            reservationInfoView.setText(Html.fromHtml(text) + getLastingTimeReservation(room));
+            String text = String.format("%02d:%02d",nextFreeSlot.getStart().get(Calendar.HOUR_OF_DAY), nextFreeSlot.getStart().get(Calendar.MINUTE));
+            reservationInfoView.setText(String.format("%s %s %s ", getContext().getString(R.string.freeAt),text, getLastingTimeReservation(room)));
             reservationInfoView.setVisibility(VISIBLE);
         }
     }
@@ -164,7 +167,7 @@ public class RoomTrafficLights extends RelativeLayout {
         long diffHours = room.getTimeDifferenceHour(lastTimeConnected);
         long diffMinutes = room.getTimeDifferenceMinute(lastTimeConnected);
         diffMinutes += diffHours *60;
-            return " ("+getContext().getString(R.string.freeIn)+" " +Helpers.humanizeTimeSpan2((int)diffMinutes,this.getContext()) + ")";
+            return String.format("%s %s%s", "("+getContext().getString(R.string.freeIn), Helpers.humanizeTimeSpan2((int)diffMinutes,this.getContext()),")");
 
     }
 

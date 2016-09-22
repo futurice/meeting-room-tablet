@@ -85,6 +85,7 @@ public class PlatformCalendarDataProxy extends DataProxy {
         this.context = context;
         setDesignationMeetingName(context);
     }
+
     private void setDesignationMeetingName(Context context) {
         String settingMeetingDesignation = context.getSharedPreferences(context.getString(R.string.PREFERENCES_NAME), context.MODE_PRIVATE).getString("meetingDesignation","");
         this.designationMeetingName = settingMeetingDesignation.equals(context.getString(R.string.meetingTitleMeetingName));
@@ -257,18 +258,20 @@ public class PlatformCalendarDataProxy extends DataProxy {
                     success = true;
                     if (!ContentResolver.isSyncActive(account, CALENDAR_SYNC_AUTHORITY)) {
                         ContentResolver.requestSync(account, CALENDAR_SYNC_AUTHORITY, new Bundle());
-                        Log.d("SYNC", context.getString(R.string.syncGoogleCalRequest) + accountName);
+                        Log.d("SYNC", String.format("%s %s", context.getString(R.string.syncGoogleCalRequest), accountName));
                     } else {
-                        Log.d("SYNC", context.getString(R.string.syncGoogleCalActiv)  + accountName);
+                        Log.d("SYNC", String.format("%s %s", context.getString(R.string.syncGoogleCalActiv),accountName ));
                     }
                 } else {
-                    Log.d("SYNC", context.getString(R.string.syncGoogleCalNotSync) + accountName);
+                    Log.d("SYNC", String.format("%s %s", context.getString(R.string.syncGoogleCalNotSync), accountName));
                 }
             }
         }
 
         if (!success) {
-            Log.w("SYNC", context.getString(R.string.initiateNot)  + accountName);
+            Log.w("SYNC", String.format("%s %s", context.getString(R.string.initiateNot) , accountName));
+        }
+    }
         }
     }
 

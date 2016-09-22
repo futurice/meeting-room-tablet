@@ -50,9 +50,9 @@ public class Helpers {
         } else if (minutes < 110) {
             return context.getString(R.string.hourAndHalf);
         } else if (minutes < 24 * 60) {
-            return Integer.toString((minutes + 10) / 60) + " " +context.getString(R.string.hours);
+            return String.format("%s %s", Integer.toString((minutes + 10) / 60), context.getString(R.string.hours));
         } else {
-            return Integer.toString(minutes / (60 * 24)) + context.getString(R.string.days);
+            return  String.format("%s %s", Integer.toString(minutes / (60 * 24)),context.getString(R.string.days));
         }
     }
 
