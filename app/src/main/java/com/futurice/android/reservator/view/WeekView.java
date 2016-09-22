@@ -1,9 +1,5 @@
 package com.futurice.android.reservator.view;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.List;
-
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.View;
@@ -16,6 +12,10 @@ import com.futurice.android.reservator.model.DateTime;
 import com.futurice.android.reservator.model.Reservation;
 import com.futurice.android.reservator.model.Room;
 import com.futurice.android.reservator.model.TimeSpan;
+
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
 
 public class WeekView extends RelativeLayout implements OnClickListener {
 
