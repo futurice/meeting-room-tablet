@@ -21,7 +21,7 @@ About Futurice
 --------------
 [Futurice](http://www.futurice.com) is a lean service creation company with offices in Helsinki, Tampere, Berlin and London.
 
-People who have contributed to Reservator:
+People who have originally contributed to Reservator:
 * [Ville Sinisalo](https://github.com/villesinisalo)
 * [Joel Mertanen](https://github.com/joelmertanen)
 * [Sébastien Piquemal](https://github.com/sebpiq)
@@ -36,6 +36,9 @@ People who have contributed to Reservator:
 * [Pekka Pulli](https://github.com/pekkapulli)
 * [Ville Tainio](https://github.com/Wisheri)
 * [Vera Izrailit](https://github.com/izrailit)
+* [Sebi Tauciuc](https://github.com/stauciuc)
+
+For the contributions after the initial release, please see the Contributors view in this GitHub Project.
 
 Support
 -------
