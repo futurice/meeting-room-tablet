@@ -39,7 +39,7 @@ public class ReservatorApplication extends Application {
         proxy = new PlatformCalendarDataProxy(
             getContentResolver(),
             AccountManager.get(this),
-            getString(R.string.calendarAccountGlob));
+            PlatformCalendarDataProxy.Mode.RESOURCES);
 
         String usedAccount = getSharedPreferences(getString(R.string.PREFERENCES_NAME), Context.MODE_PRIVATE).getString(
             getString(R.string.PREFERENCES_GOOGLE_ACCOUNT),
