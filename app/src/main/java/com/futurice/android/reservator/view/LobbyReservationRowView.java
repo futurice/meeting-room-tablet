@@ -5,6 +5,7 @@ import android.app.AlertDialog.Builder;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
+import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.util.AttributeSet;
 import android.view.View;
@@ -17,6 +18,7 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AutoCompleteTextView;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.ViewSwitcher;
 import android.content.SharedPreferences;
@@ -39,6 +41,7 @@ public class LobbyReservationRowView extends FrameLayout implements
     AutoCompleteTextView nameField;
     CustomTimeSpanPicker2 timePicker2;
     TextView roomNameView, roomInfoView, roomStatusView;
+    ImageView defaultRoomFlag;
     ReservatorApplication application;
     ViewSwitcher modeSwitcher;
     OnReserveListener onReserveCallback = null;
@@ -83,6 +86,8 @@ public class LobbyReservationRowView extends FrameLayout implements
         roomInfoView = (TextView) findViewById(R.id.roomInfoLabel);
         roomStatusView = (TextView) findViewById(R.id.roomStatusLabel);
         modeSwitcher = (ViewSwitcher) findViewById(R.id.modeSwitcher);
+        defaultRoomFlag = (ImageView) findViewById(R.id.roomDefaultIcon);
+
         switchToNormalModeContent();
         settings = context.getSharedPreferences(context.getString(R.string.PREFERENCES_NAME), context.MODE_PRIVATE);
 
@@ -118,6 +123,7 @@ public class LobbyReservationRowView extends FrameLayout implements
 
         // Room stuff
         roomNameView.setText(room.getName());
+
         if (room.getCapacity() >= 0) {
             roomInfoView.setText("for " + room.getCapacity());
         } else {
@@ -145,6 +151,15 @@ public class LobbyReservationRowView extends FrameLayout implements
             roomStatusView.setTextColor(getResources().getColor(
                 R.color.StatusReservedColor));
             bookNowButton.setVisibility(View.INVISIBLE);
+        }
+
+        if(application.getFavouriteRoomName().equals(room.getName()))
+        {
+            defaultRoomFlag.setVisibility(VISIBLE);
+            roomNameView.setTypeface(null, Typeface.BOLD);
+        } else {
+            defaultRoomFlag.setVisibility(INVISIBLE);
+            roomNameView.setTypeface(null, Typeface.NORMAL);
         }
     }
 
