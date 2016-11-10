@@ -9,6 +9,8 @@ import android.content.Intent;
 import android.accounts.Account;
 import android.accounts.AccountManager;
 
+import com.futurice.android.reservator.common.PreferenceManager;
+
 import java.util.List;
 import java.util.ArrayList;
 
@@ -48,18 +50,16 @@ public class AccountSelection extends ReservatorActivity {
     }
 
     public void selectGoogleAccount() {
-        final SharedPreferences preferences = getSharedPreferences(this.getString(R.string.PREFERENCES_NAME), Context.MODE_PRIVATE);
-        final String selectedAccount = preferences.getString(getString(R.string.accountForServation), "");
-        boolean addressBookOption = preferences.getBoolean("addressBookOption", false);
 
-        if (selectedAccount == "" && !addressBookOption) {
+        final String selectedAccount = PreferenceManager.getInstance(this).getDefaultUserName();
+        boolean addressBookOption = PreferenceManager.getInstance(this).getAddressBookEnabled();
+
+        if (selectedAccount == null && !addressBookOption) {
             final String[] values = fetchAccounts();
 
             // Only one Google account available so the selection isn't needed.
             if (values.length == 1) {
-                preferences.edit()
-                    .putString(getString(R.string.accountForServation), values[0])
-                    .apply();
+                PreferenceManager.getInstance(this).setDefaultUserName(values[0]);
                 moveToLobby();
             } else {
 
@@ -71,9 +71,7 @@ public class AccountSelection extends ReservatorActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
-                        preferences.edit()
-                            .putString(getString(R.string.accountForServation), values[which])
-                            .apply();
+                        PreferenceManager.getInstance(AccountSelection.this).setDefaultUserName(values[which]);
                         moveToLobby();
                     }
                 });

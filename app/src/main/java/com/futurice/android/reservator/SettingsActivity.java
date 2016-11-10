@@ -19,6 +19,7 @@ import android.widget.Spinner;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
+import com.futurice.android.reservator.common.PreferenceManager;
 import com.futurice.android.reservator.model.AddressBook;
 import com.futurice.android.reservator.model.DataProxy;
 import com.futurice.android.reservator.model.platformcalendar.PlatformCalendarDataProxy;
@@ -33,7 +34,7 @@ public class SettingsActivity extends ReservatorActivity {
     ToggleButton addressBookOptionView;
     Spinner usedReservationAccount;
     DataProxy proxy;
-    SharedPreferences settings;
+    PreferenceManager settings;
     HashSet<String> unselectedRooms;
     ArrayList<String> roomNames;
 
@@ -56,8 +57,8 @@ public class SettingsActivity extends ReservatorActivity {
     @Override
     public void onResume() {
         super.onResume();
-        settings = getSharedPreferences(getString(R.string.PREFERENCES_NAME), Context.MODE_PRIVATE);
-        unselectedRooms = new HashSet<String>(settings.getStringSet(getString(R.string.PREFERENCES_UNSELECTED_ROOMS), new HashSet<String>()));
+        settings = PreferenceManager.getInstance(this);
+        unselectedRooms = new HashSet<String>(settings.getUnselectedRooms());
 
         ListView l = (ListView) findViewById(R.id.roomListView);
         SettingsRoomRowAdapter roomListAdapter = new SettingsRoomRowAdapter(this, R.layout.settings_select_room_row, roomNames);
@@ -66,19 +67,15 @@ public class SettingsActivity extends ReservatorActivity {
 
         // Set back the recorded settings
         usedAccountView = (Spinner) findViewById(R.id.usedAccountSpinner);
-        String usedAccount = settings.getString(
-            getString(R.string.PREFERENCES_GOOGLE_ACCOUNT),
-            getString(R.string.allAccountsMagicWord));
+        String usedAccount = settings.getDefaultCalendarAccount();
         refreshGoogleAccountsSpinner();
 
         // Require weather reservation requires address book contacts or not
         addressBookOptionView = (ToggleButton) findViewById(R.id.usedAddressBookOption);
-        addressBookOptionView.setChecked(settings.getBoolean("addressBookOption", false));
+        addressBookOptionView.setChecked(settings.getAddressBookEnabled());
 
         usedReservationAccount = (Spinner) findViewById(R.id.defaultReservationAccount);
-        String usedResAccount = settings.getString(
-            getString(R.string.accountForServation),
-            "");
+        String usedResAccount = settings.getDefaultUserName();
         if (addressBookOptionView.isChecked()) {
             usedReservationAccount.setVisibility(View.GONE);
             findViewById(R.id.defaultReservationAccountLabel).setVisibility(View.GONE);
@@ -102,7 +99,7 @@ public class SettingsActivity extends ReservatorActivity {
 
 
         roomNameView = (Spinner) findViewById(R.id.roomNameSpinner);
-        String roomName = settings.getString(getString(R.string.PREFERENCES_ROOM_NAME), "");
+        String roomName = settings.getSelectedRoom();
 
         refreshRoomNamesSpinner();
 
@@ -120,12 +117,7 @@ public class SettingsActivity extends ReservatorActivity {
             @Override
             public void onClick(View v) {
                 // credentials
-                Editor editor = settings.edit();
-                Map<String, ?> keys = settings.getAll();
-                for (Map.Entry<String, ?> entry : keys.entrySet()) {
-                    editor.remove(entry.getKey());
-                }
-                editor.apply();
+                settings.removeAllSettings();
                 Toast.makeText(getApplicationContext(), "Removed credentials and reseted settings", Toast.LENGTH_SHORT).show();
                 finish();
             }
@@ -150,34 +142,26 @@ public class SettingsActivity extends ReservatorActivity {
         }
 
         Object selectedResAccountName = usedReservationAccount.getSelectedItem();
-        String selectedResAccount = "";
+        String selectedResAccount = null;
         if (selectedResAccountName != null) {
             selectedResAccount = selectedResAccountName.toString().trim();
         }
-        Editor editor = settings.edit();
-        editor.putString(getString(R.string.PREFERENCES_GOOGLE_ACCOUNT), selectedAccount);
-        editor.putString(getString(R.string.PREFERENCES_ROOM_NAME), roomName);
-        editor.putBoolean("addressBookOption", addressBookOptionView.isChecked());
-        editor.putString(getString(R.string.accountForServation), selectedResAccount);
 
-        editor.apply();
+
+        settings.setDefaultCalendarAccount(selectedAccount);
+        settings.setSelectedRoom(roomName);
+        settings.setAddressBookEnabled(addressBookOptionView.isChecked());
+        settings.setDefaultUserName(selectedResAccount);
+
 
         // Update proxies
         if (proxy instanceof PlatformCalendarDataProxy) {
-            if (selectedAccount.equals(getString(R.string.allAccountsMagicWord))) {
-                ((PlatformCalendarDataProxy) proxy).setAccount(null);
-            } else {
-                ((PlatformCalendarDataProxy) proxy).setAccount(selectedAccount);
-            }
+            ((PlatformCalendarDataProxy) proxy).setAccount(selectedAccount);
         }
 
         AddressBook ab = getResApplication().getAddressBook();
         if (ab instanceof PlatformContactsAddressBook) {
-            if (selectedAccount.equals(getString(R.string.allAccountsMagicWord))) {
-                ((PlatformContactsAddressBook) ab).setAccount(null);
-            } else {
-                ((PlatformContactsAddressBook) ab).setAccount(selectedAccount);
-            }
+            ((PlatformContactsAddressBook) ab).setAccount(selectedAccount);
         }
         Toast.makeText(getApplicationContext(), "Settings saved", Toast.LENGTH_SHORT).show();
     }
@@ -190,7 +174,6 @@ public class SettingsActivity extends ReservatorActivity {
 
         ArrayAdapter<String> adapter;
         ArrayList<String> accounts = new ArrayList<String>();
-        accounts.add(getString(R.string.allAccountsMagicWord));
         for (Account account : AccountManager.get(this).getAccountsByType(GOOGLE_ACCOUNT_TYPE)) {
             accounts.add(account.name);
         }
@@ -250,7 +233,6 @@ public class SettingsActivity extends ReservatorActivity {
 
     public void roomRowClicked(final View view) {
         if (view instanceof CheckBox) {
-            Editor editor = settings.edit();
 
             CheckBox c = (CheckBox) view;
             // checked = "not unselected". sorry!
@@ -260,10 +242,7 @@ public class SettingsActivity extends ReservatorActivity {
                 unselectedRooms.add(c.getText().toString());
             }
 
-            // Create a new HashSet, because...
-            // http://stackoverflow.com/questions/14034803/misbehavior-when-trying-to-store-a-string-set-using-sharedpreferences
-            editor.putStringSet(getString(R.string.PREFERENCES_UNSELECTED_ROOMS), new HashSet<String>(unselectedRooms));
-            editor.commit();
+            settings.setUnselectedRooms(unselectedRooms);
 
             refreshRoomNamesSpinner();
         }

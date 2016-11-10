@@ -22,8 +22,6 @@ public class LoginActivity extends ReservatorActivity implements AddressBookUpda
     private ProgressDialog pd;
     private boolean addressBookOk = false;
     private boolean roomListOk = false;
-    private SharedPreferences preferences;
-    private Editor editor;
 
     /**
      * Called when the activity is first created.
@@ -36,9 +34,6 @@ public class LoginActivity extends ReservatorActivity implements AddressBookUpda
         if (pd != null) {
             pd.dismiss();
         }
-
-        preferences = getSharedPreferences(this.getString(R.string.PREFERENCES_NAME), Context.MODE_PRIVATE);
-        editor = preferences.edit();
 
         // Check Google Calendar
         if (getResApplication().getDataProxy().hasFatalError()) {
@@ -91,7 +86,7 @@ public class LoginActivity extends ReservatorActivity implements AddressBookUpda
 
     private void checkAndGo() {
         if (addressBookOk && roomListOk) {
-            editor.apply();
+
             if (pd != null)
                 pd.dismiss();
 

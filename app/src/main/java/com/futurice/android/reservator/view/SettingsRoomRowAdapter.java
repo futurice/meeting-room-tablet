@@ -12,11 +12,11 @@ import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 
 import com.futurice.android.reservator.R;
+import com.futurice.android.reservator.common.PreferenceManager;
 
 public class SettingsRoomRowAdapter extends ArrayAdapter<String> {
     private final Context context;
     private final ArrayList<String> values;
-    private SharedPreferences preferences;
 
     public SettingsRoomRowAdapter(Context context, int view,
                                   ArrayList<String> values) {
@@ -24,9 +24,6 @@ public class SettingsRoomRowAdapter extends ArrayAdapter<String> {
         this.context = context;
         this.values = values;
 
-        preferences = context.getSharedPreferences(
-            context.getString(R.string.PREFERENCES_NAME),
-            Context.MODE_PRIVATE);
     }
 
     @Override
@@ -37,9 +34,7 @@ public class SettingsRoomRowAdapter extends ArrayAdapter<String> {
             parent, false);
 
         // reload the unselected rooms when scrolling. This is not the most efficient solution.
-        HashSet<String> unselectedRooms = (HashSet<String>) preferences.getStringSet(
-            context.getString(R.string.PREFERENCES_UNSELECTED_ROOMS),
-            new HashSet<String>());
+        HashSet<String> unselectedRooms = PreferenceManager.getInstance(context).getUnselectedRooms();
 
         CheckBox t = (CheckBox) rowView.findViewById(R.id.checkBox1);
         String current = values.get(position);

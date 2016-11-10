@@ -1,6 +1,7 @@
 package com.futurice.android.reservator;
 
 import com.futurice.android.reservator.ReservatorApplication;
+import com.futurice.android.reservator.common.PreferenceManager;
 import com.futurice.android.reservator.model.ReservatorException;
 import com.futurice.android.reservator.model.Room;
 
@@ -88,8 +89,8 @@ public class ReservatorActivity extends Activity {
 
         @Override
         public void run() {
-            String roomName = activity.getResApplication().getFavouriteRoomName();
-            if (roomName != getString(R.string.lobbyRoomName)) {
+            String roomName = PreferenceManager.getInstance(getApplicationContext()).getDefaultCalendarAccount();
+            if (roomName != null) {
                 Room room;
                 try {
                     room = activity.getResApplication().getDataProxy().getRoomWithName(roomName);

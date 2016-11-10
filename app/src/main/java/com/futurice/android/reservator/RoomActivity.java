@@ -26,6 +26,7 @@ import android.view.Window;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.futurice.android.reservator.common.PreferenceManager;
 import com.futurice.android.reservator.model.AddressBook;
 import com.futurice.android.reservator.model.AddressBookUpdatedListener;
 import com.futurice.android.reservator.model.CachedDataProxy;
@@ -295,8 +296,8 @@ public class RoomActivity extends ReservatorActivity implements OnMenuItemClickL
 
     @Override
     protected Boolean isPrehensible() {
-        String favouriteRoomName = getResApplication().getFavouriteRoomName();
-        return !(currentRoom.getName().equals(favouriteRoomName));
+        String favouriteRoomName = PreferenceManager.getInstance(this).getSelectedRoom();
+        return favouriteRoomName != null;
     }
 
     @Override

@@ -547,15 +547,15 @@ public class PlatformCalendarDataProxy extends DataProxy {
 
         String[] mProjection = {};
 
-        String mSelectionClause = "";
+        ArrayList<String> mSelectionClauses = new ArrayList<String>();
         ArrayList<String> mSelectionArgs = new ArrayList<String>();
 
         if(this.calendarMode == Mode.RESOURCES)
         {
-            mSelectionClause += CalendarContract.Calendars.OWNER_ACCOUNT + " GLOB ?";
+            mSelectionClauses.add(CalendarContract.Calendars.OWNER_ACCOUNT + " GLOB ?");
             mSelectionArgs.add(Mode.RESOURCES.resourcesGlob);
         }
-        mSelectionClause += CalendarContract.Calendars.SYNC_EVENTS + " = 1";
+        mSelectionClauses.add(CalendarContract.Calendars.SYNC_EVENTS + " = 1");
 
 
         String mSortOrder = null;
@@ -563,7 +563,7 @@ public class PlatformCalendarDataProxy extends DataProxy {
         Cursor result = resolver.query(
             CalendarContract.Calendars.CONTENT_URI,
             mProjection,
-            mSelectionClause,
+            TextUtils.join(" AND ", mSelectionClauses),
             mSelectionArgs.toArray(new String[0]),
             mSortOrder);
 

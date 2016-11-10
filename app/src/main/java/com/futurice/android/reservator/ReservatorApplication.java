@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Handler;
 
+import com.futurice.android.reservator.common.PreferenceManager;
 import com.futurice.android.reservator.model.AddressBook;
 import com.futurice.android.reservator.model.DataProxy;
 import com.futurice.android.reservator.model.platformcalendar.PlatformCalendarDataProxy;
@@ -41,17 +42,9 @@ public class ReservatorApplication extends Application {
             AccountManager.get(this),
             PlatformCalendarDataProxy.Mode.RESOURCES);
 
-        String usedAccount = getSharedPreferences(getString(R.string.PREFERENCES_NAME), Context.MODE_PRIVATE).getString(
-            getString(R.string.PREFERENCES_GOOGLE_ACCOUNT),
-            getString(R.string.allAccountsMagicWord));
-
-        if (usedAccount.equals(getString(R.string.allAccountsMagicWord))) {
-            ((PlatformCalendarDataProxy) proxy).setAccount(null);
-            googleAddressBook.setAccount(null);
-        } else {
-            ((PlatformCalendarDataProxy) proxy).setAccount(usedAccount);
-            googleAddressBook.setAccount(usedAccount);
-        }
+        String usedAccount = PreferenceManager.getInstance(this).getDefaultCalendarAccount();
+        ((PlatformCalendarDataProxy) proxy).setAccount(usedAccount);
+        googleAddressBook.setAccount(usedAccount);
 
         addressBook = googleAddressBook;
 
@@ -59,19 +52,6 @@ public class ReservatorApplication extends Application {
         clearCacheLater();
     }
 
-    public String getSettingValue(int settingNameId, String defaultValue) {
-        SharedPreferences settings = getSharedPreferences(getString(R.string.PREFERENCES_NAME), 0);
-        return settings.getString(getString(settingNameId), defaultValue);
-    }
-
-    public Boolean getBooleanSettingsValue(String settingName, Boolean defaultValue) {
-        SharedPreferences settings = getSharedPreferences(getString(R.string.PREFERENCES_NAME), 0);
-        return settings.getBoolean(settingName, defaultValue);
-    }
-
-    public String getFavouriteRoomName() {
-        return this.getSettingValue(R.string.PREFERENCES_ROOM_NAME, getString(R.string.lobbyRoomName));
-    }
 
     private void clearCacheLater() {
         handler.postDelayed(clearAddressCache, ADDRESS_CACHE_CLEAR_INTERVAL);

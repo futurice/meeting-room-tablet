@@ -29,6 +29,7 @@ import android.widget.DigitalClock;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.futurice.android.reservator.common.PreferenceManager;
 import com.futurice.android.reservator.model.AddressBook;
 import com.futurice.android.reservator.model.AddressBookUpdatedListener;
 import com.futurice.android.reservator.model.DataProxy;
@@ -65,7 +66,6 @@ public class LobbyActivity extends ReservatorActivity implements OnMenuItemClick
     @Override
     public void onResume() {
         super.onResume();
-        settings = getSharedPreferences(getString(R.string.PREFERENCES_NAME), Context.MODE_PRIVATE);
         showLoadingCount = 0; //TODO better fix
         proxy.addDataUpdatedListener(this);
         ab.addDataUpdatedListener(this);
@@ -86,8 +86,8 @@ public class LobbyActivity extends ReservatorActivity implements OnMenuItemClick
 
     @Override
     protected Boolean isPrehensible() {
-        String favouriteRoomName = getResApplication().getFavouriteRoomName();
-        return !(favouriteRoomName.equals(getString(R.string.lobbyRoomName)));
+        String favouriteRoomName = PreferenceManager.getInstance(this).getSelectedRoom();
+        return favouriteRoomName != null;
     }
 
     private void refreshRoomInfo() {
@@ -180,8 +180,7 @@ public class LobbyActivity extends ReservatorActivity implements OnMenuItemClick
 
     @Override
     public void roomListUpdated(Vector<Room> rooms) {
-        HashSet<String> hiddenRooms = (HashSet<String>)
-            settings.getStringSet(getString(R.string.PREFERENCES_UNSELECTED_ROOMS), new HashSet<String>());
+        HashSet<String> hiddenRooms = PreferenceManager.getInstance(this).getUnselectedRooms();
 
         //proceed to requesting room reservation data
         for (Room r : rooms) {

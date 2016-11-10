@@ -24,6 +24,7 @@ import android.content.SharedPreferences;
 import com.futurice.android.reservator.R;
 import com.futurice.android.reservator.ReservatorApplication;
 import com.futurice.android.reservator.RoomActivity;
+import com.futurice.android.reservator.common.PreferenceManager;
 import com.futurice.android.reservator.model.AddressBookAdapter;
 import com.futurice.android.reservator.model.AddressBookEntry;
 import com.futurice.android.reservator.model.DateTime;
@@ -84,7 +85,7 @@ public class LobbyReservationRowView extends FrameLayout implements
         roomStatusView = (TextView) findViewById(R.id.roomStatusLabel);
         modeSwitcher = (ViewSwitcher) findViewById(R.id.modeSwitcher);
         switchToNormalModeContent();
-        settings = context.getSharedPreferences(context.getString(R.string.PREFERENCES_NAME), context.MODE_PRIVATE);
+
 
         application = (ReservatorApplication) this.getContext()
             .getApplicationContext();
@@ -261,7 +262,7 @@ public class LobbyReservationRowView extends FrameLayout implements
         setBackgroundColor(getResources().getColor(R.color.ReserveBackground));
 
         // Initial state for the "Reserve" button.
-        if (application.getBooleanSettingsValue("addressBookOption", false)) {
+        if (PreferenceManager.getInstance(getContext()).getAddressBookEnabled()) {
             reserveButton.setEnabled(false);
             findViewById(R.id.hintText).setVisibility(View.GONE);
         } else {
@@ -308,7 +309,7 @@ public class LobbyReservationRowView extends FrameLayout implements
         protected Void doInBackground(Void... arg0) {
             AddressBookEntry entry = application.getAddressBook().getEntryByName(
                 nameField.getText().toString());
-            Boolean addressBookOption = application.getBooleanSettingsValue("addressBookOption", false);
+            Boolean addressBookOption = PreferenceManager.getInstance(getContext()).getAddressBookEnabled();
 
             if (entry == null && addressBookOption) {
                 reservatorError(new ReservatorException("No such user, try again"));
@@ -319,7 +320,7 @@ public class LobbyReservationRowView extends FrameLayout implements
                         entry.getName(), entry.getEmail());
                 } else {
                     // Address book option is off so reserve the room with the selected account in settings.
-                    String accountEmail = application.getSettingValue(R.string.accountForServation, "");
+                    String accountEmail = PreferenceManager.getInstance(getContext()).getDefaultUserName();
                     if (accountEmail.equals("")) {
                         reservatorError(new ReservatorException("No account for reservation stored. Check your settings."));
                     }
