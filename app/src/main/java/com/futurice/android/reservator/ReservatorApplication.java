@@ -21,29 +21,32 @@ public class ReservatorApplication extends Application {
             clearCacheLater();
         }
     };
-    private DataProxy proxy;
-    private AddressBook addressBook;
-    private Handler handler;
+    private DataProxy proxy = null;
+    private AddressBook addressBook = null;
+    private Handler handler = null;
 
     public DataProxy getDataProxy() {
+        if(proxy == null) resetDataProxy();
         return proxy;
     }
 
-    public AddressBook getAddressBook() {
-        return addressBook;
-    }
-
-    @Override
-    public void onCreate() {
-        PlatformContactsAddressBook googleAddressBook = new PlatformContactsAddressBook(getContentResolver());
+    public void resetDataProxy()
+    {
+        PlatformCalendarDataProxy.Mode mode = PreferenceManager.getInstance(this).getCalendarMode();
+        if(mode==null)
+        {
+            mode = PlatformCalendarDataProxy.Mode.CALENDARS;
+        }
 
         proxy = new PlatformCalendarDataProxy(
-            getContentResolver(),
-            AccountManager.get(this),
-            PlatformCalendarDataProxy.Mode.RESOURCES);
+                getContentResolver(),
+                AccountManager.get(this),
+                mode);
 
         String usedAccount = PreferenceManager.getInstance(this).getDefaultCalendarAccount();
         ((PlatformCalendarDataProxy) proxy).setAccount(usedAccount);
+
+        PlatformContactsAddressBook googleAddressBook = new PlatformContactsAddressBook(getContentResolver());
         googleAddressBook.setAccount(usedAccount);
 
         addressBook = googleAddressBook;
@@ -52,6 +55,14 @@ public class ReservatorApplication extends Application {
         clearCacheLater();
     }
 
+    public AddressBook getAddressBook() {
+        return addressBook;
+    }
+
+    @Override
+    public void onCreate() {
+        resetDataProxy();
+    }
 
     private void clearCacheLater() {
         handler.postDelayed(clearAddressCache, ADDRESS_CACHE_CLEAR_INTERVAL);

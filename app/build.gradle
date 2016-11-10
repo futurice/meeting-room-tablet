@@ -1,8 +1,8 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 22
-    buildToolsVersion "23.0.1"
+    compileSdkVersion 24
+    buildToolsVersion '25'
 
     defaultConfig {
         applicationId "com.futurice.android.reservator"
@@ -18,5 +18,13 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
         }
+    }
+
+    repositories {
+        mavenCentral()
+    }
+
+    dependencies {
+        compile 'com.github.paolorotolo:appintro:4.1.0'
     }
 }

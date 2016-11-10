@@ -3,8 +3,11 @@ package com.futurice.android.reservator.common;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import com.futurice.android.reservator.model.platformcalendar.PlatformCalendarDataProxy;
+
 import java.util.HashSet;
 import java.util.Map;
+
 
 /**
  * Created by shoj on 10/11/2016.
@@ -18,11 +21,14 @@ public class PreferenceManager {
     }
 
     final static String PREFERENCES_IDENTIFIER = "ReservatorPreferences";
+
     final static String PREFERENCES_DEFAULT_ACCOUNT = "googleAccount";
     final static String PREFERENCES_DEFAULT_USER_NAME = "reservationAccount";
     final static String PREFERENCES_ADDRESSBOOK_ENABLED = "addressBookOption";
     final static String PREFERENCES_UNSELECTED_ROOMS = "unselectedRooms";
     final static String PREFERENCES_SELECTED_ROOM = "roomName";
+    final static String PREFERENCES_CONFIGURED = "preferencedConfigured";
+    final static String PREFERENCES_CALENDAR_MODE = "resourcesOnly";
 
 
     final SharedPreferences preferences;
@@ -90,6 +96,17 @@ public class PreferenceManager {
     }
 
 
+    public boolean getApplicationConfigured()
+    {
+        return preferences.getBoolean(PREFERENCES_CONFIGURED,false);
+    }
+    public void setApplicationConfigured(boolean configured)
+    {
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putBoolean(PREFERENCES_CONFIGURED,configured);
+        editor.apply();
+    }
+
 
     public void removeAllSettings()
     {
@@ -100,4 +117,19 @@ public class PreferenceManager {
         }
         editor.apply();
     }
+
+    public PlatformCalendarDataProxy.Mode getCalendarMode()
+    {
+        String name = preferences.getString(PREFERENCES_CALENDAR_MODE,null);
+        if(name==null) return null;
+        return Enum.valueOf(PlatformCalendarDataProxy.Mode.class, name);
+    }
+
+    public void setCalendarMode(PlatformCalendarDataProxy.Mode mode)
+    {
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putString(PREFERENCES_CALENDAR_MODE,mode.name());
+        editor.apply();
+    }
+
 }
