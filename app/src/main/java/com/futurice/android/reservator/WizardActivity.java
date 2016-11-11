@@ -7,9 +7,9 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 
 import com.futurice.android.reservator.common.PreferenceManager;
-import com.futurice.android.reservator.view.WizardAccountSelectionFragment;
-import com.futurice.android.reservator.view.WizardDefaultRoomSelectionFragment;
-import com.futurice.android.reservator.view.WizardRoomSelectionFragment;
+import com.futurice.android.reservator.view.wizard.WizardAccountSelectionFragment;
+import com.futurice.android.reservator.view.wizard.WizardDefaultRoomSelectionFragment;
+import com.futurice.android.reservator.view.wizard.WizardRoomSelectionFragment;
 import com.github.paolorotolo.appintro.AppIntro;
 
 /**
@@ -72,4 +72,5 @@ public final class WizardActivity extends AppIntro {
         final Intent i = new Intent(this, LoginActivity.class);
         startActivity(i);
     }
+
 }

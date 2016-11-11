@@ -1,4 +1,4 @@
-package com.futurice.android.reservator.view;
+package com.futurice.android.reservator.view.wizard;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
@@ -20,6 +20,7 @@ import android.widget.Toast;
 
 import com.futurice.android.reservator.R;
 import com.futurice.android.reservator.ReservatorApplication;
+import com.futurice.android.reservator.WizardActivity;
 import com.futurice.android.reservator.common.PreferenceManager;
 import com.futurice.android.reservator.model.DataProxy;
 import com.futurice.android.reservator.model.ReservatorException;
@@ -46,7 +47,7 @@ public final class WizardDefaultRoomSelectionFragment extends android.support.v4
 
         roomRadioGroup = (RadioGroup) view.findViewById(R.id.wizard_accounts_radiogroup);
         TextView title = (TextView) view.findViewById(R.id.wizard_accounts_title);
-        title.setText(R.string.get_a_room);
+        title.setText(R.string.defaultRoomSelectionTitle);
 
 
         roomRadioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
@@ -67,33 +68,24 @@ public final class WizardDefaultRoomSelectionFragment extends android.support.v4
         PreferenceManager preferences = PreferenceManager.getInstance(getActivity());
         ReservatorApplication application = ((ReservatorApplication) getActivity().getApplication());
 
+        roomRadioGroup.removeAllViews();
+        DataProxy proxy = application.getDataProxy();
 
-        try {
+        ArrayList<String> roomNames = proxy.getRoomNames();
 
-            roomRadioGroup.removeAllViews();
-            DataProxy proxy = application.getDataProxy();
+        HashSet<String> unselectedRooms = preferences.getUnselectedRooms();
 
-            ArrayList<String> roomNames = proxy.getRoomNames();
-
-            HashSet<String> unselectedRooms = preferences.getUnselectedRooms();
-
-            for(String roomName: roomNames)
-            {
-                if(unselectedRooms.contains(roomName)) {
-                    continue;
-                }
-
-
-                RadioButton roomRadioButton = new RadioButton(getActivity());
-                roomRadioButton.setText(roomName);
-                roomRadioGroup.addView(roomRadioButton);
+        for(String roomName: roomNames)
+        {
+            if(unselectedRooms.contains(roomName)) {
+                continue;
             }
 
-        } catch (ReservatorException e) {
-            Toast err = Toast.makeText(getActivity(), e.getMessage(),
-                    Toast.LENGTH_LONG);
-            err.show();
+            RadioButton roomRadioButton = new RadioButton(getActivity());
+            roomRadioButton.setText(roomName);
+            roomRadioGroup.addView(roomRadioButton);
         }
+
 
     }
 

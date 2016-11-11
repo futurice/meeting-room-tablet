@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="hello">Hello World, Reservator!</string>
     <string name="app_name">Reservator</string>
-    <string name="get_a_room">Get a room!</string>
     <string name="start">start</string>
     <string name="end">end</string>
     <string name="reserve">reserve</string>
@@ -39,7 +37,7 @@
     <string name="touchToReserve">Tap for reservations</string>
     <string name="bookNow">Book Now</string>
     <string name="disconnectedWarning">Disconnected!</string>
-    <string name="aboutInfo">Reservator is made by Futurice, a lean service creation company with offices in Helsinki, Tampere, Berlin and London. More information at: www.futurice.com.\n\nThis application is published under the BSD license. You can find the source code at: http://github.com/futurice/meeting-room-tablet</string>
+    <string name="aboutInfo">Reservator is made by Futurice, a lean service creation company with offices in Helsinki, Tampere, Berlin, Munich, Stockholm and London. More information at: www.futurice.com.\n\nThis application is published under the BSD license. You can find the source code at: http://github.com/futurice/meeting-room-tablet</string>
     <string name="aboutTitle">About</string>
     <string name="loadingText">Loading</string>
     <string name="addressBookOptionLabel">Require address book contacts for reserving</string>
@@ -50,4 +48,9 @@
     <string name="googleAccountHelp">Account or accounts used for searching rooms.</string>
     <string name="defaultTitleForReservation">Reserved</string>
     <string name="hintText">Hint: You can use your tablet\'s address book contacts for reserving.</string>
+    <string name="goToAccountSettings">Go to account settings</string>
+    <string name="goToCalendarSettings">Go to calendar settings</string>
+    <string name="defaultRoomSelectionTitle">Select default room</string>
+
+
 </resources>

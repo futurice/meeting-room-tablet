@@ -1,7 +1,12 @@
-package com.futurice.android.reservator.view;
+package com.futurice.android.reservator.view.wizard;
 
-import android.app.Application;
+import android.app.AlertDialog;
+import android.content.ContentUris;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.CalendarContract;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,14 +15,12 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
-import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.futurice.android.reservator.R;
 import com.futurice.android.reservator.ReservatorApplication;
+import com.futurice.android.reservator.WizardActivity;
 import com.futurice.android.reservator.common.PreferenceManager;
 import com.futurice.android.reservator.model.DataProxy;
 import com.futurice.android.reservator.model.ReservatorException;
@@ -39,7 +42,6 @@ public final class WizardRoomSelectionFragment extends android.support.v4.app.Fr
     ProgressBar progressBar = null;
 
     DataProxy proxy = null;
-    HashSet<String> unselectedRooms = null;
     ArrayList<String> roomNames = null;
 
     PreferenceManager preferences = null;
@@ -103,28 +105,26 @@ public final class WizardRoomSelectionFragment extends android.support.v4.app.Fr
         application.resetDataProxy();
         proxy = application.getDataProxy();
 
-        try {
-            roomNames = proxy.getRoomNames();
-            progressBar.setVisibility(View.GONE);
-            containerRoomCheckboxes.removeAllViews();
-            onlyUseResource.setVisibility(View.VISIBLE);
+        roomNames = proxy.getRoomNames();
 
-            HashSet<String> unselectedRooms = preferences.getUnselectedRooms();
+        progressBar.setVisibility(View.GONE);
+        containerRoomCheckboxes.removeAllViews();
+        onlyUseResource.setVisibility(View.VISIBLE);
 
-            for(String roomName: roomNames)
-            {
-                CheckBox cb = new CheckBox(getActivity());
-                cb.setText(roomName);
-                cb.setChecked(unselectedRooms.contains(roomName)==false);
-                containerRoomCheckboxes.addView(cb);
-            }
+        HashSet<String> unselectedRooms = preferences.getUnselectedRooms();
 
-
-        } catch (ReservatorException e) {
-            Toast err = Toast.makeText(getActivity(), e.getMessage(),
-                    Toast.LENGTH_LONG);
-            err.show();
+        for(String roomName: roomNames)
+        {
+            CheckBox cb = new CheckBox(getActivity());
+            cb.setText(roomName);
+            cb.setChecked(unselectedRooms.contains(roomName)==false);
+            containerRoomCheckboxes.addView(cb);
         }
+
+    }
+
+    private void showErrorMessageNoCalendars()
+    {
 
     }
 
@@ -133,9 +133,19 @@ public final class WizardRoomSelectionFragment extends android.support.v4.app.Fr
         super.onResume();
     }
 
+
     @Override
     public boolean isPolicyRespected() {
-        return true;
+        // check whether any room is checked
+        for (int i=0; i<containerRoomCheckboxes.getChildCount(); i++) {
+            CheckBox cb = (CheckBox) containerRoomCheckboxes.getChildAt(i);
+            if (cb == null) continue;
+
+            if (cb.isChecked() == true) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override

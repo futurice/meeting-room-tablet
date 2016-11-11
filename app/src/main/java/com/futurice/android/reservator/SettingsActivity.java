@@ -44,14 +44,9 @@ public class SettingsActivity extends ReservatorActivity {
         setContentView(R.layout.settings_activity);
         proxy = getResApplication().getDataProxy();
 
-        try {
-            roomNames = proxy.getRoomNames();
-            roomNames.add(getString(R.string.lobbyRoomName));
-        } catch (ReservatorException e) {
-            Toast err = Toast.makeText(getResApplication(), e.getMessage(),
-                Toast.LENGTH_LONG);
-            err.show();
-        }
+        roomNames = proxy.getRoomNames();
+        roomNames.add(getString(R.string.lobbyRoomName));
+
     }
 
     @Override

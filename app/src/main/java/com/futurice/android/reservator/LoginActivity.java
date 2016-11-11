@@ -31,7 +31,7 @@ public class LoginActivity extends ReservatorActivity implements AddressBookUpda
 
         if (PreferenceManager.getInstance(this).getApplicationConfigured() == false)
         {
-            showWizard(null);
+            showWizard();
             return;
         }
 
@@ -39,8 +39,7 @@ public class LoginActivity extends ReservatorActivity implements AddressBookUpda
 
         // Check Google Calendar
         if (getResApplication().getDataProxy().hasFatalError()) {
-
-            showWizard(getString(R.string.noCalendarsError));
+            showWizard();
             return;
         } else {
             roomListOk = true;
@@ -82,30 +81,14 @@ public class LoginActivity extends ReservatorActivity implements AddressBookUpda
     @Override
     public void addressBookUpdateFailed(ReservatorException e) {
         addressBookOk = false;
-
-        // show error message and return to config screen
-        showWizard(e.getMessage());
+        // return to config
+        showWizard();
     }
 
-    private void showWizard(String errorMessage)
+    private void showWizard()
     {
         final Intent i = new Intent(this, WizardActivity.class);
-
-        if(errorMessage == null)
-        {
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setMessage(errorMessage)
-                    .setTitle(R.string.calendarError)
-                    .setPositiveButton(R.string.close, new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            startActivity(i);
-                        }
-                    });
-            builder.create().show();
-        }
-
         startActivity(i);
-
 
     }
 

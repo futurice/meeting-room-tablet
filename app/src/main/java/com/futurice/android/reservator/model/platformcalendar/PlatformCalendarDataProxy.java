@@ -88,7 +88,7 @@ public class PlatformCalendarDataProxy extends DataProxy {
     /**
      * @param resolver       From application context. Used to access the platform's Calendar Provider.
      * @param accountManager From application context. Allows us to initiate a sync immediately after adding a reservation.
-     * @param accountGlob    SQLite glob pattern that selects room calendar accounts.
+     * @param calendarMode   Specifies whether all calendars are considered or only resources.
      */
     public PlatformCalendarDataProxy(ContentResolver resolver, AccountManager accountManager, Mode calendarMode) {
         this.resolver = resolver;
@@ -279,7 +279,7 @@ public class PlatformCalendarDataProxy extends DataProxy {
     }
 
     @Override
-    public Vector<Room> getRooms() throws ReservatorException {
+    public Vector<Room> getRooms() {
         setSyncOn();
 
         Vector<Room> rooms = new Vector<Room>();
