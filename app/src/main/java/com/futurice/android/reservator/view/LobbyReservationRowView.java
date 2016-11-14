@@ -44,18 +44,17 @@ public class LobbyReservationRowView extends FrameLayout implements
     ViewSwitcher modeSwitcher;
     OnReserveListener onReserveCallback = null;
     OnCancellListener onCancellListener = null;
-    SharedPreferences settings;
+
     private Room room;
     private int animationDuration = 300;
     private ReservatorException reservatorException;
     private OnFocusChangeListener userNameFocusChangeListener = new OnFocusChangeListener() {
         @Override
         public void onFocusChange(View v, boolean hasFocus) {
-            Boolean addressBookOption = settings.getBoolean("addressBookOption", false);
+            Boolean addressBookOption = PreferenceManager.getInstance(getContext()).getAddressBookEnabled();
             if (hasFocus && addressBookOption) {
                 reserveButton.setEnabled(false);
             }
-
         }
     };
 

@@ -123,11 +123,6 @@ public final class WizardRoomSelectionFragment extends android.support.v4.app.Fr
 
     }
 
-    private void showErrorMessageNoCalendars()
-    {
-
-    }
-
     @Override
     public void onResume() {
         super.onResume();

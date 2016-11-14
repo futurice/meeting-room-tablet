@@ -6,14 +6,14 @@
             android:background="#fff"
             android:padding="0dip">
 
-    <RelativeLayout
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
         android:paddingBottom="40dp"
         android:paddingLeft="20dp"
         android:paddingRight="20dp"
-        android:paddingTop="20dp">
+        android:paddingTop="20dp"
+        android:orientation="vertical">
 
         <TextView
             android:id="@+id/addressBookOptionLabel"
@@ -28,26 +28,20 @@
             style="@android:style/TextAppearance.Small"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/addressBookOptionLabel"
             android:text="@string/addressBookHelpText"
             android:textColor="#555"/>
 
         <ToggleButton
             android:id="@+id/usedAddressBookOption"
-            android:layout_width="20dp"
+            android:layout_width="60dp"
             android:layout_height="wrap_content"
-            android:layout_alignLeft="@+id/addressBookOptionLabel"
-            android:layout_alignRight="@+id/addressBookOptionLabel"
-            android:layout_below="@+id/addressBookHelpText"
-            android:layout_marginBottom="10dp"
-            android:onClick="onToggleClicked"/>
+            android:layout_marginBottom="10dp"/>
 
         <TextView
             android:id="@+id/defaultReservationAccountLabel"
             style="@android:style/TextAppearance.Medium"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/usedAddressBookOption"
             android:text="@string/settingsDefaultAccountForReservation"
             android:textColor="#000"/>
 
@@ -55,7 +49,6 @@
             android:id="@+id/defaultReservationAccount"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/defaultReservationAccountLabel"
             android:layout_marginBottom="10dp"
             android:inputType="text"
             android:maxLines="1"/>
@@ -65,7 +58,6 @@
             style="@android:style/TextAppearance.Medium"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/defaultReservationAccount"
             android:text="@string/used_google_account"
             android:textColor="#000"/>
 
@@ -74,7 +66,6 @@
             style="@android:style/TextAppearance.Small"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/usedAccountLabel"
             android:text="@string/googleAccountHelp"
             android:textColor="#555"/>
 
@@ -82,9 +73,6 @@
             android:id="@+id/usedAccountSpinner"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_alignLeft="@+id/usedAccountLabel"
-            android:layout_alignRight="@+id/usedAccountLabel"
-            android:layout_below="@+id/usedAccountHelp"
             android:inputType="text"
             android:maxLines="1"/>
 
@@ -93,7 +81,6 @@
             style="@android:style/TextAppearance.Medium"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/usedAccountSpinner"
             android:layout_marginTop="10dp"
             android:text="@string/room_name"
             android:textColor="#000"/>
@@ -102,37 +89,44 @@
             android:id="@+id/roomNameSpinner"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_alignLeft="@+id/roomNameLabel"
-            android:layout_alignRight="@+id/roomNameLabel"
-            android:layout_below="@+id/roomNameLabel"
             android:layout_marginBottom="10dp"/>
 
         <Button
             android:id="@+id/removeUserDataButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignLeft="@+id/usedAccountSpinner"
-            android:layout_below="@+id/roomNameSpinner"
             android:layout_marginBottom="10dp"
             android:layout_marginTop="10dp"
             android:text="@string/removeUserData"/>
+
+        <TextView
+            android:id="@+id/roomResourceCalendarTitle"
+            style="@android:style/TextAppearance.Medium"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/calendarResourcesHelpText"
+            android:textColor="#000"/>
+
+        <ToggleButton
+            android:id="@+id/roomResourceCalendarOption"
+            android:layout_width="60dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"/>
 
         <TextView
             android:id="@+id/roomListLabel"
             style="@android:style/TextAppearance.Medium"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/removeUserDataButton"
             android:layout_marginTop="10dp"
             android:text="@string/shown_rooms"
             android:textColor="#000"/>
 
-        <ListView
-            android:id="@+id/roomListView"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:id="@+id/roomsLinearLayout"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/roomListLabel"
-            android:cacheColorHint="@android:color/transparent"/>
-    </RelativeLayout>
+            android:orientation="vertical"/>
+    </LinearLayout>
 
 </ScrollView>

@@ -50,14 +50,12 @@ public class LobbyActivity extends ReservatorActivity implements OnMenuItemClick
     int showLoadingCount = 0;
     AlertDialog alertDialog;
     private ProgressDialog progressDialog = null;
-    private SharedPreferences settings;
     private boolean waitingAddresses = false;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.setContentView(R.layout.lobby_activity);
-        proxy = this.getResApplication().getDataProxy();
         ab = this.getResApplication().getAddressBook();
         DigitalClock clock = (DigitalClock) findViewById(R.id.digitalClock1);  //FIXME deprecated
         clock.setTypeface(Typeface.createFromAsset(getAssets(), "fonts/EHSMB.TTF"));
@@ -67,6 +65,7 @@ public class LobbyActivity extends ReservatorActivity implements OnMenuItemClick
     public void onResume() {
         super.onResume();
         showLoadingCount = 0; //TODO better fix
+        proxy = this.getResApplication().getDataProxy();
         proxy.addDataUpdatedListener(this);
         ab.addDataUpdatedListener(this);
         refreshRoomInfo();
@@ -76,6 +75,8 @@ public class LobbyActivity extends ReservatorActivity implements OnMenuItemClick
     public void onPause() {
         super.onPause();
         proxy.removeDataUpdatedListener(this);
+        proxy = null;
+
         ab.addDataUpdatedListener(this);
         if (progressDialog != null) {
             progressDialog.dismiss();
