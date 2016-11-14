@@ -67,9 +67,7 @@ public class ReservatorActivity extends Activity {
     }
 
     private void stopAutoGoToFavouriteRoom() {
-        if (isPrehensible()) {
-            handler.removeCallbacks(goToFavouriteRoomRunable);
-        }
+        handler.removeCallbacks(goToFavouriteRoomRunable);
     }
 
     static class ReservatorAppHandler extends Handler {
@@ -89,7 +87,7 @@ public class ReservatorActivity extends Activity {
 
         @Override
         public void run() {
-            String roomName = PreferenceManager.getInstance(getApplicationContext()).getDefaultCalendarAccount();
+            String roomName = PreferenceManager.getInstance(getApplicationContext()).getSelectedRoom();
             if (roomName != null) {
                 Room room;
                 try {

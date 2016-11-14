@@ -297,7 +297,10 @@ public class RoomActivity extends ReservatorActivity implements OnMenuItemClickL
     @Override
     protected Boolean isPrehensible() {
         String favouriteRoomName = PreferenceManager.getInstance(this).getSelectedRoom();
-        return favouriteRoomName != null;
+        System.out.println("Is prehensible: " + favouriteRoomName);
+
+        // jump to another room if we have a selected room AND we are not displaying it atm
+        return (favouriteRoomName != null) && (!favouriteRoomName.equals(currentRoom.getName()));
     }
 
     @Override
