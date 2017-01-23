@@ -1,5 +1,7 @@
 package com.futurice.android.reservator.model;
 
+import android.os.AsyncTask;
+
 import java.text.Collator;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -7,8 +9,6 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 import java.util.Vector;
-
-import android.os.AsyncTask;
 
 public abstract class DataProxy {
     private Set<DataUpdatedListener> listeners = new HashSet<DataUpdatedListener>();
@@ -44,7 +44,7 @@ public abstract class DataProxy {
     /**
      * Synchronously gets a room with its name. Listeners are not notified when done.
      *
-     * @param roomName. The room name to look for
+     * @param roomName The room name to look for
      * @return the room matching roomName or null
      * @throws ReservatorException
      */
@@ -72,7 +72,8 @@ public abstract class DataProxy {
         Iterator<Room> it = rooms.iterator();
         while (it.hasNext()) {
             Room room = it.next();
-            roomNames.add(room.getName());
+            room.setReservations(getRoomReservations(room));
+            roomNames.add(room.getShownRoomName());
         }
         Collections.sort(roomNames, Collator.getInstance());
         return roomNames;

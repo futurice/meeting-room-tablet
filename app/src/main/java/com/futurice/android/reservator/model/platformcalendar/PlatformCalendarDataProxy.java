@@ -24,7 +24,6 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.TimeZone;
 import java.util.Vector;
@@ -76,7 +75,7 @@ public class PlatformCalendarDataProxy extends DataProxy {
     /**
      * @param resolver       From application context. Used to access the platform's Calendar Provider.
      * @param accountManager From application context. Allows us to initiate a sync immediately after adding a reservation.
-     * @param accountGlob    SQLite glob pattern that selects room calendar accounts.
+     * @param roomAccountGlob    SQLite glob pattern that selects room calendar accounts.
      */
     public PlatformCalendarDataProxy(ContentResolver resolver, AccountManager accountManager, String roomAccountGlob, Context context) {
         this.resolver = resolver;
