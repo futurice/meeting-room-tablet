@@ -316,7 +316,7 @@ public class RoomActivity extends ReservatorActivity implements OnMenuItemClickL
     @Override
     protected Boolean isPrehensible() {
         String favouriteRoomName = getResApplication().getFavouriteRoomName();
-        return !(currentRoom.getName().equals(favouriteRoomName));
+        return !(currentRoom.getShownRoomName().equals(favouriteRoomName));
     }
 
     @Override
