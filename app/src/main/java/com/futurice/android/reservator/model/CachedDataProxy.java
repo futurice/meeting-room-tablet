@@ -7,7 +7,6 @@ import com.futurice.android.reservator.common.CacheMap;
 import java.util.Vector;
 
 public class CachedDataProxy extends DataProxy {
-    // private static final long CACHE_ROOMS_FOR = 3600*1000; // 1 hour
     private static final long CACHE_RESERVATION_FOR = 60 * 1000; // 1 minute
 
     private final DataProxy dataProxy;

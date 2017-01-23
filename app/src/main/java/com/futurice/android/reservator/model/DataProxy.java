@@ -6,7 +6,6 @@ import java.text.Collator;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Set;
 import java.util.Vector;
 
@@ -50,10 +49,9 @@ public abstract class DataProxy {
      */
     public Room getRoomWithName(String roomName) throws ReservatorException {
         Vector<Room> rooms = getRooms();
-        Iterator<Room> it = rooms.iterator();
-        while (it.hasNext()) {
-            Room room = it.next();
-            if (room.getName().equals(roomName)) {
+        for (Room room : rooms) {
+            room.setReservations(getRoomReservations(room));
+            if (room.getShownRoomName().equals(roomName)) {
                 return room;
             }
         }
@@ -69,9 +67,7 @@ public abstract class DataProxy {
     public ArrayList<String> getRoomNames() throws ReservatorException {
         Vector<Room> rooms = getRooms();
         ArrayList<String> roomNames = new ArrayList<String>();
-        Iterator<Room> it = rooms.iterator();
-        while (it.hasNext()) {
-            Room room = it.next();
+        for (Room room : rooms) {
             room.setReservations(getRoomReservations(room));
             roomNames.add(room.getShownRoomName());
         }
