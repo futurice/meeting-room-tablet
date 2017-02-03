@@ -4,17 +4,31 @@
                 android:layout_height="fill_parent"
                 android:padding="20dp">
 
+    <DigitalClock
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/digitalClock"
+        android:textColor="@color/TrafficLightText"
+        android:textSize="40sp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
     <TextView
         android:id="@+id/roomTitle"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
         android:textColor="@color/TrafficLightText"
         android:gravity="left"
         android:textSize="40sp"
         android:textStyle="bold"
         android:textAllCaps="true"
-        android:textIsSelectable="false"/>
+        android:textIsSelectable="false"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_toStartOf="@+id/bookNow"
+        android:layout_toLeftOf="@id/digitalClock"/>
 
     <RelativeLayout
         android:layout_width="fill_parent"
@@ -97,8 +111,8 @@
     </RelativeLayout>
 
     <TextView
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:layout_height="45dp"
         android:layout_alignParentBottom="true"
         android:textColor="@color/TrafficLightText"
         android:gravity="right"
@@ -106,5 +120,9 @@
         android:textSize="30sp"
         android:textStyle="bold"
         android:textAllCaps="true"
-        android:textIsSelectable="false"/>
+        android:textIsSelectable="false"
+        android:id="@+id/textViewToReserveTrafficlights"
+        android:clickable="true"
+        android:layout_alignParentEnd="true"
+        android:onClick="onClick" />
 </RelativeLayout>

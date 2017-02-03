@@ -159,11 +159,11 @@ public class CustomTimeSpanPicker2 extends FrameLayout implements OnClickListene
         int start = time.get(Calendar.HOUR_OF_DAY) * 60 + time.get(Calendar.MINUTE);
 
         if (start < minimumTime || start > maximumTime) {
-            throw new IllegalArgumentException("setting startTime outside of minmax");
+            throw new IllegalArgumentException(getResources().getString(R.string.startTimeOutsideMinMax));
         }
 
         if (start > currentTimeEnd) {
-            throw new IllegalArgumentException("setting startTime after endTime");
+            throw new IllegalArgumentException(getResources().getString(R.string.startTimeAfterEndTime));
         }
 
         currentTimeStart = start;
@@ -180,11 +180,11 @@ public class CustomTimeSpanPicker2 extends FrameLayout implements OnClickListene
         int end = time.get(Calendar.HOUR_OF_DAY) * 60 + time.get(Calendar.MINUTE);
 
         if (end < minimumTime || end > maximumTime) {
-            throw new IllegalArgumentException("setting endTime outside of minmax");
+            throw new IllegalArgumentException(getResources().getString(R.string.endTimeOutsideMinMax));
         }
 
         if (end < currentTimeStart) {
-            throw new IllegalArgumentException("setting endTime before startTime");
+            throw new IllegalArgumentException(getResources().getString(R.string.endTimeBeforeStartTime));
         }
 
         currentTimeEnd = end;
@@ -207,7 +207,7 @@ public class CustomTimeSpanPicker2 extends FrameLayout implements OnClickListene
         }
 
         if (max < minimumTime)
-            throw new IllegalArgumentException("setting maximumTime to be before the minimum");
+            throw new IllegalArgumentException(getResources().getString(R.string.maximumBeforeMin));
 
         maximumTime = max;
         if (currentTimeEnd > maximumTime) {
@@ -234,7 +234,7 @@ public class CustomTimeSpanPicker2 extends FrameLayout implements OnClickListene
 
         int min = time.get(Calendar.HOUR_OF_DAY) * 60 + time.get(Calendar.MINUTE);
         if (min > maximumTime)
-            throw new IllegalArgumentException("setting minimumTime to be after the maximum");
+            throw new IllegalArgumentException(getResources().getString(R.string.minumumAfterMax));
         minimumTime = min;
         if (currentTimeStart < minimumTime) {
             currentTimeStart = minimumTime;

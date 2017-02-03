@@ -7,17 +7,13 @@ import java.util.Vector;
 
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
-import android.app.Dialog;
-import android.app.DialogFragment;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Handler;
-import android.text.Html;
 import android.text.SpannableString;
 import android.text.method.LinkMovementMethod;
 import android.text.util.Linkify;
@@ -138,7 +134,7 @@ public class LobbyActivity extends ReservatorActivity implements OnMenuItemClick
     private ProgressDialog constructNewProgressDialog() {
         ProgressDialog d = new ProgressDialog(this);
         d.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-        d.setMessage("Refreshing room list...");
+        d.setMessage(getString(R.string.refreshRoomList));
         d.setCancelable(true);
         d.setMax(1);
         return d;
@@ -146,11 +142,11 @@ public class LobbyActivity extends ReservatorActivity implements OnMenuItemClick
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        refreshMenu = menu.add("Refresh").setOnMenuItemClickListener(this);
+        refreshMenu = menu.add(getString(R.string.refresh)).setOnMenuItemClickListener(this);
         refreshMenu.setIcon(android.R.drawable.ic_popup_sync);
-        settingsMenu = menu.add("Settings").setOnMenuItemClickListener(this);
+        settingsMenu = menu.add(getString(R.string.setting)).setOnMenuItemClickListener(this);
         settingsMenu.setIcon(android.R.drawable.ic_menu_preferences);
-        aboutMenu = menu.add("About").setOnMenuItemClickListener(this);
+        aboutMenu = menu.add(getString(R.string.aboutTitle)).setOnMenuItemClickListener(this);
         return true;
     }
 

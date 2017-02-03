@@ -1,13 +1,18 @@
 package com.futurice.android.reservator.model;
 
+import android.content.Context;
+
+import com.futurice.android.reservator.R;
+import com.futurice.android.reservator.common.Helpers;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.Vector;
-
-import com.futurice.android.reservator.common.Helpers;
+import java.util.concurrent.TimeUnit;
 
 public class Room implements Serializable {
     // Rooms that are free for no more than this long to future are considered "reserved" (not-bookable)
@@ -80,7 +85,7 @@ public class Room implements Serializable {
      */
     public int minutesFreeFrom(DateTime from) {
         for (Reservation r : reservations) {
-            if (r.getStartTime().after(from)) {
+             if (r.getStartTime().after(from)) {
                 return (int) ((r.getStartTime().getTimeInMillis() - from.getTimeInMillis()) / 60000);
             }
         }
@@ -238,19 +243,42 @@ public class Room implements Serializable {
         return true;
     }
 
-    public String getStatusText() {
+    public String getStatusText(Context context) {
         if (this.isFree()) {
             int freeMinutes = this.minutesFreeFromNow();
 
             if (freeMinutes > FREE_THRESHOLD_MINUTES) {
-                return "Free";
+                return context.getString(R.string.free);
             } else if (freeMinutes < RESERVED_THRESHOLD_MINUTES) {
-                return "Reserved";
+                return context.getString(R.string.defaultTitleForReservation);
             } else {
-                return "Free for " + Helpers.humanizeTimeSpan(freeMinutes);
+                return (context.getString(R.string.freeFor)+ " " + Helpers.humanizeTimeSpan(freeMinutes, context));
             }
         } else {
-            return "Reserved";
+            return context.getString(R.string.defaultTitleForReservation);
         }
+    }
+
+    private long getTimeDifference(int hours, int minutes, Date lastTimeConnected) {
+        DateTime reservEndTime = new DateTime().setTime(hours,minutes,0);
+        return reservEndTime.subtract(new DateTime(lastTimeConnected.getTime()),Calendar.MILLISECOND);
+
+    }
+
+    public long getTimeDifferenceHour(Date lastTimeConnected) {
+        int hours = getNextFreeSlot().getStart().get(Calendar.HOUR_OF_DAY);
+        int minutes = getNextFreeSlot().getStart().get(Calendar.MINUTE);
+
+        return (TimeUnit.MILLISECONDS.toHours(getTimeDifference(hours, minutes,lastTimeConnected)) % 24);
+    }
+
+    public long getTimeDifferenceMinute(Date lastTimeConnected) {
+        int hours = getNextFreeSlot().getStart().get(Calendar.HOUR_OF_DAY);
+        int minutes = getNextFreeSlot().getStart().get(Calendar.MINUTE);
+
+        long timeDifference = getTimeDifference(hours, minutes,lastTimeConnected);
+        timeDifference -= TimeUnit.HOURS.toMillis(getTimeDifferenceHour(lastTimeConnected));
+
+        return TimeUnit.MILLISECONDS.toMinutes(timeDifference) % 60;
     }
 }

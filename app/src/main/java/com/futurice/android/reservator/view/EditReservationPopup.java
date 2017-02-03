@@ -61,11 +61,18 @@ public class EditReservationPopup extends Dialog {
                 public void onClick(View v) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(EditReservationPopup.this.getContext());
                     builder
-                        .setTitle("Cancel reservation?")
-                        .setMessage(reservationInfo)
-                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                try {
+                            .setTitle(getContext().getString(R.string.cancleTitle))
+                            .setMessage(reservationInfo)
+                            .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    try {
+                                        application.getDataProxy().cancelReservation(EditReservationPopup.this.reservation);
+                                        if (EditReservationPopup.this.cancelledListener != null) {
+                                            EditReservationPopup.this.cancelledListener.onReservationCancelled(
+                                                    EditReservationPopup.this.reservation);
+                                        }
+                                    } catch (ReservatorException e) {
+                                        android.util.Log.w("CANCEL", e);
                                     application.getDataProxy().cancelReservation(EditReservationPopup.this.reservation);
                                     if (EditReservationPopup.this.cancelledListener != null) {
                                         EditReservationPopup.this.cancelledListener.onReservationCancelled(

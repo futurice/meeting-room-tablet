@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="hello">Hallo Welt, Reservator!</string>
+    <string name="app_name">Reservator</string>
+
+    <!--Login-->
+    <string name="login">Login</string>
+    <string name="username_hint">Benutzername</string>
+    <string name="password_hint">Passwort</string>
+    <string name="exchange_username">Benutzername austauschen:</string>
+    <string name="exchange_password">Passwort austauschen:</string>
+    <string name="googleCalendarOk">Google Kalender ist OK</string>
+    <string name="googleCalendarPending">Google Kalendar noch nicht erledigt…</string>
+    <string name="googleContactsOk">Google Kontakte sind OK</string>
+    <string name="googleContactsPending">Google Kontakte noch nicht erledigt…</string>
+    <string name="fum_username">FUM3 Benutzername:</string>
+    <string name="fum_password">FUM3 Passwort:</string>
+    <string name="default_fum_username">roomreservator</string>
+    <string name="default_exchange_username">reserve@futurice.com</string>
+    <string name="exchange_server_address">Server-Adresse austauschen</string>
+    <string name="calendarError">Fehler: Google Kalender</string>
+    <string name="noCalendarsError">Es wurde kein Meetingraum Kalender gefunden. Bitte stellen Sie sicher, dass ein Google Konto auf diesem Gerät konfiguriert wurde und der Google Kalender eingestellt wurde, um den Meetingraum Kalender zu synchronisieren.</string>
+    <string name="loadingText">lädt</string>
+
+    <!--AccountSelection-->
+    <string name="selectGoogleAccount">Wähle ein Google Konto aus</string>
+    <string name="accountForServation">Reservierungskonto</string>
+    <string name="googleAccountType">com.google</string>
+
+    <!-- Lobby-->
+    <string name="lobbyRoomName">Lobby</string>
+    <string name="refresh">Aktualisieren</string>
+    <string name="refreshRoomList">Raumliste aktualisieren…</string>
+    <string name="setting">Einstellungen</string>
+    <string name="aboutTitle">Über</string>
+    <string name="aboutInfo">Reservator wurde von Futurice, einer kleinen Service - Creation Unternehmen mit Büros in Helsinki, Tampere, Berlin and London. Weitere Informationen finden Sie unter: www.futurice.com.\n\nDiese Anwendung wird unter der BSD-Lizenz veröffentlicht. Sie finden den Ursprungs Code unter: http://github.com/futurice/meeting-room-tablet</string>
+    <string name="hintText">Tipp: Sie können die Kontakte aus dem Adressbuch Ihres/Ihrer Tablet/ -s zum reservieren benutzen.</string>
+    <string name="book_now">Jetzt buchen</string>
+    <string name="faildUser">Bitte versuchen Sie es erneut, denn diesen Benutzer gibt es nicht</string>
+    <string name="faildCheckSettings">Kein Konto für eine Reservierung vorhanden. Bitte prüfen Sie Ihre Einstellungen.</string>
+
+    <!--Settings-->
+    <string name="language">Sprache:</string>
+    <string name="language_De">Deutsch</string>
+    <string name="language_En">Englisch</string>
+    <string name="PREFERENCES_NAME">Reservator Voreinstellungen</string>
+    <string name="PREFERENCES_SERVER_ADDRESS">ServerAddresse</string>
+    <string name="PREFERENCES_ROOM_NAME">Raumname</string>
+    <string name="PREFERENCES_USERNAME">Benutzername</string>
+    <string name="PREFERENCES_PASSWORD">Passwort</string>
+    <string name="PREFERENCES_FUM_USERNAME">fumBenutzername</string>
+    <string name="PREFERENCES_FUM_PASSWORD">fumPasswort</string>
+    <string name="PREFERENCES_UNSELECTED_ROOMS">Nicht ausgewählte Räume</string>
+    <string name="PREFERENCES_GOOGLE_ACCOUNT">Google Konto</string>
+    <string name="removeUserData">Login Informationen entfernen und Einstellungen zurückstellen</string>
+    <string name="settings_Default_Account_For_Reservation">Wähle ein Konto für die Reservierung aus</string>
+    <string name="settingsReset">Einstellungen zurückgesetzt und Konten gelöscht</string>
+    <string name="settingsSaved">Einstellungen gespeichert</string>
+    <string name="addressBookHelpText">Wenn diese Option aktiv ist, erfordet das Reservieren mit dem Tablet die Eingabe eines gültigen Kontaktes, welcher sich im Adressbuch befindet.</string>
+    <string name="googleAccountHelp">Konto oder Konten, welche benutzt werden um Räume zu suchen.</string>
+    <string name="addressBookOptionLabel">Reservierung erfordert Kontakte vom Adressbuch </string>
+    <string name="continueBtn">weiter</string>
+    <string name="doNotModify">Verändern Sie diese Einstellungen nicht!</string>
+    <string name="onlyItTeamShouldModify">Nur das IT Team darf diese Einstellungen ändern.</string>
+    <string name="goBackBtn">zurück</string>
+    <string name="room_name">Name des Standard-Raums</string>
+    <string name="close">Schließen</string>
+    <string name="used_google_account">Benutzer Google Konto</string>
+    <string name="allAccountsMagicWord">(Alle)</string>
+    <string name="shown_rooms">Sichtbare Räume</string>
+    <string name="meetingTitleLabel">Meeting Bezeichnung</string>
+    <string name="meetingTitlePersonName">Name der Person, die reserviert hat</string>
+    <string name="meetingTitleMeetingName">Name des Meetings</string>
+    <string name="saveSettings">Einstellungen speichern</string>
+
+    <!--Room-->
+    <string name="refreshRoom">Rauminformationen aktualisierten</string>
+    <string name="defaultTitleForReservation">Reserviert</string>
+    <string name="from">von </string>
+    <string name="to">bis </string>
+    <string name="forX">für </string>
+    <string name="free">Frei </string>
+    <string name="freeFor">Frei für </string>
+    <string name="freeIn">Frei in </string>
+    <string name="freeAt">Frei ab </string>
+    <string name="freeDay">für den restlichen Tag</string>
+    <string name="get_a_room">Erhalte einen Raum!</string>
+    <string name="reserve">reserviere</string>
+    <string name="reservationTextTemplate">Reserviert: ^1</string>
+    <string name="seeAllRooms">Alle Räume</string>
+    <string name="faildReservation">Fehler beim Reservieren</string>
+
+    <!--Calendar-->
+    <string name="dateLabelFormat">d. MMM. EEEE</string>
+    <string name="weekLabelFormat">\'Woche\' w</string>
+    <string name="visualizer">Zeichne KalenderVisualisierer in </string>
+    <string name="visualizerTime">Kalender visualisierer: </string>
+    <string name="timeSpan">Zeitspanne: </string>
+    <string name="reservationDone">Reserviertung fertig in </string>
+
+    <!--Time-->
+    <string name="minutes"> Minuten</string>
+    <string name="minute"> Minute</string>
+    <string name="halfHour"> eine halbe Stunde</string>
+    <string name="hour"> einer Stunde</string>
+    <string name="threeQuartershour"> 45 Minuten</string>
+    <string name="hourAndHalf"> 1:30 Stunden</string>
+    <string name="hours"> Stunden</string>
+    <string name="day"> Tag</string>
+    <string name="days"> Tage</string>
+
+    <!--TimeSpan-->
+    <string name="start">start</string>
+    <string name="end">ende</string>
+    <string name="negativeTime">Keine negative Zeit erlaubt</string>
+    <string name="negativeTimeMinus">Keine negative Zeit erlaubt — </string>
+    <string name="negativeTimeCount">Keine negative Zeit erlaubt — Zahl: </string>
+    <string name="negativeTimeStart">Keine negative Zeit erlaubt — setze Start</string>
+    <string name="negativeTimeEnd">Keine negative Zeit erlaubt — setze Ende</string>
+    <string name="startTimeAfterEndTime">setze Startzeit nach Endzeit</string>
+    <string name="startTimeOutsideMinMax">setze Startzeit außerhalb der MinMax</string>
+    <string name="endTimeOutsideMinMax">setze Endzeitaußerhalb der MinMax</string>
+    <string name="endTimeBeforeStartTime">setze Endzeit vor Startzeit</string>
+    <string name="maximumBeforeMin">setze maximumTime vor das minimum</string>
+    <string name="minumumAfterMax">setze minimumTime nach dem maximum</string>
+
+    <!--ReservatorExceptions-->
+    <string name="roomDeleted">Raumkalender wurde gelöscht</string>
+    <string name="parsID">Reservations ID konnte nicht analysiert werden</string>
+    <string name="syncGoogleCalRequest">Kalender synchronisation erfragt </string>
+    <string name="syncGoogleCalActiv">Kalender synchronisation würde aktiviert von </string>
+    <string name="syncGoogleCalNotSync">Kalender ist nicht synchronisierbar von</string>
+    <string name="initiateNot">Synchronisation mit Konto konnte nicht gestartet werden</string>
+
+
+    <string name="calendarAccountGlob">*@resource.calendar.google.com</string>
+    <string name="reservationCancelInfo">Sie können Reservierungen löschen, welche ursprünglisch von einem Raum - Tablet erstellt wurde.</string>
+    <string name="touchToReserve">Tippen Sie um zu reservieren</string>
+    <string name="bookNow">Jetzt buchen</string>
+    <string name="disconnectedWarning">Verbindung ist getrennt!</string>
+    <string name="cancleTitle">Reservierung abbrechen?</string>
+    <string name="seeRoomTrafficLights">Raum Status</string>
+    <string name="resExaptionErrorCancel">Es ist nicht möglich diese Reservierung zu stonieren.</string>
+
+</resources>
