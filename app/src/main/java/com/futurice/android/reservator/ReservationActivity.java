@@ -31,7 +31,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.Vector;
 
-public class ReservationActivity extends ReservatorActivity implements View.OnClickListener, AdapterView.OnItemClickListener{
+public class ReservationActivity extends ReservatorActivity implements View.OnClickListener{
     private long minToMS = 60000;
     private final int MIN_MEETING_TIME = 15;
 
@@ -94,7 +94,6 @@ public class ReservationActivity extends ReservatorActivity implements View.OnCl
         setButtons();
 
         nameField.setOnFocusChangeListener(userNameFocusChangeListener);
-        nameField.setOnItemClickListener(this);
         nameField.setOnClickListener(this);
         if (nameField.getAdapter() == null) {
             try {
@@ -177,12 +176,18 @@ public class ReservationActivity extends ReservatorActivity implements View.OnCl
 
     @Override
     public void onClick(View view) {
+        if (ableToReserve()) {
+            reserveButton.setEnabled(true);
+        };
+
         switch (view.getId()) {
             case R.id.reserveButtonAlternativ:
                 if (ableToReserve()){
-                    reserveButton.setEnabled(false);
                     new MakeReservationTask().execute();
                     this.finish();
+                } else {
+                    infoLabel.setText(R.string.infoMeetingName);
+                    infoLabel.setTextColor(getResources().getColor(R.color.TrafficLightReserved));
                 }
                 break;
 
@@ -224,14 +229,6 @@ public class ReservationActivity extends ReservatorActivity implements View.OnCl
                 setChangedTime(addTime(-60));
                 break;
         }
-    }
-
-    @Override
-    public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-        reserveButton.setEnabled(true);
-        nameField.setSelected(false);
-        InputMethodManager imm = (InputMethodManager) this.getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(nameField.getRootView().getWindowToken(), 0);
     }
 
     private boolean ableToReserve(){
@@ -284,19 +281,20 @@ public class ReservationActivity extends ReservatorActivity implements View.OnCl
             try {
                 if (entry != null) {
                     application.getDataProxy().reserve(room, new TimeSpan(startTime,endTime),
-                            meetingField.getText().toString(), entry.getEmail());
+                            entry.getName(), entry.getEmail(), meetingField.getText().toString());
                 } else {
                     // Address book option is off so reserve the room with the selected account in settings.
-                    String accountEmail = application.getSettingValue(R.string.accountForServation, "");
+
+                    String accountEmail = settings.getString(getString(R.string.accountForServation), "");
                     if (accountEmail.equals("")) {
                         reservatorError(new ReservatorException(getResources().getString(R.string.faildCheckSettings)));
                     }
 
-                    String title =  nameField.getText().toString();
+                    String title =  meetingField.getText().toString();
                     if ( !meetingField.getText().toString().isEmpty()) {
                         title = meetingField.getText().toString();
                     }
-                    application.getDataProxy().reserve(room, new TimeSpan(startTime,endTime),title, accountEmail);
+                    application.getDataProxy().reserve(room, new TimeSpan(startTime,endTime),nameField.getText().toString(), accountEmail,title);
                 }
             } catch (ReservatorException e) {
                 reservatorError(e);

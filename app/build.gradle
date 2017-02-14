@@ -5,7 +5,7 @@ android {
     buildToolsVersion "24.0.2"
 
     defaultConfig {
-        applicationId "com.synyx.android.reservator"
+        applicationId "com.futurice.android.reservator"
         minSdkVersion 14
         targetSdkVersion 18
 

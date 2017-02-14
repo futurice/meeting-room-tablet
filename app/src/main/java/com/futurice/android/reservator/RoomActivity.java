@@ -73,7 +73,7 @@ public class RoomActivity extends ReservatorActivity implements OnMenuItemClickL
     private SharedPreferences settings;
 
     /**
-     * Helper for starting a RoomActivity
+     * Helper for starting MakeReservationTask RoomActivity
      *
      * @param context
      * @param room

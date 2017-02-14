@@ -47,7 +47,7 @@ public abstract class AddressBook {
     }
 
     /**
-     * Add a listener for this proxy. The listener will be notified after calls to refreshRooms and refreshRoomReservations finish or fail.
+     * Add MakeReservationTask listener for this proxy. The listener will be notified after calls to refreshRooms and refreshRoomReservations finish or fail.
      *
      * @param listener
      */
@@ -56,7 +56,7 @@ public abstract class AddressBook {
     }
 
     /**
-     * Remove a listener from this proxy.
+     * Remove MakeReservationTask listener from this proxy.
      *
      * @param listener
      */

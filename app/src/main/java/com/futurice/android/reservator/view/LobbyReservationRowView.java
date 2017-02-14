@@ -323,7 +323,7 @@ public class LobbyReservationRowView extends FrameLayout implements
             try {
                 if (entry != null) {
                     application.getDataProxy().reserve(room, timePicker2.getTimeSpan(),
-                            entry.getName(), entry.getEmail());
+                            entry.getName(), entry.getEmail(),entry.getName());
                 } else {
                     // Address book option is off so reserve the room with the selected account in settings.
                     String accountEmail = application.getSettingValue(R.string.accountForServation, "");
@@ -334,7 +334,7 @@ public class LobbyReservationRowView extends FrameLayout implements
                     if (title.equals("")) {
                         title = application.getString(R.string.defaultTitleForReservation);
                     }
-                    application.getDataProxy().reserve(room, timePicker2.getTimeSpan(),title, accountEmail);
+                    application.getDataProxy().reserve(room, timePicker2.getTimeSpan(),title, accountEmail,title);
                 }
             } catch (ReservatorException e) {
                 reservatorError(e);

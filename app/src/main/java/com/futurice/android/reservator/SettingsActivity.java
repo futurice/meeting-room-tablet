@@ -318,7 +318,7 @@ public class SettingsActivity extends ReservatorActivity {
                 unselectedRooms.add(c.getText().toString());
             }
 
-            // Create a new HashSet, because...
+            // Create MakeReservationTask new HashSet, because...
             // http://stackoverflow.com/questions/14034803/misbehavior-when-trying-to-store-a-string-set-using-sharedpreferences
             editor.putStringSet(getString(R.string.PREFERENCES_UNSELECTED_ROOMS), new HashSet<String>(unselectedRooms));
             editor.commit();

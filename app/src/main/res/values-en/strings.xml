@@ -135,6 +135,7 @@
     <string name="syncGoogleCalActiv">Calendar sync was active on</string>
     <string name="syncGoogleCalNotSync">Calendar is not syncable on </string>
     <string name="initiateNot">Could not initiate sync on account  </string>
+    <string name="infoMeetingName">Please enter a meeting name</string>
 
     <string name="calendarAccountGlob">*@resource.calendar.google.com</string>
     <string name="reservationCancelInfo">You can cancel reservations that were originally made from a room tablet</string>

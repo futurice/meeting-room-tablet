@@ -137,6 +137,7 @@
     <string name="syncGoogleCalActiv">Kalender synchronisation würde aktiviert von </string>
     <string name="syncGoogleCalNotSync">Kalender ist nicht synchronisierbar von</string>
     <string name="initiateNot">Synchronisation mit Konto konnte nicht gestartet werden</string>
+    <string name="infoMeetingName">Bitte gib einen Meetingnamen an</string>
 
 
     <string name="calendarAccountGlob">*@resource.calendar.google.com</string>

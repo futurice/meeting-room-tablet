@@ -1,11 +1,13 @@
 package com.futurice.android.reservator.model.platformcalendar;
 
+import android.Manifest;
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -48,16 +50,16 @@ public class PlatformCalendarDataProxy extends DataProxy {
     private final long EVENT_SELECTION_PERIOD_FORWARD = 11 * 24 * 60 * 60 * 1000; // 11 days
     // Uses SQLite (http://www.sqlite.org/lang_select.html)
     private final String TITLE_PREFERENCE_SORT_ORDER =
-        "CASE " + CalendarContract.Attendees.ATTENDEE_RELATIONSHIP + " " +
-            "WHEN " + CalendarContract.Attendees.RELATIONSHIP_ORGANIZER + " THEN 1 " +
-            "WHEN " + CalendarContract.Attendees.RELATIONSHIP_SPEAKER + " THEN 2 " +
-            "WHEN " + CalendarContract.Attendees.RELATIONSHIP_PERFORMER + " THEN 3 " +
-            "WHEN " + CalendarContract.Attendees.RELATIONSHIP_ATTENDEE + " THEN 4 " +
-            "ELSE 5 END, " +
-            "CASE " + CalendarContract.Attendees.ATTENDEE_STATUS + " " +
-            "WHEN " + CalendarContract.Attendees.ATTENDEE_STATUS_ACCEPTED + " THEN 1 " +
-            "WHEN " + CalendarContract.Attendees.ATTENDEE_STATUS_DECLINED + " THEN 3 " +
-            "ELSE 2 END";
+            "CASE " + CalendarContract.Attendees.ATTENDEE_RELATIONSHIP + " " +
+                    "WHEN " + CalendarContract.Attendees.RELATIONSHIP_ORGANIZER + " THEN 1 " +
+                    "WHEN " + CalendarContract.Attendees.RELATIONSHIP_SPEAKER + " THEN 2 " +
+                    "WHEN " + CalendarContract.Attendees.RELATIONSHIP_PERFORMER + " THEN 3 " +
+                    "WHEN " + CalendarContract.Attendees.RELATIONSHIP_ATTENDEE + " THEN 4 " +
+                    "ELSE 5 END, " +
+                    "CASE " + CalendarContract.Attendees.ATTENDEE_STATUS + " " +
+                    "WHEN " + CalendarContract.Attendees.ATTENDEE_STATUS_ACCEPTED + " THEN 1 " +
+                    "WHEN " + CalendarContract.Attendees.ATTENDEE_STATUS_DECLINED + " THEN 3 " +
+                    "ELSE 2 END";
     // Preferred account, or null if any account is good
     String account = null;
     TimeZone SYSTEM_TZ = java.util.Calendar.getInstance().getTimeZone();
@@ -66,15 +68,15 @@ public class PlatformCalendarDataProxy extends DataProxy {
     private String roomAccountGlob;
     // Two-level data structure that stores locally created reservations
     // for each room until they get synced. Access but altering the Set objects
-    // or modifying the structure of the Map must be within a synchronized block.
+    // or modifying the structure of the Map must be within MakeReservationTask synchronized block.
     private Map<Room, HashSet<Reservation>> locallyCreatedReservationCaches =
-        Collections.synchronizedMap(new HashMap<Room, HashSet<Reservation>>());
+            Collections.synchronizedMap(new HashMap<Room, HashSet<Reservation>>());
 
     private boolean designationMeetingName;
 
     /**
      * @param resolver       From application context. Used to access the platform's Calendar Provider.
-     * @param accountManager From application context. Allows us to initiate a sync immediately after adding a reservation.
+     * @param accountManager From application context. Allows us to initiate MakeReservationTask sync immediately after adding MakeReservationTask reservation.
      * @param roomAccountGlob    SQLite glob pattern that selects room calendar accounts.
      */
     public PlatformCalendarDataProxy(ContentResolver resolver, AccountManager accountManager, String roomAccountGlob, Context context) {
@@ -86,7 +88,7 @@ public class PlatformCalendarDataProxy extends DataProxy {
     }
 
     private void setDesignationMeetingName(Context context) {
-        String settingMeetingDesignation = context.getSharedPreferences(context.getString(R.string.PREFERENCES_NAME), context.MODE_PRIVATE).getString("meetingDesignation","");
+        String settingMeetingDesignation = context.getSharedPreferences(context.getString(R.string.PREFERENCES_NAME), context.MODE_PRIVATE).getString("meetingDesignation", "");
         this.designationMeetingName = settingMeetingDesignation.equals(context.getString(R.string.meetingTitleMeetingName));
     }
 
@@ -100,7 +102,7 @@ public class PlatformCalendarDataProxy extends DataProxy {
     }
 
     @Override
-    public void reserve(Room r, TimeSpan timeSpan, String owner, String ownerEmail) throws ReservatorException {
+    public void reserve(Room r, TimeSpan timeSpan, String owner, String ownerEmail, String meetingName) throws ReservatorException {
         if (!(r instanceof PlatformCalendarRoom)) {
             throw new ReservatorException("Data type error (expecting PlatformCalendarRoom)");
         }
@@ -117,11 +119,14 @@ public class PlatformCalendarDataProxy extends DataProxy {
         mNewValues.put(CalendarContract.Events.DTEND, timeSpan.getEnd().getTimeInMillis());
         mNewValues.put(CalendarContract.Events.EVENT_TIMEZONE, SYSTEM_TZ.getID());
         mNewValues.put(CalendarContract.Events.EVENT_LOCATION, room.getLocation());
-        mNewValues.put(CalendarContract.Events.TITLE, owner);
+        mNewValues.put(CalendarContract.Events.TITLE, meetingName);
 
         Uri eventUri = resolver.insert(CalendarContract.Events.CONTENT_URI, mNewValues);
         if (eventUri == null) {
             throw new ReservatorException("Could not create event");
+        }
+        if(owner.isEmpty()){
+            owner = ownerEmail;
         }
 
         long eventId = Long.parseLong(eventUri.getLastPathSegment());
@@ -141,15 +146,15 @@ public class PlatformCalendarDataProxy extends DataProxy {
         syncGoogleCalendarAccount(accountName);
 
         Reservation createdReservation = new Reservation(
-            Long.toString(eventId) + "-" + Long.toString(timeSpan.getStart().getTimeInMillis()),
-            owner,
-            timeSpan);
+                Long.toString(eventId) + "-" + Long.toString(timeSpan.getStart().getTimeInMillis()),
+                meetingName,
+                timeSpan);
         createdReservation.setIsCancellable(true);
         putToLocalCache(room, createdReservation);
     }
 
     /**
-     * Resolves a Calendar's ACCOUNT_NAME.
+     * Resolves MakeReservationTask Calendar's ACCOUNT_NAME.
      *
      * @throws ReservatorException If the account has been deleted.
      * @author vsin
@@ -161,11 +166,11 @@ public class PlatformCalendarDataProxy extends DataProxy {
         String mSortOrder = null;
 
         Cursor result = resolver.query(
-            CalendarContract.Calendars.CONTENT_URI,
-            mProjection,
-            mSelectionClause,
-            mSelectionArgs,
-            mSortOrder);
+                CalendarContract.Calendars.CONTENT_URI,
+                mProjection,
+                mSelectionClause,
+                mSelectionArgs,
+                mSortOrder);
 
         if (result == null) {
             throw new ReservatorException(context.getString(R.string.roomDeleted));
@@ -205,11 +210,11 @@ public class PlatformCalendarDataProxy extends DataProxy {
         String[] mSelectionArgs = {};
         String mSortOrder = null;
         Cursor result = resolver.query(
-            eventUri,
-            mProjection,
-            mSelectionClause,
-            mSelectionArgs,
-            mSortOrder);
+                eventUri,
+                mProjection,
+                mSelectionClause,
+                mSelectionArgs,
+                mSortOrder);
 
         if (result == null) {
             return; // Event has already been deleted!
@@ -241,13 +246,13 @@ public class PlatformCalendarDataProxy extends DataProxy {
             try {
                 syncGoogleCalendarAccount(getAccountName(calendarId));
             } catch (ReservatorException e) {
-                ; // Calendar has been deleted by user, can't sync. "Not a biggie"
+                ; // Calendar has been deleted by user, can't sync. "Not MakeReservationTask biggie"
             }
         }
     }
 
     /**
-     * Initiate a sync on a Google Calendar account if possible.
+     * Initiate MakeReservationTask sync on MakeReservationTask Google Calendar account if possible.
      */
     private void syncGoogleCalendarAccount(String accountName) {
         boolean success = false;
@@ -259,7 +264,7 @@ public class PlatformCalendarDataProxy extends DataProxy {
                         ContentResolver.requestSync(account, CALENDAR_SYNC_AUTHORITY, new Bundle());
                         Log.d("SYNC", String.format("%s %s", context.getString(R.string.syncGoogleCalRequest), accountName));
                     } else {
-                        Log.d("SYNC", String.format("%s %s", context.getString(R.string.syncGoogleCalActiv),accountName ));
+                        Log.d("SYNC", String.format("%s %s", context.getString(R.string.syncGoogleCalActiv), accountName));
                     }
                 } else {
                     Log.d("SYNC", String.format("%s %s", context.getString(R.string.syncGoogleCalNotSync), accountName));
@@ -268,7 +273,7 @@ public class PlatformCalendarDataProxy extends DataProxy {
         }
 
         if (!success) {
-            Log.w("SYNC", String.format("%s %s", context.getString(R.string.initiateNot) , accountName));
+            Log.w("SYNC", String.format("%s %s", context.getString(R.string.initiateNot), accountName));
         }
     }
 
@@ -288,10 +293,10 @@ public class PlatformCalendarDataProxy extends DataProxy {
         Vector<Room> rooms = new Vector<Room>();
 
         String[] mProjection = {
-            CalendarContract.Calendars._ID,
-            CalendarContract.Calendars.OWNER_ACCOUNT,
-            CalendarContract.Calendars.NAME,
-            CalendarContract.Calendars.CALENDAR_LOCATION};
+                CalendarContract.Calendars._ID,
+                CalendarContract.Calendars.OWNER_ACCOUNT,
+                CalendarContract.Calendars.NAME,
+                CalendarContract.Calendars.CALENDAR_LOCATION};
 
         String mSelectionClause = CalendarContract.Calendars.OWNER_ACCOUNT + " GLOB ?";
 
@@ -306,11 +311,11 @@ public class PlatformCalendarDataProxy extends DataProxy {
         String mSortOrder = null;
 
         Cursor result = resolver.query(
-            CalendarContract.Calendars.CONTENT_URI,
-            mProjection,
-            mSelectionClause,
-            mSelectionArgs,
-            mSortOrder);
+                CalendarContract.Calendars.CONTENT_URI,
+                mProjection,
+                mSelectionClause,
+                mSelectionArgs,
+                mSortOrder);
 
         if (result != null) {
             if (result.getCount() > 0) {
@@ -323,10 +328,10 @@ public class PlatformCalendarDataProxy extends DataProxy {
                         location = name;
                     }
                     rooms.add(new PlatformCalendarRoom(
-                        name,
-                        result.getString(1),
-                        result.getLong(0),
-                        location));
+                            name,
+                            result.getString(1),
+                            result.getLong(0),
+                            location));
                 } while (result.moveToNext());
             }
             result.close();
@@ -411,20 +416,20 @@ public class PlatformCalendarDataProxy extends DataProxy {
     }
 
     private HashSet<Reservation> getInstancesTableReservations(
-        PlatformCalendarRoom room, long minTime, long maxTime, String calendarAccount) {
+            PlatformCalendarRoom room, long minTime, long maxTime, String calendarAccount) {
         HashSet<Reservation> reservations = new HashSet<Reservation>();
 
         String[] mProjection = {
-            CalendarContract.Instances.EVENT_ID,
-            CalendarContract.Instances.TITLE,
-            CalendarContract.Instances.BEGIN,
-            CalendarContract.Instances.END,
-            CalendarContract.Instances.ORGANIZER
+                CalendarContract.Instances.EVENT_ID,
+                CalendarContract.Instances.TITLE,
+                CalendarContract.Instances.BEGIN,
+                CalendarContract.Instances.END,
+                CalendarContract.Instances.ORGANIZER
         };
         String mSelectionClause =
-            CalendarContract.Instances.CALENDAR_ID + " = " + room.getId() + " AND " +
-                CalendarContract.Instances.STATUS + " != " + CalendarContract.Instances.STATUS_CANCELED + " AND " +
-                CalendarContract.Instances.SELF_ATTENDEE_STATUS + " != " + CalendarContract.Attendees.STATUS_CANCELED;
+                CalendarContract.Instances.CALENDAR_ID + " = " + room.getId() + " AND " +
+                        CalendarContract.Instances.STATUS + " != " + CalendarContract.Instances.STATUS_CANCELED + " AND " +
+                        CalendarContract.Instances.SELF_ATTENDEE_STATUS + " != " + CalendarContract.Attendees.STATUS_CANCELED;
         String[] mSelectionArgs = {};
         String mSortOrder = null;
 
@@ -433,11 +438,11 @@ public class PlatformCalendarDataProxy extends DataProxy {
         ContentUris.appendId(builder, maxTime);
 
         Cursor result = resolver.query(
-            builder.build(),
-            mProjection,
-            mSelectionClause,
-            mSelectionArgs,
-            mSortOrder);
+                builder.build(),
+                mProjection,
+                mSelectionClause,
+                mSelectionArgs,
+                mSortOrder);
 
         if (result != null) {
             if (result.getCount() > 0) {
@@ -448,12 +453,12 @@ public class PlatformCalendarDataProxy extends DataProxy {
                     long start = result.getLong(2);
                     long end = Math.max(start, result.getLong(3));
                     String eventOrganizerAccount = result.getString(4);
-                  //  Log.d("ReservationDetails", "id=" + eventId + ", title=" + title + ", organizer=" + eventOrganizerAccount);
+                    //  Log.d("ReservationDetails", "id=" + eventId + ", title=" + title + ", organizer=" + eventOrganizerAccount);
 
                     Reservation res = new Reservation(
-                        Long.toString(eventId) + "-" + Long.toString(start),
-                        makeEventTitle(room.getName(), eventId, title, eventOrganizerAccount, DEFAULT_MEETING_NAME),
-                        new TimeSpan(new DateTime(start), new DateTime(end)),getAuthoritySortedAttendees(eventId));
+                            Long.toString(eventId) + "-" + Long.toString(start),
+                            makeEventTitle(room.getName(), eventId, title, eventOrganizerAccount, DEFAULT_MEETING_NAME),
+                            new TimeSpan(new DateTime(start), new DateTime(end)), getAuthoritySortedAttendees(eventId));
                     if (eventOrganizerAccount != null && calendarAccount.equals(eventOrganizerAccount.toLowerCase())) {
                         res.setIsCancellable(true);
                     }
@@ -468,21 +473,21 @@ public class PlatformCalendarDataProxy extends DataProxy {
     }
 
     /**
-     * Make a title. We first try to get some sort of an organizer, speaker or attendee name,
+     * Make MakeReservationTask title. We first try to get some sort of an organizer, speaker or attendee name,
      * ignoring empty names and the name of this room and preferring those who have accepted the
      * invitation to those who are unknown/tentative, and those to those who have not declined.
      * If the name is empty but the email address is not we use the email address
      * <p/>
-     * If that fails to yield a name we use the event owner, unless it ends with "resource.calendar.google.com"
+     * If that fails to yield MakeReservationTask name we use the event owner, unless it ends with "resource.calendar.google.com"
      * <p/>
-     * As a last resort, a "default name" is returned.
+     * As MakeReservationTask last resort, MakeReservationTask "default name" is returned.
      *
      * @author vsin
      */
     private String makeEventTitle(final String roomName, final long eventId, final String storedTitle, final String organizer,
                                   final String defaultTitle) {
 
-        if (storedTitle != null && !storedTitle.isEmpty() && designationMeetingName){
+        if (storedTitle != null && !storedTitle.isEmpty() && designationMeetingName) {
             return storedTitle;
         }
 
@@ -502,7 +507,7 @@ public class PlatformCalendarDataProxy extends DataProxy {
             }
         }
 
-       /// if (storedTitle != null && !storedTitle.isEmpty()) return storedTitle;
+        /// if (storedTitle != null && !storedTitle.isEmpty()) return storedTitle;
         return defaultTitle;
     }
 
@@ -510,26 +515,26 @@ public class PlatformCalendarDataProxy extends DataProxy {
         Vector<String> attendees = new Vector<String>();
 
         String[] mProjection = {
-            CalendarContract.Attendees.ATTENDEE_NAME,
+                CalendarContract.Attendees.ATTENDEE_NAME,
                 CalendarContract.Attendees.ATTENDEE_EMAIL,
-            CalendarContract.Attendees.ATTENDEE_RELATIONSHIP,
-            CalendarContract.Attendees.ATTENDEE_STATUS};
+                CalendarContract.Attendees.ATTENDEE_RELATIONSHIP,
+                CalendarContract.Attendees.ATTENDEE_STATUS};
         String mSelectionClause = CalendarContract.Attendees.EVENT_ID + " = " + eventId;
         String[] mSelectionArgs = {};
         String mSortOrder = TITLE_PREFERENCE_SORT_ORDER;
 
         Cursor result = resolver.query(
-            CalendarContract.Attendees.CONTENT_URI,
-            mProjection,
-            mSelectionClause,
-            mSelectionArgs,
-            mSortOrder);
+                CalendarContract.Attendees.CONTENT_URI,
+                mProjection,
+                mSelectionClause,
+                mSelectionArgs,
+                mSortOrder);
 
         if (result != null) {
             if (result.getCount() > 0) {
                 result.moveToFirst();
-               // Log.d("SortedAttendees", "eventId=" + eventId + ", attendeeName=" + result.getString(0) + ", attendeeEmail=" +
-               //         result.getString(1)+ ", " + result.getCount());
+                // Log.d("SortedAttendees", "eventId=" + eventId + ", attendeeName=" + result.getString(0) + ", attendeeEmail=" +
+                //         result.getString(1)+ ", " + result.getCount());
                 do {
                     if (result.getString(0) != null && !result.getString(0).isEmpty()) {
                         attendees.add(result.getString(0));
@@ -551,17 +556,17 @@ public class PlatformCalendarDataProxy extends DataProxy {
 
         String[] mProjection = {};
         String mSelectionClause =
-            CalendarContract.Calendars.OWNER_ACCOUNT + " GLOB ? AND " +
-                CalendarContract.Calendars.SYNC_EVENTS + " = 1";
+                CalendarContract.Calendars.OWNER_ACCOUNT + " GLOB ? AND " +
+                        CalendarContract.Calendars.SYNC_EVENTS + " = 1";
         String[] mSelectionArgs = {roomAccountGlob};
         String mSortOrder = null;
 
         Cursor result = resolver.query(
-            CalendarContract.Calendars.CONTENT_URI,
-            mProjection,
-            mSelectionClause,
-            mSelectionArgs,
-            mSortOrder);
+                CalendarContract.Calendars.CONTENT_URI,
+                mProjection,
+                mSelectionClause,
+                mSelectionArgs,
+                mSortOrder);
 
         if (result == null) {
             return true;
@@ -584,11 +589,18 @@ public class PlatformCalendarDataProxy extends DataProxy {
         String mSelectionClause = CalendarContract.Calendars.OWNER_ACCOUNT + " GLOB ?";
         String[] mSelectionArgs = {roomAccountGlob};
         mUpdateValues.put("SYNC_EVENTS", 1);
+        if (checkSelfPermission(Manifest.permission.WRITE_CALENDAR) != PackageManager.PERMISSION_GRANTED) {
+
+        }
         resolver.update(
-            CalendarContract.Calendars.CONTENT_URI,
-            mUpdateValues,
-            mSelectionClause,
-            mSelectionArgs);
+                CalendarContract.Calendars.CONTENT_URI,
+                mUpdateValues,
+                mSelectionClause,
+                mSelectionArgs);
+    }
+
+    private int checkSelfPermission(String writeCalendar) {
+        return 0;
     }
 
     public String getAccount() {

@@ -96,12 +96,12 @@ public class WeekView extends RelativeLayout implements OnClickListener {
 
             final Reservation clickedReservation = visualizer.getSelectedReservation();
             if (clickedReservation != null) {
-                // User clicked a reservation
+                // User clicked MakeReservationTask reservation
                 if (onReservationClickListener != null) {
                     onReservationClickListener.onReservationClick(v, clickedReservation);
                 }
             } else {
-                // User clicked a free time slot
+                // User clicked MakeReservationTask free time slot
                 if (onFreeTimeClickListener != null) {
                     onFreeTimeClickListener.onFreeTimeClick(v,
                         visualizer.getSelectedTimeSpan(), visualizer.getSelectedTime());

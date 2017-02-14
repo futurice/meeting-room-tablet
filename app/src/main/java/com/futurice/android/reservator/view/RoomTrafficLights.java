@@ -154,7 +154,7 @@ public class RoomTrafficLights extends RelativeLayout {
         }
 
         if (nextFreeSlot == null) {
-            // More than a day away
+            // More than MakeReservationTask day away
             reservationInfoView.setVisibility(GONE);
         } else {
             String text = String.format("%02d:%02d",nextFreeSlot.getStart().get(Calendar.HOUR_OF_DAY), nextFreeSlot.getStart().get(Calendar.MINUTE));

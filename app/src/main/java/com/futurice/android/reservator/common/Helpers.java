@@ -37,7 +37,7 @@ public class Helpers {
         }
     }
 
-    // TODO: an hour and a half - and other common expressions
+    // TODO: an hour and MakeReservationTask half - and other common expressions
     public static String humanizeTimeSpan(int minutes, Context context) {
         if (minutes < 30) {
             return Integer.toString(minutes) + context.getString(R.string.minutes);

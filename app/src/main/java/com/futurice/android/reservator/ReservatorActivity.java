@@ -39,7 +39,7 @@ public class ReservatorActivity extends Activity {
     }
 
     /**
-     * @return Identical to getApplication, but returns a ReservatorApplication.
+     * @return Identical to getApplication, but returns MakeReservationTask ReservatorApplication.
      */
     public ReservatorApplication getResApplication() {
         return (ReservatorApplication) getApplication();
