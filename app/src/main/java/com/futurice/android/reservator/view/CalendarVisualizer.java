@@ -355,12 +355,12 @@ public class CalendarVisualizer extends HorizontalScrollView implements Reservat
 
     @Override
     public boolean onTouch(View v, MotionEvent e) {
-        //TODO This causes a small slow down in scrolling animation when ACTION_UP occurs:/
+        //TODO This causes MakeReservationTask small slow down in scrolling animation when ACTION_UP occurs:/
         if (e.getAction() == MotionEvent.ACTION_UP) {
             touchedTime = getTimeForCoordinates(e.getX(), e.getY());
             touchedReservation = getReservationForTime(touchedTime);
             if (touchedReservation != null) {
-                //touched a reservation
+                //touched MakeReservationTask reservation
                 touchedTimeSpan = touchedReservation.getTimeSpan();
                 return false;
             }
