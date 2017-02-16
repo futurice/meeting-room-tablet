@@ -32,12 +32,13 @@ public class RoomTrafficLights extends RelativeLayout {
     TextView roomTitleView;
     TextView roomStatusInfoView;
     TextView reservationInfoView;
-    Button bookNowView;
+    Button bookView, bookNowButton;
     View disconnected;
     Timer touchTimeoutTimer;
     boolean enabled = true;
-    View.OnClickListener bookNowListener;
+    View.OnClickListener bookListener;
     private long lastTouched = 0;
+    private OnClickListener bookNowListener;
 
     public RoomTrafficLights(Context context) {
         this(context, null);
@@ -50,21 +51,36 @@ public class RoomTrafficLights extends RelativeLayout {
         roomStatusView = (TextView) findViewById(R.id.roomStatus);
         roomStatusInfoView = (TextView) findViewById(R.id.roomStatusInfo);
         reservationInfoView = (TextView) findViewById(R.id.reservationInfo);
-        bookNowView = (Button) findViewById(R.id.bookNow);
+        bookView = (Button) findViewById(R.id.book);
+        bookNowButton = (Button) findViewById(R.id.bookNow);
+
         disconnected = findViewById(R.id.disconnected);
         updateConnected();
 
         setClickable(true);
         setVisibility(INVISIBLE);
 
-        bookNowView.setOnClickListener(new OnClickListener() {
+        bookView.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (bookNowListener != null && bookNowView.getVisibility() == VISIBLE) {
+                if (bookListener != null && bookView.getVisibility() == VISIBLE) {
+                    bookListener.onClick(v);
+                }
+            }
+        });
+
+        bookNowButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (bookNowListener != null && bookNowButton.getVisibility() == VISIBLE){
                     bookNowListener.onClick(v);
                 }
             }
         });
+    }
+
+    public void setBookListener(OnClickListener l) {
+        this.bookListener = l;
     }
 
     public void setBookNowListener(OnClickListener l) {
@@ -78,37 +94,51 @@ public class RoomTrafficLights extends RelativeLayout {
 
         if (room.isBookable(QUICK_BOOK_THRESHOLD)) {
             roomStatusView.setText(this.getContext().getString(R.string.free));
+            bookNowButton.setVisibility(VISIBLE);
             if (room.isFreeRestOfDay()) {
                 roomStatusInfoView.setText(this.getContext().getString(R.string.freeDay));
                 this.setBackgroundColor(getResources().getColor(R.color.TrafficLightFree));
                 // Must use deprecated API for some reason or it crashes on older tablets
-                bookNowView.setBackgroundDrawable(getResources().getDrawable(R.drawable.traffic_lights_button_green));
-                bookNowView.setTextColor(getResources().getColorStateList(R.color.traffic_lights_button_green));
+                setBookButtonGreen(bookView);
+                setBookButtonGreen(bookNowButton);
             } else {
                 int freeMinutes = room.minutesFreeFromNow();
                 roomStatusView.setText(this.getContext().getString(R.string.free));
                 String statusText = String.format("%s %s", this.getContext().getString(R.string.forX),Helpers.humanizeTimeSpan2(freeMinutes, this.getContext()));
                 roomStatusInfoView.setText(statusText);
 
-                if (freeMinutes >= Room.RESERVED_THRESHOLD_MINUTES) {
+                if (freeMinutes >= 2*Room.RESERVED_THRESHOLD_MINUTES){
+                    roomStatusInfoView.setText(this.getContext().getString(R.string.freeDay));
                     this.setBackgroundColor(getResources().getColor(R.color.TrafficLightFree));
-                    bookNowView.setBackgroundDrawable(getResources().getDrawable(R.drawable.traffic_lights_button_green));
-                    bookNowView.setTextColor(getResources().getColorStateList(R.color.traffic_lights_button_green));
-                } else {
-                    this.setBackgroundColor(getResources().getColor(R.color.TrafficLightYellow));
-                    bookNowView.setBackgroundDrawable(getResources().getDrawable(R.drawable.traffic_lights_button_yellow));
-                    bookNowView.setTextColor(getResources().getColorStateList(R.color.traffic_lights_button_yellow));
+                    setBookButtonGreen(bookView);
+                    setBookButtonGreen(bookNowButton);
+                }else {
+                    bookNowButton.setVisibility(GONE);
+                    if (freeMinutes >= Room.RESERVED_THRESHOLD_MINUTES) {
+                        this.setBackgroundColor(getResources().getColor(R.color.TrafficLightFree));
+                        setBookButtonGreen(bookView);
+                    } else {
+                        this.setBackgroundColor(getResources().getColor(R.color.TrafficLightYellow));
+                        bookView.setBackgroundDrawable(getResources().getDrawable(R.drawable.traffic_lights_button_yellow));
+                        bookView.setTextColor(getResources().getColorStateList(R.color.traffic_lights_button_yellow));
+                    }
                 }
             }
             reservationInfoView.setVisibility(GONE);
             roomStatusInfoView.setVisibility(VISIBLE);
-            bookNowView.setVisibility(VISIBLE);
+            bookView.setVisibility(VISIBLE);
         } else {
             this.setBackgroundColor(getResources().getColor(R.color.TrafficLightReserved));
             roomStatusView.setText(this.getContext().getString(R.string.defaultTitleForReservation));
-            bookNowView.setVisibility(GONE);
+            bookView.setVisibility(GONE);
+            bookNowButton.setVisibility(GONE);
             setReservationInfo(room.getCurrentReservation(), room);
         }
+    }
+
+    private void setBookButtonGreen(Button button) {
+        button.setBackgroundDrawable(getResources().getDrawable(R.drawable.traffic_lights_button_green));
+        button.setTextColor(getResources().getColorStateList(R.color.traffic_lights_button_green));
     }
 
     private void updateConnected() {

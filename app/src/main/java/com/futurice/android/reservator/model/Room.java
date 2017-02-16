@@ -156,7 +156,9 @@ public class Room implements Serializable {
         DateTime now = new DateTime();
         DateTime max = now.add(Calendar.DAY_OF_YEAR, 1).stripTime();
 
-        TimeSpan candidateSlot = new TimeSpan(now, now.add(Calendar.MINUTE, length));
+        int roundedMin = now.roundTime(now.get(Calendar.MINUTE)) - now.get(Calendar.MINUTE);
+        DateTime dateTime = now.add(Calendar.MINUTE, length + roundedMin);
+        TimeSpan candidateSlot = new TimeSpan(now, dateTime);
 
         for (Reservation r : reservations) {
             if (r.getStartTime().afterOrEqual(candidateSlot.getEnd())) return candidateSlot;
