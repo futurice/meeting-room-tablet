@@ -1,6 +1,5 @@
 package com.futurice.android.reservator.view;
 
-import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -26,8 +25,8 @@ import com.futurice.android.reservator.R;
 import com.futurice.android.reservator.ReservationActivity;
 import com.futurice.android.reservator.ReservatorApplication;
 import com.futurice.android.reservator.RoomActivity;
+import com.futurice.android.reservator.controller.MakeReservations;
 import com.futurice.android.reservator.model.AddressBookAdapter;
-import com.futurice.android.reservator.model.AddressBookEntry;
 import com.futurice.android.reservator.model.DateTime;
 import com.futurice.android.reservator.model.ReservatorException;
 import com.futurice.android.reservator.model.Room;
@@ -314,33 +313,14 @@ public class LobbyReservationRowView extends FrameLayout implements
         @Override
         protected Void doInBackground(Void... voids) {
             publishProgress();
-            AddressBookEntry entry = application.getAddressBook().getEntryByName(nameField.getText().toString());
-            Boolean addressBookOption = application.getBooleanSettingsValue("addressBookOption", false);
-
-            if (entry == null && addressBookOption) {
-                reservatorError(new ReservatorException(getResources().getString(R.string.faildUser)));
-            }
+            String name = nameField.getText().toString();
             try {
-                if (entry != null) {
-                    application.getDataProxy().reserve(room, timePicker2.getTimeSpan(),
-                            entry.getName(), entry.getEmail(),entry.getName());
-                } else {
-                    // Address book option is off so reserve the room with the selected account in settings.
-                    String accountEmail = application.getSettingValue(R.string.accountForServation, "");
-                    if (accountEmail.equals("")) {
-                        reservatorError(new ReservatorException(getResources().getString(R.string.faildCheckSettings)));
-                    }
-                    String title = nameField.getText().toString();
-                    if (title.equals("")) {
-                        title = application.getString(R.string.defaultTitleForReservation);
-                    }
-                    application.getDataProxy().reserve(room, timePicker2.getTimeSpan(),title, accountEmail,title);
-                }
+                new MakeReservations().doReservation(application, name, room,
+                        timePicker2.getTimeSpan(), name);
             } catch (ReservatorException e) {
                 reservatorError(e);
             }
 
-            // Void requires "return null;". Java blah.
             return null;
         }
 
