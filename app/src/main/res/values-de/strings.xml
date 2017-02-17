@@ -154,6 +154,8 @@
     <string name="ERROR">Fehler</string>
     <string name="SUCCESS">Reserviert</string>
     <string name="SUCCESS_Message">Deine Reservierung war erfolgreich. </string>
-    
+
+    <!--Lable following Meeting-->
+    <string name="FollowMeeting">Nextes Meeting: </string>
 
 </resources>
