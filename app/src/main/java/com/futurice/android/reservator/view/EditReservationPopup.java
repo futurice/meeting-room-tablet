@@ -17,6 +17,7 @@ import com.futurice.android.reservator.model.ReservatorException;
 import com.futurice.android.reservator.model.Room;
 
 import java.util.Calendar;
+import java.util.Locale;
 
 ;
 
@@ -47,7 +48,7 @@ public class EditReservationPopup extends Dialog {
 
         DateTime start = reservation.getTimeSpan().getStart();
         DateTime end = reservation.getTimeSpan().getEnd();
-        reservationInfo = String.format("%02d:%02d–%02d:%02d\n%s",
+        reservationInfo = String.format(Locale.getDefault(),"%02d:%02d–%02d:%02d\n%s",
             start.get(Calendar.HOUR_OF_DAY),
             start.get(Calendar.MINUTE),
             end.get(Calendar.HOUR_OF_DAY),

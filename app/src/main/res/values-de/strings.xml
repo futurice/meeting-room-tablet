@@ -5,19 +5,18 @@
 
     <!--Login-->
     <string name="login">Login</string>
-    <string name="username_hint">Benutzername</string>
-    <string name="password_hint">Passwort</string>
-    <string name="exchange_username">Benutzername austauschen:</string>
-    <string name="exchange_password">Passwort austauschen:</string>
-    <string name="googleCalendarOk">Google Kalender ist OK</string>
-    <string name="googleCalendarPending">Google Kalendar noch nicht erledigt…</string>
-    <string name="googleContactsOk">Google Kontakte sind OK</string>
-    <string name="googleContactsPending">Google Kontakte noch nicht erledigt…</string>
-    <string name="fum_username">FUM3 Benutzername:</string>
-    <string name="fum_password">FUM3 Passwort:</string>
+    <string name="username_hint">username</string>
+    <string name="password_hint">password</string>
+    <string name="exchange_username">Exchange username:</string>
+    <string name="exchange_password">Exchange password:</string>
+    <string name="googleCalendarOk">Google Calendar OK</string>
+    <string name="googleCalendarPending">Google Calendar pending…</string>
+    <string name="googleContactsOk">Google Contacts OK</string>
+    <string name="googleContactsPending">Google Contacts pending…</string>
+    <string name="fum_username">FUM3 username:</string>
+    <string name="fum_password">FUM3 password:</string>
     <string name="default_fum_username">roomreservator</string>
     <string name="default_exchange_username">reserve@futurice.com</string>
-    <string name="exchange_server_address">Server-Adresse austauschen</string>
     <string name="calendarError">Fehler: Google Kalender</string>
     <string name="noCalendarsError">Es wurde kein Meetingraum Kalender gefunden. Bitte stell sicher, dass ein Google Konto auf diesem Gerät konfiguriert wurde und der Google Kalender eingestellt wurde, um den Meetingraum Kalender zu synchronisieren.</string>
     <string name="loadingText">lädt</string>
@@ -102,7 +101,7 @@
     <string name="visualizer">Zeichne KalenderVisualisierer in </string>
     <string name="visualizerTime">Kalender visualisierer: </string>
     <string name="timeSpan">Zeitspanne: </string>
-    <string name="reservationDone">Reserviertung fertig in </string>
+    <string name="reservationDone">reservation finished in </string>
 
     <!--Time-->
     <string name="minutes"> Minuten</string>
@@ -143,11 +142,18 @@
     <string name="calendarAccountGlob">*@resource.calendar.google.com</string>
     <string name="reservationCancelInfo">Du kannst Reservierungen löschen, welche ursprünglisch von einem Raum - Tablet erstellt wurde.</string>
     <string name="touchToReturn">Tippe um zu der Wochenansicht zurückzukehren</string>
+    <string name="book">Raum buchen</string>
     <string name="bookNow">Jetzt buchen</string>
     <string name="disconnectedWarning">Verbindung ist getrennt!</string>
     <string name="cancleTitle">Reservierung abbrechen?</string>
     <string name="seeRoomTrafficLights">Raum Status</string>
     <string name="resExaptionErrorCancel">Es ist nicht möglich diese Reservierung zu stonieren.</string>
     <string name="calendarInfo">Tipp: Tippe einen freien Zeitraum an um zu reservieren.</string>
+
+    <!--OnClickBooking-->
+    <string name="ERROR">Fehler</string>
+    <string name="SUCCESS">Reserviert</string>
+    <string name="SUCCESS_Message">Deine Reservierung war erfolgreich. </string>
+    
 
 </resources>

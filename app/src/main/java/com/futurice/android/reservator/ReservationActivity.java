@@ -1,21 +1,17 @@
 package com.futurice.android.reservator;
 
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
 import android.widget.TextView;
 
+import com.futurice.android.reservator.controller.MakeReservations;
 import com.futurice.android.reservator.model.AddressBookAdapter;
-import com.futurice.android.reservator.model.AddressBookEntry;
 import com.futurice.android.reservator.model.CachedDataProxy;
 import com.futurice.android.reservator.model.DataProxy;
 import com.futurice.android.reservator.model.DateTime;
@@ -27,13 +23,14 @@ import com.futurice.android.reservator.model.TimeSpan;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.Vector;
 
 public class ReservationActivity extends ReservatorActivity implements View.OnClickListener{
-    private long minToMS = 60000;
-    private final int MIN_MEETING_TIME = 15;
+    private static final long ONE_MIN_IN_SEC = 60000;
+    private static final int MIN_MEETING_TIME = 15;
 
     private Room room;
     private ReservatorApplication application;
@@ -43,10 +40,8 @@ public class ReservationActivity extends ReservatorActivity implements View.OnCl
     private TextView infoLabel;
     private AutoCompleteTextView meetingField, nameField;
     private View reserveButton, plusButton, minusButton;
-    private List<Reservation> reservationList;
 
     private SharedPreferences settings;
-    private ReservatorException reservatorException;
     private View.OnFocusChangeListener userNameFocusChangeListener = new View.OnFocusChangeListener() {
         @Override
         public void onFocusChange(View v, boolean hasFocus) {
@@ -99,7 +94,7 @@ public class ReservationActivity extends ReservatorActivity implements View.OnCl
             try {
                 nameField.setAdapter(new AddressBookAdapter(this, application.getAddressBook()));
             } catch (ReservatorException e) {
-                reservatorException = e;
+                reservatorError(e);
             }
         }
 
@@ -112,7 +107,7 @@ public class ReservationActivity extends ReservatorActivity implements View.OnCl
             public void run() {
                 cancelButton.performClick();
             }
-        }, minToMS);
+        }, ONE_MIN_IN_SEC);
     }
 
     public void setRoom(String roomName) {
@@ -257,45 +252,24 @@ public class ReservationActivity extends ReservatorActivity implements View.OnCl
 
     private long addTime(int value) {
         if (plusDiff != 0){
-            return changeTime.getTimeInMillis()+(plusDiff*minToMS);
+            return changeTime.getTimeInMillis()+(plusDiff*ONE_MIN_IN_SEC);
         }
 
         else if (negDiff != 0){
-            return changeTime.getTimeInMillis()+(negDiff*minToMS);
+            return changeTime.getTimeInMillis()+(negDiff*ONE_MIN_IN_SEC);
         }
 
-        return changeTime.getTimeInMillis()+(value*minToMS);
+        return changeTime.getTimeInMillis()+(value*ONE_MIN_IN_SEC);
     }
 
     private class MakeReservationTask extends AsyncTask<Void, Void, Void> {
         @Override
         protected Void doInBackground(Void... voids) {
             publishProgress();
-            AddressBookEntry entry = application.getAddressBook().getEntryByName(nameField.getText().toString());
-            Boolean addressBookOption = application.getBooleanSettingsValue("addressBookOption", false);
-
-            if (entry == null && addressBookOption && room == null) {
-                reservatorError(new ReservatorException(getResources().getString(R.string.faildUser)));
-            }
 
             try {
-                if (entry != null) {
-                    application.getDataProxy().reserve(room, new TimeSpan(startTime,endTime),
-                            entry.getName(), entry.getEmail(), meetingField.getText().toString());
-                } else {
-                    // Address book option is off so reserve the room with the selected account in settings.
-
-                    String accountEmail = settings.getString(getString(R.string.accountForServation), "");
-                    if (accountEmail.equals("")) {
-                        reservatorError(new ReservatorException(getResources().getString(R.string.faildCheckSettings)));
-                    }
-
-                    String title =  meetingField.getText().toString();
-                    if ( !meetingField.getText().toString().isEmpty()) {
-                        title = meetingField.getText().toString();
-                    }
-                    application.getDataProxy().reserve(room, new TimeSpan(startTime,endTime),nameField.getText().toString(), accountEmail,title);
-                }
+                new MakeReservations().doReservation(application,nameField.getText().toString(), room,
+                        new TimeSpan(startTime, endTime), meetingField.getText().toString());
             } catch (ReservatorException e) {
                 reservatorError(e);
             }
@@ -329,14 +303,14 @@ public class ReservationActivity extends ReservatorActivity implements View.OnCl
     }
 
     protected void refreshTimeLabels() {
+        Locale locale = Locale.getDefault();
         Date date = new Date(startTime.getTimeInMillis());
         startTimeView = (TextView) findViewById(R.id.startTimeAlternative);
-        startTimeView.setText(String.format("%02d:%02d",date.getHours(),date.getMinutes()));
+        startTimeView.setText(String.format(locale,"%02d:%02d", date.getHours(), date.getMinutes()));
 
         date = new Date(endTime.getTimeInMillis());
         endTimeView = (TextView) findViewById(R.id.endTimeAlternative);
-        endTimeView.setText(String.format("%02d:%02d",date.getHours(),date.getMinutes()));
-
+        endTimeView.setText(String.format(locale,"%02d:%02d", date.getHours(), date.getMinutes()));
         negDiff = 0;
         plusDiff = 0;
         checkBookable(true);
@@ -373,38 +347,38 @@ public class ReservationActivity extends ReservatorActivity implements View.OnCl
             //test end of meeting <= startTime
             Reservation reservation = room.getCurrentReservation();
             if (reservation!=null){
-                diff = startTime.subtract(reservation.getEndTime(),Calendar.MILLISECOND)/minToMS;
+                diff = startTime.subtract(reservation.getEndTime(),Calendar.MILLISECOND)/ ONE_MIN_IN_SEC;
                 setButtonEnable(false, (int) diff);
             }
             //test timediff between end and start time if startTime add time not greater endtime
-            diff = endTime.subtract(startTime,Calendar.MILLISECOND)/minToMS;
+            diff = endTime.subtract(startTime,Calendar.MILLISECOND)/ ONE_MIN_IN_SEC;
             setButtonEnable(true,(int)diff-MIN_MEETING_TIME);
 
         } else {
             //test timediff between end and start time if endtimeTime add time not smaller starttime
-            diff = endTime.subtract(startTime,Calendar.MILLISECOND)/minToMS;
+            diff = endTime.subtract(startTime,Calendar.MILLISECOND)/ ONE_MIN_IN_SEC;
             setButtonEnable(false,(int)diff-MIN_MEETING_TIME);
         }
 
         //test end or starttime of mieetings, endMeeting >= startTime or startMeeting >= endTime
-        reservationList = room.getReservationsForTimeSpan(new TimeSpan(new DateTime(startTime.getTime()).setTime(0,0,0),new DateTime(endTime.getTime()).setTime(23,0,0)));
+        List<Reservation> reservationList = room.getReservationsForTimeSpan(new TimeSpan(new DateTime(startTime.getTime()).setTime(0, 0, 0), new DateTime(endTime.getTime()).setTime(23, 0, 0)));
         if (reservationList.size() >= 0){
             for (Reservation r : reservationList){
                 if (isStartTime){
                     if (r.getEndTime().getTimeInMillis() <= startTime.getTimeInMillis()){
-                            diff = startTime.subtract(r.getEndTime(),Calendar.MILLISECOND)/minToMS;
+                            diff = startTime.subtract(r.getEndTime(),Calendar.MILLISECOND)/ ONE_MIN_IN_SEC;
                             setButtonEnable(false, (int) diff);
                     }
 
                     if (r.getStartTime().getTimeInMillis() >= endTime.getTimeInMillis()) {
-                            diff = r.getStartTime().subtract(endTime, Calendar.MILLISECOND) / minToMS;
+                            diff = r.getStartTime().subtract(endTime, Calendar.MILLISECOND) / ONE_MIN_IN_SEC;
                             setButtonEnable(true, (int) diff);
                     }
                 }
 
                 if (!isStartTime){
                     if (r.getStartTime().getTimeInMillis() >= endTime.getTimeInMillis()) {
-                        diff = r.getStartTime().subtract(endTime,Calendar.MILLISECOND)/minToMS;
+                        diff = r.getStartTime().subtract(endTime,Calendar.MILLISECOND)/ ONE_MIN_IN_SEC;
                         setButtonEnable(true,(int)diff);
                     }
                 }
@@ -447,7 +421,7 @@ public class ReservationActivity extends ReservatorActivity implements View.OnCl
         }
     }
 
-    public void refreshButtonEnabled(){
+    private void refreshButtonEnabled(){
         findViewById(R.id.plus15button).setEnabled(true);
         findViewById(R.id.plus30button).setEnabled(true);
         findViewById(R.id.plus60button).setEnabled(true);
