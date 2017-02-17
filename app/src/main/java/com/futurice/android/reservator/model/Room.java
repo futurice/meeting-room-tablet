@@ -185,6 +185,22 @@ public class Room implements Serializable {
         return daysReservations;
     }
 
+    public Reservation getFollowingReservation() {
+        Reservation currentReservation = getCurrentReservation();
+        for (Reservation r : reservations) {
+            if (currentReservation.getEndTime().equals(r.getStartTime())) {
+                return r;
+            } else {
+                long timeDiff = r.getStartTime().getTimeInMillis() - currentReservation.getEndTime().getTimeInMillis();
+
+                if (timeDiff < 15) {
+                    return r;
+                }
+            }
+        }
+        return null;
+    }
+
     @Override
     public int hashCode() {
         return email.hashCode();

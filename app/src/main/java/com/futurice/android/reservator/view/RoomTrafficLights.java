@@ -18,6 +18,7 @@ import com.futurice.android.reservator.model.TimeSpan;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -32,6 +33,7 @@ public class RoomTrafficLights extends RelativeLayout {
     TextView roomTitleView;
     TextView roomStatusInfoView;
     TextView reservationInfoView;
+    private TextView followingMeeting;
     Button bookView, bookNowButton;
     View disconnected;
     Timer touchTimeoutTimer;
@@ -53,6 +55,7 @@ public class RoomTrafficLights extends RelativeLayout {
         reservationInfoView = (TextView) findViewById(R.id.reservationInfo);
         bookView = (Button) findViewById(R.id.book);
         bookNowButton = (Button) findViewById(R.id.bookNow);
+        followingMeeting = (TextView) findViewById(R.id.followMeeting);
 
         disconnected = findViewById(R.id.disconnected);
         updateConnected();
@@ -95,6 +98,8 @@ public class RoomTrafficLights extends RelativeLayout {
         if (room.isBookable(QUICK_BOOK_THRESHOLD)) {
             roomStatusView.setText(this.getContext().getString(R.string.free));
             bookNowButton.setVisibility(VISIBLE);
+            followingMeeting.setVisibility(GONE);
+
             if (room.isFreeRestOfDay()) {
                 roomStatusInfoView.setText(this.getContext().getString(R.string.freeDay));
                 this.setBackgroundColor(getResources().getColor(R.color.TrafficLightFree));
@@ -108,7 +113,6 @@ public class RoomTrafficLights extends RelativeLayout {
                 roomStatusInfoView.setText(statusText);
 
                 if (freeMinutes >= 2*Room.RESERVED_THRESHOLD_MINUTES){
-                    roomStatusInfoView.setText(this.getContext().getString(R.string.freeDay));
                     this.setBackgroundColor(getResources().getColor(R.color.TrafficLightFree));
                     setBookButtonGreen(bookView);
                     setBookButtonGreen(bookNowButton);
@@ -132,6 +136,7 @@ public class RoomTrafficLights extends RelativeLayout {
             roomStatusView.setText(this.getContext().getString(R.string.defaultTitleForReservation));
             bookView.setVisibility(GONE);
             bookNowButton.setVisibility(GONE);
+            setFollowMeeting(room);
             setReservationInfo(room.getCurrentReservation(), room);
         }
     }
@@ -187,7 +192,7 @@ public class RoomTrafficLights extends RelativeLayout {
             // More than MakeReservationTask day away
             reservationInfoView.setVisibility(GONE);
         } else {
-            String text = String.format("%02d:%02d",nextFreeSlot.getStart().get(Calendar.HOUR_OF_DAY), nextFreeSlot.getStart().get(Calendar.MINUTE));
+            String text = String.format(Locale.getDefault(),"%02d:%02d",nextFreeSlot.getStart().get(Calendar.HOUR_OF_DAY), nextFreeSlot.getStart().get(Calendar.MINUTE));
             reservationInfoView.setText(String.format("%s %s %s ", getContext().getString(R.string.freeAt),text, getLastingTimeReservation(room)));
             reservationInfoView.setVisibility(VISIBLE);
         }
@@ -250,6 +255,17 @@ public class RoomTrafficLights extends RelativeLayout {
         if (touchTimeoutTimer != null) {
             touchTimeoutTimer.cancel();
             touchTimeoutTimer = null;
+        }
+    }
+
+    private void setFollowMeeting(Room room) {
+        Reservation followingReservation = room.getFollowingReservation();
+        if (followingReservation != null) {
+
+
+            String meetingName = followingReservation.getSubject();
+            followingMeeting.setText(getContext().getString(R.string.FollowMeeting) +" "+meetingName);
+            followingMeeting.setVisibility(VISIBLE);
         }
     }
 }
