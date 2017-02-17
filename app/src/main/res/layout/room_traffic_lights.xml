@@ -61,12 +61,23 @@
             android:id="@+id/reservationInfo"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
+            android:layout_marginTop="15dp"
             android:layout_below="@id/roomStatusInfo"
             android:textColor="@color/TrafficLightText"
             android:textSize="30sp"
             android:gravity="center_horizontal"
             android:textIsSelectable="false"/>
+
+        <TextView
+            android:id="@+id/followMeeting"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_below="@id/reservationInfo"
+            android:textColor="@color/TrafficLightText"
+            android:textSize="30sp"
+            android:gravity="center_horizontal"
+            android:textIsSelectable="false" />
 
         <LinearLayout
             android:orientation="horizontal"
@@ -143,6 +154,5 @@
         android:textIsSelectable="false"
         android:id="@+id/textViewToReserveTrafficlights"
         android:clickable="false"
-        android:layout_alignParentEnd="true"
         android:onClick="onClick" />
 </RelativeLayout>
