@@ -48,7 +48,7 @@ import java.util.Calendar;
 import java.util.Vector;
 
 public class RoomActivity extends ReservatorActivity implements OnMenuItemClickListener,
-    DataUpdatedListener, AddressBookUpdatedListener, OnClickListener {
+    DataUpdatedListener, AddressBookUpdatedListener {
     public static final String ROOM_EXTRA = "room";
     public static final long ROOMLIST_REFRESH_PERIOD = 10 * 1000;
     final Handler handler = new Handler();
@@ -184,7 +184,7 @@ public class RoomActivity extends ReservatorActivity implements OnMenuItemClickL
             }
         });
 
-        trafficLights.setBookListener(this);
+        trafficLights.setBookListener(getBookListener());
 
         trafficLights.setBookNowListener(getBookNowListener());
 
@@ -380,45 +380,51 @@ public class RoomActivity extends ReservatorActivity implements OnMenuItemClickL
         refreshFailed(e);
     }
 
-    @Override
-    public void onClick(View v) {
-        if (!currentRoom.isFree()) return;
-        TimeSpan limits = currentRoom.getNextFreeTime();
 
-        DateTime now = new DateTime();
-        TimeSpan suggested = new TimeSpan(now, now.add(Calendar.MINUTE, DEFAULT_BOOK_NOW_DURATION));
+    private OnClickListener getBookListener(){
+       return new OnClickListener() {
+           @Override
+           public void onClick(View v) {
+               if (!currentRoom.isFree()) return;
+               TimeSpan limits = currentRoom.getNextFreeTime();
 
-        if (limits == null) {
-            // No next free time was found. Use the suggested time.
-            limits = suggested;
-        } else if (limits.getEnd().before(suggested.getEnd())) {
-            // The next free time ends before the suggested time.
-            suggested = limits;
-        }
+               DateTime now = new DateTime();
+               TimeSpan suggested = new TimeSpan(now, now.add(Calendar.MINUTE, DEFAULT_BOOK_NOW_DURATION));
 
-        final RoomReservationPopup d = new RoomReservationPopup(RoomActivity.this, limits, suggested, currentRoom);
-        d.setOnReserveCallback(new OnReserveListener() {
-            @Override
-            public void call(LobbyReservationRowView v) {
-                d.dismiss();
-                refreshData();
-            }
-        });
+               if (limits == null) {
+                   // No next free time was found. Use the suggested time.
+                   limits = suggested;
+               } else if (limits.getEnd().before(suggested.getEnd())) {
+                   // The next free time ends before the suggested time.
+                   suggested = limits;
+               }
 
-        RoomActivity.this.trafficLights.disable();
-        d.setOnDismissListener(new OnDismissListener() {
-            @Override
-            public void onDismiss(DialogInterface dialog) {
-                RoomActivity.this.trafficLights.enable();
-            }
-        });
+               final RoomReservationPopup d = new RoomReservationPopup(RoomActivity.this, limits, suggested, currentRoom);
+               d.setOnReserveCallback(new OnReserveListener() {
+                   @Override
+                   public void call(LobbyReservationRowView v) {
+                       d.dismiss();
+                       refreshData();
+                   }
+               });
 
-        d.show();
+               RoomActivity.this.trafficLights.disable();
+               d.setOnDismissListener(new OnDismissListener() {
+                   @Override
+                   public void onDismiss(DialogInterface dialog) {
+                       RoomActivity.this.trafficLights.enable();
+                   }
+               });
 
-        if (settings.getString("reservationView","").equals(getBaseContext().getString(R.string.reserv_view_spinner_change))) {
-            d.cancel();
-        }
+               d.show();
+
+               if (settings.getString("reservationView","").equals(getBaseContext().getString(R.string.reserv_view_spinner_change))) {
+                   d.cancel();
+               }
+           }
+       };
     }
+
 
     private OnClickListener getBookNowListener() {
         return new OnClickListener() {
