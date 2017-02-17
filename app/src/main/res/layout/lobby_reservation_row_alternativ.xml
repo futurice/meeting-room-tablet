@@ -32,8 +32,8 @@
 
         <ImageButton
             android:id="@+id/cancelButtonAlternativ"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:layout_gravity="top"
             android:layout_marginRight="10dp"
             android:layout_marginTop="10dp"
