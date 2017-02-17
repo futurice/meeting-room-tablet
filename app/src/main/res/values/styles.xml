@@ -15,6 +15,7 @@
     <color name="Transparent">#0000</color>
     <color name="CalendarMarkerReservedColor">#0066CC</color>
     <color name="CalendarMarkerFreeColor">#0000</color>
+    <color name="GreenColor">#b2c900</color>
 
     <style name="Theme.Transparent" parent="android:Theme">
         <item name="android:windowIsTranslucent">true</item>

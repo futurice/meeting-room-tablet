@@ -43,3 +43,5 @@ For the contributions after the initial release, please see the Contributors vie
 Support
 -------
 Pull requests and new issues are of course welcome. If you have any questions, comments or feedback you can contact us by email at sol@futurice.com. We will try to answer your questions, but we have limited manpower so please, be patient with us. If you or your company decides to use this, feel also free to send us pictures of your setups.
+
+This is the fork version created by synyx.

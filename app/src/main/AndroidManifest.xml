@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="com.futurice.android.reservator"
-          android:versionCode="17"
-          android:versionName="4.2.1">
+          android:versionCode="19"
+          android:versionName="1.0.0">
 
     <uses-sdk
         android:minSdkVersion="14"
-        android:targetSdkVersion="18"/>
+        android:targetSdkVersion="24"/>
 
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.GET_ACCOUNTS"/>
@@ -50,17 +50,27 @@
             android:name="RoomActivity"
             android:screenOrientation="sensorLandscape"
             android:configChanges="orientation|screenSize"
-            android:hardwareAccelerated="false"></activity>
+            android:hardwareAccelerated="false">
+        </activity>
         <activity
             android:name="SettingsActivity"
-            android:theme="@style/Theme.Transparent"></activity>
+            android:theme="@style/Theme.Transparent">
+        </activity>
         <activity
             android:name="LobbyActivity"
             android:screenOrientation="sensorLandscape"
-            android:configChanges="orientation|screenSize"></activity>
+            android:configChanges="orientation|screenSize">
+        </activity>
         <activity
             android:name=".view.RoomReservationPopup"
-            android:theme="@style/Theme.Transparent"></activity>
+            android:theme="@style/Theme.Transparent">
+        </activity>
+        <activity
+            android:name=".ReservationActivity"
+            android:screenOrientation="sensorLandscape"
+            android:configChanges="orientation|screenSize">
+        </activity>
 
+        <uses-library android:name="android.test.runner" />
     </application>
 </manifest>

@@ -4,17 +4,30 @@
                 android:layout_height="fill_parent"
                 android:padding="20dp">
 
+    <DigitalClock
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/digitalClock"
+        android:textColor="@color/TrafficLightText"
+        android:textSize="40sp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
     <TextView
         android:id="@+id/roomTitle"
-        android:layout_width="fill_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
         android:textColor="@color/TrafficLightText"
         android:gravity="left"
         android:textSize="40sp"
         android:textStyle="bold"
         android:textAllCaps="true"
-        android:textIsSelectable="false"/>
+        android:textIsSelectable="false"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_toLeftOf="@id/digitalClock"/>
 
     <RelativeLayout
         android:layout_width="fill_parent"
@@ -55,22 +68,42 @@
             android:gravity="center_horizontal"
             android:textIsSelectable="false"/>
 
-        <Button
-            android:id="@+id/bookNow"
+        <LinearLayout
+            android:orientation="horizontal"
+            android:id="@+id/layoutBookButtons"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="30dp"
             android:layout_centerHorizontal="true"
-            android:layout_below="@id/reservationInfo"
-            android:text="@string/bookNow"
-            android:textSize="40sp"
-            android:textStyle="bold"
-            android:textIsSelectable="false"/>
+            android:layout_below="@id/reservationInfo">
+
+            <Button
+                android:id="@+id/book"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/book"
+                android:textSize="40sp"
+                android:textStyle="bold"
+                android:textIsSelectable="false"
+                android:layout_weight="1" />
+
+            <Button
+                android:id="@+id/bookNow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/bookNow"
+                android:textSize="40sp"
+                android:textStyle="bold"
+                android:textIsSelectable="false"
+                android:layout_marginLeft="85dp"
+                android:layout_marginStart="85dp"
+                android:layout_weight="1" />
+        </LinearLayout>
 
         <LinearLayout
             android:id="@+id/disconnected"
             android:orientation="vertical"
-            android:layout_below="@id/bookNow"
+            android:layout_below="@id/layoutBookButtons"
             android:layout_marginTop="30dp"
             android:layout_centerHorizontal="true"
             android:layout_width="wrap_content"
@@ -94,17 +127,22 @@
                 android:textStyle="bold"
                 android:textAllCaps="true"/>
         </LinearLayout>
+
     </RelativeLayout>
 
     <TextView
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:layout_height="45dp"
         android:layout_alignParentBottom="true"
         android:textColor="@color/TrafficLightText"
         android:gravity="right"
-        android:text="@string/touchToReserve"
+        android:text="@string/touchToReturn"
         android:textSize="30sp"
         android:textStyle="bold"
         android:textAllCaps="true"
-        android:textIsSelectable="false"/>
+        android:textIsSelectable="false"
+        android:id="@+id/textViewToReserveTrafficlights"
+        android:clickable="false"
+        android:layout_alignParentEnd="true"
+        android:onClick="onClick" />
 </RelativeLayout>

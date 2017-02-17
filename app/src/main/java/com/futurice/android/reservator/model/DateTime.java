@@ -114,19 +114,55 @@ public class DateTime implements Serializable {
         return new DateTime(n, false);
     }
 
-    public int subtract(DateTime o, int unit) {
+    public long subtract(DateTime o, int unit) {
         switch (unit) {
             case Calendar.DAY_OF_YEAR:
-                return (int) ((this.getTimeInMillis() - o.getTimeInMillis()) / (1000 * 60 * 60 * 24));
+                return (this.getTimeInMillis() - o.getTimeInMillis()) / (1000 * 60 * 60 * 24);
             case Calendar.MILLISECOND:
-                return (int) (this.getTimeInMillis() - o.getTimeInMillis());
+                return this.getTimeInMillis() - o.getTimeInMillis();
             default:
                 throw new IllegalArgumentException("Not implemented with unit " + unit);
         }
     }
 
+    public boolean equals(long o) {
+        return this.getTimeInMillis() == o;
+    }
+
     @Override
     public String toString() {
-        return toGMTString();
+        return cal.getTime().toString();
+        //return toGMTString();
     }
+
+    public Date getDate(int value, boolean doRoundTime){
+        if (doRoundTime){
+            return new Date(this.get(Calendar.YEAR),this.get(Calendar.MONTH),this.get(Calendar.DAY_OF_YEAR),this.get(Calendar.HOUR)+value,roundTime(this.get(Calendar.MINUTE)));
+        } else {
+            return new Date(this.get(Calendar.YEAR),this.get(Calendar.MONTH),this.get(Calendar.DAY_OF_YEAR),this.get(Calendar.HOUR)+value,this.get(Calendar.MINUTE));
+        }
+    }
+
+    public int roundTime(int min) {
+        int counter = min/15;
+        min= min%15;
+        if(min==0 && counter==0){
+            return 0;
+        }
+
+        if (counter == 0 || (counter == 1 && min == 0)){
+            return 15;
+        }
+
+        if (counter >= 1 && min < 15){
+            if (min == 0){
+                return counter*15;
+            } else {
+                counter = counter + 1;
+                return counter*15;
+            }
+        }
+        return 0;
+    }
+
 }

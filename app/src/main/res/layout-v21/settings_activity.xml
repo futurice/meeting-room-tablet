@@ -4,8 +4,7 @@
             android:layout_height="fill_parent"
             android:fillViewport="true"
             android:background="#fff"
-            android:padding="0dip"
-    android:nestedScrollingEnabled="true">
+            android:padding="0dip">
 
     <RelativeLayout
         android:layout_width="wrap_content"
@@ -116,7 +115,8 @@
             android:layout_below="@+id/saveSettings"
             android:layout_marginBottom="10dp"
             android:layout_marginTop="10dp"
-            android:text="@string/removeUserData"/>
+            android:text="@string/removeUserData"
+            android:layout_centerHorizontal="true" />
 
         <TextView
             android:id="@+id/roomListLabel"
@@ -138,14 +138,20 @@
             android:nestedScrollingEnabled="true"
             android:fillViewport="true">
 
-            <ListView
-                android:id="@+id/roomListView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:cacheColorHint="@android:color/transparent"
-                android:layout_below="@+id/roomListLabel"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentEnd="true" />
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <ListView
+                    android:id="@+id/roomListView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="190dp"
+                    android:cacheColorHint="@android:color/transparent"
+                    android:nestedScrollingEnabled="true"
+                    android:scrollingCache="false"
+                    android:smoothScrollbar="false" />
+            </LinearLayout>
         </ScrollView>
 
         <Spinner
@@ -155,8 +161,7 @@
             android:layout_alignLeft="@+id/language"
             android:layout_alignRight="@+id/language"
             android:layout_below="@+id/language"
-            android:layout_marginBottom="10dp"
-            android:spinnerMode="dropdown" />
+            android:layout_marginBottom="10dp"/>
 
         <TextView
             android:id="@+id/language"
@@ -167,7 +172,8 @@
             android:textColor="#000"
             android:layout_below="@+id/scrollView"
             android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true" />
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="10dp" />
 
         <TextView
             style="@android:style/TextAppearance.Medium"
@@ -180,9 +186,8 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true" />
 
-
         <Spinner
-            android:layout_width="wrap_content"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:id="@+id/meetingDesignationSpinner"
             android:layout_below="@+id/meetingDesignationLabel"
@@ -200,7 +205,8 @@
             android:textColor="@color/CalendarTextColor"
             android:layout_alignParentTop="true"
             android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true" />
+            android:layout_alignParentStart="true"
+            android:layout_marginBottom="10dp" />
 
         <TextView
             style="@android:style/TextAppearance.Medium"
@@ -228,8 +234,9 @@
             android:layout_height="wrap_content"
             android:text="@string/saveSettings"
             android:layout_below="@+id/reservationViewSpinner"
-            android:layout_toRightOf="@+id/titelSettings"
-            android:layout_toEndOf="@+id/titelSettings" />
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="20dp" />
 
     </RelativeLayout>
 

@@ -1,26 +1,28 @@
 package com.futurice.android.reservator.model;
 
+import android.content.Context;
+
+import com.futurice.android.reservator.R;
+import com.futurice.android.reservator.common.Helpers;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.Vector;
-
-import com.futurice.android.reservator.common.Helpers;
+import java.util.concurrent.TimeUnit;
 
 public class Room implements Serializable {
     // Rooms that are free for no more than this long to future are considered "reserved" (not-bookable)
-    static public final int RESERVED_THRESHOLD_MINUTES = 30;
+    static public final int RESERVED_THRESHOLD_MINUTES = 15;
     private static final long serialVersionUID = 1L;
     // Rooms that are free for this long to future are considered "free"
     static private final int FREE_THRESHOLD_MINUTES = 180;
     private String name, email;
     private Vector<Reservation> reservations;
-
-    //public Vector<Reservation> getReservations(){
-    //	return this.reservations;
-    //}
+    private String shownRoomName;
     private int capacity = -1;
 
     public Room(String name, String email) {
@@ -40,11 +42,16 @@ public class Room implements Serializable {
     public void setReservations(Vector<Reservation> reservations) {
         this.reservations = reservations;
         Collections.sort(reservations);
+        setShownRoomName();
+    }
+
+    public String getShownRoomName(){
+        return shownRoomName;
     }
 
     @Override
     public String toString() {
-        return name; // + " " + (isFree() ? "(free)" : "(reserved)");
+        return name;
     }
 
     public boolean isFree() {
@@ -80,7 +87,7 @@ public class Room implements Serializable {
      */
     public int minutesFreeFrom(DateTime from) {
         for (Reservation r : reservations) {
-            if (r.getStartTime().after(from)) {
+             if (r.getStartTime().after(from)) {
                 return (int) ((r.getStartTime().getTimeInMillis() - from.getTimeInMillis()) / 60000);
             }
         }
@@ -149,7 +156,9 @@ public class Room implements Serializable {
         DateTime now = new DateTime();
         DateTime max = now.add(Calendar.DAY_OF_YEAR, 1).stripTime();
 
-        TimeSpan candidateSlot = new TimeSpan(now, now.add(Calendar.MINUTE, length));
+        int roundedMin = now.roundTime(now.get(Calendar.MINUTE)) - now.get(Calendar.MINUTE);
+        DateTime dateTime = now.add(Calendar.MINUTE, length + roundedMin);
+        TimeSpan candidateSlot = new TimeSpan(now, dateTime);
 
         for (Reservation r : reservations) {
             if (r.getStartTime().afterOrEqual(candidateSlot.getEnd())) return candidateSlot;
@@ -238,19 +247,74 @@ public class Room implements Serializable {
         return true;
     }
 
-    public String getStatusText() {
+    public String getStatusText(Context context) {
         if (this.isFree()) {
             int freeMinutes = this.minutesFreeFromNow();
 
             if (freeMinutes > FREE_THRESHOLD_MINUTES) {
-                return "Free";
+                return context.getString(R.string.free);
             } else if (freeMinutes < RESERVED_THRESHOLD_MINUTES) {
-                return "Reserved";
+                return context.getString(R.string.defaultTitleForReservation);
             } else {
-                return "Free for " + Helpers.humanizeTimeSpan(freeMinutes);
+                return String.format("%s %s", context.getString(R.string.freeFor), Helpers.humanizeTimeSpan(freeMinutes, context));
             }
         } else {
-            return "Reserved";
+            return context.getString(R.string.defaultTitleForReservation);
         }
+    }
+
+    private long getTimeDifference(int hours, int minutes, Date lastTimeConnected) {
+        DateTime reservEndTime = new DateTime().setTime(hours,minutes,0);
+        return reservEndTime.subtract(new DateTime(lastTimeConnected.getTime()),Calendar.MILLISECOND);
+
+    }
+
+    public long getTimeDifferenceHour(Date lastTimeConnected) {
+        int hours = getNextFreeSlot().getStart().get(Calendar.HOUR_OF_DAY);
+        int minutes = getNextFreeSlot().getStart().get(Calendar.MINUTE);
+
+        return (TimeUnit.MILLISECONDS.toHours(getTimeDifference(hours, minutes,lastTimeConnected)) % 24);
+    }
+
+    public long getTimeDifferenceMinute(Date lastTimeConnected) {
+        int hours = getNextFreeSlot().getStart().get(Calendar.HOUR_OF_DAY);
+        int minutes = getNextFreeSlot().getStart().get(Calendar.MINUTE);
+
+        long timeDifference = getTimeDifference(hours, minutes,lastTimeConnected);
+        timeDifference -= TimeUnit.HOURS.toMillis(getTimeDifferenceHour(lastTimeConnected));
+
+        return TimeUnit.MILLISECONDS.toMinutes(timeDifference) % 60;
+    }
+
+    private void setShownRoomName() {
+        if (!reservations.isEmpty()) {
+            Vector<String> attendees = reservations.get(0).getAttendees();
+            String[] nameList;
+
+            for (Object attendee : attendees) {
+                String name = attendee.toString();
+                nameList = name.split(" ");
+
+                if (nameList.length < 2) {
+                    if (!nameList[0].contains("@")) {
+                        shownRoomName = name;
+                        break;
+                    }
+                }
+            }
+        }
+
+        if (isShownNameSetToName()){
+            shownRoomName =  name;
+        }
+    }
+
+    private boolean isShownNameSetToName() {
+        if (shownRoomName == null || name.split(" ").length == 2){
+            if (shownRoomName == null|| name.split(" ")[0].equals("10") || name.split(" ")[1].contains("Ecke")){
+                return true;
+            }
+        }
+        return false;
     }
 }
