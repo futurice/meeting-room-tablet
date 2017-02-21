@@ -106,8 +106,8 @@
     <!--Time-->
     <string name="minutes"> Minuten</string>
     <string name="minute"> Minute</string>
-    <string name="halfHour"> eine halbe Stunde</string>
-    <string name="hour"> einer Stunde</string>
+    <string name="halfHour"> halbe Stunde</string>
+    <string name="hour"> Stunde</string>
     <string name="threeQuartershour"> 45 Minuten</string>
     <string name="hourAndHalf"> 1:30 Stunden</string>
     <string name="hours"> Stunden</string>
