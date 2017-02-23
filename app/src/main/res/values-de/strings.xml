@@ -22,7 +22,7 @@
     <string name="loadingText">lädt</string>
 
     <!--AccountSelection-->
-    <string name="selectGoogleAccount">Wähle ein Google Konto aus</string>
+    <string name="selectAccount">Wähle ein Konto aus</string>
     <string name="accountForServation">Reservierungskonto</string>
     <string name="googleAccountType">com.google</string>
 

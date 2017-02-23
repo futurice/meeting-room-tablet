@@ -20,13 +20,13 @@ public class AccountSelection extends ReservatorActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.setContentView(R.layout.account_selection);
-        selectGoogleAccount();
+        selectAccount();
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        selectGoogleAccount();
+        selectAccount();
     }
 
     @Override
@@ -41,13 +41,13 @@ public class AccountSelection extends ReservatorActivity {
 
     public String[] fetchAccounts() {
         List<String> accountsList = new ArrayList<String>();
-        for (Account account : AccountManager.get(this).getAccountsByType(getString(R.string.googleAccountType))) {
+        for (Account account : AccountManager.get(this).getAccounts()) {
             accountsList.add(account.name);
         }
         return accountsList.toArray(new String[accountsList.size()]);
     }
 
-    public void selectGoogleAccount() {
+    public void selectAccount() {
         final SharedPreferences preferences = getSharedPreferences(this.getString(R.string.PREFERENCES_NAME), Context.MODE_PRIVATE);
         final String selectedAccount = preferences.getString(getString(R.string.accountForServation), "");
         boolean addressBookOption = preferences.getBoolean("addressBookOption", false);
@@ -58,22 +58,22 @@ public class AccountSelection extends ReservatorActivity {
             // Only one Google account available so the selection isn't needed.
             if (values.length == 1) {
                 preferences.edit()
-                    .putString(getString(R.string.accountForServation), values[0])
-                    .apply();
+                        .putString(getString(R.string.accountForServation), values[0])
+                        .apply();
                 moveToLobby();
             } else {
 
                 // Build an alert dialog to select the account.
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                builder.setTitle(R.string.selectGoogleAccount);
+                builder.setTitle(R.string.selectAccount);
                 builder.setItems(values, new DialogInterface.OnClickListener() {
 
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
                         preferences.edit()
-                            .putString(getString(R.string.accountForServation), values[which])
-                            .apply();
+                                .putString(getString(R.string.accountForServation), values[which])
+                                .apply();
                         moveToLobby();
                     }
                 });
