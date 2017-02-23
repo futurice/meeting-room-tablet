@@ -307,14 +307,16 @@ public class Room implements Serializable {
             Vector<String> attendees = reservations.get(0).getAttendees();
             String[] nameList;
 
-            for (Object attendee : attendees) {
-                String name = attendee.toString();
-                nameList = name.split(" ");
+            if(attendees != null) {
+                for (Object attendee : attendees) {
+                    String name = attendee.toString();
+                    nameList = name.split(" ");
 
-                if (nameList.length < 2) {
-                    if (!nameList[0].contains("@")) {
-                        shownRoomName = name;
-                        break;
+                    if (nameList.length < 2) {
+                        if (!nameList[0].contains("@")) {
+                            shownRoomName = name;
+                            break;
+                        }
                     }
                 }
             }

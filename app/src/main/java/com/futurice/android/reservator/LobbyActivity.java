@@ -321,6 +321,9 @@ public class LobbyActivity extends ReservatorActivity implements OnMenuItemClick
 
         @Override
         public int compare(Room room1, Room room2) {
+            if(room1.getName() == null || room2.getName() == null) {
+                return 0;
+            }
             return collator.compare(room1.getName(), room2.getName());
         }
     }

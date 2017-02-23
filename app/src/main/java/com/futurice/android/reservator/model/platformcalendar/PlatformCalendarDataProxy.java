@@ -12,6 +12,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.CalendarContract;
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.futurice.android.reservator.R;
@@ -22,10 +23,12 @@ import com.futurice.android.reservator.model.ReservatorException;
 import com.futurice.android.reservator.model.Room;
 import com.futurice.android.reservator.model.TimeSpan;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.TimeZone;
 import java.util.Vector;
@@ -65,7 +68,7 @@ public class PlatformCalendarDataProxy extends DataProxy {
     TimeZone SYSTEM_TZ = java.util.Calendar.getInstance().getTimeZone();
     private ContentResolver resolver;
     private AccountManager accountManager;
-    private String roomAccountGlob;
+    private Mode calendarMode;
     // Two-level data structure that stores locally created reservations
     // for each room until they get synced. Access but altering the Set objects
     // or modifying the structure of the Map must be within MakeReservationTask synchronized block.
@@ -77,14 +80,28 @@ public class PlatformCalendarDataProxy extends DataProxy {
     /**
      * @param resolver       From application context. Used to access the platform's Calendar Provider.
      * @param accountManager From application context. Allows us to initiate MakeReservationTask sync immediately after adding MakeReservationTask reservation.
-     * @param roomAccountGlob    SQLite glob pattern that selects room calendar accounts.
+     * @param calendarMode   Enum to select if a resource or non resource calendar is used.
      */
-    public PlatformCalendarDataProxy(ContentResolver resolver, AccountManager accountManager, String roomAccountGlob, Context context) {
+    public PlatformCalendarDataProxy(ContentResolver resolver, AccountManager accountManager, Mode calendarMode, Context context) {
         this.resolver = resolver;
         this.accountManager = accountManager;
-        this.roomAccountGlob = roomAccountGlob;
+        this.calendarMode = calendarMode;
         this.context = context;
         setDesignationMeetingName(context);
+    }
+
+    public enum Mode {
+        // Filters Google Resources, only available for App users
+        RESOURCES("*@resource.calendar.google.com"),
+        // Shows all calendars by default
+        CALENDARS(null);
+
+        private String resourcesGlob = null;
+        private Mode(String resourcesGlob)
+        {
+            this.resourcesGlob = resourcesGlob;
+        }
+
     }
 
     private void setDesignationMeetingName(Context context) {
@@ -298,14 +315,19 @@ public class PlatformCalendarDataProxy extends DataProxy {
                 CalendarContract.Calendars.NAME,
                 CalendarContract.Calendars.CALENDAR_LOCATION};
 
-        String mSelectionClause = CalendarContract.Calendars.OWNER_ACCOUNT + " GLOB ?";
+        List<String> mSelectionClauses = new ArrayList<String>();
+        List<String> mSelectionArgs = new ArrayList<String>();
 
-        String[] mSelectionArgs;
-        if (this.account != null) {
-            mSelectionClause = mSelectionClause + " AND " + CalendarContract.Calendars.ACCOUNT_NAME + " = ?";
-            mSelectionArgs = new String[]{roomAccountGlob, account};
+        if (this.calendarMode == Mode.RESOURCES) {
+            mSelectionClauses.add(CalendarContract.Calendars.OWNER_ACCOUNT + " GLOB ?");
+            mSelectionArgs.add(Mode.RESOURCES.resourcesGlob);
         } else {
-            mSelectionArgs = new String[]{roomAccountGlob};
+            mSelectionClauses.add(CalendarContract.Calendars.OWNER_ACCOUNT + " LIKE '%" + context.getString(R.string.accountType) + "'");
+        }
+
+        if (this.account != null) {
+            mSelectionClauses.add(CalendarContract.Calendars.ACCOUNT_NAME + " = ?");
+            mSelectionArgs.add(account);
         }
 
         String mSortOrder = null;
@@ -313,8 +335,8 @@ public class PlatformCalendarDataProxy extends DataProxy {
         Cursor result = resolver.query(
                 CalendarContract.Calendars.CONTENT_URI,
                 mProjection,
-                mSelectionClause,
-                mSelectionArgs,
+                TextUtils.join(" AND ", mSelectionClauses),
+                mSelectionArgs.toArray(new String[0]),
                 mSortOrder);
 
         if (result != null) {
@@ -555,17 +577,23 @@ public class PlatformCalendarDataProxy extends DataProxy {
         setSyncOn();
 
         String[] mProjection = {};
-        String mSelectionClause =
-                CalendarContract.Calendars.OWNER_ACCOUNT + " GLOB ? AND " +
-                        CalendarContract.Calendars.SYNC_EVENTS + " = 1";
-        String[] mSelectionArgs = {roomAccountGlob};
+
+        String mSelectionClause = "";
+        ArrayList<String> mSelectionArgs = new ArrayList<String>();
+
+        if (this.calendarMode == Mode.RESOURCES) {
+            mSelectionClause += CalendarContract.Calendars.OWNER_ACCOUNT + " GLOB ?";
+            mSelectionArgs.add(Mode.RESOURCES.resourcesGlob);
+        }
+        mSelectionClause += CalendarContract.Calendars.SYNC_EVENTS + " = 1";
+
         String mSortOrder = null;
 
         Cursor result = resolver.query(
                 CalendarContract.Calendars.CONTENT_URI,
                 mProjection,
                 mSelectionClause,
-                mSelectionArgs,
+                mSelectionArgs.toArray(new String[0]),
                 mSortOrder);
 
         if (result == null) {
@@ -586,8 +614,16 @@ public class PlatformCalendarDataProxy extends DataProxy {
      */
     private void setSyncOn() {
         ContentValues mUpdateValues = new ContentValues();
-        String mSelectionClause = CalendarContract.Calendars.OWNER_ACCOUNT + " GLOB ?";
-        String[] mSelectionArgs = {roomAccountGlob};
+        String mSelectionClause = "";
+        ArrayList<String> mSelectionArgs = new ArrayList<String>();
+
+        if (this.calendarMode == Mode.RESOURCES) {
+            mSelectionClause += CalendarContract.Calendars.OWNER_ACCOUNT + " GLOB ?";
+            mSelectionArgs.add(Mode.RESOURCES.resourcesGlob);
+        } else {
+            mSelectionClause += CalendarContract.Calendars.OWNER_ACCOUNT + " LIKE '%" + context.getString(R.string.accountType) + "'";
+        }
+
         mUpdateValues.put("SYNC_EVENTS", 1);
         if (checkSelfPermission(Manifest.permission.WRITE_CALENDAR) != PackageManager.PERMISSION_GRANTED) {
 
@@ -596,7 +632,7 @@ public class PlatformCalendarDataProxy extends DataProxy {
                 CalendarContract.Calendars.CONTENT_URI,
                 mUpdateValues,
                 mSelectionClause,
-                mSelectionArgs);
+                mSelectionArgs.toArray(new String[0]));
     }
 
     private int checkSelfPermission(String writeCalendar) {

@@ -42,7 +42,9 @@ public class AccountSelection extends ReservatorActivity {
     public String[] fetchAccounts() {
         List<String> accountsList = new ArrayList<String>();
         for (Account account : AccountManager.get(this).getAccounts()) {
-            accountsList.add(account.name);
+            if(account.name.contains(getString(R.string.accountType))) {
+                accountsList.add(account.name);
+            }
         }
         return accountsList.toArray(new String[accountsList.size()]);
     }

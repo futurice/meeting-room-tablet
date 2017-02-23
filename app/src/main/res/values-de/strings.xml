@@ -24,7 +24,7 @@
     <!--AccountSelection-->
     <string name="selectAccount">Wähle ein Konto aus</string>
     <string name="accountForServation">Reservierungskonto</string>
-    <string name="googleAccountType">com.google</string>
+    <string name="accountType">gmail.com</string>
 
     <!-- Lobby-->
     <string name="lobbyRoomName">Lobby</string>
