@@ -344,6 +344,11 @@ public class PlatformCalendarDataProxy extends DataProxy {
                 do {
                     String name = result.getString(2);
 
+                    if(name == null) {
+                        String nameTemp = result.getString(1);
+                        name = nameTemp.substring(0,nameTemp.indexOf("@"));
+                    }
+
                     String location = result.getString(3);
                     if (location == null || location.isEmpty()) {
                         location = name;
