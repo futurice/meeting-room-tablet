@@ -45,7 +45,6 @@ public class PlatformCalendarDataProxy extends DataProxy {
     private Context context;
     private static final Pattern idPattern = Pattern.compile("^(\\d+)(-.*)?");
     private final String DEFAULT_MEETING_NAME = "Reserved";
-    private final String GOOGLE_ACCOUNT_TYPE = "com.google";
     private final String CALENDAR_SYNC_AUTHORITY = "com.android.calendar";
     private final String RESOURCE_CALENDAR_TYPE = "resource.calendar.google.com";
     // Event fetch window (if we try to query all events it's very, very slow)
@@ -160,7 +159,7 @@ public class PlatformCalendarDataProxy extends DataProxy {
             Log.w("reserve", "Could not add an attendeee");
         }
 
-        syncGoogleCalendarAccount(accountName);
+        syncCalendarAccount(accountName);
 
         Reservation createdReservation = new Reservation(
                 Long.toString(eventId) + "-" + Long.toString(timeSpan.getStart().getTimeInMillis()),
@@ -261,7 +260,7 @@ public class PlatformCalendarDataProxy extends DataProxy {
 
         if (nRows > 0) {
             try {
-                syncGoogleCalendarAccount(getAccountName(calendarId));
+                syncCalendarAccount(getAccountName(calendarId));
             } catch (ReservatorException e) {
                 ; // Calendar has been deleted by user, can't sync. "Not MakeReservationTask biggie"
             }
@@ -269,24 +268,24 @@ public class PlatformCalendarDataProxy extends DataProxy {
     }
 
     /**
-     * Initiate MakeReservationTask sync on MakeReservationTask Google Calendar account if possible.
+     * Initiate MakeReservationTask sync on MakeReservationTask Calendar account if possible.
      */
-    private void syncGoogleCalendarAccount(String accountName) {
+    private void syncCalendarAccount(String accountName) {
         boolean success = false;
-        for (Account account : accountManager.getAccountsByType(GOOGLE_ACCOUNT_TYPE)) {
-            if (account.name.equals(accountName)) {
-                if (ContentResolver.getIsSyncable(account, CALENDAR_SYNC_AUTHORITY) > 0) {
-                    success = true;
-                    if (!ContentResolver.isSyncActive(account, CALENDAR_SYNC_AUTHORITY)) {
-                        ContentResolver.requestSync(account, CALENDAR_SYNC_AUTHORITY, new Bundle());
-                        Log.d("SYNC", String.format("%s %s", context.getString(R.string.syncGoogleCalRequest), accountName));
+        for (Account account : accountManager.getAccounts()) {
+                if (account.name.equals(accountName)) {
+                    if (ContentResolver.getIsSyncable(account, CALENDAR_SYNC_AUTHORITY) > 0) {
+                        success = true;
+                        if (!ContentResolver.isSyncActive(account, CALENDAR_SYNC_AUTHORITY)) {
+                            ContentResolver.requestSync(account, CALENDAR_SYNC_AUTHORITY, new Bundle());
+                            Log.d("SYNC", String.format("%s %s", context.getString(R.string.syncGoogleCalRequest), accountName));
+                        } else {
+                            Log.d("SYNC", String.format("%s %s", context.getString(R.string.syncGoogleCalActiv), accountName));
+                        }
                     } else {
-                        Log.d("SYNC", String.format("%s %s", context.getString(R.string.syncGoogleCalActiv), accountName));
+                        Log.d("SYNC", String.format("%s %s", context.getString(R.string.syncGoogleCalNotSync), accountName));
                     }
-                } else {
-                    Log.d("SYNC", String.format("%s %s", context.getString(R.string.syncGoogleCalNotSync), accountName));
                 }
-            }
         }
 
         if (!success) {
@@ -297,7 +296,7 @@ public class PlatformCalendarDataProxy extends DataProxy {
     public void synchronize(Room r) {
         PlatformCalendarRoom room = (PlatformCalendarRoom) r;
         try {
-            syncGoogleCalendarAccount(getAccountName(room.getId()));
+            syncCalendarAccount(getAccountName(room.getId()));
         } catch (ReservatorException e) {
             e.printStackTrace();
         }

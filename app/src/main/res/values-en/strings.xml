@@ -52,7 +52,7 @@
     <string name="PREFERENCES_FUM_USERNAME">fumUsername</string>
     <string name="PREFERENCES_FUM_PASSWORD">fumPassword</string>
     <string name="PREFERENCES_UNSELECTED_ROOMS">unselectedRooms</string>
-    <string name="PREFERENCES_GOOGLE_ACCOUNT">googleAccount</string>
+    <string name="PREFERENCES_ACCOUNT">googleAccount</string>
     <string name="PREFERENCES_LANGUAGE">language</string>
     <string name="removeUserData">Remove login info and reset settings</string>
     <string name="settings_Default_Account_For_Reservation">Select account for reserving</string>

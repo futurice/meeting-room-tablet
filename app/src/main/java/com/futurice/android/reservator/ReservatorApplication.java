@@ -42,7 +42,7 @@ public class ReservatorApplication extends Application {
                 PlatformCalendarDataProxy.Mode.CALENDARS, this);
 
         String usedAccount = getSharedPreferences(getString(R.string.PREFERENCES_NAME), Context.MODE_PRIVATE).getString(
-            getString(R.string.PREFERENCES_GOOGLE_ACCOUNT),
+            getString(R.string.PREFERENCES_ACCOUNT),
             getString(R.string.allAccountsMagicWord));
 
         if (usedAccount.equals(getString(R.string.allAccountsMagicWord))) {

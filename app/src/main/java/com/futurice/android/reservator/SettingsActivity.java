@@ -74,7 +74,7 @@ public class SettingsActivity extends ReservatorActivity {
         // Set back the recorded settings
         usedAccountView = (Spinner) findViewById(R.id.usedAccountSpinner);
         String usedAccount = settings.getString(
-            getString(R.string.PREFERENCES_GOOGLE_ACCOUNT),
+            getString(R.string.PREFERENCES_ACCOUNT),
             getString(R.string.allAccountsMagicWord));
         refreshGoogleAccountsSpinner();
 
@@ -210,7 +210,7 @@ public class SettingsActivity extends ReservatorActivity {
         }
 
         Editor editor = settings.edit();
-        editor.putString(getString(R.string.PREFERENCES_GOOGLE_ACCOUNT), selectedAccount);
+        editor.putString(getString(R.string.PREFERENCES_ACCOUNT), selectedAccount);
         editor.putString(getString(R.string.PREFERENCES_ROOM_NAME), roomName);
         editor.putBoolean("addressBookOption", addressBookOptionView.isChecked());
         editor.putString(getString(R.string.accountForServation), selectedResAccount);
