@@ -452,10 +452,18 @@ public class PlatformCalendarDataProxy extends DataProxy {
                 CalendarContract.Instances.END,
                 CalendarContract.Instances.ORGANIZER
         };
-        String mSelectionClause =
-                CalendarContract.Instances.CALENDAR_ID + " = " + room.getId() + " AND " +
-                        CalendarContract.Instances.STATUS + " != " + CalendarContract.Instances.STATUS_CANCELED + " AND " +
-                        CalendarContract.Instances.SELF_ATTENDEE_STATUS + " != " + CalendarContract.Attendees.STATUS_CANCELED;
+        String mSelectionClause;
+
+        if (this.calendarMode == Mode.RESOURCES) {
+            mSelectionClause =
+                    CalendarContract.Instances.CALENDAR_ID + " = " + room.getId() + " AND " +
+                            CalendarContract.Instances.STATUS + " != " + CalendarContract.Instances.STATUS_CANCELED + " AND " +
+                            CalendarContract.Instances.SELF_ATTENDEE_STATUS + " != " + CalendarContract.Attendees.STATUS_CANCELED;
+        } else {
+            mSelectionClause = CalendarContract.Calendars.ACCOUNT_NAME + " = " + "'tsynyx@contargo.net'";
+        }
+
+
         String[] mSelectionArgs = {};
         String mSortOrder = null;
 
