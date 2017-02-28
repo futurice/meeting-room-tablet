@@ -138,8 +138,6 @@
     <string name="initiateNot">Synchronisation mit Konto konnte nicht gestartet werden</string>
     <string name="infoMeetingName">Bitte gib einen Meetingnamen an</string>
 
-
-    <string name="calendarAccountGlob">*@resource.calendar.google.com</string>
     <string name="reservationCancelInfo">Du kannst Reservierungen löschen, welche ursprünglisch von einem Raum - Tablet erstellt wurde.</string>
     <string name="touchToReturn">Tippe um zu der Wochenansicht zurückzukehren</string>
     <string name="book">Raum buchen</string>

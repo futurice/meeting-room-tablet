@@ -137,7 +137,6 @@
     <string name="initiateNot">Could not initiate sync on account  </string>
     <string name="infoMeetingName">Please enter a meeting name</string>
 
-    <string name="calendarAccountGlob">*@resource.calendar.google.com</string>
     <string name="reservationCancelInfo">You can cancel reservations that were originally made from a room tablet</string>
     <string name="touchToReturn">Tap for reservations</string>
     <string name="book">Book room</string>
