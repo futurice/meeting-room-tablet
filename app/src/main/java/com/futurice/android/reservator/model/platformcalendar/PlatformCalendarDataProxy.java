@@ -278,12 +278,12 @@ public class PlatformCalendarDataProxy extends DataProxy {
                         success = true;
                         if (!ContentResolver.isSyncActive(account, CALENDAR_SYNC_AUTHORITY)) {
                             ContentResolver.requestSync(account, CALENDAR_SYNC_AUTHORITY, new Bundle());
-                            Log.d("SYNC", String.format("%s %s", context.getString(R.string.syncGoogleCalRequest), accountName));
+                            Log.d("SYNC", String.format("%s %s", context.getString(R.string.syncCalRequest), accountName));
                         } else {
-                            Log.d("SYNC", String.format("%s %s", context.getString(R.string.syncGoogleCalActiv), accountName));
+                            Log.d("SYNC", String.format("%s %s", context.getString(R.string.syncCalActiv), accountName));
                         }
                     } else {
-                        Log.d("SYNC", String.format("%s %s", context.getString(R.string.syncGoogleCalNotSync), accountName));
+                        Log.d("SYNC", String.format("%s %s", context.getString(R.string.syncCalNotSync), accountName));
                     }
                 }
         }

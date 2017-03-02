@@ -67,7 +67,7 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/defaultReservationAccount"
-            android:text="@string/used_google_account"
+            android:text="@string/used_account"
             android:textColor="#000"/>
 
         <TextView
@@ -76,7 +76,7 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/usedAccountLabel"
-            android:text="@string/googleAccountHelp"
+            android:text="@string/accountHelp"
             android:textColor="#555"/>
 
         <Spinner

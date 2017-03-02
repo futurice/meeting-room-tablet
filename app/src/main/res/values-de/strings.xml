@@ -9,16 +9,16 @@
     <string name="password_hint">password</string>
     <string name="exchange_username">Exchange username:</string>
     <string name="exchange_password">Exchange password:</string>
-    <string name="googleCalendarOk">Google Calendar OK</string>
-    <string name="googleCalendarPending">Google Calendar pending…</string>
-    <string name="googleContactsOk">Google Contacts OK</string>
-    <string name="googleContactsPending">Google Contacts pending…</string>
+    <string name="calendarOk">Calendar OK</string>
+    <string name="calendarPending">Calendar pending…</string>
+    <string name="contactsOk">Contacts OK</string>
+    <string name="contactsPending">Contacts pending…</string>
     <string name="fum_username">FUM3 username:</string>
     <string name="fum_password">FUM3 password:</string>
     <string name="default_fum_username">roomreservator</string>
     <string name="default_exchange_username">reserve@futurice.com</string>
-    <string name="calendarError">Fehler: Google Kalender</string>
-    <string name="noCalendarsError">Es wurde kein Meetingraum Kalender gefunden. Bitte stell sicher, dass ein Google Konto auf diesem Gerät konfiguriert wurde und der Google Kalender eingestellt wurde, um den Meetingraum Kalender zu synchronisieren.</string>
+    <string name="calendarError">Fehler: Kalender</string>
+    <string name="noCalendarsError">Es wurde kein Meetingraum Kalender gefunden. Bitte stell sicher, dass ein Konto auf diesem Gerät konfiguriert wurde und der Kalender eingestellt wurde, um den Meetingraum Kalender zu synchronisieren.</string>
     <string name="loadingText">lädt</string>
 
     <!--AccountSelection-->
@@ -51,14 +51,14 @@
     <string name="PREFERENCES_FUM_USERNAME">fumBenutzername</string>
     <string name="PREFERENCES_FUM_PASSWORD">fumPasswort</string>
     <string name="PREFERENCES_UNSELECTED_ROOMS">Nicht ausgewählte Räume</string>
-    <string name="PREFERENCES_ACCOUNT">Google Konto</string>
+    <string name="PREFERENCES_ACCOUNT">Konto</string>
     <string name="PREFERENCES_LANGUAGE">Sprache</string>
     <string name="removeUserData">Login Informationen entfernen und Einstellungen zurückstellen</string>
     <string name="settings_Default_Account_For_Reservation">Wähle ein Konto für die Reservierung aus</string>
     <string name="settingsReset">Einstellungen zurückgesetzt und Konten gelöscht</string>
     <string name="settingsSaved">Einstellungen gespeichert</string>
     <string name="addressBookHelpText">Wenn diese Option aktiv ist, erfordet das Reservieren mit dem Tablet die Eingabe eines gültigen Kontaktes, welcher sich im Adressbuch befindet.</string>
-    <string name="googleAccountHelp">Konto oder Konten, welche benutzt werden um Räume zu suchen.</string>
+    <string name="accountHelp">Konto oder Konten, welche benutzt werden um Räume zu suchen.</string>
     <string name="addressBookOptionLabel">Reservierung erfordert Kontakte vom Adressbuch </string>
     <string name="continueBtn">weiter</string>
     <string name="doNotModify">Veränder diese Einstellungen nicht!</string>
@@ -66,7 +66,7 @@
     <string name="goBackBtn">zurück</string>
     <string name="room_name">Name des Standard-Raums</string>
     <string name="close">Schließen</string>
-    <string name="used_google_account">Benutzer Google Konto</string>
+    <string name="used_account">Benutzer Konto</string>
     <string name="allAccountsMagicWord">(Alle)</string>
     <string name="shown_rooms">Sichtbare Räume</string>
     <string name="reserv_view_alternativ_label">Ansicht der Reservierungen</string>
@@ -132,9 +132,9 @@
     <!--ReservatorExceptions-->
     <string name="roomDeleted">Raumkalender wurde gelöscht</string>
     <string name="parsID">Reservations ID konnte nicht analysiert werden</string>
-    <string name="syncGoogleCalRequest">Kalender synchronisation erfragt </string>
-    <string name="syncGoogleCalActiv">Kalender synchronisation würde aktiviert von </string>
-    <string name="syncGoogleCalNotSync">Kalender ist nicht synchronisierbar von</string>
+    <string name="syncCalRequest">Kalender synchronisation erfragt </string>
+    <string name="syncCalActiv">Kalender synchronisation würde aktiviert von </string>
+    <string name="syncCalNotSync">Kalender ist nicht synchronisierbar von</string>
     <string name="initiateNot">Synchronisation mit Konto konnte nicht gestartet werden</string>
     <string name="infoMeetingName">Bitte gib einen Meetingnamen an</string>
 

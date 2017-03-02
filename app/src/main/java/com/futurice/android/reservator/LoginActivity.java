@@ -77,14 +77,14 @@ public class LoginActivity extends ReservatorActivity implements AddressBookUpda
         String s = "";
 
         if (roomListOk)
-            s += getString(R.string.googleCalendarOk)+"\n";
+            s += getString(R.string.calendarOk)+"\n";
         else
-            s += getString(R.string.googleCalendarPending)+"\n";
+            s += getString(R.string.calendarPending)+"\n";
 
         if (addressBookOk)
-            s += getString(R.string.googleContactsOk)+"\n";
+            s += getString(R.string.contactsOk)+"\n";
         else
-            s += getString(R.string.googleContactsPending)+"\n";
+            s += getString(R.string.contactsPending)+"\n";
 
         pd.setMessage(s);
     }
