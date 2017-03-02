@@ -594,7 +594,7 @@ public class PlatformCalendarDataProxy extends DataProxy {
         ArrayList<String> mSelectionArgs = new ArrayList<String>();
 
         if (this.calendarMode == Mode.RESOURCES) {
-            mSelectionClause += CalendarContract.Calendars.OWNER_ACCOUNT + " GLOB ?";
+            mSelectionClause += CalendarContract.Calendars.OWNER_ACCOUNT + " GLOB ? AND ";
             mSelectionArgs.add(Mode.RESOURCES.resourcesGlob);
         }
         mSelectionClause += CalendarContract.Calendars.SYNC_EVENTS + " = 1";
