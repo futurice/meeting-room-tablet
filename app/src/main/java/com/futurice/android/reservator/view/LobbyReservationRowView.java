@@ -118,7 +118,7 @@ public class LobbyReservationRowView extends FrameLayout implements
         this.room = room;
 
         // Room stuff
-        roomNameView.setText(room.getShownRoomName());
+        roomNameView.setText(room.getName());
         if (room.getCapacity() >= 0) {
             roomInfoView.setText(R.string.forX + room.getCapacity());
         } else {
@@ -333,7 +333,6 @@ public class LobbyReservationRowView extends FrameLayout implements
     private void useReservationActivity(){
         SharedPreferences.Editor editor = settings.edit();
         editor.putString("roomName", this.room.getName().trim());
-        editor.putString("roomShownName", this.room.getShownRoomName().trim());
         editor.putLong("resTimestart",this.timePicker2.getTimeSpan().getStart().getTimeInMillis());
         editor.putLong("resTimeend",this.timePicker2.getTimeSpan().getEnd().getTimeInMillis());
 

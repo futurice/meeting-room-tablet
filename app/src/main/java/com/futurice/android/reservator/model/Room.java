@@ -22,7 +22,6 @@ public class Room implements Serializable {
     static private final int FREE_THRESHOLD_MINUTES = 180;
     private String name, email;
     private Vector<Reservation> reservations;
-    private String shownRoomName;
     private int capacity = -1;
 
     public Room(String name, String email) {
@@ -42,11 +41,6 @@ public class Room implements Serializable {
     public void setReservations(Vector<Reservation> reservations) {
         this.reservations = reservations;
         Collections.sort(reservations);
-        setShownRoomName();
-    }
-
-    public String getShownRoomName(){
-        return shownRoomName;
     }
 
     @Override
@@ -300,39 +294,5 @@ public class Room implements Serializable {
         timeDifference -= TimeUnit.HOURS.toMillis(getTimeDifferenceHour(lastTimeConnected));
 
         return TimeUnit.MILLISECONDS.toMinutes(timeDifference) % 60;
-    }
-
-    private void setShownRoomName() {
-        if (!reservations.isEmpty()) {
-            Vector<String> attendees = reservations.get(0).getAttendees();
-            String[] nameList;
-
-            if(attendees != null) {
-                for (Object attendee : attendees) {
-                    String name = attendee.toString();
-                    nameList = name.split(" ");
-
-                    if (nameList.length < 2) {
-                        if (!nameList[0].contains("@")) {
-                            shownRoomName = name;
-                            break;
-                        }
-                    }
-                }
-            }
-        }
-
-        if (isShownNameSetToName()){
-            shownRoomName =  name;
-        }
-    }
-
-    private boolean isShownNameSetToName() {
-        if (shownRoomName == null || name.split(" ").length == 2){
-            if (shownRoomName == null|| name.split(" ")[0].equals("10") || name.split(" ")[1].contains("Ecke")){
-                return true;
-            }
-        }
-        return false;
     }
 }

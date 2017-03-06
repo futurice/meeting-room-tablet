@@ -93,7 +93,7 @@ public class RoomTrafficLights extends RelativeLayout {
     public void update(Room room) {
         updateConnected();
 
-        roomTitleView.setText(room.getShownRoomName());
+        roomTitleView.setText(room.getName());
 
         if (room.isBookable(QUICK_BOOK_THRESHOLD)) {
             roomStatusView.setText(this.getContext().getString(R.string.free));
