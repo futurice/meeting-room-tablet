@@ -426,8 +426,11 @@ public class PlatformCalendarDataProxy extends DataProxy {
             HashSet<Reservation> filteredRoomCache = new HashSet<Reservation>(roomCache);
 
             filteredRoomCache.removeAll(reservations);
+            filteredRoomCache = deleteOlderLocalReservations(filteredRoomCache);
+
 
             if (filteredRoomCache.size() != roomCache.size()) {
+
                 synchronized (locallyCreatedReservationCaches) {
                     locallyCreatedReservationCaches.put(room, filteredRoomCache);
                 }
@@ -439,6 +442,16 @@ public class PlatformCalendarDataProxy extends DataProxy {
         }
 
         return new Vector<Reservation>(reservations);
+    }
+
+    private HashSet<Reservation> deleteOlderLocalReservations(HashSet<Reservation> filteredRoomCache) {
+        for (Reservation reservation : filteredRoomCache
+                ) {
+            if (System.currentTimeMillis() - reservation.getCreatedAt() > 120_000) {
+                filteredRoomCache.remove(reservation);
+            }
+        }
+        return filteredRoomCache;
     }
 
     private HashSet<Reservation> getInstancesTableReservations(
