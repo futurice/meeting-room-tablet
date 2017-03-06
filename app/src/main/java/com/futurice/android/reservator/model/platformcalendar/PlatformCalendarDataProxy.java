@@ -7,7 +7,6 @@ import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
@@ -325,7 +324,9 @@ public class PlatformCalendarDataProxy extends DataProxy {
             mSelectionClauses.add(CalendarContract.Calendars.OWNER_ACCOUNT + " GLOB ?");
             mSelectionArgs.add(Mode.RESOURCES.resourcesGlob);
         } else {
-            mSelectionClauses.add(CalendarContract.Calendars.OWNER_ACCOUNT + " LIKE '%" + context.getString(R.string.accountType) + "'");
+            String accountType = context.getSharedPreferences(context.getString(R.string.PREFERENCES_NAME),
+                    context.MODE_PRIVATE).getString(context.getString(R.string.accountType), "");
+            mSelectionClauses.add(CalendarContract.Calendars.OWNER_ACCOUNT + " LIKE '%" + accountType + "'");
         }
 
         if (this.account != null) {
@@ -473,9 +474,7 @@ public class PlatformCalendarDataProxy extends DataProxy {
 
         if(context.getString(R.string.oneAccountPerRoom).equals("false")) {
             mSelectionClause =
-                    CalendarContract.Instances.CALENDAR_ID + " = " + room.getId() + " AND " +
-                            CalendarContract.Instances.STATUS + " != " + CalendarContract.Instances.STATUS_CANCELED + " AND " +
-                            CalendarContract.Instances.SELF_ATTENDEE_STATUS + " != " + CalendarContract.Attendees.STATUS_CANCELED;
+                    CalendarContract.Instances.CALENDAR_ID + " = " + room.getId();
         } else {
             mSelectionClause = CalendarContract.Calendars.ACCOUNT_NAME + " = " + "'" + calendarAccount +"'";
         }
@@ -651,7 +650,9 @@ public class PlatformCalendarDataProxy extends DataProxy {
             mSelectionClause += CalendarContract.Calendars.OWNER_ACCOUNT + " GLOB ?";
             mSelectionArgs.add(Mode.RESOURCES.resourcesGlob);
         } else {
-            mSelectionClause += CalendarContract.Calendars.OWNER_ACCOUNT + " LIKE '%" + context.getString(R.string.accountType) + "'";
+            String accountType = context.getSharedPreferences(context.getString(R.string.PREFERENCES_NAME),
+                    context.MODE_PRIVATE).getString(context.getString(R.string.accountType), "");
+            mSelectionClause += CalendarContract.Calendars.OWNER_ACCOUNT + " LIKE '%" + accountType + "'";
         }
 
         mUpdateValues.put("SYNC_EVENTS", 1);

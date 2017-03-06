@@ -24,7 +24,7 @@
     <!--AccountSelection-->
     <string name="selectAccount">Wähle ein Konto aus</string>
     <string name="accountForServation">Reservierungskonto</string>
-    <string name="accountType">synyx.de</string>
+    <string name="accountType">accountType</string>
 
     <!-- Lobby-->
     <string name="lobbyRoomName">Lobby</string>

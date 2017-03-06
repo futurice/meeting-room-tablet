@@ -42,9 +42,7 @@ public class AccountSelection extends ReservatorActivity {
     public String[] fetchAccounts() {
         List<String> accountsList = new ArrayList<String>();
         for (Account account : AccountManager.get(this).getAccounts()) {
-            if(account.name.contains(getString(R.string.accountType))) {
                 accountsList.add(account.name);
-            }
         }
         return accountsList.toArray(new String[accountsList.size()]);
     }
@@ -62,6 +60,8 @@ public class AccountSelection extends ReservatorActivity {
                 preferences.edit()
                         .putString(getString(R.string.accountForServation), values[0])
                         .apply();
+                preferences.edit().putString(getString(R.string.accountType),
+                        values[0].substring(values[0].indexOf("@") +1, values[0].length())).apply();
                 moveToLobby();
             } else {
 
@@ -76,6 +76,8 @@ public class AccountSelection extends ReservatorActivity {
                         preferences.edit()
                                 .putString(getString(R.string.accountForServation), values[which])
                                 .apply();
+                        preferences.edit().putString(getString(R.string.accountType),
+                                values[which].substring(values[which].indexOf("@") + 1, values[which].length())).apply();
                         moveToLobby();
                     }
                 });
