@@ -25,7 +25,7 @@
     <!--AccountSelection-->
     <string name="selectAccount">Select Account</string>
     <string name="accountForServation">reservationAccount</string>
-    <string name="accountType">gmail.com</string>
+    <string name="accountType">synyx.de</string>
 
     <!-- Lobby-->
     <string name="lobbyRoomName">Lobby</string>
@@ -77,6 +77,7 @@
     <string name="meetingTitleLabel">Meeting designation</string>
     <string name="meetingTitlePersonName">is person name who reservated</string>
     <string name="meetingTitleMeetingName">is meeting name</string>
+    <string name="oneAccountPerRoom">false</string>
 
     <!--Room-->
     <string name="refreshRoom">refreshing room info</string>

@@ -35,15 +35,13 @@ public class ReservatorApplication extends Application {
     @Override
     public void onCreate() {
         PlatformContactsAddressBook googleAddressBook = new PlatformContactsAddressBook(getContentResolver());
-
         proxy = new PlatformCalendarDataProxy(
                 getContentResolver(),
-                AccountManager.get(this),
-                PlatformCalendarDataProxy.Mode.CALENDARS, this);
+                AccountManager.get(this), PlatformCalendarDataProxy.Mode.RESOURCES, this);
 
         String usedAccount = getSharedPreferences(getString(R.string.PREFERENCES_NAME), Context.MODE_PRIVATE).getString(
-            getString(R.string.PREFERENCES_ACCOUNT),
-            getString(R.string.allAccountsMagicWord));
+                getString(R.string.PREFERENCES_ACCOUNT),
+                getString(R.string.allAccountsMagicWord));
 
         if (usedAccount.equals(getString(R.string.allAccountsMagicWord))) {
             ((PlatformCalendarDataProxy) proxy).setAccount(null);

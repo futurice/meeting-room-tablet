@@ -7,6 +7,7 @@ import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
@@ -24,6 +25,7 @@ import com.futurice.android.reservator.model.Room;
 import com.futurice.android.reservator.model.TimeSpan;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
@@ -312,7 +314,9 @@ public class PlatformCalendarDataProxy extends DataProxy {
                 CalendarContract.Calendars._ID,
                 CalendarContract.Calendars.OWNER_ACCOUNT,
                 CalendarContract.Calendars.NAME,
-                CalendarContract.Calendars.CALENDAR_LOCATION};
+                CalendarContract.Calendars.CALENDAR_LOCATION,
+                CalendarContract.Instances.CALENDAR_DISPLAY_NAME
+        };
 
         List<String> mSelectionClauses = new ArrayList<String>();
         List<String> mSelectionArgs = new ArrayList<String>();
@@ -345,8 +349,7 @@ public class PlatformCalendarDataProxy extends DataProxy {
                     String name = result.getString(2);
 
                     if(name == null) {
-                        String nameTemp = result.getString(1);
-                        name = nameTemp.substring(0,nameTemp.indexOf("@"));
+                        name = result.getString(4);
                     }
 
                     String location = result.getString(3);
@@ -398,6 +401,7 @@ public class PlatformCalendarDataProxy extends DataProxy {
         if (locallyCreatedReservationCaches.containsKey(room)) {
             roomCache = locallyCreatedReservationCaches.get(room);
         }
+
 
         // Remove old locally cached reservations
         // NB it's crucial that we do not alter the structure of any instance data here (it's not synchronized)
@@ -467,14 +471,15 @@ public class PlatformCalendarDataProxy extends DataProxy {
         };
         String mSelectionClause;
 
-        if (this.calendarMode == Mode.RESOURCES) {
+        if(context.getString(R.string.oneAccountPerRoom).equals("false")) {
             mSelectionClause =
                     CalendarContract.Instances.CALENDAR_ID + " = " + room.getId() + " AND " +
                             CalendarContract.Instances.STATUS + " != " + CalendarContract.Instances.STATUS_CANCELED + " AND " +
                             CalendarContract.Instances.SELF_ATTENDEE_STATUS + " != " + CalendarContract.Attendees.STATUS_CANCELED;
         } else {
-            mSelectionClause = CalendarContract.Calendars.ACCOUNT_NAME + " = " + "'tsynyx@contargo.net'";
+            mSelectionClause = CalendarContract.Calendars.ACCOUNT_NAME + " = " + "'" + calendarAccount +"'";
         }
+
 
 
         String[] mSelectionArgs = {};
@@ -505,7 +510,7 @@ public class PlatformCalendarDataProxy extends DataProxy {
                     Reservation res = new Reservation(
                             Long.toString(eventId) + "-" + Long.toString(start),
                             makeEventTitle(room.getName(), eventId, title, eventOrganizerAccount, DEFAULT_MEETING_NAME),
-                            new TimeSpan(new DateTime(start), new DateTime(end)), getAuthoritySortedAttendees(eventId));
+                            new TimeSpan(new DateTime(start), new DateTime(end)), getAuthoritySortedAttendees(eventId), System.currentTimeMillis());
                     if (eventOrganizerAccount != null && calendarAccount.equals(eventOrganizerAccount.toLowerCase())) {
                         res.setIsCancellable(true);
                     }
