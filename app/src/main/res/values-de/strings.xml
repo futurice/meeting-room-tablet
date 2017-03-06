@@ -26,6 +26,10 @@
     <string name="accountForServation">Reservierungskonto</string>
     <string name="accountType">accountType</string>
 
+    <!--ModeSelection-->
+    <string name="selectMode">Wähle Modus für den Kalender</string>
+    <string name="modeForCalendar">calendarMode</string>
+
     <!-- Lobby-->
     <string name="lobbyRoomName">Lobby</string>
     <string name="refresh">Aktualisieren</string>

@@ -80,12 +80,10 @@ public class PlatformCalendarDataProxy extends DataProxy {
     /**
      * @param resolver       From application context. Used to access the platform's Calendar Provider.
      * @param accountManager From application context. Allows us to initiate MakeReservationTask sync immediately after adding MakeReservationTask reservation.
-     * @param calendarMode   Enum to select if a resource or non resource calendar is used.
      */
-    public PlatformCalendarDataProxy(ContentResolver resolver, AccountManager accountManager, Mode calendarMode, Context context) {
+    public PlatformCalendarDataProxy(ContentResolver resolver, AccountManager accountManager, Context context) {
         this.resolver = resolver;
         this.accountManager = accountManager;
-        this.calendarMode = calendarMode;
         this.context = context;
         setDesignationMeetingName(context);
     }
@@ -102,6 +100,14 @@ public class PlatformCalendarDataProxy extends DataProxy {
             this.resourcesGlob = resourcesGlob;
         }
 
+    }
+
+    private void setCalendarMode(String mode) {
+        if(mode.toLowerCase().equals("resources")) {
+            this.calendarMode = Mode.RESOURCES;
+        } else {
+            this.calendarMode = Mode.CALENDARS;
+        }
     }
 
     private void setDesignationMeetingName(Context context) {
@@ -307,6 +313,8 @@ public class PlatformCalendarDataProxy extends DataProxy {
     public Vector<Room> getRooms() throws ReservatorException {
         setSyncOn();
 
+        checkCalendarMode();
+
         Vector<Room> rooms = new Vector<Room>();
 
         String[] mProjection = {
@@ -368,6 +376,15 @@ public class PlatformCalendarDataProxy extends DataProxy {
         }
 
         return rooms;
+    }
+
+    private void checkCalendarMode() {
+        if(this.calendarMode == null) {
+            String mode = context.getSharedPreferences(context.getString(R.string.PREFERENCES_NAME),
+                    context.MODE_PRIVATE).getString(context.getString(R.string.modeForCalendar), "");
+
+            setCalendarMode(mode);
+        }
     }
 
     private void putToLocalCache(Room room, Reservation reservation) {

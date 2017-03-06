@@ -34,8 +34,8 @@ public class AccountSelection extends ReservatorActivity {
         super.onPause();
     }
 
-    public void moveToLobby() {
-        Intent i = new Intent(this, LobbyActivity.class);
+    public void moveToModeSelection() {
+        Intent i = new Intent(this, ModeSelection.class);
         startActivityForResult(i, REQUEST_LOBBY);
     }
 
@@ -62,7 +62,7 @@ public class AccountSelection extends ReservatorActivity {
                         .apply();
                 preferences.edit().putString(getString(R.string.accountType),
                         values[0].substring(values[0].indexOf("@") +1, values[0].length())).apply();
-                moveToLobby();
+                moveToModeSelection();
             } else {
 
                 // Build an alert dialog to select the account.
@@ -78,14 +78,14 @@ public class AccountSelection extends ReservatorActivity {
                                 .apply();
                         preferences.edit().putString(getString(R.string.accountType),
                                 values[which].substring(values[which].indexOf("@") + 1, values[which].length())).apply();
-                        moveToLobby();
+                        moveToModeSelection();
                     }
                 });
 
                 builder.show();
             }
         } else {
-            moveToLobby();
+            moveToModeSelection();
         }
     }
 }

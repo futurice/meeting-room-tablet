@@ -45,6 +45,12 @@
             android:configChanges="orientation|screenSize"
             android:hardwareAccelerated="false">
         </activity>
+        <activity
+            android:name=".ModeSelection"
+            android:screenOrientation="sensorLandscape"
+            android:configChanges="orientation|screenSize"
+            android:hardwareAccelerated="false">
+        </activity>
         <!-- Hardware acceleration breaks the drawing of the vertices -->
         <activity
             android:name="RoomActivity"

@@ -27,6 +27,10 @@
     <string name="accountForServation">reservationAccount</string>
     <string name="accountType">accountType</string>
 
+    <!--ModeSelection-->
+    <string name="selectMode">Select Mode for Calendar</string>
+    <string name="modeForCalendar">calendarMode</string>
+
     <!-- Lobby-->
     <string name="lobbyRoomName">Lobby</string>
     <string name="refresh">Refresh</string>

@@ -37,7 +37,7 @@ public class ReservatorApplication extends Application {
         PlatformContactsAddressBook googleAddressBook = new PlatformContactsAddressBook(getContentResolver());
         proxy = new PlatformCalendarDataProxy(
                 getContentResolver(),
-                AccountManager.get(this), PlatformCalendarDataProxy.Mode.RESOURCES, this);
+                AccountManager.get(this), this);
 
         String usedAccount = getSharedPreferences(getString(R.string.PREFERENCES_NAME), Context.MODE_PRIVATE).getString(
                 getString(R.string.PREFERENCES_ACCOUNT),
