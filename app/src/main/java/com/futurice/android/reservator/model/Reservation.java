@@ -11,16 +11,18 @@ public class Reservation implements Comparable<Reservation>, Serializable {
     private String subject;
     private boolean cancellable = false;
     private Vector<String> attendees;
+    private long createdAt;
 
     public Reservation(String id, String subject, TimeSpan timeSpan) {
-        this(id,subject, timeSpan,null);
+        this(id,subject, timeSpan,null,System.currentTimeMillis());
     }
 
-    public Reservation(String id, String subject, TimeSpan timeSpan,Vector<String> attendees) {
+    public Reservation(String id, String subject, TimeSpan timeSpan,Vector<String> attendees, long createdAt) {
         this.id = id;
         this.subject = subject;
         this.timeSpan = timeSpan;
         this.attendees = attendees;
+        this.createdAt = createdAt;
     }
 
     public String getSubject() {
@@ -84,5 +86,9 @@ public class Reservation implements Comparable<Reservation>, Serializable {
 
     public void setTimeSpan(TimeSpan timeSpan) {
         this.timeSpan = timeSpan;
+    }
+
+    public long getCreatedAt() {
+        return createdAt;
     }
 }
