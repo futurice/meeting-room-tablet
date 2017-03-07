@@ -1,22 +1,25 @@
 package com.futurice.android.reservator.view;
 
-import java.util.Calendar;
-
-import android.app.Dialog;
-import android.content.DialogInterface;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.view.View;
-import android.widget.TextView;
-import android.widget.ImageButton;
 import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.TextView;
 
 import com.futurice.android.reservator.R;
 import com.futurice.android.reservator.ReservatorApplication;
+import com.futurice.android.reservator.model.DateTime;
 import com.futurice.android.reservator.model.Reservation;
 import com.futurice.android.reservator.model.ReservatorException;
 import com.futurice.android.reservator.model.Room;
-import com.futurice.android.reservator.model.DateTime;;
+
+import java.util.Calendar;
+import java.util.Locale;
+
+;
 
 public class EditReservationPopup extends Dialog {
     private ReservatorApplication application;
@@ -41,11 +44,11 @@ public class EditReservationPopup extends Dialog {
             }
         });
 
-        ((TextView) findViewById(R.id.roomName)).setText(room.getName());
+        ((TextView) findViewById(R.id.roomName)).setText(room.getShownRoomName());
 
         DateTime start = reservation.getTimeSpan().getStart();
         DateTime end = reservation.getTimeSpan().getEnd();
-        reservationInfo = String.format("%02d:%02d–%02d:%02d\n%s",
+        reservationInfo = String.format(Locale.getDefault(),"%02d:%02d–%02d:%02d\n%s",
             start.get(Calendar.HOUR_OF_DAY),
             start.get(Calendar.MINUTE),
             end.get(Calendar.HOUR_OF_DAY),
@@ -61,32 +64,33 @@ public class EditReservationPopup extends Dialog {
                 public void onClick(View v) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(EditReservationPopup.this.getContext());
                     builder
-                        .setTitle("Cancel reservation?")
-                        .setMessage(reservationInfo)
-                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                try {
-                                    application.getDataProxy().cancelReservation(EditReservationPopup.this.reservation);
-                                    if (EditReservationPopup.this.cancelledListener != null) {
-                                        EditReservationPopup.this.cancelledListener.onReservationCancelled(
-                                            EditReservationPopup.this.reservation);
+                            .setTitle(getContext().getString(R.string.cancleTitle))
+                            .setMessage(reservationInfo)
+                            .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    try {
+                                        application.getDataProxy().cancelReservation(EditReservationPopup.this.reservation);
+                                        if (EditReservationPopup.this.cancelledListener != null) {
+                                            EditReservationPopup.this.cancelledListener.onReservationCancelled(
+                                                    EditReservationPopup.this.reservation);
+                                        }
+                                    } catch (ReservatorException e) {
+                                        android.util.Log.w("CANCEL", e);
                                     }
-                                } catch (ReservatorException e) {
-                                    android.util.Log.w("CANCEL", e);
+                                    EditReservationPopup.this.cancel();
                                 }
-                                EditReservationPopup.this.cancel();
-                            }
-                        })
-                        .setNegativeButton("Back", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                EditReservationPopup.this.cancel();
-                            }
-                        });
+                            })
+                            .setNegativeButton("Back", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    EditReservationPopup.this.cancel();
+                                }
+                            });
                     builder.create().show();
                 }
             });
         }
     }
+
 
     public interface OnReservationCancelledListener {
         public void onReservationCancelled(Reservation r);

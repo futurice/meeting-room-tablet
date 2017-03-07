@@ -1,0 +1,243 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/relativeLayout1"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:fillViewport="true"
+            android:background="#fff"
+            android:padding="0dip">
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:paddingBottom="40dp"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:paddingTop="20dp">
+
+        <TextView
+            android:id="@+id/addressBookOptionLabel"
+            style="@android:style/TextAppearance.Medium"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/addressBookOptionLabel"
+            android:textColor="#000"
+            android:layout_below="@+id/titelSettings"/>
+
+        <TextView
+            android:id="@+id/addressBookHelpText"
+            style="@android:style/TextAppearance.Small"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/addressBookOptionLabel"
+            android:text="@string/addressBookHelpText"
+            android:textColor="#555"/>
+
+        <ToggleButton
+            android:id="@+id/usedAddressBookOption"
+            android:layout_width="20dp"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/addressBookOptionLabel"
+            android:layout_alignRight="@+id/addressBookOptionLabel"
+            android:layout_below="@+id/addressBookHelpText"
+            android:layout_marginBottom="10dp"
+            android:onClick="onToggleClicked"/>
+
+        <TextView
+            android:id="@+id/defaultReservationAccountLabel"
+            style="@android:style/TextAppearance.Medium"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/usedAddressBookOption"
+            android:text="@string/settings_Default_Account_For_Reservation"
+            android:textColor="#000"/>
+
+        <Spinner
+            android:id="@+id/defaultReservationAccount"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/defaultReservationAccountLabel"
+            android:layout_marginBottom="10dp"
+            android:inputType="text"
+            android:maxLines="1"/>
+
+        <TextView
+            android:id="@+id/usedAccountLabel"
+            style="@android:style/TextAppearance.Medium"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/defaultReservationAccount"
+            android:text="@string/used_account"
+            android:textColor="#000"/>
+
+        <TextView
+            android:id="@+id/usedAccountHelp"
+            style="@android:style/TextAppearance.Small"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/usedAccountLabel"
+            android:text="@string/accountHelp"
+            android:textColor="#555"/>
+
+        <Spinner
+            android:id="@+id/usedAccountSpinner"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/usedAccountLabel"
+            android:layout_alignRight="@+id/usedAccountLabel"
+            android:layout_below="@+id/usedAccountHelp"
+            android:inputType="text"
+            android:maxLines="1"/>
+
+        <TextView
+            android:id="@+id/roomNameLabel"
+            style="@android:style/TextAppearance.Medium"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/usedAccountSpinner"
+            android:layout_marginTop="10dp"
+            android:text="@string/room_name"
+            android:textColor="#000"/>
+
+        <Spinner
+            android:id="@+id/roomNameSpinner"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/roomNameLabel"
+            android:layout_alignRight="@+id/roomNameLabel"
+            android:layout_below="@+id/roomNameLabel"
+            android:layout_marginBottom="10dp"/>
+
+        <Button
+            android:id="@+id/removeUserDataButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/saveSettings"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="10dp"
+            android:text="@string/removeUserData"
+            android:layout_centerHorizontal="true" />
+
+        <TextView
+            android:id="@+id/roomListLabel"
+            style="@android:style/TextAppearance.Medium"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/roomNameSpinner"
+            android:layout_marginTop="10dp"
+            android:text="@string/shown_rooms"
+            android:textColor="#000"/>
+
+        <ScrollView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/scrollView"
+            android:layout_below="@+id/roomListLabel"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:nestedScrollingEnabled="true"
+            android:fillViewport="true">
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <ListView
+                    android:id="@+id/roomListView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="190dp"
+                    android:cacheColorHint="@android:color/transparent"
+                    android:nestedScrollingEnabled="true"
+                    android:scrollingCache="false"
+                    android:smoothScrollbar="false" />
+            </LinearLayout>
+        </ScrollView>
+
+        <Spinner
+            android:id="@+id/languageSpinner"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/language"
+            android:layout_alignRight="@+id/language"
+            android:layout_below="@+id/language"
+            android:layout_marginBottom="10dp"/>
+
+        <TextView
+            android:id="@+id/language"
+            style="@android:style/TextAppearance.Medium"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/language"
+            android:textColor="#000"
+            android:layout_below="@+id/scrollView"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="10dp" />
+
+        <TextView
+            style="@android:style/TextAppearance.Medium"
+            android:id="@+id/meetingDesignationLabel"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/meetingTitleLabel"
+            android:textColor="#000"
+            android:layout_below="@+id/languageSpinner"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+
+        <Spinner
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/meetingDesignationSpinner"
+            android:layout_below="@+id/meetingDesignationLabel"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:spinnerMode="dropdown" />
+
+        <TextView
+            style="@android:style/TextAppearance.Large"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/setting"
+            android:id="@+id/titelSettings"
+            android:textIsSelectable="false"
+            android:textColor="@color/CalendarTextColor"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginBottom="10dp" />
+
+        <TextView
+            style="@android:style/TextAppearance.Medium"
+            android:id="@+id/reservationViewTitle"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/reserv_view_alternativ_label"
+            android:textColor="#000"
+            android:layout_below="@+id/meetingDesignationSpinner"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginTop="10dp" />
+
+        <Spinner
+            android:id="@+id/reservationViewSpinner"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/reservationViewTitle"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+
+        <Button
+            android:id="@+id/saveSettings"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/saveSettings"
+            android:layout_below="@+id/reservationViewSpinner"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="20dp" />
+
+    </RelativeLayout>
+
+</ScrollView>

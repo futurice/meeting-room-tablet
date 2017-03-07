@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.accounts.Account;
 import android.accounts.AccountManager;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -20,13 +21,13 @@ public class AccountSelection extends ReservatorActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.setContentView(R.layout.account_selection);
-        selectGoogleAccount();
+        selectAccount();
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        selectGoogleAccount();
+        selectAccount();
     }
 
     @Override
@@ -34,20 +35,20 @@ public class AccountSelection extends ReservatorActivity {
         super.onPause();
     }
 
-    public void moveToLobby() {
-        Intent i = new Intent(this, LobbyActivity.class);
+    public void moveToModeSelection() {
+        Intent i = new Intent(this, ModeSelection.class);
         startActivityForResult(i, REQUEST_LOBBY);
     }
 
     public String[] fetchAccounts() {
         List<String> accountsList = new ArrayList<String>();
-        for (Account account : AccountManager.get(this).getAccountsByType(getString(R.string.googleAccountType))) {
-            accountsList.add(account.name);
+        for (Account account : AccountManager.get(this).getAccounts()) {
+                accountsList.add(account.name);
         }
         return accountsList.toArray(new String[accountsList.size()]);
     }
 
-    public void selectGoogleAccount() {
+    public void selectAccount() {
         final SharedPreferences preferences = getSharedPreferences(this.getString(R.string.PREFERENCES_NAME), Context.MODE_PRIVATE);
         final String selectedAccount = preferences.getString(getString(R.string.accountForServation), "");
         boolean addressBookOption = preferences.getBoolean("addressBookOption", false);
@@ -57,31 +58,41 @@ public class AccountSelection extends ReservatorActivity {
 
             // Only one Google account available so the selection isn't needed.
             if (values.length == 1) {
-                preferences.edit()
-                    .putString(getString(R.string.accountForServation), values[0])
-                    .apply();
-                moveToLobby();
+                SharedPreferences.Editor edit = preferences.edit();
+                edit.putString(getString(R.string.accountForServation), values[0])
+                        .apply();
+
+                edit.putString(
+                        getString(R.string.PREFERENCES_ACCOUNT),
+                        values[0]);
+                edit.apply();
+                moveToModeSelection();
             } else {
 
                 // Build an alert dialog to select the account.
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                builder.setTitle(R.string.selectGoogleAccount);
+                builder.setTitle(R.string.selectAccount);
                 builder.setItems(values, new DialogInterface.OnClickListener() {
 
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
-                        preferences.edit()
-                            .putString(getString(R.string.accountForServation), values[which])
-                            .apply();
-                        moveToLobby();
+                        SharedPreferences.Editor edit = preferences.edit();
+                        edit.putString(getString(R.string.accountForServation), values[which]);
+                        edit.putString(getString(R.string.PREFERENCES_ACCOUNT_TYPE),
+                                values[which].substring(values[which].indexOf("@") + 1, values[which].length()));
+                        edit.putString(
+                                getString(R.string.PREFERENCES_ACCOUNT),
+                                values[which]);
+                        edit.apply();
+                        moveToModeSelection();
                     }
                 });
 
                 builder.show();
             }
         } else {
-            moveToLobby();
+            moveToModeSelection();
         }
     }
 }

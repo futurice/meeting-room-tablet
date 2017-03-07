@@ -1,13 +1,12 @@
 package com.futurice.android.reservator.model;
 
-import java.util.Vector;
-
 import android.util.Log;
 
 import com.futurice.android.reservator.common.CacheMap;
 
+import java.util.Vector;
+
 public class CachedDataProxy extends DataProxy {
-    // private static final long CACHE_ROOMS_FOR = 3600*1000; // 1 hour
     private static final long CACHE_RESERVATION_FOR = 60 * 1000; // 1 minute
 
     private final DataProxy dataProxy;
@@ -44,10 +43,10 @@ public class CachedDataProxy extends DataProxy {
     }
 
     @Override
-    public void reserve(Room room, TimeSpan timeSpan, String owner, String ownerEmail)
+    public void reserve(Room room, TimeSpan timeSpan, String owner, String ownerEmail, String meetingName)
         throws ReservatorException {
         reservationCache.remove(room.getEmail());
-        dataProxy.reserve(room, timeSpan, owner, ownerEmail);
+        dataProxy.reserve(room, timeSpan, owner, ownerEmail, meetingName);
     }
 
     @Override
@@ -79,5 +78,10 @@ public class CachedDataProxy extends DataProxy {
     @Override
     public void cancelReservation(Reservation r) throws ReservatorException {
         dataProxy.cancelReservation(r);
+    }
+
+    @Override
+    public void synchronize(Room r) {
+
     }
 }

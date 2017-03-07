@@ -10,23 +10,30 @@
         android:background="#fff"
         android:padding="10dip">
 
-        <com.futurice.android.reservator.view.WeekView
-            android:layout_width="fill_parent"
-            android:id="@+id/weekView1"
-            android:layout_height="fill_parent"
-            android:layout_below="@+id/roomNameLabel"
-            android:layout_marginLeft="0dp"
-            android:layout_marginRight="0dp"
-            android:layout_marginBottom="0dp"
-            android:layout_marginTop="10dp">
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/tippCalenderLabel"
+            android:fillViewport="true">
 
-            <FrameLayout
+            <com.futurice.android.reservator.view.WeekView
                 android:layout_width="fill_parent"
+                android:id="@+id/weekView1"
                 android:layout_height="fill_parent"
-                android:layout_marginRight="10dp"
+                android:layout_below="@+id/tippCalenderLabel"
+                android:layout_marginLeft="0dp"
+                android:layout_marginRight="0dp"
                 android:layout_marginBottom="0dp"
-                android:id="@+id/frameLayout1"></FrameLayout>
-        </com.futurice.android.reservator.view.WeekView>
+                android:layout_marginTop="10dp">
+
+                <FrameLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginBottom="0dp"
+                    android:id="@+id/frameLayout1"></FrameLayout>
+            </com.futurice.android.reservator.view.WeekView>
+        </ScrollView>
 
         <TextView
             android:id="@+id/roomNameLabel"
@@ -38,6 +45,18 @@
             android:textStyle="bold"
             android:textIsSelectable="false"/>
 
+        <TextView
+            android:id="@+id/tippCalenderLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:textColor="@color/TextInfoColor"
+            android:textSize="20sp"
+            android:textIsSelectable="false"
+            android:textStyle="normal"
+            android:text="@string/calendarInfo"
+            android:layout_below="@+id/seeRoomTrafficLightsButton"/>
+
         <Button
             android:id="@+id/seeAllRoomsButton"
             android:layout_width="wrap_content"
@@ -48,6 +67,16 @@
             android:background="@drawable/button_background"
             android:text="@string/seeAllRooms"
             android:textColor="#fff"/>
+
+        <Button
+            android:id="@+id/seeRoomTrafficLightsButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/button_background"
+            android:text="@string/seeRoomTrafficLights"
+            android:textColor="#fff"
+            android:layout_alignBottom="@+id/seeAllRoomsButton"
+            android:layout_centerHorizontal="true" />
     </RelativeLayout>
 
     <com.futurice.android.reservator.view.RoomTrafficLights

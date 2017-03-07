@@ -1,19 +1,28 @@
 package com.futurice.android.reservator.model;
 
 import java.io.Serializable;
+import java.util.Vector;
 
 public class Reservation implements Comparable<Reservation>, Serializable {
     private static final long serialVersionUID = 1L;
 
     final private String id;
-    final private TimeSpan timeSpan;
-    final private String subject;
+    private TimeSpan timeSpan;
+    private String subject;
     private boolean cancellable = false;
+    private Vector<String> attendees;
+    private long createdAt;
 
     public Reservation(String id, String subject, TimeSpan timeSpan) {
+        this(id,subject, timeSpan,null,System.currentTimeMillis());
+    }
+
+    public Reservation(String id, String subject, TimeSpan timeSpan,Vector<String> attendees, long createdAt) {
         this.id = id;
         this.subject = subject;
         this.timeSpan = timeSpan;
+        this.attendees = attendees;
+        this.createdAt = createdAt;
     }
 
     public String getSubject() {
@@ -34,6 +43,10 @@ public class Reservation implements Comparable<Reservation>, Serializable {
 
     public String getId() {
         return id;
+    }
+
+    public Vector<String> getAttendees (){
+        return attendees;
     }
 
     @Override
@@ -69,5 +82,13 @@ public class Reservation implements Comparable<Reservation>, Serializable {
 
     public boolean isCancellable() {
         return this.cancellable;
+    }
+
+    public void setTimeSpan(TimeSpan timeSpan) {
+        this.timeSpan = timeSpan;
+    }
+
+    public long getCreatedAt() {
+        return createdAt;
     }
 }

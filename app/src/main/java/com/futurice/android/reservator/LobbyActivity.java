@@ -1,23 +1,14 @@
 package com.futurice.android.reservator;
 
-import java.util.Comparator;
-import java.text.Collator;
-import java.util.HashSet;
-import java.util.Vector;
-
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
-import android.app.Dialog;
-import android.app.DialogFragment;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Handler;
-import android.text.Html;
 import android.text.SpannableString;
 import android.text.method.LinkMovementMethod;
 import android.text.util.Linkify;
@@ -39,6 +30,11 @@ import com.futurice.android.reservator.model.Room;
 import com.futurice.android.reservator.view.LobbyReservationRowView;
 import com.futurice.android.reservator.view.LobbyReservationRowView.OnReserveListener;
 
+import java.text.Collator;
+import java.util.Comparator;
+import java.util.HashSet;
+import java.util.Vector;
+
 public class LobbyActivity extends ReservatorActivity implements OnMenuItemClickListener,
     DataUpdatedListener, AddressBookUpdatedListener {
     final Handler handler = new Handler();
@@ -51,6 +47,7 @@ public class LobbyActivity extends ReservatorActivity implements OnMenuItemClick
     private ProgressDialog progressDialog = null;
     private SharedPreferences settings;
     private boolean waitingAddresses = false;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -138,7 +135,7 @@ public class LobbyActivity extends ReservatorActivity implements OnMenuItemClick
     private ProgressDialog constructNewProgressDialog() {
         ProgressDialog d = new ProgressDialog(this);
         d.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-        d.setMessage("Refreshing room list...");
+        d.setMessage(getString(R.string.refreshRoomList));
         d.setCancelable(true);
         d.setMax(1);
         return d;
@@ -146,11 +143,11 @@ public class LobbyActivity extends ReservatorActivity implements OnMenuItemClick
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        refreshMenu = menu.add("Refresh").setOnMenuItemClickListener(this);
+        refreshMenu = menu.add(getString(R.string.refresh)).setOnMenuItemClickListener(this);
         refreshMenu.setIcon(android.R.drawable.ic_popup_sync);
-        settingsMenu = menu.add("Settings").setOnMenuItemClickListener(this);
+        settingsMenu = menu.add(getString(R.string.setting)).setOnMenuItemClickListener(this);
         settingsMenu.setIcon(android.R.drawable.ic_menu_preferences);
-        aboutMenu = menu.add("About").setOnMenuItemClickListener(this);
+        aboutMenu = menu.add(getString(R.string.aboutTitle)).setOnMenuItemClickListener(this);
         return true;
     }
 
@@ -166,7 +163,7 @@ public class LobbyActivity extends ReservatorActivity implements OnMenuItemClick
             SpannableString s = new SpannableString(getString(R.string.aboutInfo));
             Linkify.addLinks(s, Linkify.ALL);
 
-            Builder aboutBuilder = new AlertDialog.Builder(this);
+            Builder aboutBuilder = new Builder(this);
             aboutBuilder.setTitle(R.string.aboutTitle);
             aboutBuilder.setMessage(s);
             aboutBuilder.setNegativeButton(R.string.close, null);
@@ -229,7 +226,7 @@ public class LobbyActivity extends ReservatorActivity implements OnMenuItemClick
             if (alertDialog == null || !alertDialog.isShowing()) {
                 if (alertDialog != null)
                     alertDialog.dismiss();
-                Builder alertBuilder = new AlertDialog.Builder(this);
+                Builder alertBuilder = new Builder(this);
                 alertBuilder.setTitle("Error!");
                 alertBuilder.setMessage(v.getException().getMessage());
                 alertDialog = alertBuilder.show();
@@ -324,6 +321,9 @@ public class LobbyActivity extends ReservatorActivity implements OnMenuItemClick
 
         @Override
         public int compare(Room room1, Room room2) {
+            if(room1.getName() == null || room2.getName() == null) {
+                return 0;
+            }
             return collator.compare(room1.getName(), room2.getName());
         }
     }

@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="hello">Hallo Welt, Reservator!</string>
+    <string name="app_name">Reservator</string>
+
+    <!--Login-->
+    <string name="login">Login</string>
+    <string name="username_hint">username</string>
+    <string name="password_hint">password</string>
+    <string name="exchange_username">Exchange username:</string>
+    <string name="exchange_password">Exchange password:</string>
+    <string name="calendarOk">Calendar OK</string>
+    <string name="calendarPending">Calendar pending…</string>
+    <string name="contactsOk">Contacts OK</string>
+    <string name="contactsPending">Contacts pending…</string>
+    <string name="fum_username">FUM3 username:</string>
+    <string name="fum_password">FUM3 password:</string>
+    <string name="default_fum_username">roomreservator</string>
+    <string name="default_exchange_username">reserve@futurice.com</string>
+    <string name="calendarError">Fehler: Kalender</string>
+    <string name="noCalendarsError">Es wurde kein Meetingraum Kalender gefunden. Bitte stell sicher, dass ein Konto auf diesem Gerät konfiguriert wurde und der Kalender eingestellt wurde, um den Meetingraum Kalender zu synchronisieren.</string>
+    <string name="loadingText">lädt</string>
+
+    <!--AccountSelection-->
+    <string name="selectAccount">Wähle ein Konto aus</string>
+    <string name="accountForServation">Reservierungskonto</string>
+
+    <!--ModeSelection-->
+    <string name="selectMode">Wähle Modus für den Kalender</string>
+    <string name="modeForCalendar">calendarMode</string>
+    <string name="resourcesTitel">resources</string>
+    <string name="calendarTitel">calendar</string>
+
+    <!-- Lobby-->
+    <string name="lobbyRoomName">Lobby</string>
+    <string name="refresh">Aktualisieren</string>
+    <string name="refreshRoomList">Raumliste aktualisieren…</string>
+    <string name="setting">Einstellungen</string>
+    <string name="aboutTitle">Über</string>
+    <string name="aboutInfo">Reservator wurde von Futurice, einer kleinen Service - Creation Unternehmen mit Büros in Helsinki, Tampere, Berlin and London. Weitere Informationen findst du unter: www.futurice.com.\n\nDiese Anwendung wird unter der BSD-Lizenz veröffentlicht. Du findest den Ursprungs Code unter: http://github.com/futurice/meeting-room-tablet</string>
+    <string name="hintText">Tipp: Du kannst deine Kontakte aus dem Adressbuch deines Tablets zum reservieren benutzen.</string>
+    <string name="book_now">Jetzt buchen</string>
+    <string name="faildUser">Bitte versuch es erneut, denn diesen Benutzer gibt es nicht</string>
+    <string name="faildCheckSettings">Kein Konto für eine Reservierung vorhanden. Bitte prüf deine Einstellungen.</string>
+    <string name="reservation_alternativ_infoLabel">Bitte wähle die Zeit aus, welche du verändern möchtest.</string>
+
+    <!--Settings-->
+    <string name="language">Sprache:</string>
+    <string name="language_De">Deutsch</string>
+    <string name="language_En">Englisch</string>
+    <string name="PREFERENCES_NAME">Reservator Voreinstellungen</string>
+    <string name="PREFERENCES_SERVER_ADDRESS">ServerAddresse</string>
+    <string name="PREFERENCES_ROOM_NAME">Raumname</string>
+    <string name="PREFERENCES_USERNAME">Benutzername</string>
+    <string name="PREFERENCES_PASSWORD">Passwort</string>
+    <string name="PREFERENCES_FUM_USERNAME">fumBenutzername</string>
+    <string name="PREFERENCES_FUM_PASSWORD">fumPasswort</string>
+    <string name="PREFERENCES_UNSELECTED_ROOMS">Nicht ausgewählte Räume</string>
+    <string name="PREFERENCES_ACCOUNT">Konto</string>
+    <string name="PREFERENCES_ACCOUNT_TYPE">accountType</string>
+    <string name="PREFERENCES_LANGUAGE">Sprache</string>
+    <string name="PREFERENCES_USE_ATTENDEE_AS_ROOM_NAME">useAttendeeAsRoomName</string>
+    <string name="removeUserData">Login Informationen entfernen und Einstellungen zurückstellen</string>
+    <string name="settings_Default_Account_For_Reservation">Wähle ein Konto für die Reservierung aus</string>
+    <string name="settingsReset">Einstellungen zurückgesetzt und Konten gelöscht</string>
+    <string name="settingsSaved">Einstellungen gespeichert</string>
+    <string name="addressBookHelpText">Wenn diese Option aktiv ist, erfordet das Reservieren mit dem Tablet die Eingabe eines gültigen Kontaktes, welcher sich im Adressbuch befindet.</string>
+    <string name="accountHelp">Konto oder Konten, welche benutzt werden um Räume zu suchen.</string>
+    <string name="addressBookOptionLabel">Reservierung erfordert Kontakte vom Adressbuch </string>
+    <string name="continueBtn">weiter</string>
+    <string name="doNotModify">Veränder diese Einstellungen nicht!</string>
+    <string name="onlyItTeamShouldModify">Nur das IT Team darf diese Einstellungen ändern.</string>
+    <string name="goBackBtn">zurück</string>
+    <string name="room_name">Name des Standard-Raums</string>
+    <string name="close">Schließen</string>
+    <string name="used_account">Benutzer Konto</string>
+    <string name="allAccountsMagicWord">(Alle)</string>
+    <string name="shown_rooms">Sichtbare Räume</string>
+    <string name="reserv_view_alternativ_label">Ansicht der Reservierungen</string>
+    <string name="reserv_view_spinner_default">Reservierungsansicht mit Zeitbalken</string>
+    <string name="reserv_view_spinner_change">Reservierungsansicht mit 6 Zeitbuttons</string>
+    <string name="infoText_reservPopup_select">Tipp: Tippe die Zeit an, die du ändern möchtest</string>
+    <string name="meetingTitleLabel">Meeting Bezeichnung</string>
+    <string name="meetingTitlePersonName">Name der Person, die reserviert hat</string>
+    <string name="meetingTitleMeetingName">Name des Meetings</string>
+    <string name="saveSettings">Einstellungen speichern</string>
+    <string name="oneAccountPerRoom">false</string>
+
+    <!--Room-->
+    <string name="refreshRoom">Rauminformationen aktualisierten</string>
+    <string name="defaultTitleForReservation">Reserviert</string>
+    <string name="from">von </string>
+    <string name="to">bis </string>
+    <string name="forX">für </string>
+    <string name="free">Frei </string>
+    <string name="freeFor">Frei für </string>
+    <string name="freeIn">Frei in </string>
+    <string name="freeAt">Frei ab </string>
+    <string name="freeDay">für den restlichen Tag</string>
+    <string name="get_a_room">Erhalte einen Raum!</string>
+    <string name="reserve">reserviere</string>
+    <string name="reservationTextTemplate">Reserviert: ^1</string>
+    <string name="seeAllRooms">Alle Räume</string>
+    <string name="faildReservation">Fehler beim Reservieren</string>
+
+    <!--Calendar-->
+    <string name="dateLabelFormat">d. MMM. EEEE</string>
+    <string name="weekLabelFormat">\'Woche\' w</string>
+    <string name="visualizer">Zeichne KalenderVisualisierer in </string>
+    <string name="visualizerTime">Kalender visualisierer: </string>
+    <string name="timeSpan">Zeitspanne: </string>
+    <string name="reservationDone">reservation finished in </string>
+
+    <!--Time-->
+    <string name="minutes"> Minuten</string>
+    <string name="minute"> Minute</string>
+    <string name="halfHour"> halbe Stunde</string>
+    <string name="hour"> Stunde</string>
+    <string name="threeQuartershour"> 45 Minuten</string>
+    <string name="hourAndHalf"> 1:30 Stunden</string>
+    <string name="hours"> Stunden</string>
+    <string name="day"> Tag</string>
+    <string name="days"> Tage</string>
+
+    <!--TimeSpan-->
+    <string name="start">start</string>
+    <string name="end">ende</string>
+    <string name="negativeTime">Keine negative Zeit erlaubt</string>
+    <string name="negativeTimeMinus">Keine negative Zeit erlaubt — </string>
+    <string name="negativeTimeCount">Keine negative Zeit erlaubt — Zahl: </string>
+    <string name="negativeTimeStart">Keine negative Zeit erlaubt — setze Start</string>
+    <string name="negativeTimeEnd">Keine negative Zeit erlaubt — setze Ende</string>
+    <string name="startTimeAfterEndTime">setze Startzeit nach Endzeit</string>
+    <string name="startTimeOutsideMinMax">setze Startzeit außerhalb der MinMax</string>
+    <string name="endTimeOutsideMinMax">setze Endzeitaußerhalb der MinMax</string>
+    <string name="endTimeBeforeStartTime">setze Endzeit vor Startzeit</string>
+    <string name="maximumBeforeMin">setze maximumTime vor das minimum</string>
+    <string name="minumumAfterMax">setze minimumTime nach dem maximum</string>
+
+    <!--ReservatorExceptions-->
+    <string name="roomDeleted">Raumkalender wurde gelöscht</string>
+    <string name="parsID">Reservations ID konnte nicht analysiert werden</string>
+    <string name="syncCalRequest">Kalender synchronisation erfragt </string>
+    <string name="syncCalActiv">Kalender synchronisation würde aktiviert von </string>
+    <string name="syncCalNotSync">Kalender ist nicht synchronisierbar von</string>
+    <string name="initiateNot">Synchronisation mit Konto konnte nicht gestartet werden</string>
+    <string name="infoMeetingName">Bitte gib einen Meetingnamen an</string>
+
+    <string name="reservationCancelInfo">Du kannst Reservierungen löschen, welche ursprünglisch von einem Raum - Tablet erstellt wurde.</string>
+    <string name="touchToReturn">Tippe um zu der Wochenansicht zurückzukehren</string>
+    <string name="book">Raum buchen</string>
+    <string name="bookNow">Jetzt buchen</string>
+    <string name="disconnectedWarning">Verbindung ist getrennt!</string>
+    <string name="cancleTitle">Reservierung abbrechen?</string>
+    <string name="seeRoomTrafficLights">Raum Status</string>
+    <string name="resExaptionErrorCancel">Es ist nicht möglich diese Reservierung zu stonieren.</string>
+    <string name="calendarInfo">Tipp: Tippe einen freien Zeitraum an um zu reservieren.</string>
+
+    <!--OnClickBooking-->
+    <string name="ERROR">Fehler</string>
+    <string name="SUCCESS">Reserviert</string>
+    <string name="SUCCESS_Message">Deine Reservierung war erfolgreich. </string>
+
+    <!--Lable following Meeting-->
+    <string name="FollowMeeting">Nextes Meeting: </string>
+
+</resources>

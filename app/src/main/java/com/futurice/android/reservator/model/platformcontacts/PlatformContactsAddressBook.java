@@ -21,7 +21,7 @@ public class PlatformContactsAddressBook extends AddressBook {
     }
 
     /**
-     * This is a heavy query, and should be called rarely.
+     * This is MakeReservationTask heavy query, and should be called rarely.
      */
     @Override
     protected Vector<AddressBookEntry> fetchEntries() throws ReservatorException {
