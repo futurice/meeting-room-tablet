@@ -7,8 +7,8 @@ public class PlatformCalendarRoom extends Room {
     private long id;
     private String location;
 
-    public PlatformCalendarRoom(String name, String email, long id, String location) {
-        super(name, email);
+    public PlatformCalendarRoom(String name, String email, long id, String location, boolean useAttendeeAsRoomName) {
+        super(name, email, useAttendeeAsRoomName);
         this.id = id;
         this.location = location;
     }

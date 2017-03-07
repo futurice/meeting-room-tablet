@@ -24,7 +24,6 @@ import com.futurice.android.reservator.model.Room;
 import com.futurice.android.reservator.model.TimeSpan;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
@@ -365,11 +364,14 @@ public class PlatformCalendarDataProxy extends DataProxy {
                     if (location == null || location.isEmpty()) {
                         location = name;
                     }
+                    String useAttendeeAsRoomName = context.getSharedPreferences(context.getString(R.string.PREFERENCES_NAME),
+                            context.MODE_PRIVATE).getString(context.getString(R.string.PREFERENCES_USE_ATTENDEE_AS_ROOM_NAME), "false");
+
                     rooms.add(new PlatformCalendarRoom(
                             name,
                             result.getString(1),
                             result.getLong(0),
-                            location));
+                            location, useAttendeeAsRoomName.equals("true")));
                 } while (result.moveToNext());
             }
             result.close();

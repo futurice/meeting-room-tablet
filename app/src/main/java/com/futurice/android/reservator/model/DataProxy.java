@@ -51,7 +51,9 @@ public abstract class DataProxy {
         Vector<Room> rooms = getRooms();
         for (Room room : rooms) {
             room.setReservations(getRoomReservations(room));
+            if(room.getShownRoomName().equals(roomName)) {
                 return room;
+            }
         }
         throw new ReservatorException("Can't find room " + roomName);
     }
@@ -67,7 +69,7 @@ public abstract class DataProxy {
         ArrayList<String> roomNames = new ArrayList<String>();
         for (Room room : rooms) {
             room.setReservations(getRoomReservations(room));
-            roomNames.add(room.getName());
+            roomNames.add(room.getShownRoomName());
         }
         Collections.sort(roomNames, Collator.getInstance());
         return roomNames;

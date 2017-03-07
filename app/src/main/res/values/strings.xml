@@ -58,6 +58,7 @@
     <string name="PREFERENCES_UNSELECTED_ROOMS">unselectedRooms</string>
     <string name="PREFERENCES_ACCOUNT">calendarAccount</string>
     <string name="PREFERENCES_LANGUAGE">language</string>
+    <string name="PREFERENCES_USE_ATTENDEE_AS_ROOM_NAME">useAttendeeAsRoomName</string>
     <string name="removeUserData">Remove login info and reset settings</string>
     <string name="settings_Default_Account_For_Reservation">Select account for reserving</string>
     <string name="settingsReset">Removed credentials and reseted settings</string>

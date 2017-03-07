@@ -44,7 +44,7 @@ public class EditReservationPopup extends Dialog {
             }
         });
 
-        ((TextView) findViewById(R.id.roomName)).setText(room.getName());
+        ((TextView) findViewById(R.id.roomName)).setText(room.getShownRoomName());
 
         DateTime start = reservation.getTimeSpan().getStart();
         DateTime end = reservation.getTimeSpan().getEnd();

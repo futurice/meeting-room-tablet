@@ -57,6 +57,7 @@
     <string name="PREFERENCES_UNSELECTED_ROOMS">Nicht ausgewählte Räume</string>
     <string name="PREFERENCES_ACCOUNT">Konto</string>
     <string name="PREFERENCES_LANGUAGE">Sprache</string>
+    <string name="PREFERENCES_USE_ATTENDEE_AS_ROOM_NAME">useAttendeeAsRoomName</string>
     <string name="removeUserData">Login Informationen entfernen und Einstellungen zurückstellen</string>
     <string name="settings_Default_Account_For_Reservation">Wähle ein Konto für die Reservierung aus</string>
     <string name="settingsReset">Einstellungen zurückgesetzt und Konten gelöscht</string>

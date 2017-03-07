@@ -237,7 +237,7 @@ public class RoomActivity extends ReservatorActivity implements OnMenuItemClickL
 
     private void setRoom(Room r) {
         currentRoom = r;
-        roomNameLabel.setText(currentRoom.getName());
+        roomNameLabel.setText(currentRoom.getShownRoomName());
         weekView.refreshData(currentRoom);
         trafficLights.update(currentRoom);
     }
@@ -284,7 +284,7 @@ public class RoomActivity extends ReservatorActivity implements OnMenuItemClickL
     @Override
     protected Boolean isPrehensible() {
         String favouriteRoomName = getResApplication().getFavouriteRoomName();
-        return !(currentRoom.getName().equals(favouriteRoomName));
+        return !(currentRoom.getShownRoomName().equals(favouriteRoomName));
     }
 
     @Override
@@ -431,7 +431,7 @@ public class RoomActivity extends ReservatorActivity implements OnMenuItemClickL
             @Override
             public void onClick(View v) {
                 if (currentRoom.isBookable(30)) {
-                    new MakeReservationTask(currentRoom.getNextFreeSlot(30), currentRoom.getName())
+                    new MakeReservationTask(currentRoom.getNextFreeSlot(30), currentRoom.getShownRoomName())
                             .execute();
                 }
                 refreshData();
@@ -452,7 +452,7 @@ public class RoomActivity extends ReservatorActivity implements OnMenuItemClickL
         protected Void doInBackground(Void... voids) {
             try {
                 new MakeReservations().doReservation(application,
-                        currentRoom.getName(), currentRoom, timeSpan, name);
+                        currentRoom.getShownRoomName(), currentRoom, timeSpan, name);
             } catch (ReservatorException e) {
                 showDialog(application.getString(R.string.ERROR), e.getMessage());
             }
