@@ -31,7 +31,6 @@ import java.util.Locale;
 import java.util.Map;
 
 public class SettingsActivity extends ReservatorActivity {
-    private final String GOOGLE_ACCOUNT_TYPE = "com.google";
     Spinner usedAccountView;
     Spinner roomNameView;
     ToggleButton addressBookOptionView;
@@ -211,6 +210,12 @@ public class SettingsActivity extends ReservatorActivity {
 
         Editor editor = settings.edit();
         editor.putString(getString(R.string.PREFERENCES_ACCOUNT), selectedAccount);
+
+        if(selectedAccount.equals(getString(R.string.allAccountsMagicWord))) {
+            editor.putString(getString(R.string.PREFERENCES_ACCOUNT_TYPE), "");
+        } else {
+            editor.putString(getString(R.string.PREFERENCES_ACCOUNT_TYPE), selectedAccount.substring(selectedAccount.indexOf("@"), selectedAccount.length()));
+        }
         editor.putString(getString(R.string.PREFERENCES_ROOM_NAME), roomName);
         editor.putBoolean("addressBookOption", addressBookOptionView.isChecked());
         editor.putString(getString(R.string.accountForServation), selectedResAccount);
@@ -249,7 +254,7 @@ public class SettingsActivity extends ReservatorActivity {
         ArrayAdapter<String> adapter;
         ArrayList<String> accounts = new ArrayList<String>();
         accounts.add(getString(R.string.allAccountsMagicWord));
-        for (Account account : AccountManager.get(this).getAccountsByType(GOOGLE_ACCOUNT_TYPE)) {
+        for (Account account : AccountManager.get(this).getAccounts()) {
             accounts.add(account.name);
         }
 
@@ -272,7 +277,7 @@ public class SettingsActivity extends ReservatorActivity {
 
         ArrayAdapter<String> adapter;
         ArrayList<String> accounts = new ArrayList<String>();
-        for (Account account : AccountManager.get(this).getAccountsByType(GOOGLE_ACCOUNT_TYPE)) {
+        for (Account account : AccountManager.get(this).getAccounts()) {
             accounts.add(account.name);
         }
 

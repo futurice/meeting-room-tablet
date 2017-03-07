@@ -25,11 +25,12 @@
     <!--AccountSelection-->
     <string name="selectAccount">Select Account</string>
     <string name="accountForServation">reservationAccount</string>
-    <string name="accountType">accountType</string>
 
     <!--ModeSelection-->
     <string name="selectMode">Select Mode for Calendar</string>
     <string name="modeForCalendar">calendarMode</string>
+    <string name="resourcesTitel">resources</string>
+    <string name="calendarTitel">calendar</string>
 
     <!-- Lobby-->
     <string name="lobbyRoomName">Lobby</string>
@@ -57,6 +58,7 @@
     <string name="PREFERENCES_FUM_PASSWORD">fumPassword</string>
     <string name="PREFERENCES_UNSELECTED_ROOMS">unselectedRooms</string>
     <string name="PREFERENCES_ACCOUNT">calendarAccount</string>
+    <string name="PREFERENCES_ACCOUNT_TYPE">accountType</string>
     <string name="PREFERENCES_LANGUAGE">language</string>
     <string name="PREFERENCES_USE_ATTENDEE_AS_ROOM_NAME">useAttendeeAsRoomName</string>
     <string name="removeUserData">Remove login info and reset settings</string>

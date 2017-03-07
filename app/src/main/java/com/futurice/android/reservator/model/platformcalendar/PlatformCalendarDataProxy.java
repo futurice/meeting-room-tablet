@@ -332,7 +332,7 @@ public class PlatformCalendarDataProxy extends DataProxy {
             mSelectionArgs.add(Mode.RESOURCES.resourcesGlob);
         } else {
             String accountType = context.getSharedPreferences(context.getString(R.string.PREFERENCES_NAME),
-                    context.MODE_PRIVATE).getString(context.getString(R.string.accountType), "");
+                    context.MODE_PRIVATE).getString(context.getString(R.string.PREFERENCES_ACCOUNT_TYPE), "");
             mSelectionClauses.add(CalendarContract.Calendars.OWNER_ACCOUNT + " LIKE '%" + accountType + "'");
         }
 
@@ -670,7 +670,7 @@ public class PlatformCalendarDataProxy extends DataProxy {
             mSelectionArgs.add(Mode.RESOURCES.resourcesGlob);
         } else {
             String accountType = context.getSharedPreferences(context.getString(R.string.PREFERENCES_NAME),
-                    context.MODE_PRIVATE).getString(context.getString(R.string.accountType), "");
+                    context.MODE_PRIVATE).getString(context.getString(R.string.PREFERENCES_ACCOUNT_TYPE), "");
             mSelectionClause += CalendarContract.Calendars.OWNER_ACCOUNT + " LIKE '%" + accountType + "'";
         }
 

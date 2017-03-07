@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.accounts.Account;
 import android.accounts.AccountManager;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -57,11 +58,14 @@ public class AccountSelection extends ReservatorActivity {
 
             // Only one Google account available so the selection isn't needed.
             if (values.length == 1) {
-                preferences.edit()
-                        .putString(getString(R.string.accountForServation), values[0])
+                SharedPreferences.Editor edit = preferences.edit();
+                edit.putString(getString(R.string.accountForServation), values[0])
                         .apply();
-                preferences.edit().putString(getString(R.string.accountType),
-                        values[0].substring(values[0].indexOf("@") +1, values[0].length())).apply();
+
+                edit.putString(
+                        getString(R.string.PREFERENCES_ACCOUNT),
+                        values[0]);
+                edit.apply();
                 moveToModeSelection();
             } else {
 
@@ -73,11 +77,14 @@ public class AccountSelection extends ReservatorActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
-                        preferences.edit()
-                                .putString(getString(R.string.accountForServation), values[which])
-                                .apply();
-                        preferences.edit().putString(getString(R.string.accountType),
-                                values[which].substring(values[which].indexOf("@") + 1, values[which].length())).apply();
+                        SharedPreferences.Editor edit = preferences.edit();
+                        edit.putString(getString(R.string.accountForServation), values[which]);
+                        edit.putString(getString(R.string.PREFERENCES_ACCOUNT_TYPE),
+                                values[which].substring(values[which].indexOf("@") + 1, values[which].length()));
+                        edit.putString(
+                                getString(R.string.PREFERENCES_ACCOUNT),
+                                values[which]);
+                        edit.apply();
                         moveToModeSelection();
                     }
                 });

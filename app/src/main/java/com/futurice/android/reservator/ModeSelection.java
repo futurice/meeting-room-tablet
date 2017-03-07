@@ -40,7 +40,7 @@ public class ModeSelection extends ReservatorActivity {
         final String selectedMode = preferences.getString(getString(R.string.modeForCalendar), "");
 
         if (selectedMode == "") {
-            final String[] values = {"resources", "calendar"};
+            final String[] values = {getString(R.string.calendarTitel), getString(R.string.resourcesTitel)};
 
             // Build an alert dialog to select the account.
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
