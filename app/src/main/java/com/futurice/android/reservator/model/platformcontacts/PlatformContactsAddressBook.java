@@ -1,15 +1,14 @@
 package com.futurice.android.reservator.model.platformcontacts;
 
-import java.util.Vector;
-
 import android.content.ContentResolver;
 import android.database.Cursor;
 import android.provider.ContactsContract;
-import android.util.Log;
 
 import com.futurice.android.reservator.model.AddressBook;
 import com.futurice.android.reservator.model.AddressBookEntry;
 import com.futurice.android.reservator.model.ReservatorException;
+
+import java.util.Vector;
 
 public class PlatformContactsAddressBook extends AddressBook {
     private final String GOOGLE_ACCOUNT_TYPE = "com.google";
