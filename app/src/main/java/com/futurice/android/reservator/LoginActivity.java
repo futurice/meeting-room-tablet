@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -39,12 +40,20 @@ public class LoginActivity extends ReservatorActivity implements AddressBookUpda
 
         preferences = getSharedPreferences(this.getString(R.string.PREFERENCES_NAME), Context.MODE_PRIVATE);
         editor = preferences.edit();
+        if (!havePermissions) {
+            havePermissions = checkPermissions();
+        }
+        if (havePermissions) {
+            // Check Google Calendar
+            checkCalendarAndFetchEntries();
+        }
+    }
 
-        // Check Google Calendar
+    private void checkCalendarAndFetchEntries() {
         if (getResApplication().getDataProxy().hasFatalError()) {
             showFatalErrorDialog(
-                getString(R.string.calendarError),
-                getString(R.string.noCalendarsError));
+                    getString(R.string.calendarError),
+                    getString(R.string.noCalendarsError));
             return;
         } else {
             roomListOk = true;
@@ -135,4 +144,27 @@ public class LoginActivity extends ReservatorActivity implements AddressBookUpda
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         finish();
     }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode) {
+            case PERMISSIONS_REQUEST: {
+                if (grantResults.length >= 3
+                    && grantResults[0] == PackageManager.PERMISSION_GRANTED &&
+                    grantResults[1] == PackageManager.PERMISSION_GRANTED &&
+                    grantResults[2] == PackageManager.PERMISSION_GRANTED) {
+                    havePermissions = true;
+                    checkCalendarAndFetchEntries();
+                } else {
+                    finish();
+                }
+                return;
+            }
+
+
+        }
+    }
 }
+

@@ -281,7 +281,6 @@ public class PlatformCalendarDataProxy extends DataProxy {
         } else {
             mSelectionArgs = new String[]{roomAccountGlob};
         }
-
         String mSortOrder = null;
 
         Cursor result = resolver.query(
@@ -296,7 +295,6 @@ public class PlatformCalendarDataProxy extends DataProxy {
                 result.moveToFirst();
                 do {
                     String name = result.getString(2);
-
                     String location = result.getString(3);
                     if (location == null || location.isEmpty()) {
                         location = name;
