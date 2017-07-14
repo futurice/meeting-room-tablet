@@ -16,7 +16,7 @@ import com.futurice.android.reservator.ReservatorApplication;
 import com.futurice.android.reservator.model.Reservation;
 import com.futurice.android.reservator.model.ReservatorException;
 import com.futurice.android.reservator.model.Room;
-import com.futurice.android.reservator.model.DateTime;;
+import com.futurice.android.reservator.model.DateTime;
 
 public class EditReservationPopup extends Dialog {
     private ReservatorApplication application;
