@@ -1,24 +1,16 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:id="@+id/relativeLayout1"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/linearLayout"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:background="#fff"
                 android:padding="0dip">
 
-    <DigitalClock
-        android:id="@+id/digitalClock1"
-        style="@style/DigitalClockStyle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"
-        android:layout_marginRight="150dp">
-    </DigitalClock>
-
     <ScrollView
         android:id="@+id/scrollView1"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="match_parent"
+        android:layout_weight="2"
         android:layout_marginBottom="0dp"
         android:layout_marginLeft="0dp"
         android:layout_marginTop="0dp">
@@ -32,4 +24,20 @@
         </LinearLayout>
     </ScrollView>
 
-</RelativeLayout>
+    <FrameLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:padding="32dp">
+
+        <DigitalClock
+            android:id="@+id/digitalClock1"
+            style="@style/DigitalClockStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            >
+        </DigitalClock>
+    </FrameLayout>
+
+</LinearLayout>

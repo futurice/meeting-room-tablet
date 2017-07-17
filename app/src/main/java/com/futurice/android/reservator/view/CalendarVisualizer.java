@@ -15,12 +15,15 @@ import android.graphics.Paint.Align;
 import android.graphics.RectF;
 import android.graphics.Shader;
 import android.graphics.Shader.TileMode;
+import android.text.TextPaint;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
 import android.widget.FrameLayout;
 import android.widget.HorizontalScrollView;
+import android.widget.TextView;
 
 import com.futurice.android.reservator.R;
 import com.futurice.android.reservator.model.DateTime;
@@ -41,7 +44,7 @@ public class CalendarVisualizer extends HorizontalScrollView implements Reservat
     private int dayEndTime;
     private DateTime firstDayToShow;
     private int daysToShow = 10;
-    private int dayWidth = 200;
+    private int dayWidth = 250;
     private int timeLabelWidth = 100;
     private Reservation[] reservations;
     private SimpleDateFormat dayLabelFormatter, weekLabelFormatter;
@@ -163,6 +166,7 @@ public class CalendarVisualizer extends HorizontalScrollView implements Reservat
         c.translate(area.left, area.top);
         float textSize = area.height() / 3;
         textPaint.setTextSize(textSize);
+        weekTextPaint.setTextSize(textSize * 0.7f);
         float dayLabelY = area.height() - textSize / 2;
         float weekLabelY = dayLabelY - textSize;
         for (int i = 0; i < dayLabels.length; i++) {
@@ -257,8 +261,12 @@ public class CalendarVisualizer extends HorizontalScrollView implements Reservat
         c.translate(area.left, area.top);
 
         textPaint.setColor(reservationTextColor);
+        TextPaint textPaintForEllipsize = new TextPaint(textPaint);
         for (Reservation r : reservations) {
-            c.drawText(r.getSubject(), getXForTime(r.getStartTime()) + paddingX, getProportionalY(r.getStartTime()) * height + textHeight + paddingY, textPaint);
+            float textWidth = textPaint.measureText(r.getSubject());
+            String subject = (String) TextUtils.ellipsize(r.getSubject(), textPaintForEllipsize, 250,
+                                                 TextUtils.TruncateAt.END)
+;            c.drawText(subject, getXForTime(r.getStartTime()) + paddingX, getProportionalY(r.getStartTime()) * height + textHeight + paddingY, textPaint);
         }
         textPaint.setColor(textColor);
         c.restore();
