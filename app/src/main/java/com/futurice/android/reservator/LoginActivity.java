@@ -9,7 +9,8 @@ import com.futurice.android.reservator.model.AddressBook;
 import com.futurice.android.reservator.model.AddressBookUpdatedListener;
 import com.futurice.android.reservator.model.ReservatorException;
 
-public class LoginActivity extends ReservatorActivity implements AddressBookUpdatedListener {
+public class LoginActivity extends ReservatorActivity
+        implements AddressBookUpdatedListener {
 
     private boolean addressBookOk = false;
     private boolean roomListOk = false;
@@ -22,8 +23,8 @@ public class LoginActivity extends ReservatorActivity implements AddressBookUpda
         super.onCreate(savedInstanceState);
 
 
-        if (PreferenceManager.getInstance(this).getApplicationConfigured() == false)
-        {
+        if (!PreferenceManager.getInstance(this)
+                .getApplicationConfigured()) {
             showWizard();
             return;
         }
@@ -87,22 +88,23 @@ public class LoginActivity extends ReservatorActivity implements AddressBookUpda
         showWizard();
     }
 
-    private void showWizard()
-    {
+    private void showWizard() {
         final Intent i = new Intent(this, WizardActivity.class);
         startActivity(i);
-
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    protected void onActivityResult(
+            int requestCode, int resultCode, Intent data) {
         finish();
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode,
-                                           String permissions[], int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    public void onRequestPermissionsResult(
+            int requestCode,
+            String permissions[], int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions,
+                                         grantResults);
         switch (requestCode) {
             case PERMISSIONS_REQUEST: {
                 if (grantResults.length >= 3

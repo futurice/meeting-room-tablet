@@ -2,8 +2,6 @@ package com.futurice.android.reservator;
 
 import android.accounts.AccountManager;
 import android.app.Application;
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Handler;
 
 import com.futurice.android.reservator.common.PreferenceManager;

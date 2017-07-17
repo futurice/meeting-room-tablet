@@ -27,29 +27,42 @@ import java.util.List;
  * Created by shoj on 10/11/2016.
  */
 
-public final class WizardAccountSelectionFragment extends android.support.v4.app.Fragment implements  ISlidePolicy {
+public final class WizardAccountSelectionFragment
+        extends android.support.v4.app.Fragment implements ISlidePolicy {
 
     RadioGroup accountsRadioGroup = null;
-    String[] accounts = null;
+    AlertDialog alertDialog;
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(
+            LayoutInflater inflater, ViewGroup container,
+            Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.wizard_account_selection, container, false);
-        accountsRadioGroup = (RadioGroup) view.findViewById(R.id.wizard_accounts_radiogroup);
+        View view =
+                inflater.inflate(R.layout.wizard_account_selection, container,
+                                 false);
+        accountsRadioGroup =
+                (RadioGroup) view.findViewById(R.id.wizard_accounts_radiogroup);
 
-        TextView title = (TextView) view.findViewById(R.id.wizard_accounts_title);
+        TextView title =
+                (TextView) view.findViewById(R.id.wizard_accounts_title);
         title.setText(R.string.selectGoogleAccount);
 
-        accountsRadioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-                String account = ((RadioButton)group.findViewById(checkedId)).getText().toString();
-                PreferenceManager.getInstance(getActivity()).setDefaultCalendarAccount(account);
-                PreferenceManager.getInstance(getActivity()).setDefaultUserName(account);
-            }
-        });
+        accountsRadioGroup.setOnCheckedChangeListener(
+                new RadioGroup.OnCheckedChangeListener() {
+                    @Override
+                    public void onCheckedChanged(
+                            RadioGroup group, int checkedId) {
+                        String account =
+                                ((RadioButton) group.findViewById(checkedId))
+                                        .getText().toString();
+                        PreferenceManager.getInstance(getActivity())
+                                .setDefaultCalendarAccount(account);
+                        PreferenceManager.getInstance(getActivity())
+                                .setDefaultUserName(account);
+                    }
+                });
 
         return view;
     }
@@ -59,52 +72,58 @@ public final class WizardAccountSelectionFragment extends android.support.v4.app
         super.onResume();
 
         final String[] accounts = getAvailableAccounts();
-        if(accounts.length <= 0)
-        {
+        if (accounts.length <= 0) {
             showNoAccountsErrorMessage();
             return;
         }
 
         accountsRadioGroup.removeAllViews();
-        for (String account: accounts)
-        {
+        for (String account : accounts) {
             RadioButton accountRadioButton = new RadioButton(getActivity());
             accountRadioButton.setText(account);
 
             float scale = getResources().getDisplayMetrics().density;
-            int dpAsPixels = (int) (15*scale + 0.5f);
-            accountRadioButton.setPadding(dpAsPixels,dpAsPixels,dpAsPixels,dpAsPixels);
+            int dpAsPixels = (int) (15 * scale + 0.5f);
+            accountRadioButton
+                    .setPadding(dpAsPixels, dpAsPixels, dpAsPixels, dpAsPixels);
 
             accountsRadioGroup.addView(accountRadioButton);
         }
 
     }
 
-    public String[] getAvailableAccounts()
-    {
+    public String[] getAvailableAccounts() {
         List<String> accountsList = new ArrayList<String>();
-        for (Account account : AccountManager.get(getActivity()).getAccountsByType(getString(R.string.googleAccountType))) {
+        for (Account account : AccountManager.get(getActivity())
+                .getAccountsByType(getString(R.string.googleAccountType))) {
             accountsList.add(account.name);
         }
         return accountsList.toArray(new String[accountsList.size()]);
     }
 
-    private void showNoAccountsErrorMessage()
-    {
+    private void showNoAccountsErrorMessage() {
         String errorMessage = getString(R.string.noCalendarsError);
-        final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        final AlertDialog.Builder builder =
+                new AlertDialog.Builder(getActivity());
         builder.setMessage(errorMessage)
                 .setTitle(R.string.calendarError)
-                .setPositiveButton(R.string.goToAccountSettings, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        dialog.dismiss();
-                        getActivity().startActivityForResult(new Intent(android.provider.Settings.ACTION_SYNC_SETTINGS), 0);
-                    }
-                });
-        builder.create().show();
+                .setPositiveButton(R.string.goToAccountSettings,
+                                   new DialogInterface.OnClickListener() {
+                                       public void onClick(
+                                               DialogInterface dialog, int id) {
+                                           dialog.dismiss();
+                                           getActivity().startActivityForResult(
+                                                   new Intent(
+                                                           android.provider.Settings.ACTION_SYNC_SETTINGS),
+                                                   0);
+                                       }
+                                   });
+        alertDialog = builder.create();
+        alertDialog.setCancelable(false);
+        alertDialog.setCanceledOnTouchOutside(false);
+        alertDialog.show();
 
     }
-
 
 
     @Override
@@ -116,6 +135,11 @@ public final class WizardAccountSelectionFragment extends android.support.v4.app
     public void onUserIllegallyRequestedNextPage() {
     }
 
-
+    @Override public void onPause() {
+        super.onPause();
+        if (alertDialog != null) {
+            alertDialog.dismiss();
+        }
+    }
 }
 

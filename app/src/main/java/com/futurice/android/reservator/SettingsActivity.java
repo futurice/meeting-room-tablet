@@ -1,11 +1,7 @@
 package com.futurice.android.reservator;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-
 import android.accounts.Account;
 import android.accounts.AccountManager;
-import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.view.View;
@@ -20,10 +16,11 @@ import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.futurice.android.reservator.common.PreferenceManager;
-import com.futurice.android.reservator.model.AddressBook;
 import com.futurice.android.reservator.model.DataProxy;
 import com.futurice.android.reservator.model.platformcalendar.PlatformCalendarDataProxy;
-import com.futurice.android.reservator.model.platformcontacts.PlatformContactsAddressBook;
+
+import java.util.ArrayList;
+import java.util.HashSet;
 
 public class SettingsActivity extends ReservatorActivity {
     private final String GOOGLE_ACCOUNT_TYPE = "com.google";

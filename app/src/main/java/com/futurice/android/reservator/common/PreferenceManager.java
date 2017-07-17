@@ -3,7 +3,8 @@ package com.futurice.android.reservator.common;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import com.futurice.android.reservator.model.platformcalendar.PlatformCalendarDataProxy;
+import com.futurice.android.reservator.model.platformcalendar
+        .PlatformCalendarDataProxy;
 
 import java.util.HashSet;
 import java.util.Map;
@@ -14,9 +15,11 @@ import java.util.Map;
  */
 public class PreferenceManager {
     private static PreferenceManager sharedInstance = null;
+
     public static PreferenceManager getInstance(Context context) {
-        if(sharedInstance == null)
+        if (sharedInstance == null) {
             sharedInstance = new PreferenceManager(context);
+        }
         return sharedInstance;
     }
 
@@ -34,82 +37,78 @@ public class PreferenceManager {
     final SharedPreferences preferences;
 
     private PreferenceManager(Context c) {
-        preferences = c.getSharedPreferences(PREFERENCES_IDENTIFIER, Context.MODE_PRIVATE);
+        preferences = c.getSharedPreferences(PREFERENCES_IDENTIFIER,
+                                             Context.MODE_PRIVATE);
     }
 
-    public String getDefaultCalendarAccount()
-    {
-        return preferences.getString(PREFERENCES_DEFAULT_ACCOUNT,null);
+    public String getDefaultCalendarAccount() {
+        return preferences.getString(PREFERENCES_DEFAULT_ACCOUNT, null);
     }
-    public void setDefaultCalendarAccount(String account)
-    {
+
+    public void setDefaultCalendarAccount(String account) {
         SharedPreferences.Editor editor = preferences.edit();
-        editor.putString(PREFERENCES_DEFAULT_ACCOUNT,account);
+        editor.putString(PREFERENCES_DEFAULT_ACCOUNT, account);
         editor.apply();
     }
 
-    public String getDefaultUserName()
-    {
-        return preferences.getString(PREFERENCES_DEFAULT_USER_NAME,null);
+    public String getDefaultUserName() {
+        return preferences.getString(PREFERENCES_DEFAULT_USER_NAME, null);
     }
-    public void setDefaultUserName(String user)
-    {
+
+    public void setDefaultUserName(String user) {
         SharedPreferences.Editor editor = preferences.edit();
-        editor.putString(PREFERENCES_DEFAULT_USER_NAME,user);
+        editor.putString(PREFERENCES_DEFAULT_USER_NAME, user);
         editor.apply();
     }
 
-    public boolean getAddressBookEnabled()
-    {
-        return preferences.getBoolean(PREFERENCES_ADDRESSBOOK_ENABLED,false);
+    public boolean getAddressBookEnabled() {
+        return preferences.getBoolean(PREFERENCES_ADDRESSBOOK_ENABLED, false);
     }
-    public void setAddressBookEnabled(boolean enabled)
-    {
+
+    public void setAddressBookEnabled(boolean enabled) {
         SharedPreferences.Editor editor = preferences.edit();
-        editor.putBoolean(PREFERENCES_ADDRESSBOOK_ENABLED,enabled);
+        editor.putBoolean(PREFERENCES_ADDRESSBOOK_ENABLED, enabled);
         editor.apply();
     }
 
-    public HashSet<String> getUnselectedRooms()
-    {
-        return (HashSet<String>) preferences.getStringSet(PREFERENCES_UNSELECTED_ROOMS,new HashSet<String>());
+    public HashSet<String> getUnselectedRooms() {
+        return (HashSet<String>) preferences
+                .getStringSet(PREFERENCES_UNSELECTED_ROOMS,
+                              new HashSet<String>());
     }
 
 
-    public void setUnselectedRooms(HashSet<String> rooms)
-    {
+    public void setUnselectedRooms(HashSet<String> rooms) {
         SharedPreferences.Editor editor = preferences.edit();
-        editor.putStringSet(PREFERENCES_UNSELECTED_ROOMS,new HashSet<String>(rooms));
-        editor.apply();
-    }
-
-
-    public String getSelectedRoom()
-    {
-        return preferences.getString(PREFERENCES_SELECTED_ROOM,null);
-    }
-    public void setSelectedRoom(String newRoom)
-    {
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putString(PREFERENCES_SELECTED_ROOM,newRoom);
+        editor.putStringSet(PREFERENCES_UNSELECTED_ROOMS,
+                            new HashSet<String>(rooms));
         editor.apply();
     }
 
 
-    public boolean getApplicationConfigured()
-    {
-        return preferences.getBoolean(PREFERENCES_CONFIGURED,false);
+    public String getSelectedRoom() {
+        return preferences.getString(PREFERENCES_SELECTED_ROOM, null);
     }
-    public void setApplicationConfigured(boolean configured)
-    {
+
+    public void setSelectedRoom(String newRoom) {
         SharedPreferences.Editor editor = preferences.edit();
-        editor.putBoolean(PREFERENCES_CONFIGURED,configured);
+        editor.putString(PREFERENCES_SELECTED_ROOM, newRoom);
         editor.apply();
     }
 
 
-    public void removeAllSettings()
-    {
+    public boolean getApplicationConfigured() {
+        return preferences.getBoolean(PREFERENCES_CONFIGURED, false);
+    }
+
+    public void setApplicationConfigured(boolean configured) {
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putBoolean(PREFERENCES_CONFIGURED, configured);
+        editor.apply();
+    }
+
+
+    public void removeAllSettings() {
         SharedPreferences.Editor editor = preferences.edit();
         Map<String, ?> keys = preferences.getAll();
         for (Map.Entry<String, ?> entry : keys.entrySet()) {
@@ -118,17 +117,17 @@ public class PreferenceManager {
         editor.apply();
     }
 
-    public PlatformCalendarDataProxy.Mode getCalendarMode()
-    {
-        String name = preferences.getString(PREFERENCES_CALENDAR_MODE,null);
-        if(name==null) return null;
+    public PlatformCalendarDataProxy.Mode getCalendarMode() {
+        String name = preferences.getString(PREFERENCES_CALENDAR_MODE, null);
+        if (name == null) {
+            return null;
+        }
         return Enum.valueOf(PlatformCalendarDataProxy.Mode.class, name);
     }
 
-    public void setCalendarMode(PlatformCalendarDataProxy.Mode mode)
-    {
+    public void setCalendarMode(PlatformCalendarDataProxy.Mode mode) {
         SharedPreferences.Editor editor = preferences.edit();
-        editor.putString(PREFERENCES_CALENDAR_MODE,mode.name());
+        editor.putString(PREFERENCES_CALENDAR_MODE, mode.name());
         editor.apply();
     }
 

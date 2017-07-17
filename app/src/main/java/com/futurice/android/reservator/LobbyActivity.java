@@ -1,11 +1,11 @@
 package com.futurice.android.reservator;
 
+import android.accounts.Account;
+import android.accounts.AccountManager;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
@@ -29,11 +29,14 @@ import com.futurice.android.reservator.model.DataUpdatedListener;
 import com.futurice.android.reservator.model.ReservatorException;
 import com.futurice.android.reservator.model.Room;
 import com.futurice.android.reservator.view.LobbyReservationRowView;
-import com.futurice.android.reservator.view.LobbyReservationRowView.OnReserveListener;
+import com.futurice.android.reservator.view.LobbyReservationRowView
+        .OnReserveListener;
 
 import java.text.Collator;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Vector;
 
 public class LobbyActivity extends ReservatorActivity
@@ -67,6 +70,9 @@ public class LobbyActivity extends ReservatorActivity
     @Override
     public void onResume() {
         super.onResume();
+        if (getAvailableAccounts().length <= 0) {
+            showSetupWizard();
+        }
         showLoadingCount = 0; //TODO better fix
         proxy = this.getResApplication().getDataProxy();
         proxy.addDataUpdatedListener(this);
@@ -74,11 +80,27 @@ public class LobbyActivity extends ReservatorActivity
         refreshRoomInfo();
     }
 
+    public String[] getAvailableAccounts() {
+        List<String> accountsList = new ArrayList<>();
+        for (Account account : AccountManager
+                .get(this)
+                .getAccountsByType(getString(R.string.googleAccountType))) {
+            accountsList.add(account.name);
+        }
+        return accountsList.toArray(new String[accountsList.size()]);
+    }
+
+    private void showSetupWizard() {
+        final Intent i = new Intent(this, WizardActivity.class);
+        startActivity(i);
+    }
+
     @Override
     public void onPause() {
         super.onPause();
-        proxy.removeDataUpdatedListener(this);
-        proxy = null;
+        if (proxy != null) {
+            proxy = null;
+        }
 
         ab.addDataUpdatedListener(this);
         if (progressDialog != null) {
@@ -90,7 +112,8 @@ public class LobbyActivity extends ReservatorActivity
 
     @Override
     protected Boolean isPrehensible() {
-        String favouriteRoomName = PreferenceManager.getInstance(this).getSelectedRoom();
+        String favouriteRoomName =
+                PreferenceManager.getInstance(this).getSelectedRoom();
         return favouriteRoomName != null;
     }
 
@@ -191,7 +214,8 @@ public class LobbyActivity extends ReservatorActivity
 
     @Override
     public void roomListUpdated(Vector<Room> rooms) {
-        HashSet<String> hiddenRooms = PreferenceManager.getInstance(this).getUnselectedRooms();
+        HashSet<String> hiddenRooms =
+                PreferenceManager.getInstance(this).getUnselectedRooms();
 
         //proceed to requesting room reservation data
         for (Room r : rooms) {
