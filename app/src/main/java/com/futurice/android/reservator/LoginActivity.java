@@ -1,15 +1,8 @@
 package com.futurice.android.reservator;
 
-import android.app.AlertDialog;
-import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.view.MenuItem;
-import android.widget.Toast;
-import android.content.DialogInterface;
 
 import com.futurice.android.reservator.common.PreferenceManager;
 import com.futurice.android.reservator.model.AddressBook;
@@ -37,7 +30,16 @@ public class LoginActivity extends ReservatorActivity implements AddressBookUpda
 
         setContentView(R.layout.login_activity);
 
-        // Check Google Calendar
+        if (!havePermissions) {
+            havePermissions = checkPermissions();
+        }
+        if (havePermissions) {
+            // Check Google Calendar
+            checkCalendarAndFetchEntries();
+        }
+    }
+
+    private void checkCalendarAndFetchEntries() {
         if (getResApplication().getDataProxy().hasFatalError()) {
             showWizard();
             return;
@@ -96,4 +98,27 @@ public class LoginActivity extends ReservatorActivity implements AddressBookUpda
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         finish();
     }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode) {
+            case PERMISSIONS_REQUEST: {
+                if (grantResults.length >= 3
+                    && grantResults[0] == PackageManager.PERMISSION_GRANTED &&
+                    grantResults[1] == PackageManager.PERMISSION_GRANTED &&
+                    grantResults[2] == PackageManager.PERMISSION_GRANTED) {
+                    havePermissions = true;
+                    checkCalendarAndFetchEntries();
+                } else {
+                    finish();
+                }
+                return;
+            }
+
+
+        }
+    }
 }
+

@@ -1,23 +1,14 @@
 package com.futurice.android.reservator;
 
-import java.util.Comparator;
-import java.text.Collator;
-import java.util.HashSet;
-import java.util.Vector;
-
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
-import android.app.Dialog;
-import android.app.DialogFragment;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
+import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
-import android.text.Html;
 import android.text.SpannableString;
 import android.text.method.LinkMovementMethod;
 import android.text.util.Linkify;
@@ -27,6 +18,7 @@ import android.view.MenuItem;
 import android.view.MenuItem.OnMenuItemClickListener;
 import android.widget.DigitalClock;
 import android.widget.LinearLayout;
+import android.widget.TextClock;
 import android.widget.TextView;
 
 import com.futurice.android.reservator.common.PreferenceManager;
@@ -34,15 +26,19 @@ import com.futurice.android.reservator.model.AddressBook;
 import com.futurice.android.reservator.model.AddressBookUpdatedListener;
 import com.futurice.android.reservator.model.DataProxy;
 import com.futurice.android.reservator.model.DataUpdatedListener;
-import com.futurice.android.reservator.model.DateTime;
 import com.futurice.android.reservator.model.ReservatorException;
 import com.futurice.android.reservator.model.Room;
 import com.futurice.android.reservator.view.LobbyReservationRowView;
 import com.futurice.android.reservator.view.LobbyReservationRowView.OnReserveListener;
 
-public class LobbyActivity extends ReservatorActivity implements OnMenuItemClickListener,
-    DataUpdatedListener, AddressBookUpdatedListener {
-    final Handler handler = new Handler();
+import java.text.Collator;
+import java.util.Comparator;
+import java.util.HashSet;
+import java.util.Vector;
+
+public class LobbyActivity extends ReservatorActivity
+        implements OnMenuItemClickListener,
+        DataUpdatedListener, AddressBookUpdatedListener {
     MenuItem settingsMenu, refreshMenu, aboutMenu;
     LinearLayout container = null;
     DataProxy proxy;
@@ -57,8 +53,15 @@ public class LobbyActivity extends ReservatorActivity implements OnMenuItemClick
         super.onCreate(savedInstanceState);
         this.setContentView(R.layout.lobby_activity);
         ab = this.getResApplication().getAddressBook();
-        DigitalClock clock = (DigitalClock) findViewById(R.id.digitalClock1);  //FIXME deprecated
-        clock.setTypeface(Typeface.createFromAsset(getAssets(), "fonts/EHSMB.TTF"));
+        TextView clock;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            clock = (TextClock) findViewById(R.id.digitalClock1);
+        } else {
+            clock = (DigitalClock) findViewById(
+                    R.id.digitalClock1);
+        }
+        clock.setTypeface(
+                Typeface.createFromAsset(getAssets(), "fonts/EHSMB.TTF"));
     }
 
     @Override
@@ -99,26 +102,31 @@ public class LobbyActivity extends ReservatorActivity implements OnMenuItemClick
     }
 
     /*
-     * @param howMuch If howMuch > 0, an item has been added to our ProgressDialog and
-     * we need to increase the number of max items. If howMuch is less than zero,
-     * something has been completed and we can increase the progress. This should be
+     * @param howMuch If howMuch > 0, an item has been added to our
+     * ProgressDialog and
+     * we need to increase the number of max items. If howMuch is less than
+     * zero,
+     * something has been completed and we can increase the progress. This
+     * should be
      * split to two different functions, incrementMaxItems() and itemFinished(),
-     * because (at least in the current version) there is always only one increment
+     * because (at least in the current version) there is always only one
+     * increment
      * at time.
      */
     private void updateLoadingWindow(int howMuch) {
         showLoadingCount += howMuch;
 
-        // if loadingcount <= 0 => dismiss
         if (showLoadingCount <= 0 && progressDialog != null) {
             progressDialog.dismiss();
             progressDialog = null;
             return;
         }
 
-        if (showLoadingCount > 0 && (progressDialog == null || !progressDialog.isShowing())) {
-            if (progressDialog != null)
+        if (showLoadingCount > 0 && (progressDialog == null || !progressDialog
+                .isShowing())) {
+            if (progressDialog != null) {
                 progressDialog.dismiss();
+            }
             progressDialog = constructNewProgressDialog();
             progressDialog.setMax(showLoadingCount);
             progressDialog.show();
@@ -164,7 +172,8 @@ public class LobbyActivity extends ReservatorActivity implements OnMenuItemClick
             refreshRoomInfo();
             refetchAddressBook();
         } else if (item == aboutMenu) {
-            SpannableString s = new SpannableString(getString(R.string.aboutInfo));
+            SpannableString s =
+                    new SpannableString(getString(R.string.aboutInfo));
             Linkify.addLinks(s, Linkify.ALL);
 
             Builder aboutBuilder = new AlertDialog.Builder(this);
@@ -174,7 +183,8 @@ public class LobbyActivity extends ReservatorActivity implements OnMenuItemClick
             alertDialog = aboutBuilder.show();
 
             //	Makes links clickable.
-            ((TextView) alertDialog.findViewById(android.R.id.message)).setMovementMethod(LinkMovementMethod.getInstance());
+            ((TextView) alertDialog.findViewById(android.R.id.message))
+                    .setMovementMethod(LinkMovementMethod.getInstance());
         }
         return true;
     }
@@ -208,7 +218,8 @@ public class LobbyActivity extends ReservatorActivity implements OnMenuItemClick
     public void refreshFailed(ReservatorException e) {
     /*
         if (alertDialog != null) {
-			Toast.makeText(this, "dismissed an alert", Toast.LENGTH_SHORT).show();
+			Toast.makeText(this, "dismissed an alert", Toast.LENGTH_SHORT)
+			.show();
 			alertDialog.dismiss();
 		}
 
@@ -222,13 +233,17 @@ public class LobbyActivity extends ReservatorActivity implements OnMenuItemClick
     }
 
     private void processRoom(Room r) {
-        LobbyReservationRowView v = new LobbyReservationRowView(LobbyActivity.this);
+        LobbyReservationRowView v =
+                new LobbyReservationRowView(LobbyActivity.this);
         if (v.getException() != null) {
-            Log.d("LobbyReservator", "Exception in LobbyReservator: " + v.getException().getMessage());
+            Log.d("LobbyReservator",
+                  "Exception in LobbyReservator: " + v.getException()
+                          .getMessage());
             // show only one dialog at time
             if (alertDialog == null || !alertDialog.isShowing()) {
-                if (alertDialog != null)
+                if (alertDialog != null) {
                     alertDialog.dismiss();
+                }
                 Builder alertBuilder = new AlertDialog.Builder(this);
                 alertBuilder.setTitle("Error!");
                 alertBuilder.setMessage(v.getException().getMessage());
@@ -251,9 +266,10 @@ public class LobbyActivity extends ReservatorActivity implements OnMenuItemClick
         boolean added = false;
         for (int index = 0; index < roomCount; index++) {
             Room r2 = ((LobbyReservationRowView) container.getChildAt(index))
-                .getRoom();
+                    .getRoom();
 
-            // Log.d("Lobby", "sorting: " + r.getName() + ":" + r.isFree() + " -- " + r2.getName() + ":" + r2.isFree());
+            // Log.d("Lobby", "sorting: " + r.getName() + ":" + r.isFree() +
+            // " -- " + r2.getName() + ":" + r2.isFree());
 
             if (r.equals(r2)) {
                 Log.d("LobbyActivity", "duplicate room -- " + r.getEmail());
@@ -294,29 +310,6 @@ public class LobbyActivity extends ReservatorActivity implements OnMenuItemClick
         waitingAddresses = true;
         updateLoadingWindow(+1);
         ab.refetchEntries();
-    }
-
-    private class RoomTimeComparator implements Comparator<Room> {
-        private DateTime now = new DateTime();
-
-        @Override
-        public int compare(Room room1, Room room2) {
-            boolean room1Free = room1.isFree() && room1.minutesFreeFromNow() >= 30;
-            boolean room2Free = room2.isFree() && room2.minutesFreeFromNow() >= 30;
-
-            if (room1Free && !room2Free) {
-                return -1;
-            } else if (!room1Free && room2Free) {
-                return 1;
-            } else if (room1Free && room2Free) {
-                // Log.d("Lobby", room1.toString() + " -- " + room2.toString());
-                return room2.minutesFreeFrom(now)
-                    - room1.minutesFreeFrom(now);
-            } else {
-                return 0;
-                //return room1.reservedForFrom(now) - room2.reservedForFrom(now);
-            }
-        }
     }
 
     private class RoomNameComparator implements Comparator<Room> {
