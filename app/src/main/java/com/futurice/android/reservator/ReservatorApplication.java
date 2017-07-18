@@ -2,6 +2,7 @@ package com.futurice.android.reservator;
 
 import android.accounts.AccountManager;
 import android.app.Application;
+import android.content.SharedPreferences;
 import android.os.Handler;
 
 import com.futurice.android.reservator.common.PreferenceManager;
@@ -65,4 +66,14 @@ public class ReservatorApplication extends Application {
     private void clearCacheLater() {
         handler.postDelayed(clearAddressCache, ADDRESS_CACHE_CLEAR_INTERVAL);
     }
+
+    public String getSettingValue(int settingNameId, String defaultValue) {
+        SharedPreferences settings = getSharedPreferences(getString(R.string.PREFERENCES_NAME), 0);
+        return settings.getString(getString(settingNameId), defaultValue);
+    }
+
+    public String getFavouriteRoomName() {
+        return this.getSettingValue(R.string.PREFERENCES_ROOM_NAME, getString(R.string.lobbyRoomName));
+    }
+
 }
