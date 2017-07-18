@@ -13,8 +13,10 @@ import android.support.v4.content.ContextCompat;
 import android.view.WindowManager;
 import android.widget.Toast;
 
+import com.futurice.android.reservator.common.PreferenceManager;
 import com.futurice.android.reservator.model.ReservatorException;
 import com.futurice.android.reservator.model.Room;
+
 
 public class ReservatorActivity extends Activity {
 
@@ -130,9 +132,7 @@ public class ReservatorActivity extends Activity {
     }
 
     private void stopAutoGoToFavouriteRoom() {
-        if (isPrehensible()) {
-            handler.removeCallbacks(goToFavouriteRoomRunable);
-        }
+        handler.removeCallbacks(goToFavouriteRoomRunable);
     }
 
     static class ReservatorAppHandler extends Handler {
@@ -152,8 +152,8 @@ public class ReservatorActivity extends Activity {
 
         @Override
         public void run() {
-            String roomName = activity.getResApplication().getFavouriteRoomName();
-            if (roomName != getString(R.string.lobbyRoomName)) {
+            String roomName = PreferenceManager.getInstance(getApplicationContext()).getSelectedRoom();
+            if (roomName != null) {
                 Room room;
                 try {
                     room = activity.getResApplication().getDataProxy().getRoomWithName(roomName);

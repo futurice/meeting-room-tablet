@@ -34,7 +34,7 @@ public class CachedDataProxy extends DataProxy {
     }
 
     @Override
-    public Vector<Room> getRooms() throws ReservatorException {
+    public Vector<Room> getRooms() {
         // TODO: do not cache forever
         if (this.rooms == null) {
             Log.d("CACHE", "getRooms");
