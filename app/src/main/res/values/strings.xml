@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="hello">Hello World, Reservator!</string>
     <string name="app_name">Reservator</string>
-    <string name="get_a_room">Get a room!</string>
     <string name="start">start</string>
     <string name="end">end</string>
     <string name="reserve">reserve</string>
@@ -28,38 +26,32 @@
     <string name="seeAllRooms">All rooms</string>
     <string name="exchange_server_address">Exchange server address</string>
     <string name="room_name">Name of the default room</string>
-    <string name="PREFERENCES_NAME">ReservatorPreferences</string>
-    <string name="PREFERENCES_SERVER_ADDRESS">serverAddress</string>
-    <string name="PREFERENCES_ROOM_NAME">roomName</string>
-    <string name="PREFERENCES_USERNAME">username</string>
-    <string name="PREFERENCES_PASSWORD">password</string>
-    <string name="PREFERENCES_FUM_USERNAME">fumUsername</string>
-    <string name="PREFERENCES_FUM_PASSWORD">fumPassword</string>
-    <string name="PREFERENCES_UNSELECTED_ROOMS">unselectedRooms</string>
-    <string name="PREFERENCES_GOOGLE_ACCOUNT">googleAccount</string>
     <string name="removeUserData">Remove login info and reset settings</string>
     <string name="lobbyRoomName">Lobby</string>
     <string name="calendarError">Google Calendar error</string>
     <string name="noCalendarsError">No meeting room calendars found. Please ensure that a Google Account has been configured on this device and that Google Calendar has been set to sync the meeting room calendars.</string>
     <string name="close">Close</string>
-    <string name="calendarAccountGlob">*@resource.calendar.google.com</string>
     <string name="used_google_account">Used Google Account</string>
-    <string name="allAccountsMagicWord">(All)</string>
     <string name="shown_rooms">Visible rooms</string>
     <string name="reservationCancelInfo">You can cancel reservations that were originally made from a room tablet</string>
     <string name="touchToReserve">Tap for reservations</string>
     <string name="bookNow">Book Now</string>
     <string name="disconnectedWarning">Disconnected!</string>
-    <string name="aboutInfo">Reservator is made by Futurice, a lean service creation company with offices in Helsinki, Tampere, Berlin and London. More information at: www.futurice.com.\n\nThis application is published under the BSD license. You can find the source code at: http://github.com/futurice/meeting-room-tablet</string>
+    <string name="aboutInfo">Reservator is made by Futurice, a lean service creation company with offices in Helsinki, Tampere, Berlin, Munich, Stockholm and London. More information at: www.futurice.com.\n\nThis application is published under the BSD license. You can find the source code at: http://github.com/futurice/meeting-room-tablet</string>
     <string name="aboutTitle">About</string>
     <string name="loadingText">Loading</string>
     <string name="addressBookOptionLabel">Require address book contacts for reserving</string>
     <string name="googleAccountType">com.google</string>
     <string name="selectGoogleAccount">Select Google Account</string>
     <string name="settingsDefaultAccountForReservation">Select account for reserving</string>
-    <string name="accountForServation">reservationAccount</string>
     <string name="addressBookHelpText">If this option is enabled, reserving with the tablet requires entering a valid name that is synced to the accounts address book contacts.</string>
     <string name="googleAccountHelp">Account or accounts used for searching rooms.</string>
     <string name="defaultTitleForReservation">Reserved</string>
     <string name="hintText">Hint: You can use your tablet\'s address book contacts for reserving.</string>
+    <string name="goToAccountSettings">Go to account settings</string>
+    <string name="goToCalendarSettings">Go to calendar settings</string>
+    <string name="defaultRoomSelectionTitle">Select default room</string>
+    <string name="calendarResourcesHelpText">If this option is enabled, non-resource calendars will be shown.</string>
+    <string name="permission_request_title">Permission Request</string>
+    <string name="permission_request_reason">We need your permission to access your contacts and calendar in order for the app to work.</string>
 </resources>

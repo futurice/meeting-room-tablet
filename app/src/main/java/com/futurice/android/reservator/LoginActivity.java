@@ -1,29 +1,19 @@
 package com.futurice.android.reservator;
 
-import android.app.AlertDialog;
-import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.view.MenuItem;
-import android.widget.Toast;
-import android.content.DialogInterface;
 
+import com.futurice.android.reservator.common.PreferenceManager;
 import com.futurice.android.reservator.model.AddressBook;
 import com.futurice.android.reservator.model.AddressBookUpdatedListener;
 import com.futurice.android.reservator.model.ReservatorException;
 
-public class LoginActivity extends ReservatorActivity implements AddressBookUpdatedListener {
+public class LoginActivity extends ReservatorActivity
+        implements AddressBookUpdatedListener {
 
-    static final int REQUEST_LOBBY = 0;
-    MenuItem settingsMenu;
-    private ProgressDialog pd;
     private boolean addressBookOk = false;
     private boolean roomListOk = false;
-    private SharedPreferences preferences;
-    private Editor editor;
 
     /**
      * Called when the activity is first created.
@@ -31,27 +21,32 @@ public class LoginActivity extends ReservatorActivity implements AddressBookUpda
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.login_activity);
 
-        if (pd != null) {
-            pd.dismiss();
+
+        if (!PreferenceManager.getInstance(this)
+                .getApplicationConfigured()) {
+            showWizard();
+            return;
         }
 
-        preferences = getSharedPreferences(this.getString(R.string.PREFERENCES_NAME), Context.MODE_PRIVATE);
-        editor = preferences.edit();
+        setContentView(R.layout.login_activity);
 
-        // Check Google Calendar
+        if (!havePermissions) {
+            havePermissions = checkPermissions();
+        }
+        if (havePermissions) {
+            // Check Google Calendar
+            checkCalendarAndFetchEntries();
+        }
+    }
+
+    private void checkCalendarAndFetchEntries() {
         if (getResApplication().getDataProxy().hasFatalError()) {
-            showFatalErrorDialog(
-                getString(R.string.calendarError),
-                getString(R.string.noCalendarsError));
+            showWizard();
             return;
         } else {
             roomListOk = true;
         }
-
-        AddressBook ab = this.getResApplication().getAddressBook();
-        ab.refetchEntries();
     }
 
     @Override
@@ -60,6 +55,7 @@ public class LoginActivity extends ReservatorActivity implements AddressBookUpda
 
         AddressBook ab = this.getResApplication().getAddressBook();
         ab.addDataUpdatedListener(this);
+        ab.refetchEntries();
         checkAndGo();
     }
 
@@ -70,69 +66,61 @@ public class LoginActivity extends ReservatorActivity implements AddressBookUpda
         ab.removeDataUpdatedListener(this);
     }
 
-    private void updateProgressDialogMessage() {
-        if (pd == null)
-            return;
-
-        String s = "";
-
-        if (roomListOk)
-            s += "Google Calendar ok\n";
-        else
-            s += "Google Calendar pending...\n";
-
-        if (addressBookOk)
-            s += "Google Contacts ok\n";
-        else
-            s += "Google Contacts pending...\n";
-
-        pd.setMessage(s);
-    }
 
     private void checkAndGo() {
         if (addressBookOk && roomListOk) {
-            editor.apply();
-            if (pd != null)
-                pd.dismiss();
 
-            Intent i = new Intent(this, AccountSelection.class);
-            startActivityForResult(i, REQUEST_LOBBY);
+            final Intent i = new Intent(this, LobbyActivity.class);
+            startActivity(i);
         }
     }
 
     @Override
     public void addressBookUpdated() {
         addressBookOk = true;
-        updateProgressDialogMessage();
         checkAndGo();
     }
 
     @Override
     public void addressBookUpdateFailed(ReservatorException e) {
         addressBookOk = false;
-
-        if (pd != null)
-            pd.dismiss();
-        Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
-        setContentView(R.layout.login_activity);
+        // return to config
+        showWizard();
     }
 
-    public void showFatalErrorDialog(String title, String errorMsg) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-
-        builder.setMessage(errorMsg)
-            .setTitle(title)
-            .setPositiveButton(R.string.close, new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int id) {
-                    LoginActivity.this.finish();
-                }
-            });
-
-        builder.create().show();
+    private void showWizard() {
+        final Intent i = new Intent(this, WizardActivity.class);
+        startActivity(i);
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    protected void onActivityResult(
+            int requestCode, int resultCode, Intent data) {
         finish();
     }
+
+    @Override
+    public void onRequestPermissionsResult(
+            int requestCode,
+            String permissions[], int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions,
+                                         grantResults);
+        switch (requestCode) {
+            case PERMISSIONS_REQUEST: {
+                if (grantResults.length >= 3
+                    && grantResults[0] == PackageManager.PERMISSION_GRANTED &&
+                    grantResults[1] == PackageManager.PERMISSION_GRANTED &&
+                    grantResults[2] == PackageManager.PERMISSION_GRANTED) {
+                    havePermissions = true;
+                    checkCalendarAndFetchEntries();
+                } else {
+                    finish();
+                }
+                return;
+            }
+
+
+        }
+    }
 }
+
