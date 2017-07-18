@@ -54,4 +54,6 @@
     <string name="calendarResourcesHelpText">If this option is enabled, non-resource calendars will be shown.</string>
     <string name="permission_request_title">Permission Request</string>
     <string name="permission_request_reason">We need your permission to access your contacts and calendar in order for the app to work.</string>
+    <string name="PREFERENCES_NAME">ReservatorPreferences</string>
+    <string name="PREFERENCES_ROOM_NAME">roomName</string>
 </resources>
