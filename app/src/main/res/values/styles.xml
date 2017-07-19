@@ -36,7 +36,7 @@
 
     <style name="DigitalClockStyle">
         <item name="android:textColor">@color/TimeSpanTextColor</item>
-        <item name="android:textSize">64sp</item>
+        <item name="android:textSize">@dimen/digitalClockTextSize</item>
     </style>
 
     <color name="FutuLightGreen">#cbdeb2</color>
