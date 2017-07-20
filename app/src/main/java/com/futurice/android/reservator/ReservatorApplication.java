@@ -58,11 +58,6 @@ public class ReservatorApplication extends Application {
         return addressBook;
     }
 
-    @Override
-    public void onCreate() {
-        resetDataProxy();
-    }
-
     private void clearCacheLater() {
         handler.postDelayed(clearAddressCache, ADDRESS_CACHE_CLEAR_INTERVAL);
     }
