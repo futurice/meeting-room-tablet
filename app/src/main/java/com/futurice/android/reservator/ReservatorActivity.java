@@ -6,6 +6,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.view.WindowManager;
 import android.widget.Toast;
+
 import com.futurice.android.reservator.common.PreferenceManager;
 import com.futurice.android.reservator.model.ReservatorException;
 import com.futurice.android.reservator.model.Room;
@@ -38,7 +39,6 @@ public class ReservatorActivity extends Activity {
         stopAutoGoToFavouriteRoom();
         startAutoGoToFavouriteRoom();
     }
-
 
 
     /**
@@ -96,7 +96,7 @@ public class ReservatorActivity extends Activity {
                     room = activity.getResApplication().getDataProxy().getRoomWithName(roomName);
                 } catch (ReservatorException ex) {
                     Toast err = Toast.makeText(activity, ex.getMessage(),
-                        Toast.LENGTH_LONG);
+                            Toast.LENGTH_LONG);
                     err.show();
                     return;
                 }
