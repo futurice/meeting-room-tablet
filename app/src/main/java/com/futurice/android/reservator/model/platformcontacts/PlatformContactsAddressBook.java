@@ -28,12 +28,12 @@ public class PlatformContactsAddressBook extends AddressBook {
         Vector<AddressBookEntry> entries = new Vector<AddressBookEntry>();
 
         String[] mProjection = {
-            ContactsContract.RawContacts._ID,
-            ContactsContract.RawContacts.DISPLAY_NAME_PRIMARY};
+                ContactsContract.RawContacts._ID,
+                ContactsContract.RawContacts.DISPLAY_NAME_PRIMARY};
 
         String mSelectionClause =
-            ContactsContract.RawContacts.ACCOUNT_TYPE + " = ? AND " +
-                ContactsContract.RawContacts.DELETED + " = 0";
+                ContactsContract.RawContacts.ACCOUNT_TYPE + " = ? AND " +
+                        ContactsContract.RawContacts.DELETED + " = 0";
 
         String[] mSelectionArgs;
         if (account != null) {
@@ -46,11 +46,11 @@ public class PlatformContactsAddressBook extends AddressBook {
         String mSortOrder = null;
 
         Cursor result = resolver.query(
-            ContactsContract.RawContacts.CONTENT_URI,
-            mProjection,
-            mSelectionClause,
-            mSelectionArgs,
-            mSortOrder);
+                ContactsContract.RawContacts.CONTENT_URI,
+                mProjection,
+                mSelectionClause,
+                mSelectionArgs,
+                mSortOrder);
 
         if (result != null) {
             if (result.getCount() > 0) {
@@ -78,11 +78,11 @@ public class PlatformContactsAddressBook extends AddressBook {
         String mSortOrder = null;
 
         Cursor result = resolver.query(
-            ContactsContract.CommonDataKinds.Email.CONTENT_URI,
-            mProjection,
-            mSelectionClause,
-            mSelectionArgs,
-            mSortOrder);
+                ContactsContract.CommonDataKinds.Email.CONTENT_URI,
+                mProjection,
+                mSelectionClause,
+                mSelectionArgs,
+                mSortOrder);
 
         if (result != null) {
             if (result.getCount() > 0) {
