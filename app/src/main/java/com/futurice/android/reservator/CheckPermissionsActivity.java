@@ -5,10 +5,12 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 
 public class CheckPermissionsActivity extends AppCompatActivity {
 
@@ -19,8 +21,17 @@ public class CheckPermissionsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_check_permissions);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
         if (!isPermitted) {
             isPermitted = checkPermissions();
+            if (isPermitted) {
+                ((ReservatorApplication) getApplication()).resetDataProxy();
+                startLoginActivity();
+            }
         } else {
             ((ReservatorApplication) getApplication()).resetDataProxy();
             startLoginActivity();
@@ -30,6 +41,7 @@ public class CheckPermissionsActivity extends AppCompatActivity {
     private void startLoginActivity() {
         Intent i = new Intent(this, LoginActivity.class);
         startActivity(i);
+        finish();
     }
 
     public boolean checkPermissions() {
