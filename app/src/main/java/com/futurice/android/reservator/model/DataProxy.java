@@ -25,7 +25,7 @@ public abstract class DataProxy {
      * @return the rooms
      * @throws ReservatorException
      */
-    abstract public Vector<Room> getRooms();
+    abstract public Vector<Room> getRooms() throws ReservatorException;
 
     /**
      * Synchronously get a list of reservations mapped to a room. The reservations are not updated to the room.
@@ -66,7 +66,7 @@ public abstract class DataProxy {
      * @return array of all room names
      * @throws ReservatorException
      */
-    public ArrayList<String> getRoomNames() {
+    public ArrayList<String> getRoomNames() throws ReservatorException {
         Vector<Room> rooms = getRooms();
         ArrayList<String> roomNames = new ArrayList<String>();
         Iterator<Room> it = rooms.iterator();
@@ -150,7 +150,12 @@ public abstract class DataProxy {
 
         @Override
         protected Vector<Room> doInBackground(Void... params) {
-            return getRooms();
+            try {
+                return getRooms();
+            } catch (ReservatorException e) {
+                this.e = e;
+                return null;
+            }
         }
 
         @Override

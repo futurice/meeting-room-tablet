@@ -1,5 +1,7 @@
 package com.futurice.android.reservator.model.platformcontacts;
 
+import java.util.Vector;
+
 import android.content.ContentResolver;
 import android.database.Cursor;
 import android.provider.ContactsContract;
@@ -7,8 +9,6 @@ import android.provider.ContactsContract;
 import com.futurice.android.reservator.model.AddressBook;
 import com.futurice.android.reservator.model.AddressBookEntry;
 import com.futurice.android.reservator.model.ReservatorException;
-
-import java.util.Vector;
 
 public class PlatformContactsAddressBook extends AddressBook {
     private final String GOOGLE_ACCOUNT_TYPE = "com.google";
@@ -28,12 +28,12 @@ public class PlatformContactsAddressBook extends AddressBook {
         Vector<AddressBookEntry> entries = new Vector<AddressBookEntry>();
 
         String[] mProjection = {
-                ContactsContract.RawContacts._ID,
-                ContactsContract.RawContacts.DISPLAY_NAME_PRIMARY};
+            ContactsContract.RawContacts._ID,
+            ContactsContract.RawContacts.DISPLAY_NAME_PRIMARY};
 
         String mSelectionClause =
-                ContactsContract.RawContacts.ACCOUNT_TYPE + " = ? AND " +
-                        ContactsContract.RawContacts.DELETED + " = 0";
+            ContactsContract.RawContacts.ACCOUNT_TYPE + " = ? AND " +
+                ContactsContract.RawContacts.DELETED + " = 0";
 
         String[] mSelectionArgs;
         if (account != null) {
@@ -46,11 +46,11 @@ public class PlatformContactsAddressBook extends AddressBook {
         String mSortOrder = null;
 
         Cursor result = resolver.query(
-                ContactsContract.RawContacts.CONTENT_URI,
-                mProjection,
-                mSelectionClause,
-                mSelectionArgs,
-                mSortOrder);
+            ContactsContract.RawContacts.CONTENT_URI,
+            mProjection,
+            mSelectionClause,
+            mSelectionArgs,
+            mSortOrder);
 
         if (result != null) {
             if (result.getCount() > 0) {
@@ -78,11 +78,11 @@ public class PlatformContactsAddressBook extends AddressBook {
         String mSortOrder = null;
 
         Cursor result = resolver.query(
-                ContactsContract.CommonDataKinds.Email.CONTENT_URI,
-                mProjection,
-                mSelectionClause,
-                mSelectionArgs,
-                mSortOrder);
+            ContactsContract.CommonDataKinds.Email.CONTENT_URI,
+            mProjection,
+            mSelectionClause,
+            mSelectionArgs,
+            mSortOrder);
 
         if (result != null) {
             if (result.getCount() > 0) {

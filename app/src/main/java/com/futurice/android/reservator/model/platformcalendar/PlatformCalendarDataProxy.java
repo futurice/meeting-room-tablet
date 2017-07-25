@@ -1,7 +1,5 @@
 package com.futurice.android.reservator.model.platformcalendar;
 
-import java.lang.reflect.Array;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.HashMap;
@@ -19,7 +17,6 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.provider.CalendarContract;
 import android.net.Uri;
-import android.text.TextUtils;
 import android.util.Log;
 import android.accounts.AccountManager;
 import android.accounts.Account;
@@ -38,21 +35,6 @@ import com.futurice.android.reservator.model.TimeSpan;
  * @author vsin
  */
 public class PlatformCalendarDataProxy extends DataProxy {
-
-    public enum Mode {
-        // Filters Google Resources, only available for App users
-        RESOURCES("*@resource.calendar.google.com"),
-        // Shows all calendars by default
-        CALENDARS(null);
-
-        private String resourcesGlob = null;
-        private Mode(String resourcesGlob)
-        {
-            this.resourcesGlob = resourcesGlob;
-        }
-
-    }
-
     private static final Pattern idPattern = Pattern.compile("^(\\d+)(-.*)?");
     private final String DEFAULT_MEETING_NAME = "Reserved";
     private final String GOOGLE_ACCOUNT_TYPE = "com.google";
@@ -78,7 +60,7 @@ public class PlatformCalendarDataProxy extends DataProxy {
     TimeZone SYSTEM_TZ = java.util.Calendar.getInstance().getTimeZone();
     private ContentResolver resolver;
     private AccountManager accountManager;
-    private Mode calendarMode;
+    private String roomAccountGlob;
     // Two-level data structure that stores locally created reservations
     // for each room until they get synced. Access but altering the Set objects
     // or modifying the structure of the Map must be within a synchronized block.
@@ -88,12 +70,12 @@ public class PlatformCalendarDataProxy extends DataProxy {
     /**
      * @param resolver       From application context. Used to access the platform's Calendar Provider.
      * @param accountManager From application context. Allows us to initiate a sync immediately after adding a reservation.
-     * @param calendarMode   Specifies whether all calendars are considered or only resources.
+     * @param accountGlob    SQLite glob pattern that selects room calendar accounts.
      */
-    public PlatformCalendarDataProxy(ContentResolver resolver, AccountManager accountManager, Mode calendarMode) {
+    public PlatformCalendarDataProxy(ContentResolver resolver, AccountManager accountManager, String roomAccountGlob) {
         this.resolver = resolver;
         this.accountManager = accountManager;
-        this.calendarMode = calendarMode;
+        this.roomAccountGlob = roomAccountGlob;
     }
 
     // Non-ops
@@ -279,7 +261,7 @@ public class PlatformCalendarDataProxy extends DataProxy {
     }
 
     @Override
-    public Vector<Room> getRooms() {
+    public Vector<Room> getRooms() throws ReservatorException {
         setSyncOn();
 
         Vector<Room> rooms = new Vector<Room>();
@@ -290,26 +272,23 @@ public class PlatformCalendarDataProxy extends DataProxy {
             CalendarContract.Calendars.NAME,
             CalendarContract.Calendars.CALENDAR_LOCATION};
 
+        String mSelectionClause = CalendarContract.Calendars.OWNER_ACCOUNT + " GLOB ?";
 
-        ArrayList<String>  mSelectionClauses = new ArrayList<String>();
-        ArrayList<String> mSelectionArgs = new ArrayList<String>();
-
-        if (this.calendarMode == Mode.RESOURCES)
-        {
-            mSelectionClauses.add(CalendarContract.Calendars.OWNER_ACCOUNT + " GLOB ?");
-            mSelectionArgs.add(Mode.RESOURCES.resourcesGlob);
-        }
+        String[] mSelectionArgs;
         if (this.account != null) {
-            mSelectionClauses.add(CalendarContract.Calendars.ACCOUNT_NAME + " = ?");
-            mSelectionArgs.add(account);
+            mSelectionClause = mSelectionClause + " AND " + CalendarContract.Calendars.ACCOUNT_NAME + " = ?";
+            mSelectionArgs = new String[]{roomAccountGlob, account};
+        } else {
+            mSelectionArgs = new String[]{roomAccountGlob};
         }
+
         String mSortOrder = null;
 
         Cursor result = resolver.query(
             CalendarContract.Calendars.CONTENT_URI,
             mProjection,
-            TextUtils.join(" AND ", mSelectionClauses),
-            mSelectionArgs.toArray(new String[0]),
+            mSelectionClause,
+            mSelectionArgs,
             mSortOrder);
 
         if (result != null) {
@@ -317,6 +296,7 @@ public class PlatformCalendarDataProxy extends DataProxy {
                 result.moveToFirst();
                 do {
                     String name = result.getString(2);
+
                     String location = result.getString(3);
                     if (location == null || location.isEmpty()) {
                         location = name;
@@ -544,25 +524,17 @@ public class PlatformCalendarDataProxy extends DataProxy {
         setSyncOn();
 
         String[] mProjection = {};
-
-        ArrayList<String> mSelectionClauses = new ArrayList<String>();
-        ArrayList<String> mSelectionArgs = new ArrayList<String>();
-
-        if(this.calendarMode == Mode.RESOURCES)
-        {
-            mSelectionClauses.add(CalendarContract.Calendars.OWNER_ACCOUNT + " GLOB ?");
-            mSelectionArgs.add(Mode.RESOURCES.resourcesGlob);
-        }
-        mSelectionClauses.add(CalendarContract.Calendars.SYNC_EVENTS + " = 1");
-
-
+        String mSelectionClause =
+            CalendarContract.Calendars.OWNER_ACCOUNT + " GLOB ? AND " +
+                CalendarContract.Calendars.SYNC_EVENTS + " = 1";
+        String[] mSelectionArgs = {roomAccountGlob};
         String mSortOrder = null;
 
         Cursor result = resolver.query(
             CalendarContract.Calendars.CONTENT_URI,
             mProjection,
-            TextUtils.join(" AND ", mSelectionClauses),
-            mSelectionArgs.toArray(new String[0]),
+            mSelectionClause,
+            mSelectionArgs,
             mSortOrder);
 
         if (result == null) {
@@ -583,22 +555,14 @@ public class PlatformCalendarDataProxy extends DataProxy {
      */
     private void setSyncOn() {
         ContentValues mUpdateValues = new ContentValues();
-
-        String mSelectionClause = "";
-        ArrayList<String> mSelectionArgs = new ArrayList<String>();
-
-        if(this.calendarMode == Mode.RESOURCES)
-        {
-            mSelectionClause += CalendarContract.Calendars.OWNER_ACCOUNT + " GLOB ?";
-            mSelectionArgs.add(Mode.RESOURCES.resourcesGlob);
-        }
-
+        String mSelectionClause = CalendarContract.Calendars.OWNER_ACCOUNT + " GLOB ?";
+        String[] mSelectionArgs = {roomAccountGlob};
         mUpdateValues.put("SYNC_EVENTS", 1);
         resolver.update(
             CalendarContract.Calendars.CONTENT_URI,
             mUpdateValues,
             mSelectionClause,
-            mSelectionArgs.toArray(new String[0]));
+            mSelectionArgs);
     }
 
     public String getAccount() {
