@@ -6,8 +6,7 @@ Reservator
 
 Description
 -----------
-Reservator is an Android application for displaying and reserving meeting rooms. The application is recommended to use 
-Google’s resources as meeting rooms. If you want to add a room to the application, you have to create a calendar for your resource and sync your account with the tablet. 
+Reservator is an Android application for displaying and reserving meeting rooms. The application can be used with any Google account that you have. However, the application is recommended to be used with Google’s resources as meeting rooms. If you want to add a room to the application, you have to create a calendar for your resource and sync your account with the tablet. 
 [Help for sharing resources](https://support.google.com/a/answer/1034381?hl=en) and [for creating calendars for shared resources](https://support.google.com/calendar/answer/34584?hl=en). 
 We recommend setting up a unique Google account for the tablet itself.
 
