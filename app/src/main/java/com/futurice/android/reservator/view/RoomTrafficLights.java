@@ -1,26 +1,29 @@
 package com.futurice.android.reservator.view;
 
+import com.futurice.android.reservator.R;
+
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.test.suitebuilder.annotation.Suppress;
 import android.text.Html;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
-import com.futurice.android.reservator.R;
-import com.futurice.android.reservator.common.Helpers;
-import com.futurice.android.reservator.model.Reservation;
-import com.futurice.android.reservator.model.Room;
-import com.futurice.android.reservator.model.TimeSpan;
+import android.widget.Button;
 
 import java.util.Calendar;
-import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.Date;
+
+import com.futurice.android.reservator.common.Helpers;
+import com.futurice.android.reservator.model.Room;
+import com.futurice.android.reservator.model.Reservation;
+import com.futurice.android.reservator.model.TimeSpan;
 
 public class RoomTrafficLights extends RelativeLayout {
     private static Date lastTimeConnected = new Date(0);

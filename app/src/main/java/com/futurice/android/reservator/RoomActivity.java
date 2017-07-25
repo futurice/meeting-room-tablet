@@ -1,10 +1,15 @@
 package com.futurice.android.reservator;
 
+import java.util.Calendar;
+import java.util.Vector;
+
 import android.app.AlertDialog;
-import android.app.AlertDialog.Builder;
+import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.app.AlertDialog.Builder;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.DialogInterface.OnDismissListener;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -16,27 +21,29 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MenuItem.OnMenuItemClickListener;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.Window;
 import android.widget.TextView;
 import android.widget.Toast;
-import com.futurice.android.reservator.common.PreferenceManager;
+
 import com.futurice.android.reservator.model.AddressBook;
 import com.futurice.android.reservator.model.AddressBookUpdatedListener;
 import com.futurice.android.reservator.model.CachedDataProxy;
 import com.futurice.android.reservator.model.DataProxy;
 import com.futurice.android.reservator.model.DataUpdatedListener;
 import com.futurice.android.reservator.model.DateTime;
-import com.futurice.android.reservator.model.Reservation;
 import com.futurice.android.reservator.model.ReservatorException;
 import com.futurice.android.reservator.model.Room;
 import com.futurice.android.reservator.model.TimeSpan;
-import com.futurice.android.reservator.view.EditReservationPopup;
+import com.futurice.android.reservator.model.Reservation;
 import com.futurice.android.reservator.view.LobbyReservationRowView;
+import com.futurice.android.reservator.view.LobbyReservationRowView.OnReserveListener;
 import com.futurice.android.reservator.view.RoomReservationPopup;
+import com.futurice.android.reservator.view.EditReservationPopup;
 import com.futurice.android.reservator.view.RoomTrafficLights;
 import com.futurice.android.reservator.view.WeekView;
-import java.util.Calendar;
-import java.util.Vector;
+import com.futurice.android.reservator.view.WeekView.OnFreeTimeClickListener;
+import com.futurice.android.reservator.view.WeekView.OnReservationClickListener;
 
 public class RoomActivity extends ReservatorActivity implements OnMenuItemClickListener,
     DataUpdatedListener, AddressBookUpdatedListener {
@@ -77,41 +84,6 @@ public class RoomActivity extends ReservatorActivity implements OnMenuItemClickL
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        initRoomActivity();
-    }
-
-    @Override
-    public void onResume() {
-        proxy = this.getResApplication().getDataProxy();
-        proxy.addDataUpdatedListener(this);
-        refreshData();
-        startAutoRefreshData();
-        super.onResume();
-        trafficLights.enable();
-    }
-
-    @Override
-    public void onPause() {
-        stopAutoRefreshData();
-        super.onPause();
-        this.getResApplication().getDataProxy().removeDataUpdatedListener(this);
-        if (progressDialog != null) {
-            progressDialog.dismiss();
-            progressDialog = null;
-        }
-        showLoadingCount = 0;
-        trafficLights.disable();
-    }
-
-    private void setRoom(Room r) {
-        currentRoom = r;
-        roomNameLabel
-            .setText(currentRoom.getName());
-        weekView.refreshData(currentRoom);
-        trafficLights.update(currentRoom);
-    }
-
-    private void initRoomActivity() {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.room_activity);
         this.weekView = (WeekView) findViewById(R.id.weekView1);
@@ -128,14 +100,14 @@ public class RoomActivity extends ReservatorActivity implements OnMenuItemClickL
         }
 
         findViewById(R.id.seeAllRoomsButton).setOnClickListener(
-            new View.OnClickListener() {
+            new OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     RoomActivity.this.finish();
                 }
             });
 
-        weekView.setOnFreeTimeClickListener(new WeekView.OnFreeTimeClickListener() {
+        weekView.setOnFreeTimeClickListener(new OnFreeTimeClickListener() {
             @Override
             public void onFreeTimeClick(View v, TimeSpan timeSpan, DateTime touch) {
 
@@ -168,9 +140,8 @@ public class RoomActivity extends ReservatorActivity implements OnMenuItemClickL
                     }
                 }
 
-                final RoomReservationPopup
-                    d = new RoomReservationPopup(RoomActivity.this, timeSpan, reservationTimeSpan, currentRoom);
-                d.setOnReserveCallback(new LobbyReservationRowView.OnReserveListener() {
+                final RoomReservationPopup d = new RoomReservationPopup(RoomActivity.this, timeSpan, reservationTimeSpan, currentRoom);
+                d.setOnReserveCallback(new OnReserveListener() {
                     @Override
                     public void call(LobbyReservationRowView v) {
                         d.dismiss();
@@ -179,7 +150,7 @@ public class RoomActivity extends ReservatorActivity implements OnMenuItemClickL
                 });
 
                 RoomActivity.this.trafficLights.disable();
-                d.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                d.setOnDismissListener(new OnDismissListener() {
                     @Override
                     public void onDismiss(DialogInterface dialog) {
                         RoomActivity.this.trafficLights.enable();
@@ -208,7 +179,7 @@ public class RoomActivity extends ReservatorActivity implements OnMenuItemClickL
                 }
 
                 final RoomReservationPopup d = new RoomReservationPopup(RoomActivity.this, limits, suggested, currentRoom);
-                d.setOnReserveCallback(new LobbyReservationRowView.OnReserveListener() {
+                d.setOnReserveCallback(new OnReserveListener() {
                     @Override
                     public void call(LobbyReservationRowView v) {
                         d.dismiss();
@@ -217,7 +188,7 @@ public class RoomActivity extends ReservatorActivity implements OnMenuItemClickL
                 });
 
                 RoomActivity.this.trafficLights.disable();
-                d.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                d.setOnDismissListener(new OnDismissListener() {
                     @Override
                     public void onDismiss(DialogInterface dialog) {
                         RoomActivity.this.trafficLights.enable();
@@ -228,11 +199,10 @@ public class RoomActivity extends ReservatorActivity implements OnMenuItemClickL
             }
         });
 
-        weekView.setOnReservationClickListener(new WeekView.OnReservationClickListener() {
+        weekView.setOnReservationClickListener(new OnReservationClickListener() {
             @Override
             public void onReservationClick(View v, Reservation reservation) {
-                final EditReservationPopup
-                    d = new EditReservationPopup(RoomActivity.this, reservation, currentRoom,
+                final EditReservationPopup d = new EditReservationPopup(RoomActivity.this, reservation, currentRoom,
                     new EditReservationPopup.OnReservationCancelledListener() {
                         @Override
                         public void onReservationCancelled(Reservation r) {
@@ -241,7 +211,7 @@ public class RoomActivity extends ReservatorActivity implements OnMenuItemClickL
                     });
 
                 RoomActivity.this.trafficLights.disable();
-                d.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                d.setOnDismissListener(new OnDismissListener() {
                     @Override
                     public void onDismiss(DialogInterface dialog) {
                         RoomActivity.this.trafficLights.enable();
@@ -251,6 +221,37 @@ public class RoomActivity extends ReservatorActivity implements OnMenuItemClickL
                 d.show();
             }
         });
+    }
+
+    @Override
+    public void onResume() {
+        proxy = this.getResApplication().getDataProxy();
+        proxy.addDataUpdatedListener(this);
+        refreshData();
+        startAutoRefreshData();
+        super.onResume();
+        trafficLights.enable();
+    }
+
+    @Override
+    public void onPause() {
+        stopAutoRefreshData();
+        super.onPause();
+        this.getResApplication().getDataProxy().removeDataUpdatedListener(this);
+        if (progressDialog != null) {
+            progressDialog.dismiss();
+            progressDialog = null;
+        }
+        showLoadingCount = 0;
+        trafficLights.disable();
+    }
+
+    private void setRoom(Room r) {
+        currentRoom = r;
+        roomNameLabel
+            .setText(currentRoom.getName());
+        weekView.refreshData(currentRoom);
+        trafficLights.update(currentRoom);
     }
 
     @Override
@@ -294,11 +295,8 @@ public class RoomActivity extends ReservatorActivity implements OnMenuItemClickL
 
     @Override
     protected Boolean isPrehensible() {
-        String favouriteRoomName = PreferenceManager.getInstance(this).getSelectedRoom();
-        System.out.println("Is prehensible: " + favouriteRoomName);
-
-        // jump to another room if we have a selected room AND we are not displaying it atm
-        return (favouriteRoomName != null) && (!favouriteRoomName.equals(currentRoom.getName()));
+        String favouriteRoomName = getResApplication().getFavouriteRoomName();
+        return !(currentRoom.getName().equals(favouriteRoomName));
     }
 
     @Override

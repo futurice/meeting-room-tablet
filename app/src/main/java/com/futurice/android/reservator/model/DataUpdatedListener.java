@@ -8,9 +8,9 @@ import java.util.Vector;
  * @author vman
  */
 public interface DataUpdatedListener {
-    void roomListUpdated(Vector<Room> rooms);
+    public void roomListUpdated(Vector<Room> rooms);
 
-    void roomReservationsUpdated(Room room);
+    public void roomReservationsUpdated(Room room);
 
-    void refreshFailed(ReservatorException ex);
+    public void refreshFailed(ReservatorException ex);
 }

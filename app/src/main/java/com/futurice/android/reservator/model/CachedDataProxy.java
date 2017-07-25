@@ -28,13 +28,13 @@ public class CachedDataProxy extends DataProxy {
         if (reservations == null) {
             Log.d("CACHE", "getRoomReservations -- " + r.getEmail());
             reservations = dataProxy.getRoomReservations(r);
-       }
+        }
         reservationCache.put(r.getEmail(), reservations, CACHE_RESERVATION_FOR);
         return reservations;
     }
 
     @Override
-    public Vector<Room> getRooms() {
+    public Vector<Room> getRooms() throws ReservatorException {
         // TODO: do not cache forever
         if (this.rooms == null) {
             Log.d("CACHE", "getRooms");

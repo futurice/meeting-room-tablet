@@ -1,5 +1,9 @@
 package com.futurice.android.reservator;
 
+import com.futurice.android.reservator.ReservatorApplication;
+import com.futurice.android.reservator.model.ReservatorException;
+import com.futurice.android.reservator.model.Room;
+
 import android.app.Activity;
 import android.os.Bundle;
 import android.os.Handler;
@@ -7,16 +11,10 @@ import android.os.Message;
 import android.view.WindowManager;
 import android.widget.Toast;
 
-import com.futurice.android.reservator.common.PreferenceManager;
-import com.futurice.android.reservator.model.ReservatorException;
-import com.futurice.android.reservator.model.Room;
-
-
 public class ReservatorActivity extends Activity {
 
     private final ReservatorAppHandler handler = new ReservatorAppHandler();
     private GoToFavouriteRoom goToFavouriteRoomRunable;
-    protected boolean havePermissions = false;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,7 +37,6 @@ public class ReservatorActivity extends Activity {
         stopAutoGoToFavouriteRoom();
         startAutoGoToFavouriteRoom();
     }
-
 
     /**
      * @return Identical to getApplication, but returns a ReservatorApplication.
@@ -69,7 +66,9 @@ public class ReservatorActivity extends Activity {
     }
 
     private void stopAutoGoToFavouriteRoom() {
-        handler.removeCallbacks(goToFavouriteRoomRunable);
+        if (isPrehensible()) {
+            handler.removeCallbacks(goToFavouriteRoomRunable);
+        }
     }
 
     static class ReservatorAppHandler extends Handler {
@@ -89,14 +88,14 @@ public class ReservatorActivity extends Activity {
 
         @Override
         public void run() {
-            String roomName = PreferenceManager.getInstance(getApplicationContext()).getSelectedRoom();
-            if (roomName != null) {
+            String roomName = activity.getResApplication().getFavouriteRoomName();
+            if (roomName != getString(R.string.lobbyRoomName)) {
                 Room room;
                 try {
                     room = activity.getResApplication().getDataProxy().getRoomWithName(roomName);
                 } catch (ReservatorException ex) {
                     Toast err = Toast.makeText(activity, ex.getMessage(),
-                            Toast.LENGTH_LONG);
+                        Toast.LENGTH_LONG);
                     err.show();
                     return;
                 }
