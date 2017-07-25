@@ -1,138 +1,92 @@
 package com.futurice.android.reservator;
 
-import android.app.AlertDialog;
-import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
-import android.view.MenuItem;
-import android.widget.Toast;
-import android.content.DialogInterface;
-
+import com.futurice.android.reservator.common.PreferenceManager;
 import com.futurice.android.reservator.model.AddressBook;
 import com.futurice.android.reservator.model.AddressBookUpdatedListener;
 import com.futurice.android.reservator.model.ReservatorException;
 
-public class LoginActivity extends ReservatorActivity implements AddressBookUpdatedListener {
+public class LoginActivity extends ReservatorActivity
+    implements AddressBookUpdatedListener {
 
-    static final int REQUEST_LOBBY = 0;
-    MenuItem settingsMenu;
-    private ProgressDialog pd;
-    private boolean addressBookOk = false;
-    private boolean roomListOk = false;
-    private SharedPreferences preferences;
-    private Editor editor;
+  private boolean addressBookOk = false;
+  private boolean roomListOk = false;
 
-    /**
-     * Called when the activity is first created.
-     */
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.login_activity);
+  /**
+   * Called when the activity is first created.
+   */
+  @Override
+  public void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
 
-        if (pd != null) {
-            pd.dismiss();
-        }
-
-        preferences = getSharedPreferences(this.getString(R.string.PREFERENCES_NAME), Context.MODE_PRIVATE);
-        editor = preferences.edit();
-
-        // Check Google Calendar
-        if (getResApplication().getDataProxy().hasFatalError()) {
-            showFatalErrorDialog(
-                getString(R.string.calendarError),
-                getString(R.string.noCalendarsError));
-            return;
-        } else {
-            roomListOk = true;
-        }
-
-        AddressBook ab = this.getResApplication().getAddressBook();
-        ab.refetchEntries();
+    if (!PreferenceManager.getInstance(this)
+        .getApplicationConfigured()) {
+      showWizard();
+      return;
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
+    setContentView(R.layout.login_activity);
 
-        AddressBook ab = this.getResApplication().getAddressBook();
-        ab.addDataUpdatedListener(this);
-        checkAndGo();
+    checkCalendarAndFetchEntries();
+  }
+
+  private void checkCalendarAndFetchEntries() {
+    if (getResApplication().getDataProxy().hasFatalError()) {
+      showWizard();
+      return;
+    } else {
+      roomListOk = true;
     }
+  }
 
-    public void onPause() {
-        super.onPause();
+  @Override
+  public void onResume() {
+    super.onResume();
 
-        AddressBook ab = this.getResApplication().getAddressBook();
-        ab.removeDataUpdatedListener(this);
+    AddressBook ab = this.getResApplication().getAddressBook();
+    ab.addDataUpdatedListener(this);
+    ab.refetchEntries();
+    checkAndGo();
+  }
+
+  public void onPause() {
+    super.onPause();
+
+    AddressBook ab = this.getResApplication().getAddressBook();
+    ab.removeDataUpdatedListener(this);
+  }
+
+  private void checkAndGo() {
+    if (addressBookOk && roomListOk) {
+
+      final Intent i = new Intent(this, LobbyActivity.class);
+      startActivity(i);
     }
+  }
 
-    private void updateProgressDialogMessage() {
-        if (pd == null)
-            return;
+  @Override
+  public void addressBookUpdated() {
+    addressBookOk = true;
+    checkAndGo();
+  }
 
-        String s = "";
+  @Override
+  public void addressBookUpdateFailed(ReservatorException e) {
+    addressBookOk = false;
+    // return to config
+    showWizard();
+  }
 
-        if (roomListOk)
-            s += "Google Calendar ok\n";
-        else
-            s += "Google Calendar pending...\n";
+  private void showWizard() {
+    final Intent i = new Intent(this, WizardActivity.class);
+    startActivity(i);
+  }
 
-        if (addressBookOk)
-            s += "Google Contacts ok\n";
-        else
-            s += "Google Contacts pending...\n";
-
-        pd.setMessage(s);
-    }
-
-    private void checkAndGo() {
-        if (addressBookOk && roomListOk) {
-            editor.apply();
-            if (pd != null)
-                pd.dismiss();
-
-            Intent i = new Intent(this, AccountSelection.class);
-            startActivityForResult(i, REQUEST_LOBBY);
-        }
-    }
-
-    @Override
-    public void addressBookUpdated() {
-        addressBookOk = true;
-        updateProgressDialogMessage();
-        checkAndGo();
-    }
-
-    @Override
-    public void addressBookUpdateFailed(ReservatorException e) {
-        addressBookOk = false;
-
-        if (pd != null)
-            pd.dismiss();
-        Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
-        setContentView(R.layout.login_activity);
-    }
-
-    public void showFatalErrorDialog(String title, String errorMsg) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-
-        builder.setMessage(errorMsg)
-            .setTitle(title)
-            .setPositiveButton(R.string.close, new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int id) {
-                    LoginActivity.this.finish();
-                }
-            });
-
-        builder.create().show();
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        finish();
-    }
+  @Override
+  protected void onActivityResult(
+      int requestCode, int resultCode, Intent data) {
+    finish();
+  }
 }
+
