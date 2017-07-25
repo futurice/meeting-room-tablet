@@ -5,10 +5,9 @@
                 android:background="#fff"
                 android:gravity="center"
                 android:padding="0dip">
-
-    <TextView
-        android:id="@+id/textView1"
+    <ProgressBar
+        android:layout_gravity="center"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/loadingText"/>
+        android:layout_height="wrap_content" />
+
 </RelativeLayout>
