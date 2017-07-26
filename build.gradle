@@ -12,5 +12,18 @@ allprojects {
         jcenter()
     }
 }
-dependencies {
+
+ext {
+
+    // Android SDK and Tools
+    minSdkVersion = 16
+    targetSdkVersion = 25
+    compileSdkVersion = 25
+    buildToolsVersion = '25.0.0'
+
+    // Libraries Dependencies
+    appintroVersion = '4.1.0'
+    supportLibraryVersion = '25.3.1'
+    appCompatVesion = '25.3.1'
+
 }
