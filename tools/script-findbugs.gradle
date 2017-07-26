@@ -1,0 +1,15 @@
+apply plugin: 'findbugs'
+
+task findbugs(type: FindBugs) {
+    ignoreFailures true
+    excludeFilter = file("$project.rootDir/tools/rules-findbugs.xml")
+    classes = fileTree("$project.buildDir/intermediates/classes/dev/debug/com/futurice/android/reservator")
+    source = fileTree("$project.rootDir/src/main/java/com/futurice/android/reservator")
+    classpath = files()
+
+    reports {
+        xml.enabled = false
+        html.enabled = true
+        html.destination = "$project.buildDir/outputs/findbugs/findbugs.html"
+    }
+}

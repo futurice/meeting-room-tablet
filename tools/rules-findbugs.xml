@@ -1,0 +1,10 @@
+<FindBugsFilter>
+    <Bug pattern="SF_SWITCH_NO_DEFAULT" />
+    <Bug pattern="SF_SWITCH_FALLTHROUGH" />
+    <Match>
+        <Class name="~.*\.R\$.*" />
+    </Match>
+    <Match>
+        <Class name="~.*\.Manifest\$.*" />
+    </Match>
+</FindBugsFilter>
