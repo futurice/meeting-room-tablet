@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="hello">ようこそ、Reservator!</string>
+    <!--<string name="hello">ようこそ、Reservator!</string>-->
     <string name="app_name">Reservator</string>
-    <string name="get_a_room">会議室を予約しましょう!</string>
+    <!--<string name="get_a_room">会議室を予約しましょう!</string>-->
     <string name="start">開始</string>
     <string name="end">終了</string>
     <string name="reserve">予約</string>
