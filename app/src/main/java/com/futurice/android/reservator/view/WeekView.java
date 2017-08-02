@@ -17,23 +17,27 @@ import com.futurice.android.reservator.model.Reservation;
 import com.futurice.android.reservator.model.Room;
 import com.futurice.android.reservator.model.TimeSpan;
 
+import butterknife.BindView;
+
 public class WeekView extends RelativeLayout implements OnClickListener {
 
     public static final int NUMBER_OF_DAYS_TO_SHOW = 10;
     public static final int DAY_START_TIME = 60 * 8; // minutes from midnight
     public static final int DAY_END_TIME = 60 * 20;
-
     public static final int NORMALIZATION_START_HOUR = 20;
 
-    private FrameLayout calendarFrame = null;
     private OnFreeTimeClickListener onFreeTimeClickListener = null;
     private OnReservationClickListener onReservationClickListener = null;
+
+    @BindView(R.id.frameLayout1)
+    private FrameLayout calendarFrame;
+
     public WeekView(Context context) {
-        this(context, null);
+        super(context);
     }
 
     public WeekView(Context context, AttributeSet attrs) {
-        this(context, attrs, 0);
+        super(context, attrs);
     }
 
     public WeekView(Context context, AttributeSet attrs, int defStyle) {
@@ -41,7 +45,6 @@ public class WeekView extends RelativeLayout implements OnClickListener {
     }
 
     public void refreshData(Room room) {
-        calendarFrame = (FrameLayout) findViewById(R.id.frameLayout1);
         calendarFrame.removeAllViews();
         List<Reservation> reservations = new ArrayList<Reservation>();
 
@@ -80,7 +83,6 @@ public class WeekView extends RelativeLayout implements OnClickListener {
         cv.setReservations(reservations);
         calendarFrame.addView(cv, LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
         cv.setOnClickListener(this);
-        return;
     }
 
     public void setOnFreeTimeClickListener(OnFreeTimeClickListener onFreeTimeClickListener) {
@@ -113,84 +115,11 @@ public class WeekView extends RelativeLayout implements OnClickListener {
         }
     }
 
-    // TODO What is this? If this is unusable, remove the commented section when cleaning up
-    /*
-        calendarView = new CalendarView(getContext());
-
-        DateTime today = new DateTime().stripTime();
-
-        DateTime day = today.set(Calendar.HOUR_OF_DAY, 8);
-        for (int i = 0; i < NUMBER_OF_DAYS_TO_SHOW; i++, day = day.add(Calendar.DAY_OF_YEAR, 1)) {
-            // Skip weekend days
-            if (day.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY || day.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) {
-                i -= 1;
-                continue;
-            }
-
-            DateTime endOfDay = day.set(Calendar.HOUR_OF_DAY, 18);
-
-            calendarView.addDay(day);
-
-            List<Reservation> daysReservations = room.getReservationsForDay(day);
-
-            if (daysReservations.isEmpty()) {
-                addFreeMarker(day, endOfDay);
-            } else {
-                Reservation first = daysReservations.get(0);
-                if (first.getStartTime().after(day)) {
-                    addFreeMarker(day, first.getStartTime());
-                }
-                for (int j = 0; j < daysReservations.size(); j++) {
-                    Reservation current = daysReservations.get(j);
-                    addReservedMarker(current);
-                    if (j < daysReservations.size() - 1) {
-                        Reservation next = daysReservations.get(j + 1);
-                        if(next.getStartTime().after(current.getEndTime())){
-                            addFreeMarker(current.getEndTime(), next.getStartTime());
-                        }
-                    }
-                }
-                Reservation last = daysReservations.get(daysReservations.size() - 1);
-                if(last.getEndTime().before(endOfDay)){
-                    addFreeMarker(last.getEndTime(), endOfDay);
-                }
-            }
-        }
-        addDisabledMarker(today, new DateTime());
-        calendarFrame.addView(calendarView, LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
-
-    }
-*/
-    public static interface OnFreeTimeClickListener {
-        abstract void onFreeTimeClick(View v, TimeSpan timeSpan, DateTime clickTime);
+    public interface OnFreeTimeClickListener {
+        void onFreeTimeClick(View v, TimeSpan timeSpan, DateTime clickTime);
     }
 
-    public static interface OnReservationClickListener {
-        abstract void onReservationClick(View v, Reservation r);
+    public interface OnReservationClickListener {
+        void onReservationClick(View v, Reservation r);
     }
-/*
-    private void addFreeMarker(DateTime startTime, DateTime endTime) {
-        if(startTime.after(endTime)){
-            throw new IllegalArgumentException("starTime must be before endTime");
-        }
-        CalendarMarker marker = calendarView.addMarker(startTime, endTime);
-        marker.setOnClickListener(this);
-        marker.setReserved(false);
-    }
-    private void addDisabledMarker(DateTime startTime, DateTime endTime){
-        if(startTime.after(endTime)){
-            throw new IllegalArgumentException("starTime must be before endTime");
-        }
-        CalendarMarker marker = calendarView.addMarker(startTime, endTime);
-        marker.setClickable(true); //blocks clicks from views it covers
-        marker.setReserved(true);
-        marker.setBackgroundColor(getResources().getColor(R.color.CalendarDisabledColor));
-    }
-    private void addReservedMarker(Reservation r) {
-        CalendarMarker marker = calendarView.addMarker(r.getStartTime(),
-                r.getEndTime());
-        marker.setText(r.getSubject());
-        marker.setReserved(true);
-    }
-*/
 }

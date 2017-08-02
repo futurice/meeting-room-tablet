@@ -17,7 +17,7 @@
             android:id="@+id/roomReservationView1"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
+            android:layout_gravity="center"
             android:background="@drawable/popup_background"
             android:padding="10dp"/>
     </FrameLayout>

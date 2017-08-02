@@ -13,10 +13,10 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.view.View.OnClickListener;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class CustomTimeSpanPicker2 extends FrameLayout implements OnClickListener {
-    View startMinus, startPlus, endMinus, endPlus;
-    TextView startLabel, endLabel;
-    TimeBarView timeBar;
     DateTime currentDay;
 
     int currentTimeStart;
@@ -28,8 +28,29 @@ public class CustomTimeSpanPicker2 extends FrameLayout implements OnClickListene
     int minimumDuration;
     int timeStep;
 
-    public CustomTimeSpanPicker2(Context ctx) {
-        this(ctx, null);
+    @BindView(R.id.startMinus)
+    View startMinus;
+    @BindView(R.id.startPlus)
+    View startPlus;
+    @BindView(R.id.endMinus)
+    View endMinus;
+    @BindView(R.id.endPlus)
+    View endPlus;
+    @BindView(R.id.startTimeLabel)
+    TextView startLabel;
+    @BindView(R.id.endTimeLabel)
+    TextView endLabel;
+    @BindView(R.id.timeBarView)
+    TimeBarView timeBar;
+
+    public CustomTimeSpanPicker2(Context context) {
+        super(context);
+        init(context, null, 0);
+    }
+
+    public CustomTimeSpanPicker2(Context context, AttributeSet attrs) {
+        super(context, attrs);
+        init(context, attrs, 0);
     }
 
     /*
@@ -40,24 +61,14 @@ public class CustomTimeSpanPicker2 extends FrameLayout implements OnClickListene
      * Assumptions:
      * 24 hours in day, 60 minutes in hour!
      */
-
-    public CustomTimeSpanPicker2(Context ctx, AttributeSet attrs) {
-        super(ctx, attrs);
-        inflate(ctx, R.layout.timespan_picker2, this);
-
-        startMinus = findViewById(R.id.startMinus);
-        startPlus = findViewById(R.id.startPlus);
-        endMinus = findViewById(R.id.endMinus);
-        endPlus = findViewById(R.id.endPlus);
+    private void init(Context context, AttributeSet attrs, int defStyle) {
+        inflate(context, R.layout.timespan_picker2, this);
+        ButterKnife.bind(this);
 
         startMinus.setOnClickListener(this);
         startPlus.setOnClickListener(this);
         endMinus.setOnClickListener(this);
         endPlus.setOnClickListener(this);
-
-        startLabel = (TextView) findViewById(R.id.startTimeLabel);
-        endLabel = (TextView) findViewById(R.id.endTimeLabel);
-        timeBar = (TimeBarView) findViewById(R.id.timeBarView);
 
         minimumDuration = 30;
         timeStep = 30;

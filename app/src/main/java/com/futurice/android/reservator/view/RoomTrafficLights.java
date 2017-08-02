@@ -22,6 +22,9 @@ import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class RoomTrafficLights extends RelativeLayout {
     private static Date lastTimeConnected = new Date(0);
     final long TOUCH_TIMEOUT = 30 * 1000;
@@ -29,43 +32,51 @@ public class RoomTrafficLights extends RelativeLayout {
     final int QUICK_BOOK_THRESHOLD = 5; // minutes
     // Show "disconnected" warning icon on screen when disconnected for more than 5 minutes
     private final long DISCONNECTED_WARNING_ICON_THRESHOLD = 5 * 60 * 1000;
-    TextView roomStatusView;
-    TextView roomTitleView;
-    TextView roomStatusInfoView;
-    TextView reservationInfoView;
-    Button bookNowView;
-    View disconnected;
-    Timer touchTimeoutTimer;
     boolean enabled = true;
     View.OnClickListener bookNowListener;
     private long lastTouched = 0;
+    Timer touchTimeoutTimer;
+
+    @BindView(R.id.roomTitle)
+    TextView roomTitleView;
+    @BindView(R.id.roomStatus)
+    TextView roomStatusView;
+    @BindView(R.id.roomStatusInfo)
+    TextView roomStatusInfoView;
+    @BindView(R.id.reservationInfo)
+    TextView reservationInfoView;
+    @BindView(R.id.bookNow)
+    Button bookNowButton;
+    @BindView(R.id.disconnected)
+    View disconnected;
 
     public RoomTrafficLights(Context context) {
-        this(context, null);
+        super(context);
+        init(context, null, 0);
     }
 
     public RoomTrafficLights(Context context, AttributeSet attrs) {
         super(context, attrs);
+        init(context, attrs, 0);
+    }
+
+    private void init(Context context, AttributeSet attrs, int defStyle) {
         inflate(context, R.layout.room_traffic_lights, this);
-        roomTitleView = (TextView) findViewById(R.id.roomTitle);
-        roomStatusView = (TextView) findViewById(R.id.roomStatus);
-        roomStatusInfoView = (TextView) findViewById(R.id.roomStatusInfo);
-        reservationInfoView = (TextView) findViewById(R.id.reservationInfo);
-        bookNowView = (Button) findViewById(R.id.bookNow);
-        disconnected = findViewById(R.id.disconnected);
+        ButterKnife.bind(this);
         updateConnected();
 
         setClickable(true);
         setVisibility(INVISIBLE);
 
-        bookNowView.setOnClickListener(new OnClickListener() {
+        bookNowButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (bookNowListener != null && bookNowView.getVisibility() == VISIBLE) {
+                if (bookNowListener != null && bookNowButton.getVisibility() == VISIBLE) {
                     bookNowListener.onClick(v);
                 }
             }
         });
+
     }
 
     public void setBookNowListener(View.OnClickListener l) {
@@ -83,29 +94,29 @@ public class RoomTrafficLights extends RelativeLayout {
                 roomStatusInfoView.setText("for the day");
                 this.setBackgroundColor(getResources().getColor(R.color.TrafficLightFree));
                 // Must use deprecated API for some reason or it crashes on older tablets
-                bookNowView.setBackgroundDrawable(getResources().getDrawable(R.drawable.traffic_lights_button_green));
-                bookNowView.setTextColor(getResources().getColorStateList(R.color.traffic_lights_button_green));
+                bookNowButton.setBackgroundDrawable(getResources().getDrawable(R.drawable.traffic_lights_button_green));
+                bookNowButton.setTextColor(getResources().getColorStateList(R.color.traffic_lights_button_green));
             } else {
                 int freeMinutes = room.minutesFreeFromNow();
                 roomStatusView.setText("Free");
                 roomStatusInfoView.setText("for " + Helpers.humanizeTimeSpan2(freeMinutes));
                 if (freeMinutes >= Room.RESERVED_THRESHOLD_MINUTES) {
                     this.setBackgroundColor(getResources().getColor(R.color.TrafficLightFree));
-                    bookNowView.setBackgroundDrawable(getResources().getDrawable(R.drawable.traffic_lights_button_green));
-                    bookNowView.setTextColor(getResources().getColorStateList(R.color.traffic_lights_button_green));
+                    bookNowButton.setBackgroundDrawable(getResources().getDrawable(R.drawable.traffic_lights_button_green));
+                    bookNowButton.setTextColor(getResources().getColorStateList(R.color.traffic_lights_button_green));
                 } else {
                     this.setBackgroundColor(getResources().getColor(R.color.TrafficLightYellow));
-                    bookNowView.setBackgroundDrawable(getResources().getDrawable(R.drawable.traffic_lights_button_yellow));
-                    bookNowView.setTextColor(getResources().getColorStateList(R.color.traffic_lights_button_yellow));
+                    bookNowButton.setBackgroundDrawable(getResources().getDrawable(R.drawable.traffic_lights_button_yellow));
+                    bookNowButton.setTextColor(getResources().getColorStateList(R.color.traffic_lights_button_yellow));
                 }
             }
             reservationInfoView.setVisibility(GONE);
             roomStatusInfoView.setVisibility(VISIBLE);
-            bookNowView.setVisibility(VISIBLE);
+            bookNowButton.setVisibility(VISIBLE);
         } else {
             this.setBackgroundColor(getResources().getColor(R.color.TrafficLightReserved));
             roomStatusView.setText("Reserved");
-            bookNowView.setVisibility(GONE);
+            bookNowButton.setVisibility(GONE);
             setReservationInfo(room.getCurrentReservation(), room.getNextFreeSlot());
         }
     }

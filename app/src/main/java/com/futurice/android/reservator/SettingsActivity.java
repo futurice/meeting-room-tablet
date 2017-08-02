@@ -2,16 +2,19 @@ package com.futurice.android.reservator;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
+import android.app.MediaRouteButton;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
@@ -22,38 +25,41 @@ import com.futurice.android.reservator.model.platformcalendar.PlatformCalendarDa
 import java.util.ArrayList;
 import java.util.HashSet;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class SettingsActivity extends ReservatorActivity {
     private final String GOOGLE_ACCOUNT_TYPE = "com.google";
-    Spinner usedAccountView;
-    Spinner roomNameView;
-    ToggleButton addressBookOptionView;
-    Spinner usedReservationAccount;
-    ToggleButton resourceCalendarOptionView;
-    LinearLayout roomsListLinearLayout;
-
-
     DataProxy proxy;
     PreferenceManager preferences;
 
+    @BindView(R.id.usedAccountSpinner)
+    Spinner usedAccountView;
+    @BindView(R.id.roomNameSpinner)
+    Spinner roomNameView;
+    @BindView(R.id.usedAddressBookOption)
+    ToggleButton addressBookOptionView;
+    @BindView(R.id.defaultReservationAccount)
+    Spinner usedReservationAccount;
+    @BindView(R.id.roomResourceCalendarOption)
+    ToggleButton resourceCalendarOptionView;
+    @BindView(R.id.roomsLinearLayout)
+    LinearLayout roomsListLinearLayout;
+    @BindView(R.id.removeUserDataButton)
+    Button removeUserDataButton;
+    @BindView(R.id.defaultReservationAccountLabel)
+    TextView defaultReservationAccountLabel;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.settings_activity);
+        ButterKnife.bind(this);
 
         preferences = PreferenceManager.getInstance(this);
-
-        resourceCalendarOptionView = (ToggleButton) findViewById(R.id.roomResourceCalendarOption);
-        roomsListLinearLayout = (LinearLayout) findViewById(R.id.roomsLinearLayout);
-        usedAccountView = (Spinner) findViewById(R.id.usedAccountSpinner);
-        addressBookOptionView = (ToggleButton) findViewById(R.id.usedAddressBookOption);
-        usedReservationAccount = (Spinner) findViewById(R.id.defaultReservationAccount);
-        roomNameView = (Spinner) findViewById(R.id.roomNameSpinner);
-
-        findViewById(R.id.removeUserDataButton).setOnClickListener(new OnClickListener() {
+        removeUserDataButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                // credentials
                 preferences.removeAllSettings();
                 Toast.makeText(getApplicationContext(), "Removed credentials and reseted settings", Toast.LENGTH_SHORT).show();
                 finish();
@@ -66,7 +72,6 @@ public class SettingsActivity extends ReservatorActivity {
     public void onResume() {
         super.onResume();
         reloadSettings();
-
     }
 
     @Override
@@ -76,8 +81,7 @@ public class SettingsActivity extends ReservatorActivity {
     }
 
 
-    private void save()
-    {
+    private void save() {
         Object selectedAccountName = usedAccountView.getSelectedItem();
         String selectedAccount = "";
         if (selectedAccountName != null) {
@@ -91,18 +95,17 @@ public class SettingsActivity extends ReservatorActivity {
         }
 
         HashSet<String> unselectedRooms = new HashSet<String>();
-        for (int i=0; i<roomsListLinearLayout.getChildCount(); i++)
-        {
+        for (int i = 0; i < roomsListLinearLayout.getChildCount(); i++) {
             CheckBox cb = (CheckBox) roomsListLinearLayout.getChildAt(i);
-            if(cb==null) continue;
+            if (cb == null) continue;
 
-            if(cb.isChecked()==false){
+            if (!cb.isChecked()) {
                 unselectedRooms.add(cb.getText().toString());
             }
         }
 
         PlatformCalendarDataProxy.Mode m = PlatformCalendarDataProxy.Mode.CALENDARS;
-        if(resourceCalendarOptionView.isChecked()) m = PlatformCalendarDataProxy.Mode.RESOURCES;
+        if (resourceCalendarOptionView.isChecked()) m = PlatformCalendarDataProxy.Mode.RESOURCES;
 
         Object selectedResAccountName = usedReservationAccount.getSelectedItem();
         String selectedResAccount = null;
@@ -127,8 +130,7 @@ public class SettingsActivity extends ReservatorActivity {
 
     }
 
-    private void reloadSettings()
-    {
+    private void reloadSettings() {
         proxy = getResApplication().getDataProxy();
 
         refreshGoogleAccountsSpinner();
@@ -140,11 +142,9 @@ public class SettingsActivity extends ReservatorActivity {
     }
 
 
-
-    private void refreshResourceCalendarToggle()
-    {
+    private void refreshResourceCalendarToggle() {
         resourceCalendarOptionView.setOnCheckedChangeListener(null);
-        resourceCalendarOptionView.setChecked(preferences.getCalendarMode()== PlatformCalendarDataProxy.Mode.RESOURCES);
+        resourceCalendarOptionView.setChecked(preferences.getCalendarMode() == PlatformCalendarDataProxy.Mode.RESOURCES);
         resourceCalendarOptionView.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -158,11 +158,10 @@ public class SettingsActivity extends ReservatorActivity {
 
         usedAccountView.setOnItemSelectedListener(null);
 
-        String selected = null;
+        String selected;
         if (usedAccountView.getSelectedItem() != null) {
             selected = (String) usedAccountView.getSelectedItem();
-        }
-        else {
+        } else {
             selected = preferences.getDefaultCalendarAccount();
         }
 
@@ -173,7 +172,7 @@ public class SettingsActivity extends ReservatorActivity {
         }
 
         adapter = new ArrayAdapter<String>(
-            this, android.R.layout.simple_spinner_item, accounts);
+                this, android.R.layout.simple_spinner_item, accounts);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         usedAccountView.setAdapter(adapter);
         if (selected != null && accounts.contains(selected)) {
@@ -185,28 +184,27 @@ public class SettingsActivity extends ReservatorActivity {
         usedAccountView.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if(!usedAccountView.getSelectedItem().toString().trim().equals(preferences.getDefaultCalendarAccount()))
-                {
+                if (!usedAccountView.getSelectedItem().toString().trim().equals(preferences.getDefaultCalendarAccount())) {
                     save();
                     reloadSettings();
                 }
             }
 
             @Override
-            public void onNothingSelected(AdapterView<?> parent) {}
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
         });
 
 
     }
 
-    private void refreshAddressBookToggle()
-    {
+    private void refreshAddressBookToggle() {
         // Require weather reservation requires address book contacts or not
         addressBookOptionView.setChecked(preferences.getAddressBookEnabled());
 
         if (addressBookOptionView.isChecked()) {
             usedReservationAccount.setVisibility(View.GONE);
-            findViewById(R.id.defaultReservationAccountLabel).setVisibility(View.GONE);
+            defaultReservationAccountLabel.setVisibility(View.GONE);
         }
 
         addressBookOptionView.setOnCheckedChangeListener(null);
@@ -221,11 +219,10 @@ public class SettingsActivity extends ReservatorActivity {
     }
 
     private void refreshResAccountSpinner() {
-        String selected = null;
+        String selected;
         if (usedReservationAccount.getSelectedItem() != null) {
             selected = (String) usedReservationAccount.getSelectedItem();
-        }
-        else {
+        } else {
             selected = preferences.getDefaultUserName();
         }
 
@@ -236,7 +233,7 @@ public class SettingsActivity extends ReservatorActivity {
         }
 
         adapter = new ArrayAdapter<>(
-            this, android.R.layout.simple_spinner_item, accounts);
+                this, android.R.layout.simple_spinner_item, accounts);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         usedReservationAccount.setAdapter(adapter);
         if (selected != null && accounts.contains(selected)) {
@@ -247,20 +244,18 @@ public class SettingsActivity extends ReservatorActivity {
 
 
         // hide when address book is required
-        if (preferences.getAddressBookEnabled())
-        {
+        if (preferences.getAddressBookEnabled()) {
             usedReservationAccount.setVisibility(View.GONE);
-            findViewById(R.id.defaultReservationAccountLabel).setVisibility(View.GONE);
-        }
-        else {
+            defaultReservationAccountLabel.setVisibility(View.GONE);
+        } else {
             usedReservationAccount.setVisibility(View.VISIBLE);
-            findViewById(R.id.defaultReservationAccountLabel).setVisibility(View.VISIBLE);
+            defaultReservationAccountLabel.setVisibility(View.VISIBLE);
         }
 
     }
 
     private void refreshDefaultRoomSpinner() {
-        String selected = null;
+        String selected;
         if (roomNameView.getSelectedItem() != null) {
             selected = (String) roomNameView.getSelectedItem();
         } else {
@@ -274,7 +269,7 @@ public class SettingsActivity extends ReservatorActivity {
         selectedRooms.removeAll(unselectedRooms);
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(
-            this, android.R.layout.simple_spinner_item, selectedRooms);
+                this, android.R.layout.simple_spinner_item, selectedRooms);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         roomNameView.setAdapter(adapter);
         if (selected != null && selectedRooms.contains(selected)) {
@@ -284,18 +279,16 @@ public class SettingsActivity extends ReservatorActivity {
     }
 
 
-    public void refreshRoomSelectionNamesList()
-    {
+    public void refreshRoomSelectionNamesList() {
 
         ArrayList<String> roomNames = proxy.getRoomNames();
         HashSet<String> unselectedRooms = preferences.getUnselectedRooms();
 
         roomsListLinearLayout.removeAllViews();
-        for(String roomName: roomNames)
-        {
+        for (String roomName : roomNames) {
             CheckBox cb = new CheckBox(this);
             cb.setText(roomName);
-            cb.setTextColor(ContextCompat.getColor(this,android.R.color.background_dark));
+            cb.setTextColor(ContextCompat.getColor(this, android.R.color.background_dark));
             cb.setChecked(!unselectedRooms.contains(roomName));
             roomsListLinearLayout.addView(cb);
         }

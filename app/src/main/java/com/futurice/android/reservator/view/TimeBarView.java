@@ -15,10 +15,12 @@ import android.util.AttributeSet;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class TimeBarView extends FrameLayout {
     private static final int MIN_SPAN_LENGTH = 60 * 120 * 1000;
     int animStep = 60000;
-    TextView durationLabel;
     boolean animationEnabled = false;
     Thread animatorThread = null;
     TimeSpan limits, span;
@@ -29,22 +31,30 @@ public class TimeBarView extends FrameLayout {
     private long startDelta = 0, endDelta = 0;
     private TimeSpan targetTimeSpan = null;
 
+    @BindView(R.id.textView1)
+    TextView durationLabel;
+
     public TimeBarView(Context context) {
-        this(context, null);
+        super(context);
+        init(context, null, 0);
     }
 
     public TimeBarView(Context context, AttributeSet attrs) {
         super(context, attrs);
+        init(context, attrs, 0);
+    }
+
+    private void init(Context context, AttributeSet attrs, int defStyle) {
         inflate(context, R.layout.time_bar, this);
-        durationLabel = (TextView) findViewById(R.id.textView1);
+        ButterKnife.bind(this);
         this.setTimeLimits(new TimeSpan(null, Calendar.HOUR, 2));
         this.setSpan(new TimeSpan(null, Calendar.MINUTE, 90));
-        // span.getStart().add(Calendar.MINUTE, 30); // XXX: check why
 
         background = getResources().getDrawable(R.drawable.timeline);
         reservationOwn = getResources().getDrawable(R.drawable.oma_varaus);
         reservationOther = getResources().getDrawable(R.drawable.muu_varaus);
         tickColor = getResources().getColor(R.color.TimeBarTickColor);
+
     }
 
     public void setTimeLimits(TimeSpan span) {
