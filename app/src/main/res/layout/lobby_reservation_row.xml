@@ -1,57 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:layout_gravity="center"
     android:gravity="center_vertical">
 
-    <FrameLayout
+    <LinearLayout
         android:layout_width="170dp"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
+        android:layout_gravity="center_vertical"
+        android:layout_marginEnd="20dp"
         android:layout_marginLeft="120dp"
-        android:layout_marginRight="20dp">
+        android:layout_marginRight="20dp"
+        android:layout_marginStart="120dp"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/roomDefaultIcon"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginEnd="4dp"
+            android:layout_marginRight="4dp"
+            android:src="@android:drawable/ic_notification_overlay" />
+
 
         <LinearLayout
+            android:id="@+id/titleLayout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:orientation="horizontal">
+            android:layout_gravity="center_vertical|start"
+            android:layout_marginLeft="10dp"
+            android:layout_marginStart="10dp"
+            android:orientation="vertical">
 
-            <ImageView
-                android:id="@+id/roomDefaultIcon"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:src="@android:drawable/ic_notification_overlay"
-                android:layout_marginRight="4dp"></ImageView>
-
-
-            <LinearLayout
-                android:id="@+id/titleLayout"
+            <TextView
+                android:id="@+id/roomNameLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical|left"
-                android:layout_marginLeft="10dp"
-                android:orientation="vertical">
+                android:textColor="@color/TextColor"
+                android:textStyle="bold"
+                tools:text="Room name XXX" />
 
-                <TextView
-                    android:id="@+id/roomNameLabel"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Room name XXX"
-                    android:textColor="@color/TextColor"
-                    android:textStyle="bold"></TextView>
-
-                <TextView
-                    android:id="@+id/roomInfoLabel"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="(42 persons)"
-                    android:textColor="@color/TextInfoColor"></TextView>
-            </LinearLayout>
+            <TextView
+                android:id="@+id/roomInfoLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/TextInfoColor"
+                tools:text="(42 persons)" />
         </LinearLayout>
-    </FrameLayout>
+    </LinearLayout>
 
     <ViewSwitcher
         android:id="@+id/modeSwitcher"
@@ -67,6 +65,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:layout_marginBottom="10dp"
+            android:layout_marginEnd="0dp"
             android:layout_marginRight="0dp"
             android:layout_marginTop="10dp"
             android:visibility="visible">
@@ -77,10 +76,11 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginLeft="20dp"
+                android:layout_marginStart="20dp"
                 android:background="@drawable/button_background"
                 android:focusable="true"
                 android:text="@string/book_now"
-                android:textColor="#fff"></Button>
+                android:textColor="#fff" />
 
             <TextView
                 android:id="@+id/roomStatusLabel"
@@ -88,13 +88,9 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginLeft="20dp"
+                android:layout_marginStart="20dp"
                 android:width="200dp"
-                android:text="&lt;status&gt;"></TextView>
-
-            <FrameLayout
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_weight="1"></FrameLayout>
+                tools:text="&lt;status&gt;" />
 
             <Button
                 android:id="@+id/calendarButton"
@@ -103,7 +99,7 @@
                 android:layout_gravity="center"
                 android:background="@drawable/calendar_small_grey"
                 android:focusable="true"
-                android:visibility="gone"></Button>
+                android:visibility="gone" />
         </LinearLayout>
 
         <LinearLayout
@@ -119,7 +115,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginBottom="30dp"
-                android:layout_marginTop="30sp"/>
+                android:layout_marginTop="30sp" />
 
             <RelativeLayout
                 android:layout_width="wrap_content"
@@ -136,19 +132,19 @@
                     android:layout_marginTop="30dp"
                     android:completionHint="Your name"
                     android:completionThreshold="2"
-                    android:hint="Your name"
+                    android:hint="@string/hint_your_name"
                     android:imeOptions="actionDone"
                     android:inputType="textCapWords|textFilter"
                     android:lines="1"
                     android:maxLines="1"
-                    android:textColor="@color/button_color"></AutoCompleteTextView>
+                    android:textColor="@color/button_color" />
 
                 <TextView
                     android:id="@+id/hintText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/autoCompleteTextView1"
-                    android:text="@string/hintText"/>
+                    android:text="@string/hintText" />
 
                 <Button
                     android:id="@+id/reserveButton"
@@ -157,26 +153,23 @@
                     android:layout_gravity="center"
                     android:layout_marginBottom="30dp"
                     android:layout_marginTop="30dp"
+                    android:layout_toEndOf="@+id/autoCompleteTextView1"
                     android:layout_toRightOf="@+id/autoCompleteTextView1"
                     android:background="@drawable/button_background"
                     android:focusable="true"
-                    android:text="Reserve"
-                    android:textColor="@color/button_color"></Button>
+                    android:text="@string/button_reserve"
+                    android:textColor="@color/button_color" />
             </RelativeLayout>
-
-            <FrameLayout
-                android:layout_width="1dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"/>
 
             <ImageButton
                 android:id="@+id/cancelButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="top"
+                android:layout_marginEnd="10dp"
                 android:layout_marginRight="10dp"
                 android:layout_marginTop="10dp"
-                android:background="@drawable/close_button_states"></ImageButton>
+                android:background="@drawable/close_button_states" />
         </LinearLayout>
     </ViewSwitcher>
 </LinearLayout>

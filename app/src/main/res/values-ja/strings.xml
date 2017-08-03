@@ -9,7 +9,7 @@
     <string name="dateLabelFormat">yyyy/MM/dd E</string>
     <string name="weekLabelFormat">w \'週\'</string>
     <string name="seeAllRooms">すべての会議室</string>
-    <string name="room_name">デフォルトの会議室の名前</string>
+    <string name="default_room_name">デフォルトの会議室の名前</string>
     <string name="removeUserData">ログイン情報の削除と設定をリセット</string>
     <string name="lobbyRoomName">ロビー</string>
     <string name="calendarError">Google カレンダーエラー</string>
