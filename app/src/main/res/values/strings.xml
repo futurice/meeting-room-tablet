@@ -42,4 +42,6 @@
     <string name="button_reserve">Reserve</string>
     <string name="message_permissions_are_required">Reservator Needs Permissions to Work!</string>
     <string name="room_capacity">for %1$d</string>
+    <string name="end_plus_content_description">plus time</string>
+    <string name="minus_time_content_description">minus time</string>
 </resources>
