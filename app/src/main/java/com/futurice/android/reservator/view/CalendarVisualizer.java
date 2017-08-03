@@ -4,6 +4,7 @@ import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -31,7 +32,7 @@ import com.futurice.android.reservator.model.Reservation;
 import com.futurice.android.reservator.model.TimeSpan;
 
 public class CalendarVisualizer extends HorizontalScrollView implements ReservatorVisualizer,
-    OnTouchListener {
+        OnTouchListener {
     TimeSpan touchedTimeSpan;
     Reservation touchedReservation;
     DateTime touchedTime;
@@ -93,9 +94,10 @@ public class CalendarVisualizer extends HorizontalScrollView implements Reservat
         setHorizontalFadingEdgeEnabled(false);
         this.setBackgroundColor(Color.TRANSPARENT);
 
-        dayLabelFormatter = new SimpleDateFormat(getResources().getString(R.string.dateLabelFormat));
+        dayLabelFormatter = new SimpleDateFormat(
+                getResources().getString(R.string.dateLabelFormat), Locale.getDefault());
         String weekLabelFormat = getResources().getString(R.string.weekLabelFormat);
-        weekLabelFormatter = new SimpleDateFormat(weekLabelFormat);
+        weekLabelFormatter = new SimpleDateFormat(weekLabelFormat, Locale.getDefault());
 
     }
 
@@ -113,8 +115,8 @@ public class CalendarVisualizer extends HorizontalScrollView implements Reservat
     private void generateDayHeaderLabels() {
         if (reservations.length > 0) {
             dayLabels = new String[Math.max(
-                getDaysFromStart(reservations[reservations.length - 1]
-                    .getEndTime()), daysToShow)];
+                    getDaysFromStart(reservations[reservations.length - 1]
+                            .getEndTime()), daysToShow)];
             weekLabels = new String[dayLabels.length];
         } else {
             dayLabels = new String[daysToShow];
@@ -211,7 +213,7 @@ public class CalendarVisualizer extends HorizontalScrollView implements Reservat
                 indices[p + 5] = (short) (vi + 3);
             }
             c.drawVertices(VertexMode.TRIANGLE_STRIP, points.length, points, 0,
-                points, 0, null, 0, indices, 0, indices.length, markerPaint);
+                    points, 0, null, 0, indices, 0, indices.length, markerPaint);
 
             Paint linePaint = new Paint();
             // linePaint.setARGB(200, 255, 255, 255);
@@ -220,12 +222,12 @@ public class CalendarVisualizer extends HorizontalScrollView implements Reservat
             // Draw the separator line only if the next reservation is following this one immediately.
             for (int i = 0; i < reservations.length; i++) {
                 if ((i + 1) < reservations.length &&
-                    reservations[i].getEndTime().getTimeInMillis() == reservations[i + 1].getStartTime().getTimeInMillis()) {
+                        reservations[i].getEndTime().getTimeInMillis() == reservations[i + 1].getStartTime().getTimeInMillis()) {
                     c.drawLine(getXForTime(reservations[i].getStartTime()),
-                        getProportionalEndY(reservations[i].getEndTime()) * height,
-                        getXForTime(reservations[i].getStartTime()) + dayWidth,
-                        getProportionalEndY(reservations[i].getEndTime()) * height,
-                        linePaint);
+                            getProportionalEndY(reservations[i].getEndTime()) * height,
+                            getXForTime(reservations[i].getStartTime()) + dayWidth,
+                            getProportionalEndY(reservations[i].getEndTime()) * height,
+                            linePaint);
                 }
             }
 
@@ -265,8 +267,8 @@ public class CalendarVisualizer extends HorizontalScrollView implements Reservat
         for (Reservation r : reservations) {
             float textWidth = textPaint.measureText(r.getSubject());
             String subject = (String) TextUtils.ellipsize(r.getSubject(), textPaintForEllipsize, 250,
-                                                 TextUtils.TruncateAt.END)
-;            c.drawText(subject, getXForTime(r.getStartTime()) + paddingX, getProportionalY(r.getStartTime()) * height + textHeight + paddingY, textPaint);
+                    TextUtils.TruncateAt.END);
+            c.drawText(subject, getXForTime(r.getStartTime()) + paddingX, getProportionalY(r.getStartTime()) * height + textHeight + paddingY, textPaint);
         }
         textPaint.setColor(textColor);
         c.restore();
@@ -382,9 +384,9 @@ public class CalendarVisualizer extends HorizontalScrollView implements Reservat
             }
             touchedTimeSpan = new TimeSpan(start, end);
             Log.d("CalendarVisualize", "Calendar visualizer touched time: "
-                + touchedTime.toGMTString() + "\n timespan: "
-                + touchedTimeSpan.getStart().toGMTString() + "-"
-                + touchedTimeSpan.getEnd().toGMTString());
+                    + touchedTime.toGMTString() + "\n timespan: "
+                    + touchedTimeSpan.getStart().toGMTString() + "-"
+                    + touchedTimeSpan.getEnd().toGMTString());
             invalidate();
         }
         return false; // do not interfere with onClick logic
@@ -427,7 +429,7 @@ public class CalendarVisualizer extends HorizontalScrollView implements Reservat
     private DateTime getTimeForCoordinates(float x, float y) {
         int minutes = dayStartTime + (int) ((y - calendarAreaRect.top) / calendarAreaRect.height() * (dayEndTime - dayStartTime));
         DateTime absoluteDays = firstDayToShow.add(Calendar.DAY_OF_YEAR, (int) ((x - calendarAreaRect.left) / dayWidth))
-            .setTime(minutes / 60, minutes % 60, 0);
+                .setTime(minutes / 60, minutes % 60, 0);
         return absoluteDays;
     }
 
@@ -445,7 +447,7 @@ public class CalendarVisualizer extends HorizontalScrollView implements Reservat
 
     private DateTime getFirstDayToShow() {
         if (reservations.length > 0
-            && reservations[0].getStartTime().before(firstDayToShow)) {
+                && reservations[0].getStartTime().before(firstDayToShow)) {
             return reservations[0].getStartTime();
         } else {
             return firstDayToShow; // TODO some logic here now it's today by default

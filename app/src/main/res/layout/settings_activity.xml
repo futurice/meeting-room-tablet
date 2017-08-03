@@ -1,6 +1,5 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-            android:id="@+id/relativeLayout1"
-            android:layout_width="fill_parent"
+    android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:fillViewport="true"
             android:background="#fff"
@@ -16,7 +15,6 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/addressBookOptionLabel"
             style="@android:style/TextAppearance.Medium"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
@@ -24,7 +22,6 @@
             android:textColor="#000"/>
 
         <TextView
-            android:id="@+id/addressBookHelpText"
             style="@android:style/TextAppearance.Small"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
@@ -54,7 +51,6 @@
             android:maxLines="1"/>
 
         <TextView
-            android:id="@+id/usedAccountLabel"
             style="@android:style/TextAppearance.Medium"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
@@ -62,7 +58,6 @@
             android:textColor="#000"/>
 
         <TextView
-            android:id="@+id/usedAccountHelp"
             style="@android:style/TextAppearance.Small"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
@@ -100,7 +95,6 @@
             android:text="@string/removeUserData"/>
 
         <TextView
-            android:id="@+id/roomResourceCalendarTitle"
             style="@android:style/TextAppearance.Medium"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
@@ -114,7 +108,6 @@
             android:layout_marginBottom="10dp"/>
 
         <TextView
-            android:id="@+id/roomListLabel"
             style="@android:style/TextAppearance.Medium"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"

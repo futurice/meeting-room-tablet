@@ -29,7 +29,6 @@ public class WeekView extends RelativeLayout implements OnClickListener {
     private OnFreeTimeClickListener onFreeTimeClickListener = null;
     private OnReservationClickListener onReservationClickListener = null;
 
-    @BindView(R.id.frameLayout1)
     private FrameLayout calendarFrame;
 
     public WeekView(Context context) {
@@ -45,6 +44,7 @@ public class WeekView extends RelativeLayout implements OnClickListener {
     }
 
     public void refreshData(Room room) {
+        calendarFrame = (FrameLayout) findViewById(R.id.frameLayout1);
         calendarFrame.removeAllViews();
         List<Reservation> reservations = new ArrayList<Reservation>();
 

@@ -1,17 +1,18 @@
 package com.futurice.android.reservator.view;
 
-import java.util.Calendar;
+import android.content.Context;
+import android.util.AttributeSet;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.FrameLayout;
+import android.widget.TextView;
 
 import com.futurice.android.reservator.R;
 import com.futurice.android.reservator.model.DateTime;
 import com.futurice.android.reservator.model.TimeSpan;
 
-import android.widget.FrameLayout;
-import android.widget.TextView;
-import android.content.Context;
-import android.util.AttributeSet;
-import android.view.View;
-import android.view.View.OnClickListener;
+import java.util.Calendar;
+import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -128,8 +129,10 @@ public class CustomTimeSpanPicker2 extends FrameLayout implements OnClickListene
     }
 
     protected void refreshLabels() {
-        startLabel.setText(String.format("%02d:%02d", currentTimeStart / 60, currentTimeStart % 60));
-        endLabel.setText(String.format("%02d:%02d", currentTimeEnd / 60, currentTimeEnd % 60));
+        startLabel.setText(String.format(
+                Locale.getDefault(), "%02d:%02d", currentTimeStart / 60, currentTimeStart % 60));
+        endLabel.setText(String.format(
+                Locale.getDefault(), "%02d:%02d", currentTimeEnd / 60, currentTimeEnd % 60));
 
         timeBar.setTimeLimits(new TimeSpan(getMinimumTime(), getMaximumTime()));
         timeBar.setSpan(new TimeSpan(getStartTime(), getEndTime()));

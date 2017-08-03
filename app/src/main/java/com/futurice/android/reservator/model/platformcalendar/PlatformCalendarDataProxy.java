@@ -1,28 +1,16 @@
 package com.futurice.android.reservator.model.platformcalendar;
 
-import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.HashMap;
-import java.util.Vector;
-import java.util.Collections;
-import java.util.Map;
-import java.util.TimeZone;
-import java.util.regex.Pattern;
-import java.util.regex.Matcher;
-
+import android.accounts.Account;
+import android.accounts.AccountManager;
 import android.content.ContentResolver;
-import android.content.ContentValues;
 import android.content.ContentUris;
+import android.content.ContentValues;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.provider.CalendarContract;
-import android.net.Uri;
 import android.text.TextUtils;
 import android.util.Log;
-import android.accounts.AccountManager;
-import android.accounts.Account;
 
 import com.futurice.android.reservator.model.DataProxy;
 import com.futurice.android.reservator.model.DateTime;
@@ -31,12 +19,25 @@ import com.futurice.android.reservator.model.ReservatorException;
 import com.futurice.android.reservator.model.Room;
 import com.futurice.android.reservator.model.TimeSpan;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Locale;
+import java.util.Map;
+import java.util.TimeZone;
+import java.util.Vector;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 /**
  * Implements the DataProxy for getting meeting room info through
  * the platform's Content Provider API.
  *
  * @author vsin
  */
+@SuppressWarnings("MissingPermission")
 public class PlatformCalendarDataProxy extends DataProxy {
 
     public enum Mode {
@@ -453,7 +454,7 @@ public class PlatformCalendarDataProxy extends DataProxy {
                         Long.toString(eventId) + "-" + Long.toString(start),
                         makeEventTitle(room.getName(), eventId, title, eventOrganizerAccount, DEFAULT_MEETING_NAME),
                         new TimeSpan(new DateTime(start), new DateTime(end)));
-                    if (eventOrganizerAccount != null && calendarAccount.equals(eventOrganizerAccount.toLowerCase())) {
+                    if (eventOrganizerAccount != null && calendarAccount.equals(eventOrganizerAccount.toLowerCase(Locale.getDefault()))) {
                         res.setIsCancellable(true);
                     }
                     reservations.add(res);

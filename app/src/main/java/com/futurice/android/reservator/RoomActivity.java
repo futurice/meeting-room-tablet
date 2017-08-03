@@ -89,6 +89,9 @@ public class RoomActivity extends ReservatorActivity implements OnMenuItemClickL
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        setContentView(R.layout.room_activity);
+        ButterKnife.bind(this);
         initRoomActivity();
     }
 
@@ -124,9 +127,6 @@ public class RoomActivity extends ReservatorActivity implements OnMenuItemClickL
     }
 
     private void initRoomActivity() {
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
-        setContentView(R.layout.room_activity);
-        ButterKnife.bind(this);
         try {
             currentRoom = (Room) getIntent().getSerializableExtra(ROOM_EXTRA);
         } catch (ClassCastException e) {

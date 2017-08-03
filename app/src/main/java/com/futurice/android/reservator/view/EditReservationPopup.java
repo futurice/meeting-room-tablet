@@ -1,22 +1,22 @@
 package com.futurice.android.reservator.view;
 
-import java.util.Calendar;
-
-import android.app.Dialog;
-import android.content.DialogInterface;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.view.View;
-import android.widget.TextView;
-import android.widget.ImageButton;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.futurice.android.reservator.R;
 import com.futurice.android.reservator.ReservatorApplication;
+import com.futurice.android.reservator.model.DateTime;
 import com.futurice.android.reservator.model.Reservation;
 import com.futurice.android.reservator.model.ReservatorException;
 import com.futurice.android.reservator.model.Room;
-import com.futurice.android.reservator.model.DateTime;
+
+import java.util.Calendar;
+import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -58,7 +58,9 @@ public class EditReservationPopup extends Dialog {
 
         DateTime start = reservation.getTimeSpan().getStart();
         DateTime end = reservation.getTimeSpan().getEnd();
-        reservationInfo = String.format("%02d:%02d–%02d:%02d\n%s",
+        reservationInfo = String.format(
+                Locale.getDefault(),
+                "%02d:%02d–%02d:%02d\n%s",
                 start.get(Calendar.HOUR_OF_DAY),
                 start.get(Calendar.MINUTE),
                 end.get(Calendar.HOUR_OF_DAY),

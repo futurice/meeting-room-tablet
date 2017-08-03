@@ -1,6 +1,4 @@
-<RelativeLayout
-    android:id="@+id/relativeLayout1"
-    android:layout_width="fill_parent"
+<RelativeLayout android:layout_width="fill_parent"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_height="wrap_content">
 

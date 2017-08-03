@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="match_parent"
-                android:layout_height="fill_parent"
-                android:padding="20dp">
+    android:layout_width="match_parent"
+    android:layout_height="fill_parent"
+    android:padding="20dp">
 
     <TextView
         android:id="@+id/roomTitle"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:textColor="@color/TrafficLightText"
         android:gravity="left"
-        android:textSize="40sp"
-        android:textStyle="bold"
         android:textAllCaps="true"
-        android:textIsSelectable="false"/>
+        android:textColor="@color/TrafficLightText"
+        android:textIsSelectable="false"
+        android:textSize="40sp"
+        android:textStyle="bold" />
 
     <RelativeLayout
         android:layout_width="fill_parent"
@@ -27,84 +27,73 @@
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:gravity="center_horizontal"
-            android:textSize="80sp"
-            android:textStyle="bold"
             android:textColor="@color/TrafficLightText"
-            android:textIsSelectable="false"/>
+            android:textIsSelectable="false"
+            android:textSize="80sp"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/roomStatusInfo"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
             android:layout_below="@id/roomStatus"
-            android:textColor="@color/TrafficLightText"
-            android:textSize="50sp"
-            android:textStyle="bold"
+            android:layout_marginTop="5dp"
             android:gravity="center_horizontal"
-            android:textIsSelectable="false"/>
+            android:textColor="@color/TrafficLightText"
+            android:textIsSelectable="false"
+            android:textSize="50sp"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/reservationInfo"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
             android:layout_below="@id/roomStatusInfo"
-            android:textColor="@color/TrafficLightText"
-            android:textSize="30sp"
+            android:layout_marginTop="5dp"
             android:gravity="center_horizontal"
-            android:textIsSelectable="false"/>
+            android:textColor="@color/TrafficLightText"
+            android:textIsSelectable="false"
+            android:textSize="30sp" />
 
         <Button
             android:id="@+id/bookNow"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
-            android:layout_centerHorizontal="true"
             android:layout_below="@id/reservationInfo"
-            android:text="@string/bookNow"
-            android:textSize="40sp"
-            android:textStyle="bold"
-            android:textIsSelectable="false"/>
-
-        <LinearLayout
-            android:id="@+id/disconnected"
-            android:orientation="vertical"
-            android:layout_below="@id/bookNow"
-            android:layout_marginTop="30dp"
             android:layout_centerHorizontal="true"
+            android:layout_marginTop="30dp"
+            android:text="@string/bookNow"
+            android:textIsSelectable="false"
+            android:textSize="40sp"
+            android:textStyle="bold" />
+
+
+        <TextView
+            android:id="@+id/disconnected"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-
-            <ImageView
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:layout_gravity="center_horizontal"
-                android:src="@drawable/disconnected"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:layout_gravity="center_horizontal"
-                android:text="@string/disconnectedWarning"
-                android:textColor="@color/TrafficLightText"
-                android:textSize="40sp"
-                android:textIsSelectable="false"
-                android:textStyle="bold"
-                android:textAllCaps="true"/>
-        </LinearLayout>
+            android:layout_height="wrap_content"
+            android:layout_below="@id/bookNow"
+            android:layout_centerHorizontal="true"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="30dp"
+            android:drawableTop="@drawable/disconnected"
+            android:text="@string/disconnectedWarning"
+            android:textAllCaps="true"
+            android:textColor="@color/TrafficLightText"
+            android:textIsSelectable="false"
+            android:textSize="36sp"
+            android:textStyle="bold" />
     </RelativeLayout>
 
     <TextView
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:textColor="@color/TrafficLightText"
         android:gravity="right"
         android:text="@string/touchToReserve"
-        android:textSize="30sp"
-        android:textStyle="bold"
         android:textAllCaps="true"
-        android:textIsSelectable="false"/>
+        android:textColor="@color/TrafficLightText"
+        android:textIsSelectable="false"
+        android:textSize="30sp"
+        android:textStyle="bold" />
 </RelativeLayout>

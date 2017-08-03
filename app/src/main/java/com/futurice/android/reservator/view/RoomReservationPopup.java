@@ -10,25 +10,24 @@ import android.app.Dialog;
 import android.content.Context;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 
 public class RoomReservationPopup extends Dialog {
     @BindView(R.id.roomReservationView1)
     LobbyReservationRowView reservationView;
-    @BindView(R.id.relativeLayout1)
-    LinearLayout cancelLayout;
-
-    public RoomReservationPopup() {
-        super(null, 0);
-    }
+    @BindView(R.id.container_reservation_popup)
+    RelativeLayout popupContainer;
 
     public RoomReservationPopup(Context context, TimeSpan timeLimits, TimeSpan presetTime, Room room) {
         super(context, R.style.Theme_Transparent);
         setCancelable(true);
         setContentView(R.layout.reservation_popup);
+        ButterKnife.bind(this);
 
-        cancelLayout.setOnClickListener(new View.OnClickListener() {
+        popupContainer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 cancel();

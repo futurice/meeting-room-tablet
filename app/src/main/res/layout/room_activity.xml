@@ -3,7 +3,6 @@
              android:layout_height="fill_parent">
 
     <RelativeLayout
-        android:id="@+id/relativeLayout"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:layout_gravity="center"
@@ -25,7 +24,7 @@
                 android:layout_height="fill_parent"
                 android:layout_marginRight="10dp"
                 android:layout_marginBottom="0dp"
-                android:id="@+id/frameLayout1"></FrameLayout>
+                android:id="@+id/frameLayout1" />
         </com.futurice.android.reservator.view.WeekView>
 
         <TextView

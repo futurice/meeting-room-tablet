@@ -19,6 +19,7 @@ import com.futurice.android.reservator.model.TimeSpan;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -160,9 +161,11 @@ public class RoomTrafficLights extends RelativeLayout {
             // More than a day away
             reservationInfoView.setVisibility(GONE);
         } else {
-            reservationInfoView.setText(Html.fromHtml(String.format("Free at <b>%02d:%02d</b>",
-                nextFreeSlot.getStart().get(Calendar.HOUR_OF_DAY),
-                nextFreeSlot.getStart().get(Calendar.MINUTE))));
+            reservationInfoView.setText(Html.fromHtml(String.format(
+                    Locale.getDefault(),
+                    "Free at <b>%02d:%02d</b>",
+                    nextFreeSlot.getStart().get(Calendar.HOUR_OF_DAY),
+                    nextFreeSlot.getStart().get(Calendar.MINUTE))));
             reservationInfoView.setVisibility(VISIBLE);
         }
     }
@@ -199,7 +202,7 @@ public class RoomTrafficLights extends RelativeLayout {
                 @Override
                 public void run() {
                     if (RoomTrafficLights.this.enabled &&
-                        new Date().getTime() >= RoomTrafficLights.this.lastTouched + TOUCH_TIMEOUT) {
+                            new Date().getTime() >= RoomTrafficLights.this.lastTouched + TOUCH_TIMEOUT) {
                         RoomTrafficLights.this.post(new Runnable() {
                             public void run() {
                                 RoomTrafficLights.this.setVisibility(VISIBLE);

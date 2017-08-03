@@ -3,6 +3,7 @@ package com.futurice.android.reservator.common;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Locale;
 
 import android.util.Log;
 
@@ -73,7 +74,7 @@ public class Helpers {
             if (hourMins == 0) {
                 return getUnits(hours, "hour", "hours");
             } else {
-                return String.format("%dh:%02dmin", hours, hourMins);
+                return String.format(Locale.getDefault(), "%dh:%02dmin", hours, hourMins);
             }
         } else if (minutes < 24 * 60) {
             return getUnits(hours, "hour", "hours");
@@ -84,7 +85,7 @@ public class Helpers {
 
     private static String getUnits(int amount, String unitName, String unitNamePlural) {
         if (amount == 1) return String.format("1 %s", unitName);
-        return String.format("%d %s", amount, unitNamePlural);
+        return String.format(Locale.getDefault(), "%d %s", amount, unitNamePlural);
     }
 
     private static int roundTo(int in, int precision) {
