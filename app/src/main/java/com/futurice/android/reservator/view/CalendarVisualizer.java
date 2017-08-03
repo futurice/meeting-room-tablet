@@ -6,6 +6,7 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Canvas.VertexMode;
@@ -359,7 +360,6 @@ public class CalendarVisualizer extends HorizontalScrollView implements Reservat
 
     @Override
     public boolean onTouch(View v, MotionEvent e) {
-        //TODO This causes a small slow down in scrolling animation when ACTION_UP occurs:/
         if (e.getAction() == MotionEvent.ACTION_UP) {
             touchedTime = getTimeForCoordinates(e.getX(), e.getY());
             touchedReservation = getReservationForTime(touchedTime);
@@ -388,6 +388,7 @@ public class CalendarVisualizer extends HorizontalScrollView implements Reservat
                     + touchedTimeSpan.getStart().toGMTString() + "-"
                     + touchedTimeSpan.getEnd().toGMTString());
             invalidate();
+            v.performClick();
         }
         return false; // do not interfere with onClick logic
     }

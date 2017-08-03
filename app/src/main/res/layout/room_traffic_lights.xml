@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="fill_parent"
+    android:layout_height="match_parent"
     android:padding="20dp">
 
     <TextView
         android:id="@+id/roomTitle"
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:gravity="left"
+        android:gravity="start"
         android:textAllCaps="true"
         android:textColor="@color/TrafficLightText"
         android:textIsSelectable="false"
@@ -17,13 +17,13 @@
         android:textStyle="bold" />
 
     <RelativeLayout
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true">
 
         <TextView
             android:id="@+id/roomStatus"
-            android:layout_width="fill_parent"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:gravity="center_horizontal"
@@ -34,7 +34,7 @@
 
         <TextView
             android:id="@+id/roomStatusInfo"
-            android:layout_width="fill_parent"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/roomStatus"
             android:layout_marginTop="5dp"
@@ -46,7 +46,7 @@
 
         <TextView
             android:id="@+id/reservationInfo"
-            android:layout_width="fill_parent"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/roomStatusInfo"
             android:layout_marginTop="5dp"
@@ -86,10 +86,10 @@
     </RelativeLayout>
 
     <TextView
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:gravity="right"
+        android:gravity="end"
         android:text="@string/touchToReserve"
         android:textAllCaps="true"
         android:textColor="@color/TrafficLightText"

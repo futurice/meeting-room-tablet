@@ -90,17 +90,17 @@ public class RoomTrafficLights extends RelativeLayout {
         roomTitleView.setText(room.getName());
 
         if (room.isBookable(QUICK_BOOK_THRESHOLD)) {
-            roomStatusView.setText("Free");
+            roomStatusView.setText(getResources().getText(R.string.status_free));
             if (room.isFreeRestOfDay()) {
-                roomStatusInfoView.setText("for the day");
+                roomStatusInfoView.setText(getResources().getString(R.string.free_for_the_day));
                 this.setBackgroundColor(getResources().getColor(R.color.TrafficLightFree));
                 // Must use deprecated API for some reason or it crashes on older tablets
                 bookNowButton.setBackgroundDrawable(getResources().getDrawable(R.drawable.traffic_lights_button_green));
                 bookNowButton.setTextColor(getResources().getColorStateList(R.color.traffic_lights_button_green));
             } else {
                 int freeMinutes = room.minutesFreeFromNow();
-                roomStatusView.setText("Free");
-                roomStatusInfoView.setText("for " + Helpers.humanizeTimeSpan2(freeMinutes));
+                roomStatusView.setText(R.string.status_free);
+                roomStatusInfoView.setText(getContext().getString(R.string.free_for_specific_amount, Helpers.humanizeTimeSpan2(freeMinutes)));
                 if (freeMinutes >= Room.RESERVED_THRESHOLD_MINUTES) {
                     this.setBackgroundColor(getResources().getColor(R.color.TrafficLightFree));
                     bookNowButton.setBackgroundDrawable(getResources().getDrawable(R.drawable.traffic_lights_button_green));
@@ -116,7 +116,7 @@ public class RoomTrafficLights extends RelativeLayout {
             bookNowButton.setVisibility(VISIBLE);
         } else {
             this.setBackgroundColor(getResources().getColor(R.color.TrafficLightReserved));
-            roomStatusView.setText("Reserved");
+            roomStatusView.setText(R.string.status_reserved);
             bookNowButton.setVisibility(GONE);
             setReservationInfo(room.getCurrentReservation(), room.getNextFreeSlot());
         }

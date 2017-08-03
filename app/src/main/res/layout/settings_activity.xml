@@ -1,6 +1,6 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
+    android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:fillViewport="true"
             android:background="#fff"
             android:padding="0dip">
@@ -16,14 +16,14 @@
 
         <TextView
             style="@android:style/TextAppearance.Medium"
-            android:layout_width="fill_parent"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/addressBookOptionLabel"
             android:textColor="#000"/>
 
         <TextView
             style="@android:style/TextAppearance.Small"
-            android:layout_width="fill_parent"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/addressBookHelpText"
             android:textColor="#555"/>
@@ -37,14 +37,14 @@
         <TextView
             android:id="@+id/defaultReservationAccountLabel"
             style="@android:style/TextAppearance.Medium"
-            android:layout_width="fill_parent"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/settingsDefaultAccountForReservation"
             android:textColor="#000"/>
 
         <Spinner
             android:id="@+id/defaultReservationAccount"
-            android:layout_width="fill_parent"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
             android:inputType="text"
@@ -52,21 +52,21 @@
 
         <TextView
             style="@android:style/TextAppearance.Medium"
-            android:layout_width="fill_parent"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/used_google_account"
             android:textColor="#000"/>
 
         <TextView
             style="@android:style/TextAppearance.Small"
-            android:layout_width="fill_parent"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/googleAccountHelp"
             android:textColor="#555"/>
 
         <Spinner
             android:id="@+id/usedAccountSpinner"
-            android:layout_width="fill_parent"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="text"
             android:maxLines="1"/>
@@ -74,7 +74,7 @@
         <TextView
             android:id="@+id/roomNameLabel"
             style="@android:style/TextAppearance.Medium"
-            android:layout_width="fill_parent"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:text="@string/default_room_name"
@@ -82,7 +82,7 @@
 
         <Spinner
             android:id="@+id/roomNameSpinner"
-            android:layout_width="fill_parent"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"/>
 
@@ -96,7 +96,7 @@
 
         <TextView
             style="@android:style/TextAppearance.Medium"
-            android:layout_width="fill_parent"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/calendarResourcesHelpText"
             android:textColor="#000"/>
@@ -109,7 +109,7 @@
 
         <TextView
             style="@android:style/TextAppearance.Medium"
-            android:layout_width="fill_parent"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:text="@string/shown_rooms"

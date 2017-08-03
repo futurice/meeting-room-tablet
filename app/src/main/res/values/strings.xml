@@ -44,4 +44,10 @@
     <string name="room_capacity">for %1$d</string>
     <string name="end_plus_content_description">plus time</string>
     <string name="minus_time_content_description">minus time</string>
+    <string name="only_use_resource_calendars">Only use resource calendars</string>
+    <string name="default_room_icon_content_description">default room icon</string>
+    <string name="status_free">Free</string>
+    <string name="free_for_the_day">for the day</string>
+    <string name="free_for_specific_amount">for %1$s</string>
+    <string name="status_reserved">Reserved</string>
 </resources>
