@@ -132,18 +132,17 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginBottom="30dp"
-                android:layout_marginTop="30sp" />
+                android:layout_marginBottom="16dp" />
 
             <AutoCompleteTextView
                 android:id="@+id/autoCompleteTextView1"
                 android:layout_width="230dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginBottom="30dp"
+                android:layout_marginBottom="10dp"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="10dp"
                 android:completionHint="Your name"
                 android:completionThreshold="2"
                 android:hint="@string/hint_your_name"
@@ -151,22 +150,24 @@
                 android:inputType="textCapWords|textFilter"
                 android:lines="1"
                 android:maxLines="1"
-                android:textColor="@color/button_color" />
+                android:textColor="@color/button_color"
+                android:textColorHint="@color/CalendarWeekTextColor"/>
 
             <TextView
                 android:layout_gravity="center"
                 android:id="@+id/hintText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/hintText" />
+                android:text="@string/hintText"
+                android:textColor="@color/CalendarWeekTextColor"/>
 
             <Button
                 android:id="@+id/reserveButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginBottom="30dp"
-                android:layout_marginTop="30dp"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="10dp"
                 android:background="@drawable/button_background"
                 android:focusable="true"
                 android:text="@string/button_reserve"
