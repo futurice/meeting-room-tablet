@@ -72,16 +72,14 @@
             android:layout_marginTop="10dp"
             android:orientation="horizontal"
             android:visibility="visible"
-            android:weightSum="100">
+            android:weightSum="9" >
 
             <Button
                 android:id="@+id/bookNowButton"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginLeft="20dp"
-                android:layout_marginStart="20dp"
-                android:layout_weight="50"
+                android:layout_weight="3"
                 android:background="@drawable/button_background"
                 android:focusable="true"
                 android:text="@string/book_now"
@@ -89,12 +87,12 @@
 
             <TextView
                 android:id="@+id/roomStatusLabel"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_marginLeft="20dp"
                 android:layout_marginStart="20dp"
-                android:layout_weight="40"
+                android:layout_weight="5"
                 android:minWidth="100dp"
                 tools:text="&lt;status&gt;" />
 
