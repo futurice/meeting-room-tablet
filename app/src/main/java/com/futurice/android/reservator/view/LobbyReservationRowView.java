@@ -17,7 +17,9 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AutoCompleteTextView;
+import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.ViewSwitcher;
@@ -34,17 +36,46 @@ import com.futurice.android.reservator.model.ReservatorException;
 import com.futurice.android.reservator.model.Room;
 import com.futurice.android.reservator.model.TimeSpan;
 
-public class LobbyReservationRowView extends FrameLayout implements
-    OnClickListener, OnItemClickListener {
+import org.w3c.dom.Text;
 
-    View cancelButton, bookNowButton, reserveButton, calendarButton,
-        bookingMode, normalMode, titleView;
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
+public class LobbyReservationRowView extends FrameLayout implements
+        OnClickListener, OnItemClickListener {
+
+    @BindView(R.id.cancelButton)
+    ImageButton cancelButton;
+    @BindView(R.id.bookNowButton)
+    Button bookNowButton;
+    @BindView(R.id.titleLayout)
+    View titleView;
+    @BindView(R.id.reserveButton)
+    Button reserveButton;
+    @BindView(R.id.calendarButton)
+    Button calendarButton;
+    @BindView(R.id.bookingMode)
+    View bookingMode;
+    @BindView(R.id.normalMode)
+    View normalMode;
+    @BindView(R.id.autoCompleteTextView1)
     AutoCompleteTextView nameField;
+    @BindView(R.id.timeSpanPicker2)
     CustomTimeSpanPicker2 timePicker2;
-    TextView roomNameView, roomInfoView, roomStatusView;
-    ImageView defaultRoomFlag;
-    ReservatorApplication application;
+    @BindView(R.id.roomNameLabel)
+    TextView roomNameView;
+    @BindView(R.id.roomInfoLabel)
+    TextView roomInfoView;
+    @BindView(R.id.roomStatusLabel)
+    TextView roomStatusView;
+    @BindView(R.id.modeSwitcher)
     ViewSwitcher modeSwitcher;
+    @BindView(R.id.roomDefaultIcon)
+    ImageView defaultRoomFlag;
+    @BindView(R.id.hintText)
+    TextView hintText;
+
+    ReservatorApplication application;
     OnReserveListener onReserveCallback = null;
     OnCancellListener onCancellListener = null;
 
@@ -62,44 +93,34 @@ public class LobbyReservationRowView extends FrameLayout implements
     };
 
     public LobbyReservationRowView(Context context) {
-        this(context, null);
+        super(context);
+        init(context, null, 0);
     }
 
     public LobbyReservationRowView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        inflate(context, R.layout.lobby_reservation_row, this);
-        cancelButton = findViewById(R.id.cancelButton);
-        cancelButton.setOnClickListener(this);
-        bookNowButton = findViewById(R.id.bookNowButton);
-        bookNowButton.setOnClickListener(this);
-        titleView = findViewById(R.id.titleLayout);
-        titleView.setOnClickListener(this);
-        reserveButton = findViewById(R.id.reserveButton);
-        reserveButton.setOnClickListener(this);
-        calendarButton = findViewById(R.id.calendarButton);
-        calendarButton.setOnClickListener(this);
-        bookingMode = findViewById(R.id.bookingMode);
-        normalMode = findViewById(R.id.normalMode);
-        nameField = (AutoCompleteTextView) findViewById(R.id.autoCompleteTextView1);
-        timePicker2 = (CustomTimeSpanPicker2) findViewById(R.id.timeSpanPicker2);
-        roomNameView = (TextView) findViewById(R.id.roomNameLabel);
-        roomInfoView = (TextView) findViewById(R.id.roomInfoLabel);
-        roomStatusView = (TextView) findViewById(R.id.roomStatusLabel);
-        modeSwitcher = (ViewSwitcher) findViewById(R.id.modeSwitcher);
-        defaultRoomFlag = (ImageView) findViewById(R.id.roomDefaultIcon);
+        init(context, attrs, 0);
+    }
 
+    private void init(Context context, AttributeSet attrs, int defStyle) {
+        inflate(context, R.layout.lobby_reservation_row, this);
+        ButterKnife.bind(this);
+        cancelButton.setOnClickListener(this);
+        bookNowButton.setOnClickListener(this);
+        titleView.setOnClickListener(this);
+        reserveButton.setOnClickListener(this);
+        calendarButton.setOnClickListener(this);
         switchToNormalModeContent();
 
-
         application = (ReservatorApplication) this.getContext()
-            .getApplicationContext();
+                .getApplicationContext();
         nameField.setOnFocusChangeListener(userNameFocusChangeListener);
         nameField.setOnItemClickListener(this);
         nameField.setOnClickListener(this);
         if (nameField.getAdapter() == null) {
             try {
                 nameField.setAdapter(new AddressBookAdapter(this.getContext(),
-                    application.getAddressBook()));
+                        application.getAddressBook()));
             } catch (ReservatorException e) {
                 reservatorException = e;
             }
@@ -125,7 +146,7 @@ public class LobbyReservationRowView extends FrameLayout implements
         roomNameView.setText(room.getName());
 
         if (room.getCapacity() >= 0) {
-            roomInfoView.setText("for " + room.getCapacity());
+            roomInfoView.setText(getContext().getString(R.string.room_capacity, room.getCapacity()));
         } else {
             roomInfoView.setText("");
         }
@@ -145,16 +166,15 @@ public class LobbyReservationRowView extends FrameLayout implements
         roomStatusView.setText(room.getStatusText());
         if (room.isBookable()) {
             roomStatusView.setTextColor(getResources().getColor(
-                R.color.StatusFreeColor));
+                    R.color.StatusFreeColor));
             bookNowButton.setVisibility(View.VISIBLE);
         } else {
             roomStatusView.setTextColor(getResources().getColor(
-                R.color.StatusReservedColor));
+                    R.color.StatusReservedColor));
             bookNowButton.setVisibility(View.INVISIBLE);
         }
 
-        if(application.getFavouriteRoomName().equals(room.getName()))
-        {
+        if (application.getFavouriteRoomName().equals(room.getName())) {
             defaultRoomFlag.setVisibility(VISIBLE);
             roomNameView.setTypeface(null, Typeface.BOLD);
         } else {
@@ -186,14 +206,14 @@ public class LobbyReservationRowView extends FrameLayout implements
         reserveButton.setEnabled(true);
         nameField.setSelected(false);
         InputMethodManager imm = (InputMethodManager) getContext()
-            .getSystemService(Context.INPUT_METHOD_SERVICE);
+                .getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(nameField.getRootView().getWindowToken(), 0);
     }
 
     private void reservatorError(ReservatorException e) {
         Builder alertBuilder = new AlertDialog.Builder(getContext());
         alertBuilder.setTitle("Failed to put reservation").setMessage(
-            e.getMessage());
+                e.getMessage());
         alertBuilder.setOnCancelListener(new OnCancelListener() {
             public void onCancel(DialogInterface dialog) {
                 if (onReserveCallback != null) {
@@ -278,10 +298,10 @@ public class LobbyReservationRowView extends FrameLayout implements
         // Initial state for the "Reserve" button.
         if (PreferenceManager.getInstance(getContext()).getAddressBookEnabled()) {
             reserveButton.setEnabled(false);
-            findViewById(R.id.hintText).setVisibility(View.GONE);
+            hintText.setVisibility(View.GONE);
         } else {
             reserveButton.setEnabled(true);
-            findViewById(R.id.hintText).setVisibility(View.VISIBLE);
+            hintText.setVisibility(View.VISIBLE);
         }
 
     }
@@ -322,7 +342,7 @@ public class LobbyReservationRowView extends FrameLayout implements
         @Override
         protected Void doInBackground(Void... arg0) {
             AddressBookEntry entry = application.getAddressBook().getEntryByName(
-                nameField.getText().toString());
+                    nameField.getText().toString());
             Boolean addressBookOption = PreferenceManager.getInstance(getContext()).getAddressBookEnabled();
 
             if (entry == null && addressBookOption) {
@@ -331,7 +351,7 @@ public class LobbyReservationRowView extends FrameLayout implements
             try {
                 if (entry != null) {
                     application.getDataProxy().reserve(room, timePicker2.getTimeSpan(),
-                        entry.getName(), entry.getEmail());
+                            entry.getName(), entry.getEmail());
                 } else {
                     // Address book option is off so reserve the room with the selected account in settings.
                     String accountEmail = PreferenceManager.getInstance(getContext()).getDefaultUserName();
@@ -343,7 +363,7 @@ public class LobbyReservationRowView extends FrameLayout implements
                         title = application.getString(R.string.defaultTitleForReservation);
                     }
                     application.getDataProxy().reserve(room, timePicker2.getTimeSpan(),
-                        title, accountEmail);
+                            title, accountEmail);
                 }
             } catch (ReservatorException e) {
                 reservatorError(e);

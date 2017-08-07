@@ -5,10 +5,7 @@ import android.accounts.AccountManager;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.support.annotation.ColorInt;
-import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +20,10 @@ import com.github.paolorotolo.appintro.ISlidePolicy;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
+
 /**
  * Created by shoj on 10/11/2016.
  */
@@ -30,25 +31,23 @@ import java.util.List;
 public final class WizardAccountSelectionFragment
         extends android.support.v4.app.Fragment implements ISlidePolicy {
 
+    @BindView(R.id.wizard_accounts_radiogroup)
     RadioGroup accountsRadioGroup = null;
+    @BindView(R.id.wizard_accounts_title)
+    TextView title;
+
+    Unbinder unbinder;
+
     AlertDialog alertDialog;
 
-    @Nullable
     @Override
     public View onCreateView(
             LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
 
-        View view =
-                inflater.inflate(R.layout.wizard_account_selection, container,
-                                 false);
-        accountsRadioGroup =
-                (RadioGroup) view.findViewById(R.id.wizard_accounts_radiogroup);
-
-        TextView title =
-                (TextView) view.findViewById(R.id.wizard_accounts_title);
+        View view = inflater.inflate(R.layout.wizard_account_selection, container, false);
+        unbinder = ButterKnife.bind(this, view);
         title.setText(R.string.selectGoogleAccount);
-
         accountsRadioGroup.setOnCheckedChangeListener(
                 new RadioGroup.OnCheckedChangeListener() {
                     @Override
@@ -65,6 +64,12 @@ public final class WizardAccountSelectionFragment
                 });
 
         return view;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        unbinder.unbind();
     }
 
     @Override
@@ -108,16 +113,16 @@ public final class WizardAccountSelectionFragment
         builder.setMessage(errorMessage)
                 .setTitle(R.string.calendarError)
                 .setPositiveButton(R.string.goToAccountSettings,
-                                   new DialogInterface.OnClickListener() {
-                                       public void onClick(
-                                               DialogInterface dialog, int id) {
-                                           dialog.dismiss();
-                                           getActivity().startActivityForResult(
-                                                   new Intent(
-                                                           android.provider.Settings.ACTION_SYNC_SETTINGS),
-                                                   0);
-                                       }
-                                   });
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(
+                                    DialogInterface dialog, int id) {
+                                dialog.dismiss();
+                                getActivity().startActivityForResult(
+                                        new Intent(
+                                                android.provider.Settings.ACTION_SYNC_SETTINGS),
+                                        0);
+                            }
+                        });
         alertDialog = builder.create();
         alertDialog.setCancelable(false);
         alertDialog.setCanceledOnTouchOutside(false);
@@ -135,7 +140,8 @@ public final class WizardAccountSelectionFragment
     public void onUserIllegallyRequestedNextPage() {
     }
 
-    @Override public void onPause() {
+    @Override
+    public void onPause() {
         super.onPause();
         if (alertDialog != null) {
             alertDialog.dismiss();

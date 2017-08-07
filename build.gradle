@@ -25,5 +25,6 @@ ext {
     appintroVersion = '4.1.0'
     supportLibraryVersion = '25.3.1'
     appCompatVesion = '25.3.1'
+    butterknifeVersion = '8.7.0'
 
 }

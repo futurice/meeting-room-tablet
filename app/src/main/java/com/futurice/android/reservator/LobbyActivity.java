@@ -39,30 +39,32 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Vector;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class LobbyActivity extends ReservatorActivity
         implements OnMenuItemClickListener,
         DataUpdatedListener, AddressBookUpdatedListener {
     MenuItem settingsMenu, refreshMenu, aboutMenu;
-    LinearLayout container = null;
     DataProxy proxy;
     AddressBook ab;
     int showLoadingCount = 0;
+
     AlertDialog alertDialog;
     private ProgressDialog progressDialog = null;
     private boolean waitingAddresses = false;
 
+    @BindView(R.id.digitalClock1)
+    TextView clock;
+    @BindView(R.id.linearLayout1)
+    LinearLayout container;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        this.setContentView(R.layout.lobby_activity);
-        ab = this.getResApplication().getAddressBook();
-        TextView clock;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-            clock = (TextClock) findViewById(R.id.digitalClock1);
-        } else {
-            clock = (DigitalClock) findViewById(
-                    R.id.digitalClock1);
-        }
+        setContentView(R.layout.lobby_activity);
+        ButterKnife.bind(this);
+        ab = getResApplication().getAddressBook();
         clock.setTypeface(
                 Typeface.createFromAsset(getAssets(), "fonts/EHSMB.TTF"));
     }
@@ -119,7 +121,6 @@ public class LobbyActivity extends ReservatorActivity
 
     private void refreshRoomInfo() {
         updateLoadingWindow(1);
-        container = (LinearLayout) findViewById(R.id.linearLayout1);
         container.removeAllViews();
         proxy.refreshRooms();
     }
