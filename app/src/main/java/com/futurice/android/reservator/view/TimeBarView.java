@@ -15,10 +15,12 @@ import android.util.AttributeSet;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class TimeBarView extends FrameLayout {
     private static final int MIN_SPAN_LENGTH = 60 * 120 * 1000;
     int animStep = 60000;
-    TextView durationLabel;
     boolean animationEnabled = false;
     Thread animatorThread = null;
     TimeSpan limits, span;
@@ -29,22 +31,30 @@ public class TimeBarView extends FrameLayout {
     private long startDelta = 0, endDelta = 0;
     private TimeSpan targetTimeSpan = null;
 
+    @BindView(R.id.textView1)
+    TextView durationLabel;
+
     public TimeBarView(Context context) {
-        this(context, null);
+        super(context);
+        init(context, null, 0);
     }
 
     public TimeBarView(Context context, AttributeSet attrs) {
         super(context, attrs);
+        init(context, attrs, 0);
+    }
+
+    private void init(Context context, AttributeSet attrs, int defStyle) {
         inflate(context, R.layout.time_bar, this);
-        durationLabel = (TextView) findViewById(R.id.textView1);
+        ButterKnife.bind(this);
         this.setTimeLimits(new TimeSpan(null, Calendar.HOUR, 2));
         this.setSpan(new TimeSpan(null, Calendar.MINUTE, 90));
-        // span.getStart().add(Calendar.MINUTE, 30); // XXX: check why
 
         background = getResources().getDrawable(R.drawable.timeline);
         reservationOwn = getResources().getDrawable(R.drawable.oma_varaus);
         reservationOther = getResources().getDrawable(R.drawable.muu_varaus);
         tickColor = getResources().getColor(R.color.TimeBarTickColor);
+
     }
 
     public void setTimeLimits(TimeSpan span) {
@@ -176,19 +186,15 @@ public class TimeBarView extends FrameLayout {
         int hours = minutes / 60;
         minutes = minutes % 60;
 
+        String duration;
         if (hours > 0 && minutes == 0) {
-            durationLabel.setText(hours + (hours == 1 ? " hour" : " hours"));
+            duration = hours + (hours == 1 ? " hour" : " hours");
         } else if (hours > 0) {
-            durationLabel.setText(hours + (hours == 1 ? " hour " : " hours ") + minutes + " minutes");
+            duration = hours + (hours == 1 ? " hour " : " hours ") + minutes + " minutes";
         } else {
-            durationLabel.setText(minutes + " minutes");
+            duration = minutes + " minutes";
         }
-        /*p.setColor(getResources().getColor(R.color.TimeSpanTextColor));
-        String durationText = span.getLength() / 60000 + " minutes";
-        int textWidth = (int) p.measureText(durationText);
-        int textX = startX + (endX - startX - textWidth ) / 2;
-
-        c.drawText( durationText, textX > startX ? textX : startX, bottom + padding + p.getTextSize(), p);*/
+        durationLabel.setText(duration);
     }
 
     private DateTime getMaximum() {

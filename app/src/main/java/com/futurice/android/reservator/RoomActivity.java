@@ -17,6 +17,7 @@ import android.view.MenuItem;
 import android.view.MenuItem.OnMenuItemClickListener;
 import android.view.View;
 import android.view.Window;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.futurice.android.reservator.common.PreferenceManager;
@@ -38,6 +39,9 @@ import com.futurice.android.reservator.view.WeekView;
 import java.util.Calendar;
 import java.util.Vector;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class RoomActivity extends ReservatorActivity implements OnMenuItemClickListener,
     DataUpdatedListener, AddressBookUpdatedListener {
     public static final String ROOM_EXTRA = "room";
@@ -54,13 +58,21 @@ public class RoomActivity extends ReservatorActivity implements OnMenuItemClickL
     final int DEFAULT_BOOK_NOW_DURATION = 30; // mins
     DataProxy proxy;
     Room currentRoom;
-    WeekView weekView;
-    TextView roomNameLabel;
-    RoomTrafficLights trafficLights;
+
     MenuItem settingsMenu, refreshMenu, aboutMenu;
     AlertDialog alertDialog;
     int showLoadingCount = 0;
     private ProgressDialog progressDialog = null;
+
+    @BindView(R.id.weekView1)
+    WeekView weekView;
+    @BindView(R.id.roomNameLabel)
+    TextView roomNameLabel;
+    @BindView(R.id.roomTrafficLights)
+    RoomTrafficLights trafficLights;
+    @BindView(R.id.seeAllRoomsButton)
+    Button seeAllRoomsButton;
+
 
     /**
      * Helper for starting a RoomActivity
@@ -77,6 +89,9 @@ public class RoomActivity extends ReservatorActivity implements OnMenuItemClickL
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        setContentView(R.layout.room_activity);
+        ButterKnife.bind(this);
         initRoomActivity();
     }
 
@@ -112,11 +127,6 @@ public class RoomActivity extends ReservatorActivity implements OnMenuItemClickL
     }
 
     private void initRoomActivity() {
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
-        setContentView(R.layout.room_activity);
-        this.weekView = (WeekView) findViewById(R.id.weekView1);
-        this.roomNameLabel = (TextView) findViewById(R.id.roomNameLabel);
-        this.trafficLights = (RoomTrafficLights) findViewById(R.id.roomTrafficLights);
         try {
             currentRoom = (Room) getIntent().getSerializableExtra(ROOM_EXTRA);
         } catch (ClassCastException e) {
@@ -127,7 +137,7 @@ public class RoomActivity extends ReservatorActivity implements OnMenuItemClickL
                 "No room found as Serializable extra " + ROOM_EXTRA);
         }
 
-        findViewById(R.id.seeAllRoomsButton).setOnClickListener(
+        seeAllRoomsButton.setOnClickListener(
             new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

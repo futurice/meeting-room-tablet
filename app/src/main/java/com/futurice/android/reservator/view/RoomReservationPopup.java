@@ -9,26 +9,30 @@ import com.futurice.android.reservator.view.LobbyReservationRowView.OnReserveLis
 import android.app.Dialog;
 import android.content.Context;
 import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 public class RoomReservationPopup extends Dialog {
+    @BindView(R.id.roomReservationView1)
     LobbyReservationRowView reservationView;
-
-    public RoomReservationPopup() {
-        super(null, 0);
-    }
+    @BindView(R.id.container_reservation_popup)
+    RelativeLayout popupContainer;
 
     public RoomReservationPopup(Context context, TimeSpan timeLimits, TimeSpan presetTime, Room room) {
         super(context, R.style.Theme_Transparent);
         setCancelable(true);
-
         setContentView(R.layout.reservation_popup);
-        findViewById(R.id.relativeLayout1).setOnClickListener(new View.OnClickListener() {
+        ButterKnife.bind(this);
+
+        popupContainer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 cancel();
             }
         });
-        reservationView = (LobbyReservationRowView) findViewById(R.id.roomReservationView1);
         reservationView.setAnimationDuration(0);
         reservationView.setClickable(true);
         reservationView.setRoom(room);

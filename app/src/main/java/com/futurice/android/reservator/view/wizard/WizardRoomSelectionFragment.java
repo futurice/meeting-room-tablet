@@ -1,12 +1,6 @@
 package com.futurice.android.reservator.view.wizard;
 
-import android.app.AlertDialog;
-import android.content.ContentUris;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
-import android.provider.CalendarContract;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,30 +10,39 @@ import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.futurice.android.reservator.R;
 import com.futurice.android.reservator.ReservatorApplication;
-import com.futurice.android.reservator.WizardActivity;
 import com.futurice.android.reservator.common.PreferenceManager;
 import com.futurice.android.reservator.model.DataProxy;
-import com.futurice.android.reservator.model.ReservatorException;
 import com.futurice.android.reservator.model.platformcalendar.PlatformCalendarDataProxy;
 import com.github.paolorotolo.appintro.ISlidePolicy;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
+
 /**
  * Created by shoj on 10/11/2016.
  */
 
-public final class WizardRoomSelectionFragment extends android.support.v4.app.Fragment implements ISlidePolicy {
+public final class WizardRoomSelectionFragment extends android.support.v4.app.Fragment
+        implements ISlidePolicy {
 
 
-    CheckBox onlyUseResource = null;
-    LinearLayout containerRoomCheckboxes = null;
+    @BindView(R.id.wizard_rooms_use_resources)
+    CheckBox onlyUseResource;
+    @BindView(R.id.wizard_rooms_container)
+    LinearLayout containerRoomCheckboxes;
+    @BindView(R.id.wizard_rooms_progressbar)
     ProgressBar progressBar = null;
+    @BindView(R.id.wizard_rooms_title)
+    TextView title;
+
+    Unbinder unbinder;
 
     DataProxy proxy = null;
     ArrayList<String> roomNames = null;
@@ -47,17 +50,13 @@ public final class WizardRoomSelectionFragment extends android.support.v4.app.Fr
     PreferenceManager preferences = null;
     ReservatorApplication application = null;
 
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
         final View view = inflater.inflate(R.layout.wizard_room_selection, container, false);
+        unbinder = ButterKnife.bind(this, view);
 
-        onlyUseResource = (CheckBox) view.findViewById(R.id.wizard_rooms_use_resources);
-        containerRoomCheckboxes = (LinearLayout) view.findViewById(R.id.wizard_rooms_container);
-        progressBar = (ProgressBar) view.findViewById(R.id.wizard_rooms_progressbar);
-
-        TextView title = (TextView) view.findViewById(R.id.wizard_rooms_title);
         title.setText(R.string.shown_rooms);
 
         preferences = PreferenceManager.getInstance(getActivity());
@@ -66,11 +65,9 @@ public final class WizardRoomSelectionFragment extends android.support.v4.app.Fr
         onlyUseResource.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(isChecked)
-                {
+                if (isChecked) {
                     preferences.setCalendarMode(PlatformCalendarDataProxy.Mode.RESOURCES);
-                }
-                else{
+                } else {
                     preferences.setCalendarMode(PlatformCalendarDataProxy.Mode.CALENDARS);
                 }
                 saveSelection();
@@ -82,16 +79,20 @@ public final class WizardRoomSelectionFragment extends android.support.v4.app.Fr
         return view;
     }
 
-    public void saveSelection()
-    {
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        unbinder.unbind();
+    }
+
+    public void saveSelection() {
         HashSet<String> unselectedRooms = new HashSet<String>();
 
-        for (int i=0; i<containerRoomCheckboxes.getChildCount(); i++)
-        {
+        for (int i = 0; i < containerRoomCheckboxes.getChildCount(); i++) {
             CheckBox cb = (CheckBox) containerRoomCheckboxes.getChildAt(i);
-            if(cb==null) continue;
+            if (cb == null) continue;
 
-            if(cb.isChecked()==false){
+            if (cb.isChecked() == false) {
                 unselectedRooms.add(cb.getText().toString());
             }
         }
@@ -100,8 +101,7 @@ public final class WizardRoomSelectionFragment extends android.support.v4.app.Fr
 
     }
 
-    public void loadRooms()
-    {
+    public void loadRooms() {
         application.resetDataProxy();
         proxy = application.getDataProxy();
 
@@ -113,11 +113,10 @@ public final class WizardRoomSelectionFragment extends android.support.v4.app.Fr
 
         HashSet<String> unselectedRooms = preferences.getUnselectedRooms();
 
-        for(String roomName: roomNames)
-        {
+        for (String roomName : roomNames) {
             CheckBox cb = new CheckBox(getActivity());
             cb.setText(roomName);
-            cb.setChecked(unselectedRooms.contains(roomName)==false);
+            cb.setChecked(unselectedRooms.contains(roomName) == false);
             containerRoomCheckboxes.addView(cb);
         }
 
@@ -132,7 +131,7 @@ public final class WizardRoomSelectionFragment extends android.support.v4.app.Fr
     @Override
     public boolean isPolicyRespected() {
         // check whether any room is checked
-        for (int i=0; i<containerRoomCheckboxes.getChildCount(); i++) {
+        for (int i = 0; i < containerRoomCheckboxes.getChildCount(); i++) {
             CheckBox cb = (CheckBox) containerRoomCheckboxes.getChildAt(i);
             if (cb == null) continue;
 

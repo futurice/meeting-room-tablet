@@ -30,7 +30,7 @@
             android:id="@+id/wizard_rooms_use_resources"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="Only use resource calendars"
+            android:text="@string/only_use_resource_calendars"
             android:checked="true"
             android:visibility="gone"/>
 
