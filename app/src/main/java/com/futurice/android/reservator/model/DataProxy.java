@@ -74,7 +74,12 @@ public abstract class DataProxy {
             Room room = it.next();
             roomNames.add(room.getName());
         }
-        Collections.sort(roomNames, Collator.getInstance());
+        Collator collator = Collator.getInstance();
+        if (collator != null) {
+            Collections.sort(roomNames, collator);
+        } else {
+            Collections.sort(roomNames);
+        }
         return roomNames;
     }
 

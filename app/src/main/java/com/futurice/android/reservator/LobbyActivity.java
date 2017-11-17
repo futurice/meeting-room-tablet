@@ -78,7 +78,12 @@ public class LobbyActivity extends ReservatorActivity
         showLoadingCount = 0; //TODO better fix
         proxy = this.getResApplication().getDataProxy();
         proxy.addDataUpdatedListener(this);
-        ab.addDataUpdatedListener(this);
+        if (ab == null) {
+            ab = getResApplication().getAddressBook();
+        }
+        if (ab != null) {
+            ab.addDataUpdatedListener(this);
+        }
         refreshRoomInfo();
     }
 
@@ -225,7 +230,11 @@ public class LobbyActivity extends ReservatorActivity
                 continue;
             }
             updateLoadingWindow(1);
-            proxy.refreshRoomReservations(r);
+            if (proxy == null) {
+                proxy = this.getResApplication().getDataProxy();
+            } if (proxy != null) {
+                proxy.refreshRoomReservations(r);
+            }
         }
         updateLoadingWindow(-1);
     }
