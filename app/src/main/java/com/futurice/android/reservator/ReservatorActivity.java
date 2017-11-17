@@ -1,9 +1,15 @@
 package com.futurice.android.reservator;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.os.BatteryManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 import android.view.WindowManager;
 import android.widget.Toast;
 
@@ -17,21 +23,35 @@ public class ReservatorActivity extends Activity {
     private final ReservatorAppHandler handler = new ReservatorAppHandler();
     private GoToFavouriteRoom goToFavouriteRoomRunable;
     protected boolean havePermissions = false;
+    BatteryStateReceiver batteryStateReceiver = new BatteryStateReceiver();
+    IntentFilter filter = new IntentFilter();
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        this.getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN | WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        filter.addAction(Intent.ACTION_POWER_CONNECTED);
+        filter.addAction(Intent.ACTION_POWER_DISCONNECTED);
+        IntentFilter ifilter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
+        Intent batteryStatus = registerReceiver(null, ifilter);
+        int status = batteryStatus.getIntExtra(BatteryManager.EXTRA_STATUS, -1);
+        boolean isCharging = (status == BatteryManager.BATTERY_STATUS_CHARGING || status ==
+            BatteryManager.BATTERY_STATUS_FULL);
+        if (isCharging) {
+            this.getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        }
+        this.getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
         goToFavouriteRoomRunable = new GoToFavouriteRoom(this);
     }
 
     public void onResume() {
         super.onResume();
         startAutoGoToFavouriteRoom();
+        registerReceiver(batteryStateReceiver, filter);
     }
 
     public void onPause() {
         super.onPause();
         stopAutoGoToFavouriteRoom();
+        unregisterReceiver(batteryStateReceiver);
     }
 
     public void onUserInteraction() {
@@ -106,4 +126,22 @@ public class ReservatorActivity extends Activity {
         }
     }
 
+    class BatteryStateReceiver extends BroadcastReceiver {
+
+        private int status = -1;
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            status = intent.getIntExtra(BatteryManager.EXTRA_STATUS, -1);
+            if (isCharging()) {
+                ReservatorActivity.this.getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+            } else {
+                ReservatorActivity.this.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+            }
+        }
+
+        public boolean isCharging() {
+            return (status == BatteryManager.BATTERY_STATUS_CHARGING || status == BatteryManager.BATTERY_STATUS_FULL);
+        }
+    }
 }

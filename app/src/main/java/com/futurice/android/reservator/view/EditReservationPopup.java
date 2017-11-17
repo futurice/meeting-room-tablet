@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.futurice.android.reservator.R;
@@ -28,9 +29,9 @@ public class EditReservationPopup extends Dialog {
     private Reservation reservation;
 
     @BindView(R.id.cancelButton)
-    Button cancelButton;
+    ImageButton cancelButton;
     @BindView(R.id.roomName)
-    Button roomName;
+    TextView roomName;
     @BindView(R.id.reservationInfo)
     TextView reservationInfoTextView;
     @BindView(R.id.cancelReservationButton)
