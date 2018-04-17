@@ -32,13 +32,15 @@ android {
 
     productFlavors {
         dev {
-
+            dimension "dev"
         }
 
         prod {
             signingConfig signingConfigs.release
+            dimension "prod"
         }
     }
+    flavorDimensions "dev", "prod"
 
     packagingOptions {
         exclude 'META-INF/DEPENDENCIES.txt'
