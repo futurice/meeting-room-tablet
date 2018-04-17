@@ -30,18 +30,6 @@ android {
 
     }
 
-    productFlavors {
-        dev {
-            dimension "dev"
-        }
-
-        prod {
-            signingConfig signingConfigs.release
-            dimension "prod"
-        }
-    }
-    flavorDimensions "dev", "prod"
-
     packagingOptions {
         exclude 'META-INF/DEPENDENCIES.txt'
         exclude 'META-INF/LICENSE'
@@ -64,10 +52,8 @@ android {
             testCoverageEnabled true
         }
         release {
-            versionNameSuffix '-RELEASE'
-
             signingConfig signingConfigs.release
-
+            versionNameSuffix '-RELEASE'
             shrinkResources false
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
