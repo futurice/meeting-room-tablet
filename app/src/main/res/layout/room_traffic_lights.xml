@@ -6,7 +6,7 @@
 
     <TextView
         android:id="@+id/roomTitle"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:gravity="start"
@@ -15,6 +15,8 @@
         android:textIsSelectable="false"
         android:textSize="40sp"
         android:textStyle="bold" />
+
+    <include layout="@layout/clock" />
 
     <RelativeLayout
         android:layout_width="match_parent"

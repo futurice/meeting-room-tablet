@@ -2,14 +2,16 @@
 buildscript {
     repositories {
         jcenter()
+        google()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.3.3'
+        classpath 'com.android.tools.build:gradle:3.0.1'
     }
 }
 allprojects {
     repositories {
         jcenter()
+        google()
     }
 }
 
@@ -17,14 +19,14 @@ ext {
 
     // Android SDK and Tools
     minSdkVersion = 16
-    targetSdkVersion = 25
-    compileSdkVersion = 25
-    buildToolsVersion = '25.0.0'
+    targetSdkVersion = 27
+    compileSdkVersion = 27
+    buildToolsVersion = '27.0.1'
 
     // Libraries Dependencies
     appintroVersion = '4.1.0'
-    supportLibraryVersion = '25.3.1'
-    appCompatVesion = '25.3.1'
-    butterknifeVersion = '8.7.0'
+    supportLibraryVersion = '27.0.1'
+    appCompatVesion = '27.0.1'
+    butterknifeVersion = '8.8.1'
 
 }
