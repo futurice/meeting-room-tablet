@@ -65,8 +65,8 @@ public class LobbyActivity extends ReservatorActivity
         setContentView(R.layout.lobby_activity);
         ButterKnife.bind(this);
         ab = getResApplication().getAddressBook();
-        clock.setTypeface(
-                Typeface.createFromAsset(getAssets(), "fonts/EHSMB.TTF"));
+//        clock.setTypeface(
+//                Typeface.createFromAsset(getAssets(), "fonts/EHSMB.TTF"));
     }
 
     @Override

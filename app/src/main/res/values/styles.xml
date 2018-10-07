@@ -23,7 +23,7 @@
         <item name="android:backgroundDimEnabled">true</item>
     </style>
 
-    <color name="TextColor">#000</color>
+    <color name="TextColor">#000000</color>
     <color name="TimeSpanTextColor">#529200</color>
 
     <style name="TimeSpanTimeStyle">
@@ -43,7 +43,7 @@
     <color name="ButtonTextNormal">#333</color>
     <color name="ButtonTextActive">#333</color>
     <color name="ButtonTextDisabled">#999</color>
-    <color name="TextInfoColor">#666</color>
+    <color name="TextInfoColor">#666666</color>
     <color name="CalendarWeekTextColor">#999</color>
     <color name="MenuButtonBackgroundColor">#005C99</color>
     <color name="MenuButtonPressedColor">#00436E</color>
