@@ -6,7 +6,7 @@ apply from: "$project.rootDir/tools/script-pmd.gradle"
 
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
-    buildToolsVersion rootProject.ext.buildToolsVersion
+    buildToolsVersion '28.0.2'
 
     defaultConfig {
         applicationId "com.futurice.android.reservator"
@@ -23,8 +23,8 @@ android {
         release {
             keyAlias 'futurice'
             // Create your own gradle.properties file and store the passwords there
-            keyPassword RESERVATOR_KEY_PASSWORD
-            storePassword RESERVATOR_KEYSTORE_PASSWORD
+//            keyPassword RESERVATOR_KEY_PASSWORD
+//            storePassword RESERVATOR_KEYSTORE_PASSWORD
             storeFile file("../keystore/reservator_release.keystore")
         }
 
@@ -65,10 +65,14 @@ android {
     }
 
     dependencies {
-        compile "com.github.paolorotolo:appintro:$rootProject.appintroVersion"
-        compile "com.android.support:support-v4:$rootProject.supportLibraryVersion"
-        compile "com.android.support:appcompat-v7:$rootProject.appCompatVesion"
-        compile "com.jakewharton:butterknife:$rootProject.butterknifeVersion"
+        implementation "com.github.paolorotolo:appintro:$rootProject.appintroVersion"
+        implementation "com.android.support:support-v4:$rootProject.supportLibraryVersion"
+        implementation "com.android.support:appcompat-v7:$rootProject.appCompatVesion"
+        implementation "com.jakewharton:butterknife:$rootProject.butterknifeVersion"
         annotationProcessor "com.jakewharton:butterknife-compiler:$rootProject.butterknifeVersion"
     }
+}
+
+dependencies {
+    implementation 'com.android.support.constraint:constraint-layout:1.1.3'
 }
