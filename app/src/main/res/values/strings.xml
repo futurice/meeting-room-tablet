@@ -4,7 +4,7 @@
     <string name="start">start</string>
     <string name="end">end</string>
     <string name="book_now">Book now</string>
-    <string name="dateLabelFormat">EEEE, MMM. d</string>
+    <string name="dateLabelFormat">EEE, d/MM</string>
     <string name="weekLabelFormat">\'Week\' w</string>
     <string name="seeAllRooms">All rooms</string>
     <string name="default_room_name">Name of the default room</string>
