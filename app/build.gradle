@@ -21,11 +21,11 @@ android {
 
     signingConfigs {
         release {
-            keyAlias 'futurice'
+            // keyAlias 'futurice'
             // Create your own gradle.properties file and store the passwords there
-            keyPassword RESERVATOR_KEY_PASSWORD
-            storePassword RESERVATOR_KEYSTORE_PASSWORD
-            storeFile file("../keystore/reservator_release.keystore")
+            // keyPassword RESERVATOR_KEY_PASSWORD
+            // storePassword RESERVATOR_KEYSTORE_PASSWORD
+            // storeFile file("../keystore/reservator_release.keystore")
         }
 
     }

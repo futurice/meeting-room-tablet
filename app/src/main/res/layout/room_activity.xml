@@ -14,32 +14,32 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_below="@+id/roomNameLabel"
-            android:layout_marginBottom="0dp"
             android:layout_marginLeft="0dp"
+            android:layout_marginTop="10dp"
             android:layout_marginRight="0dp"
-            android:layout_marginTop="10dp">
+            android:layout_marginBottom="0dp">
 
             <FrameLayout
                 android:id="@+id/frameLayout1"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginBottom="0dp"
                 android:layout_marginEnd="10dp"
-                android:layout_marginRight="10dp" />
+                android:layout_marginRight="10dp"
+                android:layout_marginBottom="0dp" />
         </com.futurice.android.reservator.view.WeekView>
 
         <TextView
             android:id="@+id/roomNameLabel"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
             android:textColor="@color/TextColor"
             android:textIsSelectable="false"
             android:textSize="20sp"
             android:textStyle="bold" />
 
-        <Button
+        <!-- <Button
             android:id="@+id/seeAllRoomsButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -51,7 +51,7 @@
             android:layout_marginRight="10dp"
             android:background="@drawable/button_background"
             android:text="@string/seeAllRooms"
-            android:textColor="@android:color/white" />
+            android:textColor="@android:color/white" /> -->
     </RelativeLayout>
 
     <com.futurice.android.reservator.view.RoomTrafficLights
