@@ -17,9 +17,9 @@ import android.view.MenuItem;
 import android.view.MenuItem.OnMenuItemClickListener;
 import android.view.View;
 import android.view.Window;
-import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.futurice.android.reservator.common.PreferenceManager;
 import com.futurice.android.reservator.model.AddressBook;
 import com.futurice.android.reservator.model.AddressBookUpdatedListener;
@@ -36,6 +36,7 @@ import com.futurice.android.reservator.view.LobbyReservationRowView;
 import com.futurice.android.reservator.view.RoomReservationPopup;
 import com.futurice.android.reservator.view.RoomTrafficLights;
 import com.futurice.android.reservator.view.WeekView;
+
 import java.util.Calendar;
 import java.util.Vector;
 
@@ -70,8 +71,8 @@ public class RoomActivity extends ReservatorActivity implements OnMenuItemClickL
     TextView roomNameLabel;
     @BindView(R.id.roomTrafficLights)
     RoomTrafficLights trafficLights;
-    @BindView(R.id.seeAllRoomsButton)
-    Button seeAllRoomsButton;
+    /* @BindView(R.id.seeAllRoomsButton)
+    Button seeAllRoomsButton; */
 
 
     /**
@@ -137,13 +138,13 @@ public class RoomActivity extends ReservatorActivity implements OnMenuItemClickL
                 "No room found as Serializable extra " + ROOM_EXTRA);
         }
 
-        seeAllRoomsButton.setOnClickListener(
+        /*seeAllRoomsButton.setOnClickListener(
             new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     RoomActivity.this.finish();
                 }
-            });
+            });*/
 
         weekView.setOnFreeTimeClickListener(new WeekView.OnFreeTimeClickListener() {
             @Override
