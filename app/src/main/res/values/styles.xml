@@ -6,13 +6,13 @@
         <item name="android:textSize">18pt</item>
     </style>
 
-    <color name="CalendarBorderColor">#ccc</color>
+    <color name="CalendarBorderColor">#F8F8F8</color> //light silver
     <color name="CalendarTextColor">#000</color>
     <color name="CalendarResTextColor">#fff</color>
     <color name="StatusFreeColor">#529200</color>
-    <color name="StatusReservedColor">#b24c4c</color>
+    <color name="StatusReservedColor">#e5053a</color> //red
     <color name="Transparent">#0000</color>
-    <color name="CalendarMarkerReservedColor">#0066CC</color>
+    <color name="CalendarMarkerReservedColor">#0098d0</color> //blue
 
     <style name="Theme.Transparent" parent="android:Theme">
         <item name="android:windowIsTranslucent">true</item>
@@ -42,16 +42,16 @@
     <color name="TimeBarTickColor">#3333</color>
     <color name="ButtonTextNormal">#333</color>
     <color name="ButtonTextActive">#333</color>
-    <color name="ButtonTextDisabled">#999</color>
-    <color name="TextInfoColor">#666</color>
-    <color name="CalendarWeekTextColor">#999</color>
-    <color name="MenuButtonBackgroundColor">#005C99</color>
-    <color name="MenuButtonPressedColor">#00436E</color>
-    <color name="MenuButtonInactiveColor">#E3E3E9</color>
+    <color name="ButtonTextDisabled">#979797</color> //silver
+    <color name="TextInfoColor">#555555</color> //light grey
+    <color name="CalendarWeekTextColor">#979797</color> //silver
+    <color name="MenuButtonBackgroundColor">#0098d0</color>  //blue
+    <color name="MenuButtonPressedColor">#005479</color> //dark blue
+    <color name="MenuButtonInactiveColor">#F8F8F8</color> //light silver
 
     <color name="TrafficLightFree">#4ccb00</color>
     <color name="TrafficLightYellow">#cee100</color>
-    <color name="TrafficLightReserved">#de1f00</color>
+    <color name="TrafficLightReserved">#e5053a</color> //red
     <color name="TrafficLightText">#fff</color>
     <color name="TrafficLightYellowButtonText">#becf00</color>
     <color name="TrafficLightYellowButtonPressed">#a0af00</color>
