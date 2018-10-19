@@ -7,6 +7,7 @@
     <string name="dateLabelFormat">EEE, d/MM</string>
     <string name="weekLabelFormat">\'Week\' w</string>
     <string name="seeAllRooms">All rooms</string>
+    <string name="toMain">Main screen</string>
     <string name="default_room_name">Name of the default room</string>
     <string name="removeUserData">Remove login info and reset settings</string>
     <string name="lobbyRoomName">Lobby</string>

@@ -17,6 +17,7 @@ import android.view.MenuItem;
 import android.view.MenuItem.OnMenuItemClickListener;
 import android.view.View;
 import android.view.Window;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -44,7 +45,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class RoomActivity extends ReservatorActivity implements OnMenuItemClickListener,
-    DataUpdatedListener, AddressBookUpdatedListener {
+        DataUpdatedListener, AddressBookUpdatedListener {
     public static final String ROOM_EXTRA = "room";
     public static final long ROOMLIST_REFRESH_PERIOD = 60 * 1000;
     final Handler handler = new Handler();
@@ -71,8 +72,8 @@ public class RoomActivity extends ReservatorActivity implements OnMenuItemClickL
     TextView roomNameLabel;
     @BindView(R.id.roomTrafficLights)
     RoomTrafficLights trafficLights;
-    /* @BindView(R.id.seeAllRoomsButton)
-    Button seeAllRoomsButton; */
+    @BindView(R.id.backToMain)
+    Button backToMainMenu;
 
 
     /**
@@ -122,7 +123,7 @@ public class RoomActivity extends ReservatorActivity implements OnMenuItemClickL
     private void setRoom(Room r) {
         currentRoom = r;
         roomNameLabel
-            .setText(currentRoom.getName());
+                .setText(currentRoom.getName());
         weekView.refreshData(currentRoom);
         trafficLights.update(currentRoom);
     }
@@ -135,16 +136,18 @@ public class RoomActivity extends ReservatorActivity implements OnMenuItemClickL
         }
         if (currentRoom == null) {
             throw new IllegalArgumentException(
-                "No room found as Serializable extra " + ROOM_EXTRA);
+                    "No room found as Serializable extra " + ROOM_EXTRA);
         }
 
-        /*seeAllRoomsButton.setOnClickListener(
-            new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    RoomActivity.this.finish();
-                }
-            });*/
+        backToMainMenu.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) { //Once I figure out how to go to the page, make it go there automatically after making a reservation
+                        //RoomActivity.this.finish();
+                        RoomActivity.this.trafficLights.enable();
+                        RoomActivity.this.trafficLights.setVisibility(View.VISIBLE);
+                    }
+                });
 
         weekView.setOnFreeTimeClickListener(new WeekView.OnFreeTimeClickListener() {
             @Override
@@ -180,7 +183,7 @@ public class RoomActivity extends ReservatorActivity implements OnMenuItemClickL
                 }
 
                 final RoomReservationPopup
-                    d = new RoomReservationPopup(RoomActivity.this, timeSpan, reservationTimeSpan, currentRoom);
+                        d = new RoomReservationPopup(RoomActivity.this, timeSpan, reservationTimeSpan, currentRoom);
                 d.setOnReserveCallback(new LobbyReservationRowView.OnReserveListener() {
                     @Override
                     public void call(LobbyReservationRowView v) {
@@ -243,13 +246,13 @@ public class RoomActivity extends ReservatorActivity implements OnMenuItemClickL
             @Override
             public void onReservationClick(View v, Reservation reservation) {
                 final EditReservationPopup
-                    d = new EditReservationPopup(RoomActivity.this, reservation, currentRoom,
-                    new EditReservationPopup.OnReservationCancelledListener() {
-                        @Override
-                        public void onReservationCancelled(Reservation r) {
-                            refreshData();
-                        }
-                    });
+                        d = new EditReservationPopup(RoomActivity.this, reservation, currentRoom,
+                        new EditReservationPopup.OnReservationCancelledListener() {
+                            @Override
+                            public void onReservationCancelled(Reservation r) {
+                                refreshData();
+                            }
+                        });
 
                 RoomActivity.this.trafficLights.disable();
                 d.setOnDismissListener(new DialogInterface.OnDismissListener() {
@@ -389,7 +392,7 @@ public class RoomActivity extends ReservatorActivity implements OnMenuItemClickL
         //hideLoading();
         stopAutoRefreshData();
         Toast err = Toast.makeText(this, e.getMessage(),
-            Toast.LENGTH_LONG);
+                Toast.LENGTH_LONG);
         err.show();
         startAutoRefreshData();
         return;
