@@ -167,7 +167,7 @@ public class SettingsActivity extends ReservatorActivity {
 
         ArrayAdapter<String> adapter;
         ArrayList<String> accounts = new ArrayList<String>();
-        for (Account account : AccountManager.get(this).getAccountsByType(GOOGLE_ACCOUNT_TYPE)) {
+        for (Account account : AccountManager.get(this).getAccountsByType(null)) {
             accounts.add(account.name);
         }
 
@@ -228,7 +228,7 @@ public class SettingsActivity extends ReservatorActivity {
 
         ArrayAdapter<String> adapter;
         ArrayList<String> accounts = new ArrayList<String>();
-        for (Account account : AccountManager.get(this).getAccountsByType(GOOGLE_ACCOUNT_TYPE)) {
+        for (Account account : AccountManager.get(this).getAccountsByType(null)) {
             accounts.add(account.name);
         }
 

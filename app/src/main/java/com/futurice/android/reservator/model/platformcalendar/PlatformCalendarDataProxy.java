@@ -56,8 +56,8 @@ public class PlatformCalendarDataProxy extends DataProxy {
 
     private static final Pattern idPattern = Pattern.compile("^(\\d+)(-.*)?");
     private final String DEFAULT_MEETING_NAME = "Reserved";
-    //private final String GOOGLE_ACCOUNT_TYPE = "com.google";
-    private final String GOOGLE_ACCOUNT_TYPE = null;
+    private final String GOOGLE_ACCOUNT_TYPE = "com.google";
+//    private final String GOOGLE_ACCOUNT_TYPE = null;
     private final String CALENDAR_SYNC_AUTHORITY = "com.android.calendar";
     private final String RESOURCE_CALENDAR_TYPE = "resource.calendar.google.com";
     // Event fetch window (if we try to query all events it's very, very slow)
@@ -259,7 +259,7 @@ public class PlatformCalendarDataProxy extends DataProxy {
      */
     private void syncGoogleCalendarAccount(String accountName) {
         boolean success = false;
-        for (Account account : accountManager.getAccountsByType(GOOGLE_ACCOUNT_TYPE)) {
+        for (Account account : accountManager.getAccountsByType(null)) {
             if (account.name.equals(accountName)) {
                 if (ContentResolver.getIsSyncable(account, CALENDAR_SYNC_AUTHORITY) > 0) {
                     success = true;
@@ -308,7 +308,7 @@ public class PlatformCalendarDataProxy extends DataProxy {
         String mSortOrder = null;
 
         Cursor result = resolver.query(
-            CalendarContract.Calendars.CONTENT_URI, //null, null, null,null);
+            CalendarContract.Calendars.CONTENT_URI,
             mProjection,
             TextUtils.join(" AND ", mSelectionClauses),
             mSelectionArgs.toArray(new String[0]),
@@ -436,9 +436,9 @@ public class PlatformCalendarDataProxy extends DataProxy {
             CalendarContract.Instances.ORGANIZER
         };
         String mSelectionClause =
-            CalendarContract.Instances.CALENDAR_ID + " = " + room.getId() + " AND " +
-                CalendarContract.Instances.STATUS + " != " + CalendarContract.Instances.STATUS_CANCELED + " AND " +
-                CalendarContract.Instances.SELF_ATTENDEE_STATUS + " != " + CalendarContract.Attendees.STATUS_CANCELED;
+            CalendarContract.Instances.CALENDAR_ID + " = " + room.getId();// + " AND " +
+//                CalendarContract.Instances.STATUS + " != " + CalendarContract.Instances.STATUS_CANCELED + " AND " +
+//                CalendarContract.Instances.SELF_ATTENDEE_STATUS + " != " + CalendarContract.Attendees.STATUS_CANCELED;
         String[] mSelectionArgs = {};
         String mSortOrder = null;
 
