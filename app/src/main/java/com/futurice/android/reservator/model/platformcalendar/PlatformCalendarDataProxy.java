@@ -56,7 +56,8 @@ public class PlatformCalendarDataProxy extends DataProxy {
 
     private static final Pattern idPattern = Pattern.compile("^(\\d+)(-.*)?");
     private final String DEFAULT_MEETING_NAME = "Reserved";
-    private final String GOOGLE_ACCOUNT_TYPE = "com.google";
+    //private final String GOOGLE_ACCOUNT_TYPE = "com.google";
+    private final String GOOGLE_ACCOUNT_TYPE = null;
     private final String CALENDAR_SYNC_AUTHORITY = "com.android.calendar";
     private final String RESOURCE_CALENDAR_TYPE = "resource.calendar.google.com";
     // Event fetch window (if we try to query all events it's very, very slow)
@@ -288,7 +289,7 @@ public class PlatformCalendarDataProxy extends DataProxy {
         String[] mProjection = {
             CalendarContract.Calendars._ID,
             CalendarContract.Calendars.OWNER_ACCOUNT,
-            CalendarContract.Calendars.NAME,
+            CalendarContract.Calendars.CALENDAR_DISPLAY_NAME,
             CalendarContract.Calendars.CALENDAR_LOCATION};
 
 
@@ -307,12 +308,25 @@ public class PlatformCalendarDataProxy extends DataProxy {
         String mSortOrder = null;
 
         Cursor result = resolver.query(
-            CalendarContract.Calendars.CONTENT_URI,
+            CalendarContract.Calendars.CONTENT_URI, //null, null, null,null);
             mProjection,
             TextUtils.join(" AND ", mSelectionClauses),
             mSelectionArgs.toArray(new String[0]),
             mSortOrder);
+        /*
+        Cursor cursor = result;
+        String jee = "";
+        if (cursor != null && cursor.moveToFirst()) {
+            do {
+                for(int i=0; i<cursor.getColumnCount();i++)
+                {
+                    jee+= cursor.getColumnName(i) + " : " + cursor.getString(i)+"\n";
+                }
+            } while (cursor.moveToNext());
 
+            cursor.close();
+        }
+    */
         if (result != null) {
             if (result.getCount() > 0) {
                 result.moveToFirst();
@@ -433,12 +447,27 @@ public class PlatformCalendarDataProxy extends DataProxy {
         ContentUris.appendId(builder, maxTime);
 
         Cursor result = resolver.query(
-            builder.build(),
+            builder.build(), //null, null, null, null);
             mProjection,
             mSelectionClause,
             mSelectionArgs,
             mSortOrder);
 
+
+/*
+        Cursor cursor = result;
+        String jee = "";
+        if (cursor != null && cursor.moveToFirst()) {
+            do {
+                for(int i=0; i<cursor.getColumnCount();i++)
+                {
+                    jee+= cursor.getColumnName(i) + " : " + cursor.getString(i)+"\n";
+                }
+            } while (cursor.moveToNext());
+
+            //cursor.close();
+        }
+*/
         if (result != null) {
             if (result.getCount() > 0) {
                 result.moveToFirst();
@@ -519,6 +548,21 @@ public class PlatformCalendarDataProxy extends DataProxy {
             mSelectionClause,
             mSelectionArgs,
             mSortOrder);
+
+        /*
+        Cursor cursor = result;
+        String jee = "";
+        if (cursor != null && cursor.moveToFirst()) {
+            do {
+                for(int i=0; i<cursor.getColumnCount();i++)
+                {
+                    jee+= cursor.getColumnName(i) + " : " + cursor.getString(i)+"\n";
+                }
+            } while (cursor.moveToNext());
+
+            cursor.close();
+        }
+        */
 
         if (result != null) {
             if (result.getCount() > 0) {
