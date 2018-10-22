@@ -91,7 +91,7 @@ public class LobbyActivity extends ReservatorActivity
         List<String> accountsList = new ArrayList<>();
         for (Account account : AccountManager
                 .get(this)
-                .getAccountsByType(getString(R.string.googleAccountType))) {
+                .getAccountsByType(null)) {
             accountsList.add(account.name);
         }
         return accountsList.toArray(new String[accountsList.size()]);
