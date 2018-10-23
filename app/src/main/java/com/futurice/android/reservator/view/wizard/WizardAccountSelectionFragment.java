@@ -100,7 +100,7 @@ public final class WizardAccountSelectionFragment
     public String[] getAvailableAccounts() {
         List<String> accountsList = new ArrayList<String>();
         for (Account account : AccountManager.get(getActivity())
-                .getAccountsByType(getString(R.string.googleAccountType))) {
+                .getAccountsByType(null)) {
             accountsList.add(account.name);
         }
         return accountsList.toArray(new String[accountsList.size()]);
