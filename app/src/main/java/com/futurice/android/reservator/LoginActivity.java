@@ -6,6 +6,7 @@ import com.futurice.android.reservator.common.PreferenceManager;
 import com.futurice.android.reservator.model.AddressBook;
 import com.futurice.android.reservator.model.AddressBookUpdatedListener;
 import com.futurice.android.reservator.model.ReservatorException;
+import com.futurice.android.reservator.view.trafficlightsactivity.TrafficLightsActivity;
 
 public class LoginActivity extends ReservatorActivity
     implements AddressBookUpdatedListener {
@@ -60,7 +61,7 @@ public class LoginActivity extends ReservatorActivity
   private void checkAndGo() {
     if (addressBookOk && roomListOk) {
 
-      final Intent i = new Intent(this, LobbyActivity.class);
+      final Intent i = new Intent(this, TrafficLightsActivity.class);
       startActivity(i);
     }
   }
