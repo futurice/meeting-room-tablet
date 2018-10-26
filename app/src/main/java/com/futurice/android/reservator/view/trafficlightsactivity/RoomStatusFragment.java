@@ -16,7 +16,7 @@ public class RoomStatusFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         this.statusText = (TextView) getActivity().findViewById(R.id.statusText);
-        this.statusUntilText = (TextView) getActivity().findViewById(R.id.statusUtilText);
+        this.statusUntilText = (TextView) getActivity().findViewById(R.id.statusUntilText);
         this.meetingNameText = (TextView) getActivity().findViewById(R.id.meetingNameText);
 
         return inflater.inflate(R.layout.room_status_fragment, container, false);
