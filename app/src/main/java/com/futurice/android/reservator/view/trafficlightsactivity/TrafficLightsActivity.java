@@ -8,7 +8,7 @@ import com.futurice.android.reservator.common.Presenter;
 import butterknife.ButterKnife;
 
 public class TrafficLightsActivity extends Activity implements com.futurice.android.reservator.common.PresenterView {
-    private TrafficLightsPresenter presenter = new TrafficLightsPresenter();;
+    private TrafficLightsPresenter presenter = new TrafficLightsPresenter();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
