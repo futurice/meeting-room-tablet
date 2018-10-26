@@ -30,7 +30,7 @@ import butterknife.BindView;
 
 public class RoomReservationFragment extends Fragment {
 
-    /*private ReservationRequestListener listener;
+    private ReservationRequestListener listener;
     private TextView textViewBarBegin;
     private TextView textViewBarEnd;
     private TextView textViewBarDuration;
@@ -45,13 +45,13 @@ public class RoomReservationFragment extends Fragment {
 
     public interface ReservationRequestListener {
         public void onReservationRequestMade(long reservationDuration, String reservationName);
-    }*/
+    }
 
-    /*@Override
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        /*textViewBarBegin = (TextView) getActivity().findViewById(R.id.TextViewBarBegin);
+        textViewBarBegin = (TextView) getActivity().findViewById(R.id.TextViewBarBegin);
         textViewBarEnd = (TextView) getActivity().findViewById(R.id.TextViewBarEnd);
         textViewBarDuration = (TextView) getActivity().findViewById(R.id.TextViewBarDuration);
         seekBar = (SeekBar) getActivity().findViewById(R.id.seekBar);
@@ -61,9 +61,9 @@ public class RoomReservationFragment extends Fragment {
         textViewBarBegin.setText("Progress: " + progress);
 
         nameInput = (EditText) getActivity().findViewById(R.id.nameInput);
-        reserveButton = (Button) getActivity().findViewById(R.id.reserveButton);*/
+        reserveButton = (Button) getActivity().findViewById(R.id.reserveButton);
 
-        /*reserveButton.setOnClickListener(new View.OnClickListener() {
+        reserveButton.setOnClickListener(new View.OnClickListener() {
              @Override
              public void onClick(View v) {
                  nameGiven = nameInput.getText().toString();
@@ -80,9 +80,9 @@ public class RoomReservationFragment extends Fragment {
 
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.room_reservation_fragment, container, false);
-    }*/
+    }
 
-    /*@Override
+    @Override
     public void onAttach(Context context) {
         super.onAttach(context);
         try {
@@ -90,9 +90,9 @@ public class RoomReservationFragment extends Fragment {
         } catch (ClassCastException e) {
             throw new ClassCastException(context.toString() + " must implement ReservationRequestListener");
         }
-    }*/
+    }
 
-    /*public long getCurrentTime(){
+    public long getCurrentTime(){
         com.futurice.android.reservator.model.DateTime currentTime = new com.futurice.android.reservator.model.DateTime();
         currentTime.getTime();
 
@@ -100,12 +100,12 @@ public class RoomReservationFragment extends Fragment {
 
         /*int correctionToClosestFiveMinutes = currentMinutes % 5;
         LocalDateTime quantizedDate = now.withMinute(currentMinutes - correctionToClosestFiveMinutes).withSecond(0).withNano(0);
-        ZonedDateTime zdt = quantizedDate.atZone(ZoneId.systemDefault());
+        ZonedDateTime zdt = quantizedDate.atZone(ZoneId.systemDefault());*/
 
         return currentTimeMinutes;
-    }*/
+    }
 
-    /*SeekBar.OnSeekBarChangeListener seekBarChangeListener = new SeekBar.OnSeekBarChangeListener() {
+    SeekBar.OnSeekBarChangeListener seekBarChangeListener = new SeekBar.OnSeekBarChangeListener() {
         int minutesIncrement = 5;
         //int currentTime = Integer.valueOf(getCurrentTime());
 
@@ -131,5 +131,5 @@ public class RoomReservationFragment extends Fragment {
         public void onStopTrackingTouch(android.widget.SeekBar seekBar) {
 
         }
-    };*/
+    };
 }
