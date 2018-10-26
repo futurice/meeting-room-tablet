@@ -14,14 +14,31 @@
     <color name="Transparent">#0000</color>
     <color name="CalendarMarkerReservedColor">#0098d0</color> //blue
 
-    <style name="Theme.Transparent" parent="android:Theme">
-        <item name="android:windowIsTranslucent">true</item>
-        <item name="android:windowBackground">@color/Transparent</item>
-        <item name="android:windowContentOverlay">@null</item>
-        <item name="android:windowNoTitle">true</item>
-        <!-- <item name="android:windowIsFloating">true</item> -->
-        <item name="android:backgroundDimEnabled">true</item>
-    </style>
+    <color name="TimeBarTickColor">#3333</color>
+    <color name="ButtonTextNormal">#333</color>
+    <color name="ButtonTextActive">#333</color>
+    <color name="ButtonTextDisabled">#979797</color> //silver
+    <color name="TextInfoColor">#555555</color> //light grey
+    <color name="CalendarWeekTextColor">#979797</color> //silver
+    <color name="MenuButtonBackgroundColor">#0098d0</color>  //blue
+    <color name="MenuButtonPressedColor">#005479</color> //dark blue
+    <color name="MenuButtonInactiveColor">#F8F8F8</color> //light silver
+
+    <color name="TrafficLightFree">#4ccb00</color>
+    <color name="TrafficLightYellow">#cee100</color>
+    <color name="TrafficLightReserved">#e5053a</color> //red
+    <color name="TrafficLightText">#fff</color>
+
+
+    <!-- NO LONGER USED -->
+    <color name="ReserveBackground">#6698c655</color>
+    <color name="ReserveLine">#a4cb80</color>
+
+    <color name="TrafficLightYellowButtonText">#becf00</color>
+    <color name="TrafficLightYellowButtonPressed">#a0af00</color>
+    <color name="TrafficLightGreenButtonPressed">#03a021</color>
+    <color name="TrafficLightYellowButtonPressedText">#e4ec8c</color>
+    <color name="TrafficLightGreenButtonPressedText">#98dd6f</color>
 
     <color name="TextColor">#000</color>
     <color name="TimeSpanTextColor">#529200</color>
@@ -37,25 +54,14 @@
         <item name="android:textSize">@dimen/digitalClockTextSize</item>
     </style>
 
-    <color name="ReserveBackground">#6698c655</color>
-    <color name="ReserveLine">#a4cb80</color>
-    <color name="TimeBarTickColor">#3333</color>
-    <color name="ButtonTextNormal">#333</color>
-    <color name="ButtonTextActive">#333</color>
-    <color name="ButtonTextDisabled">#979797</color> //silver
-    <color name="TextInfoColor">#555555</color> //light grey
-    <color name="CalendarWeekTextColor">#979797</color> //silver
-    <color name="MenuButtonBackgroundColor">#0098d0</color>  //blue
-    <color name="MenuButtonPressedColor">#005479</color> //dark blue
-    <color name="MenuButtonInactiveColor">#F8F8F8</color> //light silver
+    <style name="Theme.Transparent" parent="android:Theme">
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@color/Transparent</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowNoTitle">true</item>
+        <!-- <item name="android:windowIsFloating">true</item> -->
+        <item name="android:backgroundDimEnabled">true</item>
+    </style>
 
-    <color name="TrafficLightFree">#4ccb00</color>
-    <color name="TrafficLightYellow">#cee100</color>
-    <color name="TrafficLightReserved">#e5053a</color> //red
-    <color name="TrafficLightText">#fff</color>
-    <color name="TrafficLightYellowButtonText">#becf00</color>
-    <color name="TrafficLightYellowButtonPressed">#a0af00</color>
-    <color name="TrafficLightGreenButtonPressed">#03a021</color>
-    <color name="TrafficLightYellowButtonPressedText">#e4ec8c</color>
-    <color name="TrafficLightGreenButtonPressedText">#98dd6f</color>
+
 </resources>
