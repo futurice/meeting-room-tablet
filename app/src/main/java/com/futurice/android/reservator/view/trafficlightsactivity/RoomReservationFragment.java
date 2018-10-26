@@ -12,9 +12,10 @@ import com.futurice.android.reservator.common.PresenterView;
 
 public class RoomReservationFragment extends Fragment {
 
-    private ReservationRequestListener listener;
+    private ReservationRequestPresenter listener;
 
-    public interface ReservationRequestListener {
+    public interface ReservationRequestPresenter {
+        public void setRoomReservationFragment(RoomReservationFragment fragment);
         public void onReservationRequestMade(int reservationDuration, String reservationName);
     }
 
@@ -29,7 +30,8 @@ public class RoomReservationFragment extends Fragment {
     public void onAttach(Context context) {
         super.onAttach(context);
         try {
-            listener = (ReservationRequestListener) (((PresenterView)context).getPresenter());
+            listener = (ReservationRequestPresenter) (((PresenterView)context).getPresenter());
+            listener.setRoomReservationFragment(this);
         } catch (ClassCastException e) {
             throw new ClassCastException(context.toString() + " must implement ReservationRequestListener");
         }
