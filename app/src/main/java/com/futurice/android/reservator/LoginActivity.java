@@ -61,7 +61,7 @@ public class LoginActivity extends ReservatorActivity
   private void checkAndGo() {
     if (addressBookOk && roomListOk) {
 
-      final Intent i = new Intent(this, LobbyActivity.class);
+      final Intent i = new Intent(this, TrafficLightsActivity.class);
       startActivity(i);
     }
   }

@@ -14,7 +14,7 @@ public class TrafficLightsPresenter implements RoomReservationFragment.Reservati
     }
 
     @Override
-    public void onReservationRequestMade(int reservationDuration, String reservationName)
+    public void onReservationRequestMade(long reservationDuration, String reservationName)
         {
             Log.d("","TrafficLightsPresenter::onReservationRequestMade() reservationDuration: "+reservationDuration+" reservationName: "+reservationName);
 

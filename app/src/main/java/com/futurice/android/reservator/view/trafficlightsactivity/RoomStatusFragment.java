@@ -15,11 +15,12 @@ public class RoomStatusFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        this.statusText = (TextView) getActivity().findViewById(R.id.statusText);
-        this.statusUntilText = (TextView) getActivity().findViewById(R.id.statusUntilText);
-        this.meetingNameText = (TextView) getActivity().findViewById(R.id.meetingNameText);
+        View view = inflater.inflate(R.layout.room_status_fragment, container, false);
+        this.statusText = (TextView) view.findViewById(R.id.statusText);
+        this.statusUntilText = (TextView) view.findViewById(R.id.statusUntilText);
+        this.meetingNameText = (TextView) view.findViewById(R.id.meetingNameText);
 
-        return inflater.inflate(R.layout.room_status_fragment, container, false);
+        return view;
     }
 
     public void setStatusText(String text) {
