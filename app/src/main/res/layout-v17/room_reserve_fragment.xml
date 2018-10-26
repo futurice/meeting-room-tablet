@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+    <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="700dp"
+            android:layout_height="520dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
+            android:padding="10dip"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:id="@+id/TextViewBarBegin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="120dp"
+                android:text="12:00"
+                android:textColor="#F8F8F8"
+                android:textSize="20sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/seekBar"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <SeekBar
+                android:id="@+id/seekBar"
+                android:layout_width="542dp"
+                android:layout_height="22dp"
+                android:layout_alignParentTop="false"
+                android:layout_alignParentEnd="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="120dp"
+                android:max="90"
+                android:progress="45"
+                android:progressBackgroundTint="@color/seekBarProgressBackgroundColor"
+                android:progressTint="@color/seekBarProgress"
+                android:thumbTint="@color/seekBarThumbColor"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <TextView
+                android:id="@+id/TextViewBarEnd"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginBottom="120dp"
+                android:text="15:00"
+                android:textColor="#F8F8F8"
+                android:textSize="20sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.304"
+                app:layout_constraintStart_toEndOf="@+id/seekBar" />
+
+            <TextView
+                android:id="@+id/TextViewBarDuration"
+                android:layout_width="108dp"
+                android:layout_height="47dp"
+                android:layout_marginEnd="284dp"
+                android:text="30 min"
+                android:textAlignment="center"
+                android:textColor="#F8F8F8"
+                android:textSize="30sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/seekBar" />
+
+            <Button
+                android:id="@+id/reserveButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignTop="@+id/nameInput"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="16dp"
+                android:layout_toEndOf="@+id/nameInput"
+                android:text="Reserve"
+                android:textColor="#0098d0"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.091"
+                app:layout_constraintStart_toEndOf="@+id/nameInput" />
+
+            <EditText
+                android:id="@+id/nameInput"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginStart="156dp"
+                android:layout_marginBottom="16dp"
+                android:ems="10"
+                android:hint="Name"
+                android:inputType="textPersonName"
+                android:singleLine="true"
+                android:textColor="#F8F8F8"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <!-- <fragment android:name="com.futurice.android.reservator.view.trafficlightsactivity.RoomStatusFragment"
+        android:id="@+id/list"
+        android:layout_weight="1"
+        android:layout_width="0dp"
+        android:layout_height="match_parent" /> -->
+
+        </android.support.constraint.ConstraintLayout>
+    </android.support.constraint.ConstraintLayout>
+
