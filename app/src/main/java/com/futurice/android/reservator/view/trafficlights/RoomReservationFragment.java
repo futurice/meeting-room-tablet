@@ -1,9 +1,8 @@
 package com.futurice.android.reservator.view.trafficlights;
 
-import android.support.v4.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
-import android.text.format.Time;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,19 +11,7 @@ import android.widget.EditText;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
-import static java.lang.Math.toIntExact;
-
 import com.futurice.android.reservator.R;
-import com.futurice.android.reservator.common.PresenterView;
-import com.futurice.android.reservator.model.DateTime;
-
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.util.Calendar;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
-import java.time.temporal.ChronoField;
-import java.util.Date;
 
 import butterknife.BindView;
 

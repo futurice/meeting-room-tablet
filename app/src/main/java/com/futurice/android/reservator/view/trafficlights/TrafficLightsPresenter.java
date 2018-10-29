@@ -1,10 +1,7 @@
 package com.futurice.android.reservator.view.trafficlights;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.res.Resources;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.util.Log;
 
 import com.futurice.android.reservator.R;
@@ -13,7 +10,6 @@ import com.futurice.android.reservator.model.Model;
 import com.futurice.android.reservator.model.ReservatorException;
 import com.futurice.android.reservator.model.Room;
 
-import java.util.Date;
 import java.util.Vector;
 
 public class TrafficLightsPresenter implements
@@ -57,10 +53,10 @@ public class TrafficLightsPresenter implements
 
     @Override
     public void setRoomReservationFragment(RoomReservationFragment fragment) {
-    this.roomReservationFragment = fragment;
+        this.roomReservationFragment = fragment;
 
-    this.roomReservationFragment.setTimeLimits(System.currentTimeMillis(), System.currentTimeMillis() + 1000*60*120);
-    this.tryStarting();
+        this.roomReservationFragment.setTimeLimits(System.currentTimeMillis(), System.currentTimeMillis() + 1000*60*120);
+        this.tryStarting();
     }
 
     @Override
@@ -152,6 +148,7 @@ public class TrafficLightsPresenter implements
 
         if (room.isBookable(QUICK_BOOK_THRESHOLD)) {
             this.roomStatusFragment.setStatusText(resources.getString(R.string.status_free));
+            this.roomStatusFragment.setMeetingNameText("");
             if (room.isFreeRestOfDay()) {
                 this.roomStatusFragment.setStatusUntilText(resources.getString(R.string.free_for_the_day));
 

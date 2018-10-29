@@ -49,10 +49,12 @@
             android:configChanges="orientation|screenSize"
             android:screenOrientation="sensorLandscape" />
         <activity
+            android:screenOrientation="sensorLandscape"
             android:name=".WizardActivity"
             android:noHistory="true"
             android:theme="@style/Theme.AppCompat" />
         <activity
+            android:screenOrientation="sensorLandscape"
             android:name=".CheckPermissionsActivity"
             android:theme="@style/Theme.AppCompat">
             <intent-filter>
