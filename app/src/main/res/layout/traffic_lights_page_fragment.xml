@@ -15,18 +15,29 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:windowSoftInputMode="adjustResize">
+        app:layout_constraintTop_toTopOf="parent">
 
             <fragment
-                android:id="@+id/list"
-                android:name="com.futurice.android.reservator.view.trafficlightsactivity.TrafficLightsPageFragment"
+                android:id="@+id/roomStatusFragment"
+                android:name="com.futurice.android.reservator.view.trafficlights.RoomStatusFragment"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
+
+
+            <fragment
+                android:id="@+id/roomReservationFragment"
+                android:name="com.futurice.android.reservator.view.trafficlights.RoomReservationFragment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.534"
+                app:layout_constraintTop_toBottomOf="@+id/list" />
 
     </android.support.constraint.ConstraintLayout>
 

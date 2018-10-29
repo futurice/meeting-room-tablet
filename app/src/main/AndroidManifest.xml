@@ -62,7 +62,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".view.trafficlightsactivity.TrafficLightsActivity"
+            android:name=".MainActivity"
             android:configChanges="orientation|screenSize"
             android:hardwareAccelerated="false"
             android:screenOrientation="sensorLandscape" />

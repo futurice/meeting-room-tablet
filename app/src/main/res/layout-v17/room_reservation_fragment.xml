@@ -12,12 +12,12 @@
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
         android:padding="10dip"
-        android:background="#0098d0"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
+    <!--
             <TextView
                 android:id="@+id/TextViewBarBegin"
                 android:layout_width="wrap_content"
@@ -30,26 +30,28 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/seekBar"
                 app:layout_constraintStart_toStartOf="parent" />
+-->
+    <SeekBar
+        android:id="@+id/seekBar"
+        android:layout_width="542dp"
+        android:layout_height="22dp"
+        android:layout_alignParentTop="false"
+        android:layout_alignParentEnd="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="312dp"
+        android:max="90"
+        android:progress="30"
+        android:progressBackgroundTint="@color/seekBarProgressBackgroundColor"
+        android:progressTint="@color/seekBarProgress"
+        android:thumbTint="@color/seekBarThumbColor"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
 
-            <SeekBar
-                android:id="@+id/seekBar"
-                android:layout_width="542dp"
-                android:layout_height="22dp"
-                android:layout_alignParentTop="false"
-                android:layout_alignParentEnd="true"
-                android:layout_centerHorizontal="true"
-                android:layout_marginStart="8dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginBottom="120dp"
-                android:max="90"
-                android:progress="45"
-                android:progressBackgroundTint="@color/seekBarProgressBackgroundColor"
-                android:progressTint="@color/seekBarProgress"
-                android:thumbTint="@color/seekBarThumbColor"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
-
+    </SeekBar>
+<!--
             <TextView
                 android:id="@+id/TextViewBarEnd"
                 android:layout_width="wrap_content"
@@ -63,7 +65,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.304"
                 app:layout_constraintStart_toEndOf="@+id/seekBar" />
-
+-->
     <TextView
         android:id="@+id/TextViewBarDuration"
         android:layout_width="108dp"
@@ -83,14 +85,17 @@
         android:layout_height="54dp"
         android:layout_alignTop="@+id/nameInput"
         android:layout_marginEnd="8dp"
-        android:layout_marginBottom="24dp"
+        android:layout_marginBottom="236dp"
         android:layout_toEndOf="@+id/nameInput"
         android:text="Reserve"
         android:textColor="#0098d0"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toEndOf="@+id/nameInput" />
+        app:layout_constraintHorizontal_bias="0.044"
+        app:layout_constraintStart_toEndOf="@+id/nameInput">
+
+        <requestFocus />
+    </Button>
 
     <EditText
         android:id="@+id/nameInput"
@@ -98,8 +103,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginStart="380dp"
-        android:layout_marginBottom="32dp"
+        android:layout_marginStart="376dp"
+        android:layout_marginBottom="236dp"
         android:ems="10"
         android:hint="Name"
         android:inputType="textPersonName"
@@ -108,6 +113,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
-        </android.support.constraint.ConstraintLayout>
+</android.support.constraint.ConstraintLayout>
 
 

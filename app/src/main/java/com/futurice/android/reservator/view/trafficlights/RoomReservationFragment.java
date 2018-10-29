@@ -1,6 +1,6 @@
-package com.futurice.android.reservator.view.trafficlightsactivity;
+package com.futurice.android.reservator.view.trafficlights;
 
-import android.app.Fragment;
+import android.support.v4.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.text.format.Time;
@@ -30,16 +30,17 @@ import butterknife.BindView;
 
 public class RoomReservationFragment extends Fragment {
 
-    public interface ReservationRequestPresenter {
-        public void setRoomReservationFragment(RoomReservationFragment fragment);
-        public void onReservationRequestMade(long reservationDuration, String reservationName);
+    public interface RoomReservationPresenter {
+        void setRoomReservationFragment(RoomReservationFragment fragment);
+        void onReservationRequestMade(long reservationDuration, String reservationName);
     }
 
-    private ReservationRequestPresenter listener;
+    private RoomReservationPresenter presenter;
 
 
-    private TextView textViewBarBegin;
-    private TextView textViewBarEnd;
+    //private TextView textViewBarBegin;
+    //private TextView textViewBarEnd;
+
     private TextView textViewBarDuration;
     private android.widget.SeekBar seekBar;
 
@@ -50,24 +51,62 @@ public class RoomReservationFragment extends Fragment {
     @BindView(R.id.reserveButton)
     Button reserveButton;
 
+    private int maxMinutes = 0;
+    private long minTime = 0;
+    private long maxTime = 0;
+
+    private void updateTimeLimitsToUi() {
+        if (this.seekBar != null) {
+            this.seekBar.setMax(this.maxMinutes);
+        }
+        /*
+        if (this.seekBar != null && this.textViewBarBegin != null) {
+            this.seekBar.setMax(this.maxMinutes);
+            Calendar cal = Calendar.getInstance();
+            cal.setTimeInMillis(this.minTime);
+            this.textViewBarBegin.setText(cal.get(Calendar.HOUR_OF_DAY) + ":" + cal.get(Calendar.MINUTE));
+        }
+        */
+    }
+
+    public void setPresenter(RoomReservationPresenter presenter) {
+        this.presenter = presenter;
+        this.presenter.setRoomReservationFragment(this);
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        /*
+        try {
+            presenter = (RoomReservationPresenter) (((PresenterView)context).getPresenter());
+            presenter.setRoomReservationFragment(this);
+        } catch (ClassCastException e) {
+            throw new ClassCastException(context.toString() + " must implement RoomReservationPresenter");
+        }
+        */
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.room_reservation_fragment, container, false);
 
-        textViewBarBegin = (TextView) view.findViewById(R.id.TextViewBarBegin);
-        textViewBarEnd = (TextView) view.findViewById(R.id.TextViewBarEnd);
-        textViewBarDuration = (TextView) view.findViewById(R.id.TextViewBarDuration);
+        //this.textViewBarBegin = (TextView) view.findViewById(R.id.TextViewBarBegin);
+        //this.textViewBarEnd = (TextView) view.findViewById(R.id.TextViewBarEnd);
 
-        seekBar = (SeekBar) view.findViewById(R.id.seekBar);
-        seekBar.setOnSeekBarChangeListener(seekBarChangeListener);
+        this.textViewBarDuration = (TextView) view.findViewById(R.id.TextViewBarDuration);
+        this.seekBar = (SeekBar) view.findViewById(R.id.seekBar);
+
+
+        this.updateTimeLimitsToUi();
+        this.seekBar.setOnSeekBarChangeListener(seekBarChangeListener);
 
         int progress = seekBar.getProgress();
-        textViewBarBegin.setText("Progress: " + progress);
+
+
 
         nameInput = (EditText) view.findViewById(R.id.nameInput);
         reserveButton = (Button) view.findViewById(R.id.reserveButton);
@@ -82,7 +121,7 @@ public class RoomReservationFragment extends Fragment {
                 if (nameGiven.equals("")) { //Throw error message or change text to give error
                     nameInput.setText("Enter a valid name");
                 } else {
-                    listener.onReservationRequestMade(getCurrentTime(), nameGiven);
+                    presenter.onReservationRequestMade(getCurrentTime(), nameGiven);
                 }
             }
         });
@@ -90,17 +129,11 @@ public class RoomReservationFragment extends Fragment {
     }
 
 
-
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        try {
-            listener = (ReservationRequestPresenter) (((PresenterView)context).getPresenter());
-            listener.setRoomReservationFragment(this);
-        } catch (ClassCastException e) {
-            throw new ClassCastException(context.toString() + " must implement ReservationRequestListener");
-        }
+    public void setTimeLimits(long minTime, long maxTime) {
+        this.minTime = minTime;
+        this.maxTime = maxTime;
+        this.maxMinutes = (int)(maxTime-minTime)/1000/60;
+        this.updateTimeLimitsToUi();
     }
 
     public long getCurrentTime(){
@@ -125,12 +158,12 @@ public class RoomReservationFragment extends Fragment {
             progress = ((int) Math.round(progress / minutesIncrement)) * minutesIncrement; //This should now move in 5 (minute) increments
             //For some reason, progress shows up as a string saying progress instead of immediately changing to the int
 
-            textViewBarBegin.setText(getCurrentTime() + "");
+            //textViewBarBegin.setText(getCurrentTime() + "");
 
             //progress += Integer.valueOf(getCurrentTime());
             seekBar.setProgress(progress);
             textViewBarDuration.setText(progress + " min.");
-            textViewBarEnd.setText("" + progress); //Add amount to current time
+            //textViewBarEnd.setText("" + progress); //Add amount to current time
         }
 
         @Override
