@@ -46,7 +46,7 @@ public class TrafficLightsPresenter implements
 
     private void tryStarting() {
         if (trafficLightsPageFragment != null && roomStatusFragment != null &&
-                roomReservationFragment != null && this.dayCalendarFragment != null) {
+                roomReservationFragment != null && dayCalendarFragment != null) {
             this.model.getDataProxy().refreshRoomReservations(this.model.getFavoriteRoom());
         }
     }
