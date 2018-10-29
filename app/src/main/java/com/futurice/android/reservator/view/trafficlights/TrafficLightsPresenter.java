@@ -16,6 +16,7 @@ public class TrafficLightsPresenter implements
         TrafficLightsPageFragment.TrafficLightsPagePresenter,
         RoomStatusFragment.RoomStatusPresenter,
         RoomReservationFragment.RoomReservationPresenter,
+        DayCalendarFragment.DayCalendarPresenter,
         com.futurice.android.reservator.common.Presenter,
         com.futurice.android.reservator.model.DataUpdatedListener,
         com.futurice.android.reservator.model.AddressBookUpdatedListener {
@@ -25,6 +26,7 @@ public class TrafficLightsPresenter implements
     private TrafficLightsPageFragment trafficLightsPageFragment;
     private RoomStatusFragment roomStatusFragment;
     private RoomReservationFragment roomReservationFragment;
+    private DayCalendarFragment dayCalendarFragment;
 
     private Activity activity;
     private Model model;
@@ -43,7 +45,8 @@ public class TrafficLightsPresenter implements
     }
 
     private void tryStarting() {
-        if (trafficLightsPageFragment != null && roomStatusFragment != null && roomReservationFragment != null) {
+        if (trafficLightsPageFragment != null && roomStatusFragment != null &&
+                roomReservationFragment != null && dayCalendarFragment != null) {
             this.model.getDataProxy().refreshRoomReservations(this.model.getFavoriteRoom());
         }
     }
@@ -77,6 +80,14 @@ public class TrafficLightsPresenter implements
     @Override
     public void setRoomStatusFragment(RoomStatusFragment fragment) {
         this.roomStatusFragment = fragment;
+        this.tryStarting();
+    }
+
+    // ------- Implementation of DayCalendarFragment.DayCalendarPresenter
+
+    @Override
+    public void setDayCalendarFragment(DayCalendarFragment fragment) {
+        this.dayCalendarFragment = fragment;
         this.tryStarting();
     }
 
@@ -142,7 +153,7 @@ public class TrafficLightsPresenter implements
     */
     public void updateRoomData(Room room) {
         //updateConnected();
-
+        this.dayCalendarFragment.updateRoomData(room);
         this.roomStatusFragment.setRoomTitleText(room.getName());
 
 

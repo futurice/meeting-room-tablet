@@ -18,7 +18,6 @@
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toTopOf="parent">
 
-
     <!--
             <TextView
                 android:id="@+id/TextViewBarBegin"
@@ -40,8 +39,6 @@
         android:layout_alignParentTop="false"
         android:layout_alignParentEnd="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
         android:layout_marginBottom="172dp"
         android:max="90"
         android:progress="30"
@@ -52,18 +49,19 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
     </SeekBar>
-    
+
     <TextView
         android:id="@+id/TextViewBarDuration"
-        android:layout_width="108dp"
-        android:layout_height="47dp"
-        android:layout_marginTop="12dp"
-        android:layout_marginEnd="576dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="130dp"
         android:text="30 min"
         android:textAlignment="center"
         android:textColor="#F8F8F8"
         android:textSize="30sp"
-        app:layout_constraintEnd_toEndOf="parent">
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
     </TextView>
 
     <Button
@@ -71,14 +69,13 @@
         android:layout_width="wrap_content"
         android:layout_height="54dp"
         android:layout_alignTop="@+id/nameInput"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="28dp"
+        android:layout_marginBottom="32dp"
         android:layout_toEndOf="@+id/nameInput"
         android:text="Reserve"
-        android:textColor="#0098d0"
+        android:textColor="#F8F8F8"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.032"
+        app:layout_constraintHorizontal_bias="0.05"
         app:layout_constraintStart_toEndOf="@+id/nameInput">
 
     </Button>
@@ -89,14 +86,17 @@
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginStart="440dp"
-        android:layout_marginBottom="36dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="40dp"
         android:ems="10"
         android:hint="Name"
         android:inputType="textPersonName"
         android:singleLine="true"
-        android:textColor="#F8F8F8"
-        app:layout_constraintBottom_toBottomOf="parent">
+        android:textColor="#979797"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.45"
+        app:layout_constraintStart_toStartOf="parent">
     </EditText>
 
 </android.support.constraint.ConstraintLayout>
