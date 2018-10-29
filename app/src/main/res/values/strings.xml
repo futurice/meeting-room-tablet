@@ -40,15 +40,18 @@
     <string name="room_name">Room Name</string>
     <string name="cancel_reservation">Cancel reservation</string>
     <string name="hint_your_name">Your name</string>
-    <string name="button_reserve">Reserve</string>
+    <string name="button_reserve">Varaa\nReservera\nReserve</string>
     <string name="message_permissions_are_required">Reservator Needs Permissions to Work!</string>
     <string name="room_capacity">for %1$d</string>
     <string name="end_plus_content_description">plus time</string>
     <string name="minus_time_content_description">minus time</string>
     <string name="only_use_resource_calendars">Only use resource calendars</string>
     <string name="default_room_icon_content_description">default room icon</string>
-    <string name="status_free">Free</string>
-    <string name="free_for_the_day">for the day</string>
+    <string name="status_free">Vapaa/Ledigt/Free</string>
+    <string name="free_for_the_day">koko päivän/hela dagen/for the day</string>
     <string name="free_for_specific_amount">for %1$s</string>
-    <string name="status_reserved">Reserved</string>
+    <string name="status_reserved">Varattu/Resrverat/Reserved</string>
+    <string name="free_at">Vapautuu/Ledigt från/Free at</string>
+    <string name="meeting_description">Kuvaus/Beskrivning/Description</string>
+    <string name="quick_booking">Pikavaraus/Snabbreservering/Use now:</string>
 </resources>

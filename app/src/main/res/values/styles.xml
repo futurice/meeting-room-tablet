@@ -6,7 +6,10 @@
         <item name="android:textSize">18pt</item>
     </style>
 
+    <!--
     <color name="CalendarBorderColor">#F8F8F8</color> //light silver
+    -->
+    <color name="CalendarBorderColor">#707070</color>
     <color name="CalendarTextColor">#000</color>
     <color name="CalendarResTextColor">#fff</color>
     <color name="StatusFreeColor">#0098d0</color>

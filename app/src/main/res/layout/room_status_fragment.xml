@@ -90,6 +90,27 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/statusUntilText" />
 
+            <TextView
+                android:id="@+id/bookNowText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/roomStatus"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:gravity="center_horizontal"
+                android:text="@string/quick_booking"
+                android:textColor="@color/colorPrimary"
+                android:textIsSelectable="false"
+                android:textSize="35sp"
+                android:textStyle="bold"
+                android:textAllCaps="true"
+                android:layout_marginTop="20sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/meetingNameText"
+                app:layout_constraintBottom_toBottomOf="parent"
+                />
         </android.support.constraint.ConstraintLayout>
 
 

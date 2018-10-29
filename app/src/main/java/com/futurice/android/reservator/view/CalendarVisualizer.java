@@ -77,6 +77,7 @@ public class CalendarVisualizer extends HorizontalScrollView implements Reservat
         textPaint.setColor(textColor);
         textPaint.setAntiAlias(true);
 
+
         this.weekTextPaint = new Paint();
         weekTextPaint.setColor(weekTextColor);
         weekTextPaint.setAntiAlias(true);
@@ -143,7 +144,7 @@ public class CalendarVisualizer extends HorizontalScrollView implements Reservat
         //c.clipRect(area); no clipRect used. the first label goes few pixels above the top
         c.translate(area.left, area.top);
         textPaint.setTextAlign(Align.RIGHT);
-        float normalTextSize = textPaint.getTextSize();
+        float normalTextSize = 32f; //textPaint.getTextSize();
         float smallTextSize = normalTextSize * 0.642f;
         textPaint.setTextSize(smallTextSize);
         float padding = width / 8;
@@ -195,7 +196,12 @@ public class CalendarVisualizer extends HorizontalScrollView implements Reservat
                 //order of points is top-left, top-right, bottom-left, bottom-right
                 points[j] = getXForTime(reservations[i].getStartTime());
                 points[j + 1] = getProportionalY(reservations[i].getStartTime()) * height;
-                points[j + 2] = getXForTime(reservations[i].getStartTime()) + dayWidth;
+
+                if (daysToShow == 1 )
+                    points[j + 2] = getWidth();
+                else
+                    points[j + 2] = getXForTime(reservations[i].getStartTime()) + dayWidth;
+
                 points[j + 3] = points[j + 1];
                 points[j + 4] = points[j];
                 points[j + 5] = getProportionalEndY(reservations[i].getEndTime()) * height;
@@ -244,11 +250,11 @@ public class CalendarVisualizer extends HorizontalScrollView implements Reservat
 
 
         for (int i = 0; i < dayLabels.length; i++) {
-            c.drawLine(i * dayWidth, 0, i * dayWidth, height, gridPaint);
+                c.drawLine(i * dayWidth, 0, i * dayWidth, height, gridPaint);
         }
         for (int minutes = dayStartTime; minutes < dayEndTime; minutes += 60) {
             float y = getProportionalY(0, minutes) * height;
-            c.drawLine(0, y, contentFrame.getWidth(), y, gridPaint);
+            c.drawLine(0, y, getWidth(), y, gridPaint);
         }
 
         c.restore();
@@ -256,8 +262,8 @@ public class CalendarVisualizer extends HorizontalScrollView implements Reservat
 
     private void drawReservationSubjects(Canvas c, RectF area) {
         float textHeight = textPaint.getTextSize();
-        int paddingX = 4;
-        int paddingY = 0;
+        int paddingX = 10;
+        int paddingY = 15;
         float height = area.height();
         c.save();
         c.clipRect(area.left + getScrollX(), area.top, area.right + getScrollX(), area.bottom);
@@ -265,6 +271,7 @@ public class CalendarVisualizer extends HorizontalScrollView implements Reservat
 
         textPaint.setColor(reservationTextColor);
         TextPaint textPaintForEllipsize = new TextPaint(textPaint);
+        textPaint.setTextSize(32f);
         for (Reservation r : reservations) {
             float textWidth = textPaint.measureText(r.getSubject());
             String subject = (String) TextUtils.ellipsize(r.getSubject(), textPaintForEllipsize, 250,
@@ -310,13 +317,20 @@ public class CalendarVisualizer extends HorizontalScrollView implements Reservat
         fillPaint.setARGB(128, 192, 192, 192); // #C0C0C0 = semialpha grey
 
         // the rectangle
-        c.drawRect(startX, 0, endX, currentY, fillPaint);
+        if (daysToShow ==1)
+            c.drawRect(startX, 0, getWidth(), currentY, fillPaint);
+        else
+            c.drawRect(startX, 0, endX, currentY, fillPaint);
 
         Paint linePaint = new Paint();
+        linePaint.setStrokeWidth(3);
         linePaint.setColor(Color.RED);
 
         // the red line
-        c.drawLine(startX, currentY, endX, currentY, linePaint);
+        if (daysToShow ==1)
+            c.drawLine(startX, currentY, getWidth(), currentY, linePaint);
+        else
+            c.drawLine(startX, currentY, endX, currentY, linePaint);
 
         c.restore();
     }

@@ -92,6 +92,10 @@ public class MainActivity extends FragmentActivity {
     }
 
     public class CalendarStateReceiver extends BroadcastReceiver {
+        public CalendarStateReceiver() {
+            super();
+        }
+
         @Override
         public void onReceive(Context context, Intent intent) {
             onCalendarUpdated();
