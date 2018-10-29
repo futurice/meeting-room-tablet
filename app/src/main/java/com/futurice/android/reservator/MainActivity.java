@@ -91,10 +91,10 @@ public class MainActivity extends FragmentActivity {
             this.model.getDataProxy().refreshRoomReservations(this.model.getFavoriteRoom());
     }
 
-    class CalendarStateReceiver extends BroadcastReceiver {
+    public class CalendarStateReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
-        onCalendarUpdated();
+            onCalendarUpdated();
         }
     }
 }
