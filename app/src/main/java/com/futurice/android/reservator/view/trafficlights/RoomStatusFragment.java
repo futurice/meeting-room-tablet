@@ -1,14 +1,13 @@
 package com.futurice.android.reservator.view.trafficlights;
-import android.support.v4.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
-import com.futurice.android.reservator.R;
-import com.futurice.android.reservator.common.PresenterView;
-
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
-import android.view.ViewGroup;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.TextView;
+
+import com.futurice.android.reservator.R;
 
 public class RoomStatusFragment extends Fragment {
 

@@ -2,9 +2,8 @@ package com.futurice.android.reservator.model;
 
 import android.accounts.AccountManager;
 import android.content.ContentResolver;
-import android.os.Handler;
 import android.content.Context;
-import android.widget.Toast;
+import android.os.Handler;
 
 import com.futurice.android.reservator.common.PreferenceManager;
 import com.futurice.android.reservator.model.platformcalendar.PlatformCalendarDataProxy;

@@ -1,14 +1,12 @@
 package com.futurice.android.reservator.view.trafficlights;
 
-import android.support.v4.app.Fragment;
-import android.content.Context;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
-import android.view.ViewGroup;
 import android.view.View;
+import android.view.ViewGroup;
 
 import com.futurice.android.reservator.R;
-import com.futurice.android.reservator.common.Presenter;
 
 public class TrafficLightsPageFragment extends Fragment {
     public interface TrafficLightsPagePresenter {
