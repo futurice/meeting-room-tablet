@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="center_horizontal"
+    android:layout_marginStart="8dp"
+    android:layout_marginTop="8dp"
+    android:layout_marginEnd="8dp"
+    android:layout_marginBottom="8dp"
+    android:focusableInTouchMode="true"
+    android:orientation="vertical"
+    android:padding="10dip"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent">
+
+
+    <!--
+            <TextView
+                android:id="@+id/TextViewBarBegin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="120dp"
+                android:text="12:00"
+                android:textColor="#F8F8F8"
+                android:textSize="20sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/seekBar"
+                app:layout_constraintStart_toStartOf="parent" />
+-->
+    <SeekBar
+        android:id="@+id/seekBar"
+        android:layout_width="542dp"
+        android:layout_height="33dp"
+        android:layout_alignParentTop="false"
+        android:layout_alignParentEnd="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="172dp"
+        android:max="90"
+        android:progress="30"
+        android:progressBackgroundTint="@color/seekBarProgressBackgroundColor"
+        android:progressTint="@color/seekBarProgress"
+        android:thumbTint="@color/seekBarThumbColor"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+    </SeekBar>
+    
+    <TextView
+        android:id="@+id/TextViewBarDuration"
+        android:layout_width="108dp"
+        android:layout_height="47dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="576dp"
+        android:text="30 min"
+        android:textAlignment="center"
+        android:textColor="#F8F8F8"
+        android:textSize="30sp"
+        app:layout_constraintEnd_toEndOf="parent">
+    </TextView>
+
+    <Button
+        android:id="@+id/reserveButton"
+        android:layout_width="wrap_content"
+        android:layout_height="54dp"
+        android:layout_alignTop="@+id/nameInput"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="28dp"
+        android:layout_toEndOf="@+id/nameInput"
+        android:text="Reserve"
+        android:textColor="#0098d0"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.032"
+        app:layout_constraintStart_toEndOf="@+id/nameInput">
+
+    </Button>
+
+    <EditText
+        android:id="@+id/nameInput"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="440dp"
+        android:layout_marginBottom="36dp"
+        android:ems="10"
+        android:hint="Name"
+        android:inputType="textPersonName"
+        android:singleLine="true"
+        android:textColor="#F8F8F8"
+        app:layout_constraintBottom_toBottomOf="parent">
+    </EditText>
+
+</android.support.constraint.ConstraintLayout>
+
+
