@@ -14,6 +14,7 @@ public class TrafficLightsPageFragment extends Fragment {
     }
     private RoomStatusFragment roomStatusFragment;
     private RoomReservationFragment roomReservationFragment;
+    private DayCalendarFragment dayCalendarFragment;
 
     private TrafficLightsPagePresenter presenter;
 
@@ -47,6 +48,14 @@ public class TrafficLightsPageFragment extends Fragment {
             catch (ClassCastException e) {
                 throw new ClassCastException(presenter.toString() + " must implement RoomReserationPresenter");
             }
+
+        try {
+            this.dayCalendarFragment = (DayCalendarFragment)getChildFragmentManager().findFragmentById(R.id.dayCalendarFragment);
+            this.dayCalendarFragment.setPresenter((DayCalendarFragment.DayCalendarPresenter) this.presenter);
+        }
+        catch (ClassCastException e) {
+            throw new ClassCastException(presenter.toString() + " must implement DayCalendarPresenter");
+        }
         return view;
     }
 }

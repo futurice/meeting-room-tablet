@@ -20,24 +20,36 @@
             <fragment
                 android:id="@+id/roomStatusFragment"
                 android:name="com.futurice.android.reservator.view.trafficlights.RoomStatusFragment"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_weight="2"
+                app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                 />
 
 
             <fragment
                 android:id="@+id/roomReservationFragment"
                 android:name="com.futurice.android.reservator.view.trafficlights.RoomReservationFragment"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                app:layout_constraintTop_toBottomOf="@+id/roomStatusFragment"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                />
+
+            <fragment
+                android:id="@+id/dayCalendarFragment"
+                android:name="com.futurice.android.reservator.view.trafficlights.DayCalendarFragment"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:background="#ff0000"
                 app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/roomStatusFragment"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.534"
-                app:layout_constraintTop_toBottomOf="@+id/list" />
+                app:layout_constraintTop_toTopOf="parent" />
 
     </android.support.constraint.ConstraintLayout>
 
