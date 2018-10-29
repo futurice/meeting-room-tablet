@@ -2,8 +2,6 @@
 <resources>
     <color name="colorPrimary">#f8f8f8</color>
     <color name="colorPrimaryDark">#111</color>
-    <color name="seekBarProgress">#424242</color>
-    <color name="seekBarProgressBackgroundColor">#F8F8F8</color>
-    <color name="seekBarThumbColor">#424242</color>
+    <color name="FreeRoomBlue">#0098d0</color>
     <color name="colorAccent">#F8F8F8</color>
 </resources>

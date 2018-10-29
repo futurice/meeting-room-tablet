@@ -9,10 +9,10 @@
     <color name="CalendarBorderColor">#F8F8F8</color> //light silver
     <color name="CalendarTextColor">#000</color>
     <color name="CalendarResTextColor">#fff</color>
-    <color name="StatusFreeColor">#529200</color>
+    <color name="StatusFreeColor">#0098d0</color>
     <color name="StatusReservedColor">#e5053a</color> //red
     <color name="Transparent">#0000</color>
-    <color name="CalendarMarkerReservedColor">#0098d0</color> //blue
+    <color name="CalendarMarkerReservedColor">#0098d0</color> //blue - todo: We need to change this because it shouldnt be the same color as "free"
 
     <color name="TimeBarTickColor">#3333</color>
     <color name="ButtonTextNormal">#333</color>
@@ -24,13 +24,18 @@
     <color name="MenuButtonPressedColor">#005479</color> //dark blue
     <color name="MenuButtonInactiveColor">#F8F8F8</color> //light silver
 
-    <color name="TrafficLightFree">#4ccb00</color>
-    <color name="TrafficLightYellow">#cee100</color>
+    <color name="TrafficLightFree">#0098d0</color>
     <color name="TrafficLightReserved">#e5053a</color> //red
     <color name="TrafficLightText">#fff</color>
 
+    <color name="seekBarProgress">#424242</color>
+    <color name="seekBarProgressBackgroundColor">#F8F8F8</color>
+    <color name="seekBarThumbColor">#424242</color>
+
 
     <!-- NO LONGER USED -->
+    <color name="TrafficLightYellow">#cee100</color>
+
     <color name="ReserveBackground">#6698c655</color>
     <color name="ReserveLine">#a4cb80</color>
 
