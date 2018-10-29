@@ -152,6 +152,7 @@ public class TrafficLightsPresenter implements
 
         if (room.isBookable(QUICK_BOOK_THRESHOLD)) {
             this.roomStatusFragment.setStatusText(resources.getString(R.string.status_free));
+            this.roomStatusFragment.setMeetingNameText("");
             if (room.isFreeRestOfDay()) {
                 this.roomStatusFragment.setStatusUntilText(resources.getString(R.string.free_for_the_day));
 
