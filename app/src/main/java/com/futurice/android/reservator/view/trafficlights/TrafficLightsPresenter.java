@@ -153,7 +153,7 @@ public class TrafficLightsPresenter implements
     */
     public void updateRoomData(Room room) {
         //updateConnected();
-
+        this.dayCalendarFragment.updateRoomData(room);
         this.roomStatusFragment.setRoomTitleText(room.getName());
 
 

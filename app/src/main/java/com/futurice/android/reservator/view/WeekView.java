@@ -8,6 +8,7 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 
@@ -21,7 +22,7 @@ import butterknife.BindView;
 
 public class WeekView extends RelativeLayout implements OnClickListener {
 
-    public static final int NUMBER_OF_DAYS_TO_SHOW = 10;
+    public static final int NUMBER_OF_DAYS_TO_SHOW = 1;
     public static final int DAY_START_TIME = 60 * 8; // minutes from midnight
     public static final int DAY_END_TIME = 60 * 20;
     public static final int NORMALIZATION_START_HOUR = 20;
@@ -44,7 +45,9 @@ public class WeekView extends RelativeLayout implements OnClickListener {
     }
 
     public void refreshData(Room room) {
-        calendarFrame = (FrameLayout) findViewById(R.id.frameLayout1);
+        //calendarFrame = (FrameLayout) findViewById(R.id.frameLayout1);
+        calendarFrame =(FrameLayout) ((ViewGroup)this).getChildAt(0);
+
         calendarFrame.removeAllViews();
         List<Reservation> reservations = new ArrayList<Reservation>();
 

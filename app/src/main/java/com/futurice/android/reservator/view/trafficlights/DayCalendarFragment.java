@@ -5,7 +5,9 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+
+import com.futurice.android.reservator.model.Room;
+import com.futurice.android.reservator.view.WeekView;
 
 import com.futurice.android.reservator.R;
 
@@ -16,6 +18,7 @@ public class DayCalendarFragment extends Fragment {
     }
 
     private DayCalendarPresenter presenter;
+    private WeekView weekView;
 
     public void setPresenter(DayCalendarPresenter presenter) {
         this.presenter = presenter;
@@ -37,9 +40,14 @@ public class DayCalendarFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.day_calendar_fragment, container, false);
-        //this.roomTitleText = (TextView) view.findViewById(R.id.roomTitleText);
+        this.weekView = (WeekView) view.findViewById(R.id.dayCalendar);
 
         return view;
+    }
+
+    public void updateRoomData(Room room) {
+        if (this.weekView != null)
+            this.weekView.refreshData(room);
     }
 
 }
