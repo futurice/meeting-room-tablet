@@ -3,16 +3,13 @@ import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
-import android.support.v7.app.AppCompatActivity;
+import android.support.v4.app.FragmentManager;
 import android.view.Window;
-import com.futurice.android.reservator.R;
-import com.futurice.android.reservator.ReservatorApplication;
-import com.futurice.android.reservator.common.Presenter;
+
 import com.futurice.android.reservator.view.trafficlights.TrafficLightsPageFragment;
 import com.futurice.android.reservator.view.trafficlights.TrafficLightsPresenter;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 
 import java.util.ArrayList;
 import java.util.List;
