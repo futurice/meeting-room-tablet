@@ -68,6 +68,15 @@
             android:configChanges="orientation|screenSize"
             android:hardwareAccelerated="false"
             android:screenOrientation="sensorLandscape" />
+
+        <receiver
+            android:name=".MainActivity$CalendarStateReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.PROVIDER_CHANGED"/>
+                <data android:scheme="content"/>
+                <data android:host="com.android.calendar"/>
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>
