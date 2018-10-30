@@ -5,6 +5,7 @@ import android.content.res.Resources;
 import android.text.Html;
 import android.util.Log;
 import android.view.View;
+import android.os.Handler;
 
 import com.futurice.android.reservator.R;
 import com.futurice.android.reservator.common.Helpers;
@@ -40,6 +41,21 @@ public class TrafficLightsPresenter implements
     private Model model;
     private Resources resources;
 
+    private Room room;
+
+    private Handler handler = new Handler();
+    private Runnable minuteRunnable = new Runnable() {
+        @Override
+        public void run() {
+            onMinuteElapsed();
+            handler.postDelayed(this, 60000);
+        }
+    };
+
+    public void onMinuteElapsed() {
+        this.updateOngoingReservationFragment();
+    }
+
     public TrafficLightsPresenter(Activity activity, Model model) {
         this.activity = activity;
         this.resources = activity.getResources();
@@ -48,14 +64,13 @@ public class TrafficLightsPresenter implements
         this.model.getDataProxy().addDataUpdatedListener(this);
         this.model.getAddressBook().addDataUpdatedListener(this);
 
-
-
     }
 
     private void tryStarting() {
         if (trafficLightsPageFragment != null && roomStatusFragment != null &&
                 ongoingReservationFragment != null && roomReservationFragment != null && dayCalendarFragment != null) {
             this.model.getDataProxy().refreshRoomReservations(this.model.getFavoriteRoom());
+            handler.postDelayed(minuteRunnable, 60000);
         }
     }
 
@@ -189,8 +204,26 @@ public class TrafficLightsPresenter implements
         }
     }
 
+    private void updateOngoingReservationFragment()
+        {
+        if (this.room == null)
+            return;
+
+        Reservation currentReservation = this.room.getCurrentReservation();
+        if (currentReservation == null)
+            return;
+
+        long endTime = currentReservation.getEndTime().getTimeInMillis();
+        int remainingMinutes = (int)(endTime - System.currentTimeMillis())/60000;
+
+        if (this.ongoingReservationFragment != null)
+            this.ongoingReservationFragment.setRemainingMinutes(remainingMinutes);
+        }
+
     public void updateRoomData(Room room) {
         //updateConnected();
+        this.room = room;
+
         this.dayCalendarFragment.updateRoomData(room);
         this.roomStatusFragment.setRoomTitleText(room.getName());
 
@@ -225,6 +258,7 @@ public class TrafficLightsPresenter implements
                 } else {
                     this.trafficLightsPageFragment.getView().setBackgroundColor(resources.getColor(R.color.TrafficLightYellow));
                     this.trafficLightsPageFragment.showOngoingReservationFragment();
+                    this.updateOngoingReservationFragment();
                     //this.roomReservationFragment.getView().setVisibility(View.GONE);
                     this.roomStatusFragment.hideBookNowText();
                     //bookNowButton.setBackgroundDrawable(resources.getDrawable(R.drawable.traffic_lights_button_yellow));
@@ -240,10 +274,10 @@ public class TrafficLightsPresenter implements
             this.trafficLightsPageFragment.getView().setBackgroundColor(resources.getColor(R.color.TrafficLightReserved));
             this.roomStatusFragment.setStatusText(resources.getString(R.string.status_reserved));
             this.trafficLightsPageFragment.showOngoingReservationFragment();
+            this.updateOngoingReservationFragment();
             //this.roomReservationFragment.getView().setVisibility(View.GONE);
             this.roomStatusFragment.hideBookNowText();
             this.showReservationDetails(room.getCurrentReservation(), room.getNextFreeSlot());
         }
     }
-
 }
