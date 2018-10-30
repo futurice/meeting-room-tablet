@@ -20,12 +20,29 @@ public class OngoingReservationFragment extends Fragment {
 
     private TextView barDurationText = null;
     private SeekBar seekBar = null;
-
+    private int remainingMinutes = 0;
 
     public void setPresenter(OngoingReservationPresenter presenter) {
         this.presenter = presenter;
         this.presenter.setOngoingReservationFragment(this);
         }
+
+    private void updateRemainingMinutesToUi() {
+        if (this.seekBar != null && this.barDurationText != null) {
+            int max = this.seekBar.getMax();
+
+            if (max < this.remainingMinutes)
+                this.seekBar.setMax(this.remainingMinutes);
+
+            this.seekBar.setProgress(this.remainingMinutes);
+            this.barDurationText.setText(this.remainingMinutes+" min.");
+        }
+    }
+
+    public void setRemainingMinutes(int minutes) {
+        this.remainingMinutes = minutes;
+        this.updateRemainingMinutesToUi();
+    }
 
 
     @Override
@@ -35,9 +52,7 @@ public class OngoingReservationFragment extends Fragment {
 
         this.barDurationText = (TextView) view.findViewById(R.id.barDurationText);
         this.seekBar = (SeekBar) view.findViewById(R.id.ongoingSeekBar);
-
+        this.updateRemainingMinutesToUi();
         return view;
     }
-
-
 }
