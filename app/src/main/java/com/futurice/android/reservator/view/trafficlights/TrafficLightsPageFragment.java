@@ -15,6 +15,7 @@ public class TrafficLightsPageFragment extends Fragment {
     }
     private RoomStatusFragment roomStatusFragment;
     private DayCalendarFragment dayCalendarFragment;
+    private BottomFragment bottomFragment;
     private RoomReservationFragment roomReservationFragment;
     private OngoingReservationFragment ongoingReservationFragment;
 
@@ -78,6 +79,15 @@ public class TrafficLightsPageFragment extends Fragment {
         catch (ClassCastException e) {
             throw new ClassCastException(presenter.toString() + " must implement DayCalendarPresenter");
         }
+
+        /*try {
+            this.bottomFragment = (BottomFragment)getChildFragmentManager().findFragmentById(R.id.bottomFragment);
+            this.bottomFragment.setPresenter((BottomFragment.BottomFragmentPresenter) this.presenter);
+        }
+        catch (ClassCastException e) {
+            throw new ClassCastException(presenter.toString() + " must implement BottomFragmentPresenter");
+        }*/
+
         return view;
     }
 

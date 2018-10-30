@@ -9,8 +9,8 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
-        android:padding="10dip"
+        android:layout_marginBottom="0dp"
+        android:padding="4dp"
         android:background="#0098d0"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -32,30 +32,53 @@
                 />
         </FrameLayout>
 
-
         <FrameLayout
             android:id="@+id/roomReservationContainer"
             android:layout_width="900dp"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@+id/roomStatusContainer"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent">
+            android:layout_marginBottom="8dp"
+            app:layout_constraintBottom_toTopOf="@+id/bottomFragmentContainer"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/roomStatusContainer">
+
+            <fragment
+                android:id="@+id/roomReservationFragment"
+                android:name="com.futurice.android.reservator.view.trafficlights.RoomReservationFragment"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
         </FrameLayout>
 
         <FrameLayout
             android:id="@+id/dayCalendarContainer"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/roomStatusContainer"
+            android:layout_marginBottom="8dp"
+            app:layout_constraintBottom_toTopOf="@+id/bottomFragmentContainer"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/roomStatusContainer"
             app:layout_constraintTop_toTopOf="parent">
 
             <fragment
                 android:id="@+id/dayCalendarFragment"
                 android:name="com.futurice.android.reservator.view.trafficlights.DayCalendarFragment"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_width="match_parent"/>
+                />
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/bottomFragmentContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="0dp"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+            <fragment
+                android:id="@+id/bottomFragment"
+                android:name="com.futurice.android.reservator.view.trafficlights.BottomFragment"
+                android:layout_height="match_parent"
+                android:layout_width="match_parent"
+                />
         </FrameLayout>
     </android.support.constraint.ConstraintLayout>
 
