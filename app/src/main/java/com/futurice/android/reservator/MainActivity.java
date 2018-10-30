@@ -10,12 +10,13 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.view.Window;
+
 import com.futurice.android.reservator.model.Model;
 import com.futurice.android.reservator.view.trafficlights.TrafficLightsPageFragment;
 import com.futurice.android.reservator.view.trafficlights.TrafficLightsPresenter;
+
 import java.util.ArrayList;
 import java.util.List;
-
 
 import butterknife.ButterKnife;
 
@@ -26,10 +27,6 @@ public class MainActivity extends FragmentActivity {
     private TrafficLightsPresenter presenter;
 
     private Model model;
-
-    CalendarStateReceiver batteryStateReceiver = new CalendarStateReceiver();
-    IntentFilter filter = new IntentFilter();
-
 
     private void openFragment(Fragment fragment) {
         if (fragmentManager != null) {
@@ -73,6 +70,9 @@ public class MainActivity extends FragmentActivity {
         ButterKnife.bind(this);
 
         this.openFragment(this.trafficLightsPageFragment);
+        registerReceiver(
+            broadcastReceiver,
+            new IntentFilter(CalendarStateReceiver.CALENDAR_CHANGED));
     }
 
     @Override
@@ -91,14 +91,16 @@ public class MainActivity extends FragmentActivity {
             this.model.getDataProxy().refreshRoomReservations(this.model.getFavoriteRoom());
     }
 
-    public class CalendarStateReceiver extends BroadcastReceiver {
-        public CalendarStateReceiver() {
-            super();
-        }
-
+    BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             onCalendarUpdated();
         }
+    };
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unregisterReceiver(broadcastReceiver);
     }
 }
