@@ -2,6 +2,7 @@ package com.futurice.android.reservator.view.trafficlights;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,11 +14,24 @@ public class TrafficLightsPageFragment extends Fragment {
     void setTrafficLightsPageFragment(TrafficLightsPageFragment fragment);
     }
     private RoomStatusFragment roomStatusFragment;
-    private RoomReservationFragment roomReservationFragment;
     private DayCalendarFragment dayCalendarFragment;
     private BottomFragment bottomFragment;
+    private RoomReservationFragment roomReservationFragment;
+    private OngoingReservationFragment ongoingReservationFragment;
+
+    private FragmentManager fragmentManager;
 
     private TrafficLightsPagePresenter presenter;
+
+    private void openFragment(Fragment fragment) {
+        if (fragmentManager != null) {
+            //@formatter:off
+            fragmentManager.beginTransaction()
+                    .replace(R.id.roomReservationContainer, fragment)
+                    .commit();
+            //@formatter:on
+        }
+    }
 
     public void setPresenter(TrafficLightsPagePresenter presenter) {
         this.presenter = presenter;
@@ -27,6 +41,23 @@ public class TrafficLightsPageFragment extends Fragment {
     @Override
     public void onAttach(android.content.Context context) {
         super.onAttach(context);
+        this.fragmentManager = getChildFragmentManager();
+
+        try {
+            this.roomReservationFragment = new RoomReservationFragment();
+            this.roomReservationFragment.setPresenter((RoomReservationFragment.RoomReservationPresenter) this.presenter);
+        }
+        catch (ClassCastException e) {
+            throw new ClassCastException(presenter.toString() + " must implement RoomReserationPresenter");
+        }
+
+        try {
+            this.ongoingReservationFragment = new OngoingReservationFragment();
+            this.ongoingReservationFragment.setPresenter((OngoingReservationFragment.OngoingReservationPresenter) this.presenter);
+        }
+        catch (ClassCastException e) {
+            throw new ClassCastException(presenter.toString() + " must implement OngoingReservationPresenter");
+        }
     }
 
     @Override
@@ -40,14 +71,6 @@ public class TrafficLightsPageFragment extends Fragment {
         catch (ClassCastException e) {
                 throw new ClassCastException(presenter.toString() + " must implement RoomStatusPresenter");
         }
-
-        try {
-            this.roomReservationFragment = (RoomReservationFragment)getChildFragmentManager().findFragmentById(R.id.roomReservationFragment);
-            this.roomReservationFragment.setPresenter((RoomReservationFragment.RoomReservationPresenter) this.presenter);
-            }
-            catch (ClassCastException e) {
-                throw new ClassCastException(presenter.toString() + " must implement RoomReserationPresenter");
-            }
 
         try {
             this.dayCalendarFragment = (DayCalendarFragment)getChildFragmentManager().findFragmentById(R.id.dayCalendarFragment);
@@ -66,5 +89,13 @@ public class TrafficLightsPageFragment extends Fragment {
         }*/
 
         return view;
+    }
+
+    public void showOngoingReservationFragment() {
+        this.openFragment(this.ongoingReservationFragment);
+    }
+
+    public void showRoomReservationFragment() {
+        this.openFragment(this.roomReservationFragment);
     }
 }

@@ -21,7 +21,7 @@ public class RoomStatusFragment extends Fragment {
     private TextView statusText = null;
     private TextView statusUntilText = null;
     private TextView meetingNameText = null;
-
+    private TextView bookNowText = null;
 
     public void setPresenter(RoomStatusPresenter presenter) {
         this.presenter = presenter;
@@ -47,7 +47,7 @@ public class RoomStatusFragment extends Fragment {
         this.statusText = (TextView) view.findViewById(R.id.statusText);
         this.statusUntilText = (TextView) view.findViewById(R.id.statusUntilText);
         this.meetingNameText = (TextView) view.findViewById(R.id.meetingNameText);
-
+        this.bookNowText = (TextView) view.findViewById(R.id.bookNowText);
         return view;
     }
 
@@ -63,5 +63,10 @@ public class RoomStatusFragment extends Fragment {
     public void setMeetingNameText(String text) {
         this.meetingNameText.setText(text);
     }
-
+    public void showBookNowText() {
+        this.bookNowText.setVisibility(View.VISIBLE);
+    }
+    public void hideBookNowText() {
+        this.bookNowText.setVisibility(View.GONE);
+    }
 }
