@@ -70,7 +70,7 @@
             android:screenOrientation="sensorLandscape" />
 
         <receiver
-            android:name=".MainActivity$CalendarStateReceiver">
+            android:name=".CalendarStateReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.PROVIDER_CHANGED"/>
                 <data android:scheme="content"/>
