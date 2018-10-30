@@ -28,7 +28,7 @@ public class TrafficLightsPageFragment extends Fragment {
             //@formatter:off
             fragmentManager.beginTransaction()
                     .replace(R.id.roomReservationContainer, fragment)
-                    .commit();
+                    .commitAllowingStateLoss();
             //@formatter:on
         }
     }
