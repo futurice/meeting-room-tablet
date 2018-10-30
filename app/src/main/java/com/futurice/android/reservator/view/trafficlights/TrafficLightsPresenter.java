@@ -9,6 +9,8 @@ import android.os.Handler;
 
 import com.futurice.android.reservator.R;
 import com.futurice.android.reservator.common.Helpers;
+import com.futurice.android.reservator.common.PreferenceManager;
+import com.futurice.android.reservator.model.DateTime;
 import com.futurice.android.reservator.model.Model;
 import com.futurice.android.reservator.model.Reservation;
 import com.futurice.android.reservator.model.ReservatorException;
@@ -74,6 +76,15 @@ public class TrafficLightsPresenter implements
         }
     }
 
+    private void makeReservation(TimeSpan timespan, String description) {
+        try {
+            String accountEmail = PreferenceManager.getInstance(this.activity).getDefaultUserName();
+            this.model.getDataProxy().reserve(room, timespan, description, accountEmail);
+        }
+        catch (ReservatorException e) {
+            Log.d("Reservator", e.toString());
+        }
+    }
 
     // ------ Implementation of RoomReservationFragment.RoomReservationPresenter
 
@@ -86,8 +97,16 @@ public class TrafficLightsPresenter implements
     }
 
     @Override
-    public void onReservationRequestMade(long reservationDuration, String reservationName) {
-        Log.d("","TrafficLightsPresenter::onReservationRequestMade() reservationDuration: "+reservationDuration+" reservationName: "+reservationName);
+    public void onReservationRequestMade(int minutes, String description) {
+        Log.d("","TrafficLightsPresenter::onReservationRequestMade() minutes: "+minutes+" description: "+description);
+
+        TimeSpan timeSpan= new TimeSpan(new DateTime(), new DateTime(System.currentTimeMillis()+(minutes*60*1000)));
+        String tempDescription = resources.getString(R.string.default_reservation_description);
+
+        if (description != null && description != "")
+            tempDescription = description;
+
+        this.makeReservation(timeSpan, tempDescription);
     }
 
     // ------ Implementation of OngoingReservationFragment.OngoingReservationPresenter

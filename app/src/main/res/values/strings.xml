@@ -55,4 +55,5 @@
     <string name="meeting_description">Kuvaus/Beskrivning/Description</string>
     <string name="quick_booking">Pikavaraus/Snabbreservering/Use now:</string>
     <string name="reservation_remaining">Varausta jäljellä/Bokning kvar/Reservation remaining</string>
+    <string name="default_reservation_description">Varaus/Bokning/Reservation</string>
 </resources>

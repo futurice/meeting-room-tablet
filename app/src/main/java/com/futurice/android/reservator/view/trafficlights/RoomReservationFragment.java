@@ -19,7 +19,7 @@ public class RoomReservationFragment extends Fragment {
 
     public interface RoomReservationPresenter {
         void setRoomReservationFragment(RoomReservationFragment fragment);
-        void onReservationRequestMade(long reservationDuration, String reservationName);
+        void onReservationRequestMade(int minutes, String description);
     }
 
     private RoomReservationPresenter presenter;
@@ -61,18 +61,6 @@ public class RoomReservationFragment extends Fragment {
         this.presenter.setRoomReservationFragment(this);
     }
 
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        /*
-        try {
-            presenter = (RoomReservationPresenter) (((PresenterView)context).getPresenter());
-            presenter.setRoomReservationFragment(this);
-        } catch (ClassCastException e) {
-            throw new ClassCastException(context.toString() + " must implement RoomReservationPresenter");
-        }
-        */
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -101,15 +89,7 @@ public class RoomReservationFragment extends Fragment {
         reserveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                nameGiven = nameInput.getText().toString();
-                //meetingDuration = get current time + duration of meeting
-
-
-                if (nameGiven.equals("")) { //Throw error message or change text to give error
-                    nameInput.setText("Enter a valid name");
-                } else {
-                    presenter.onReservationRequestMade(getCurrentTime(), nameGiven);
-                }
+                presenter.onReservationRequestMade(seekBar.getProgress(), nameInput.getText().toString());
             }
         });
         return view;
