@@ -40,14 +40,8 @@
             app:layout_constraintTop_toBottomOf="@+id/roomStatusContainer"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent">
-
-            <fragment
-                android:id="@+id/roomReservationFragment"
-                android:name="com.futurice.android.reservator.view.trafficlights.RoomReservationFragment"
-                android:layout_height="match_parent"
-                android:layout_width="match_parent"
-                />
         </FrameLayout>
+
         <FrameLayout
             android:id="@+id/dayCalendarContainer"
             android:layout_width="0dp"
