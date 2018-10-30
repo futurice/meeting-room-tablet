@@ -54,4 +54,5 @@
     <string name="free_at">Vapautuu/Ledigt från/Free at</string>
     <string name="meeting_description">Kuvaus/Beskrivning/Description</string>
     <string name="quick_booking">Pikavaraus/Snabbreservering/Use now:</string>
+    <string name="reservation_remaining">Varausta jäljellä/Bokningstid kvar/Reservation remaining</string>
 </resources>

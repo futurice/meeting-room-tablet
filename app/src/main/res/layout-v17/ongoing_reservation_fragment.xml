@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="center_horizontal"
+    android:layout_marginStart="8dp"
+    android:layout_marginTop="8dp"
+    android:layout_marginEnd="8dp"
+    android:layout_marginBottom="8dp"
+    android:focusableInTouchMode="true"
+    android:orientation="vertical"
+    android:padding="10dip"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent">
+
+
+    <TextView
+        android:id="@+id/ongoingReservationLeft"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="120dp"
+        android:text="@string/reservation_remaining"
+        android:textColor="#F8F8F8"
+        android:textSize="20sp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <SeekBar
+        android:id="@+id/ongoingSeekBar"
+        android:layout_width="542dp"
+        android:layout_height="33dp"
+        android:layout_alignParentTop="false"
+        android:layout_alignParentEnd="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="172dp"
+        android:max="90"
+        android:progress="30"
+        android:progressBackgroundTint="@color/seekBarProgressBackgroundColor"
+        android:progressTint="@color/seekBarProgress"
+        android:thumbTint="@color/seekBarThumbColor"
+        app:layout_constraintTop_toBottomOf="@+id/ongoingReservationLeft"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+    </SeekBar>
+
+    <TextView
+        android:id="@+id/barDurationText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="130dp"
+        android:text="30 min"
+        android:textAlignment="center"
+        android:textColor="#F8F8F8"
+        android:textSize="30sp"
+        app:layout_constraintTop_toBottomOf="@+id/ongoingSeekBar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+    </TextView>
+
+
+
+</android.support.constraint.ConstraintLayout>
+
+
