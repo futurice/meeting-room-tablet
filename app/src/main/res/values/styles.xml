@@ -9,14 +9,15 @@
     <!--
     <color name="CalendarBorderColor">#F8F8F8</color> //light silver
     -->
-    <color name="CalendarBorderColor">#707070</color>
-    <color name="CalendarTextColor">#000</color>
-    <color name="CalendarResTextColor">#fff</color>
+    <color name="CalendarBorderColor">#555555</color>
+    <color name="CalendarTextColor">#424242</color>
+    <color name="CalendarResTextColor">#F8F8F8</color>
     <color name="StatusFreeColor">#0098d0</color>
     <color name="StatusReservedColor">#e5053a</color> //red
     <color name="Transparent">#0000</color>
     <color name="CalendarMarkerReservedColor">#0098d0</color> //blue - todo: We need to change this because it shouldnt be the same color as "free"
 
+    <color name="Orange">#fca311</color>
     <color name="TimeBarTickColor">#3333</color>
     <color name="ButtonTextNormal">#333</color>
     <color name="ButtonTextActive">#333</color>
