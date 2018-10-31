@@ -3,9 +3,12 @@ package com.futurice.android.reservator.common;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.SimpleDateFormat;
 import java.util.Locale;
 
 import android.util.Log;
+
+import com.futurice.android.reservator.model.DateTime;
 
 public class Helpers {
     /**
@@ -81,6 +84,22 @@ public class Helpers {
         } else {
             return getUnits(hours / 24, "day", "days");
         }
+    }
+
+    public static String dateTimeTo24h(DateTime dt) {
+        java.util.Date date = new java.util.Date(dt.getTimeInMillis());
+        SimpleDateFormat format = new SimpleDateFormat("HH:mm");
+        return format.format(date);
+    }
+
+
+    public static String convertToHoursAndMinutes(int min) {
+        int hours = min / 60;
+        int minutes = min%60;
+        if (hours > 0)
+            return hours+"h "+minutes+"min";
+        else
+            return minutes+"min";
     }
 
     private static String getUnits(int amount, String unitName, String unitNamePlural) {

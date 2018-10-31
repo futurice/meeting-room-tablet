@@ -12,6 +12,7 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.futurice.android.reservator.R;
+import com.futurice.android.reservator.common.Helpers;
 
 import butterknife.BindView;
 
@@ -31,8 +32,7 @@ public class RoomReservationFragment extends Fragment {
     Button reserveButton;
 
     private int maxMinutes = 0;
-    private long minTime = 0;
-    private long maxTime = 0;
+    private int minutes = 0;
 
     private void updateTimeLimitsToUi() {
         if (this.seekBar != null) {
@@ -40,6 +40,12 @@ public class RoomReservationFragment extends Fragment {
         }
     }
 
+    private void updateMinutesToUi() {
+        if (this.seekBar != null) {
+            textViewBarDuration.setText(Helpers.convertToHoursAndMinutes(this.minutes));
+            this.seekBar.setProgress(this.minutes);
+        }
+    }
     public void setPresenter(RoomReservationPresenter presenter) {
         this.presenter = presenter;
         this.presenter.setRoomReservationFragment(this);
@@ -75,6 +81,11 @@ public class RoomReservationFragment extends Fragment {
        this.updateTimeLimitsToUi();
     }
 
+    public void setMinutes(int minutes) {
+        this.minutes = minutes;
+        this.updateMinutesToUi();
+    }
+
     SeekBar.OnSeekBarChangeListener seekBarChangeListener = new SeekBar.OnSeekBarChangeListener() {
         int minutesIncrement = 5;
 
@@ -82,7 +93,16 @@ public class RoomReservationFragment extends Fragment {
         public void onProgressChanged(android.widget.SeekBar seekBar, int progress, boolean b) {
             progress = ((int) Math.round(progress / minutesIncrement)) * minutesIncrement;
             seekBar.setProgress(progress);
-            textViewBarDuration.setText(progress + " min.");
+            minutes = progress;
+
+            if (progress==0)
+                reserveButton.setEnabled(false);
+
+            if (!reserveButton.isEnabled() && progress > 0)
+                reserveButton.setEnabled(true);
+            
+            textViewBarDuration.setText(Helpers.convertToHoursAndMinutes(progress));
+
         }
 
         @Override
@@ -99,5 +119,6 @@ public class RoomReservationFragment extends Fragment {
     public void onResume(){
         super.onResume();
         this.updateTimeLimitsToUi();
+        this.updateMinutesToUi();
     }
 }

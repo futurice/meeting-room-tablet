@@ -48,13 +48,13 @@
     <string name="only_use_resource_calendars">Only use resource calendars</string>
     <string name="default_room_icon_content_description">default room icon</string>
     <string name="status_free">Vapaa/Ledigt/Free</string>
-    <string name="free_for_the_day">koko päivän/hela dagen/for the day</string>
-    <string name="free_for_specific_amount">for %1$s</string>
+    <string name="free_for_the_day">päivän loppuun/hela dagen/for the day</string>
+    <string name="free_for_specific_amount">seuraava varaus/nästa reservering/next reservation</string>
     <string name="status_reserved">Varattu/Resrverat/Reserved</string>
     <string name="free_at">Vapautuu/Ledigt från/Free at</string>
     <string name="meeting_description">Kuvaus/Beskrivning/Description</string>
     <string name="quick_booking">Pikavaraus/Snabbreservering/Use now:</string>
-    <string name="reservation_remaining">Varausta jäljellä/Reserveringen kvar/Reservation remaining</string>
+    <string name="reservation_remaining">Varausta jäljellä/Reservering kvar/Reservation remaining</string>
     <string name="default_reservation_description">Varaus/Reservering/Reservation</string>
     <string name="approveChange">Vahvista muutos\nKonfirmera förändringen\nConfirm change</string>
     <string name="cancelChange">Muutokset tallennetaan/Ändringarna sparas/Saving changes\nPeruuta/Avbryt/Cancel</string>
