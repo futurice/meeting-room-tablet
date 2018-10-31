@@ -3,8 +3,8 @@
     android:layout_width="wrap_content" android:layout_height="wrap_content"
     android:layout_alignParentTop="true"
     android:layout_alignParentEnd="true"
-    android:format24Hour="HH:mm"
-    android:format12Hour="h:mm"
+    android:format24Hour="KK:mm"
+    android:format12Hour="kk:mm"
     android:textColor="@color/TrafficLightText"
     android:textSize="40sp"
     android:textStyle="bold">

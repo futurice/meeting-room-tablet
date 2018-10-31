@@ -47,7 +47,7 @@ public class CalendarVisualizer extends HorizontalScrollView implements Reservat
     private DateTime firstDayToShow;
     private int daysToShow = 1;
     private int dayWidth = 250;
-    private int timeLabelWidth = 100;
+    private int timeLabelWidth = 85;
     private Reservation[] reservations;
     private SimpleDateFormat dayLabelFormatter, weekLabelFormatter;
     private Paint fadingEdgePaint;
@@ -324,7 +324,7 @@ public class CalendarVisualizer extends HorizontalScrollView implements Reservat
 
         Paint linePaint = new Paint();
         linePaint.setStrokeWidth(3);
-        linePaint.setColor(Color.RED);
+        linePaint.setColor(getResources().getColor(R.color.StatusReservedColor));
 
         // the red line
         if (daysToShow ==1)
