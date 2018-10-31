@@ -80,4 +80,10 @@ public class CachedDataProxy extends DataProxy {
     public void cancelReservation(Reservation r) throws ReservatorException {
         dataProxy.cancelReservation(r);
     }
+
+    @Override
+    public void modifyReservationTimeSpan(Reservation r, Room room, TimeSpan timeSpan) throws ReservatorException {
+        dataProxy.modifyReservationTimeSpan(r, room, timeSpan);
+    }
+
 }

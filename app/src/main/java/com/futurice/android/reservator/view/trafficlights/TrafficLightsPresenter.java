@@ -92,6 +92,23 @@ public class TrafficLightsPresenter implements
         }
     }
 
+    private void cancelCurrentReservation() {
+        try {
+            this.model.getDataProxy().cancelReservation(this.room.getCurrentReservation());
+        } catch (ReservatorException e) {
+                Log.d("Reservator", e.toString());
+            }
+    }
+
+    private void modifyCurrentReservationTimeSpan(TimeSpan timeSpan) {
+        try {
+            this.model.getDataProxy().modifyReservationTimeSpan(this.room.getCurrentReservation(), this.room, timeSpan);
+        } catch (ReservatorException e) {
+            Log.d("Reservator", e.toString());
+        }
+    }
+
+
     // ------ Implementation of RoomReservationFragment.RoomReservationPresenter
 
     @Override
@@ -109,7 +126,7 @@ public class TrafficLightsPresenter implements
         TimeSpan timeSpan = new TimeSpan(new DateTime(), new DateTime(System.currentTimeMillis() + (minutes * 60 * 1000)));
         String tempDescription = resources.getString(R.string.default_reservation_description);
 
-        if (description != null && description != "")
+        if (description != null && !"".equals(description))
             tempDescription = description;
 
         this.makeReservation(timeSpan, tempDescription);
@@ -123,6 +140,20 @@ public class TrafficLightsPresenter implements
 
         //this.roomReservationFragment.setTimeLimits(System.currentTimeMillis(), System.currentTimeMillis() + 1000*60*120);
         this.tryStarting();
+    }
+
+    @Override
+    public void onReservationMinutesChanged(int newMinutes) {
+        if (newMinutes <= 0) {
+            this.cancelCurrentReservation();
+        }
+        else {
+            Reservation reservation = this.room.getCurrentReservation();
+            DateTime startTime = reservation.getStartTime();
+
+            DateTime newEndTime = new DateTime(startTime.getTimeInMillis() + (newMinutes* 60 * 1000));
+            this.modifyCurrentReservationTimeSpan(new TimeSpan(startTime,newEndTime));
+        }
     }
 
     // ------ Implementation of TrafficLightsPageFragment.TrafficLightsPagePresenter
@@ -248,19 +279,24 @@ public class TrafficLightsPresenter implements
             tempMax = MAX_QUICK_BOOK_MINUTES;
 
         long endTime = currentReservation.getEndTime().getTimeInMillis();
-        int remainingMinutes = (int) (endTime - System.currentTimeMillis()) / 60000;
+        int remainingMinutes = (int) Math.round((endTime - System.currentTimeMillis()) / 60000f);
 
         if (this.ongoingReservationFragment != null) {
             this.ongoingReservationFragment.setMaxMinutes(tempMax);
             this.ongoingReservationFragment.setRemainingMinutes(remainingMinutes);
+        }
+
+        if (remainingMinutes <= 0) {
+            this.refreshModel();
         }
     }
 
     private void showReserved() {
         this.trafficLightsPageFragment.getView().setBackgroundColor(resources.getColor(R.color.TrafficLightReserved));
         this.roomStatusFragment.setStatusText(resources.getString(R.string.status_reserved));
-        this.trafficLightsPageFragment.showOngoingReservationFragment();
         this.updateOngoingReservationFragment();
+        this.trafficLightsPageFragment.showOngoingReservationFragment();
+
 
         this.roomStatusFragment.hideBookNowText();
         this.showReservationDetails(room.getCurrentReservation(), room.getNextFreeSlot());

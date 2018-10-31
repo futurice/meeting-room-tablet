@@ -42,6 +42,11 @@ public abstract class DataProxy {
     abstract public void cancelReservation(Reservation r) throws ReservatorException;
 
     /**
+     * Synchronously modify reservation timespan.
+     */
+    abstract public void modifyReservationTimeSpan(Reservation r, Room room, TimeSpan timeSpan) throws ReservatorException;
+
+    /**
      * Synchronously gets a room with its name. Listeners are not notified when done.
      *
      * @param roomName. The room name to look for
