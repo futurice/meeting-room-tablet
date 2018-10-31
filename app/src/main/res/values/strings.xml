@@ -58,4 +58,6 @@
     <string name="default_reservation_description">Varaus/Bokning/Reservation</string>
     <string name="approveChange">Vahvista muutos\nKonfirmera förändringen\nConfirm change</string>
     <string name="cancelChange">Muutokset tallennetaan/Ändringarna sparas/Saving changes\nPeruuta/Avbryt/Cancel</string>
+    <string name="modifyPrompt">Muokkaa varausta liukusäätimestä\nÄndra bokninen med slidern\nModify reservation by using the slider</string>
+
 </resources>

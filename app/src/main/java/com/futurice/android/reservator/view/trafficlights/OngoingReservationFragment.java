@@ -28,6 +28,8 @@ public class OngoingReservationFragment extends Fragment {
 
     private ProgressBar changeProgressBar;
     private Button cancelChangeButton;
+    private TextView modifyPrompt;
+
     private CountDownTimer changeTimer;
 
     private int tickCounter = 0;
@@ -88,11 +90,13 @@ public class OngoingReservationFragment extends Fragment {
     public void showChancelWidgets() {
         this.changeProgressBar.setVisibility(View.VISIBLE);
         this.cancelChangeButton.setVisibility(View.VISIBLE);
+        this.modifyPrompt.setVisibility(View.GONE);
     }
 
     public void hideCancelWidgets() {
         this.changeProgressBar.setVisibility(View.GONE);
         this.cancelChangeButton.setVisibility(View.GONE);
+        this.modifyPrompt.setVisibility(View.VISIBLE);
     }
 
     public void setPresenter(OngoingReservationPresenter presenter) {
@@ -143,12 +147,15 @@ public class OngoingReservationFragment extends Fragment {
 
         this.barDurationText = (TextView) view.findViewById(R.id.barDurationText);
         this.seekBar = (SeekBar) view.findViewById(R.id.ongoingSeekBar);
+        this.modifyPrompt = (TextView) view.findViewById(R.id.modifyPrompt);
+
         this.changeProgressBar = (ProgressBar) view.findViewById(R.id.cangeProgressBar);
 
         this.cancelChangeButton = (Button)  view.findViewById(R.id.cancelChangeButton);
         this.cancelChangeButton.setOnClickListener(this.onCancelClicked);
 
         this.seekBar.setOnSeekBarChangeListener(seekBarChangeListener);
+
 
         this.changeProgressBar.setMax(CANCEL_COUNTDOWN_SECONDS);
         this.changeProgressBar.setProgress(CANCEL_COUNTDOWN_SECONDS);
