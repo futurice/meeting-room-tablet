@@ -56,4 +56,6 @@
     <string name="quick_booking">Pikavaraus/Snabbreservering/Use now:</string>
     <string name="reservation_remaining">Varausta jäljellä/Bokning kvar/Reservation remaining</string>
     <string name="default_reservation_description">Varaus/Bokning/Reservation</string>
+    <string name="approveChange">Vahvista muutos\nKonfirmera förändringen\nConfirm change</string>
+    <string name="cancelChange">Muutokset tallennetaan/Ändringarna sparas/Saving changes\nPeruuta/Avbryt/Cancel</string>
 </resources>
