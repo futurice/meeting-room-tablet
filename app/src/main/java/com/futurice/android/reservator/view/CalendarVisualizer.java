@@ -230,9 +230,13 @@ public class CalendarVisualizer extends HorizontalScrollView implements Reservat
             for (int i = 0; i < reservations.length; i++) {
                 if ((i + 1) < reservations.length &&
                         reservations[i].getEndTime().getTimeInMillis() == reservations[i + 1].getStartTime().getTimeInMillis()) {
+                    int tempStopX = getXForTime(reservations[i].getStartTime()) + dayWidth;
+                    if (daysToShow == 1)
+                        tempStopX = getWidth();
+
                     c.drawLine(getXForTime(reservations[i].getStartTime()),
                             getProportionalEndY(reservations[i].getEndTime()) * height,
-                            getXForTime(reservations[i].getStartTime()) + dayWidth,
+                            tempStopX,
                             getProportionalEndY(reservations[i].getEndTime()) * height,
                             linePaint);
                 }
