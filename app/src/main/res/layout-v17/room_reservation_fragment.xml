@@ -56,7 +56,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="130dp"
-        android:text="30 min."
         android:textAlignment="center"
         android:textColor="#F8F8F8"
         android:textSize="30sp"

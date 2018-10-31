@@ -12,6 +12,7 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.futurice.android.reservator.R;
+import com.futurice.android.reservator.common.Helpers;
 
 public class OngoingReservationFragment extends Fragment {
 
@@ -58,7 +59,7 @@ public class OngoingReservationFragment extends Fragment {
 
             //progress += Integer.valueOf(getCurrentTime());
             seekBar.setProgress(progress);
-            barDurationText.setText(progress + " min.");
+            barDurationText.setText(Helpers.convertToHoursAndMinutes(progress));
             //textViewBarEnd.setText("" + progress); //Add amount to current time
 
         }
@@ -114,7 +115,7 @@ public class OngoingReservationFragment extends Fragment {
                 this.seekBar.setMax(this.remainingMinutes);
 
             this.seekBar.setProgress(this.remainingMinutes);
-            this.barDurationText.setText(this.remainingMinutes+" min.");
+            this.barDurationText.setText(Helpers.convertToHoursAndMinutes(this.remainingMinutes));
         }
     }
 

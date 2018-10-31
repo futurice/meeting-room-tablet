@@ -33,6 +33,7 @@ public class TrafficLightsPresenter implements
 
     final int QUICK_BOOK_THRESHOLD = 5; // minutes
     final int MAX_QUICK_BOOK_MINUTES = 120; //minutes
+    final int DEFAULT_MINUTES = 45;
 
     private TrafficLightsPageFragment trafficLightsPageFragment;
     private RoomStatusFragment roomStatusFragment;
@@ -115,7 +116,7 @@ public class TrafficLightsPresenter implements
     public void setRoomReservationFragment(RoomReservationFragment fragment) {
         this.roomReservationFragment = fragment;
         this.roomReservationFragment.setMaxMinutes(MAX_QUICK_BOOK_MINUTES);
-
+        this.roomReservationFragment.setMinutes(DEFAULT_MINUTES);
         this.tryStarting();
     }
 
@@ -302,10 +303,10 @@ public class TrafficLightsPresenter implements
         this.showReservationDetails(room.getCurrentReservation(), room.getNextFreeSlot());
     }
 
-    private void showReservationPending(int freeMinutes) {
+    private void showReservationPending(int freeMinutes, DateTime freeAt) {
 
         this.roomStatusFragment.setStatusText(resources.getString(R.string.status_free));
-        this.roomStatusFragment.setStatusUntilText(resources.getString(R.string.free_for_specific_amount, Helpers.humanizeTimeSpan2(freeMinutes)));
+        this.roomStatusFragment.setStatusUntilText(resources.getString(R.string.free_for_specific_amount)+" "+Helpers.dateTimeTo24h(freeAt));
 
         this.trafficLightsPageFragment.getView().setBackgroundColor(resources.getColor(R.color.TrafficLightYellow));
 
@@ -327,9 +328,9 @@ public class TrafficLightsPresenter implements
 
     }
 
-    private void showFreeForMinutes(int freeMinutes) {
+    private void showFreeForMinutes(int freeMinutes, DateTime freeAt) {
         this.roomStatusFragment.setStatusText(resources.getString(R.string.status_free));
-        this.roomStatusFragment.setStatusUntilText(resources.getString(R.string.free_for_specific_amount, Helpers.humanizeTimeSpan2(freeMinutes)));
+        this.roomStatusFragment.setStatusUntilText(resources.getString(R.string.free_for_specific_amount)+" "+Helpers.dateTimeTo24h(freeAt));
 
         this.roomStatusFragment.setStatusText(resources.getString(R.string.status_free));
         this.roomStatusFragment.setMeetingNameText("");
@@ -360,10 +361,11 @@ public class TrafficLightsPresenter implements
                 this.showFreeForRestOfTheDay();
             } else {
                 int freeMinutes = room.minutesFreeFromNow();
+                DateTime freeAt = room.getNextFreeSlot().getStart();
                 if (freeMinutes >= Room.RESERVED_THRESHOLD_MINUTES) {
-                    this.showFreeForMinutes(freeMinutes);
+                    this.showFreeForMinutes(freeMinutes, freeAt);
                 } else {
-                    this.showReservationPending(freeMinutes);
+                    this.showReservationPending(freeMinutes, freeAt);
                 }
             }
         } else {
