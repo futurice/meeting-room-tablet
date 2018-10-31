@@ -6,7 +6,7 @@ public class Reservation implements Comparable<Reservation>, Serializable {
     private static final long serialVersionUID = 1L;
 
     final private String id;
-    final private TimeSpan timeSpan;
+    private TimeSpan timeSpan;
     final private String subject;
     private boolean cancellable = false;
 
@@ -36,6 +36,9 @@ public class Reservation implements Comparable<Reservation>, Serializable {
         return id;
     }
 
+    public void setTimeSpan(TimeSpan timeSpan) {
+        this.timeSpan = timeSpan;
+    }
     @Override
     public int hashCode() {
         return id.hashCode();

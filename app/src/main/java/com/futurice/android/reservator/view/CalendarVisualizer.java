@@ -278,7 +278,11 @@ public class CalendarVisualizer extends HorizontalScrollView implements Reservat
         textPaint.setTextSize(32f);
         for (Reservation r : reservations) {
             float textWidth = textPaint.measureText(r.getSubject());
-            String subject = (String) TextUtils.ellipsize(r.getSubject(), textPaintForEllipsize, 250,
+            int tempAvail = 250;
+            if (daysToShow == 1)
+                tempAvail = getWidth();
+
+            String subject = (String) TextUtils.ellipsize(r.getSubject(), textPaintForEllipsize, tempAvail,
                     TextUtils.TruncateAt.END);
             c.drawText(subject, getXForTime(r.getStartTime()) + paddingX, getProportionalY(r.getStartTime()) * height + textHeight + paddingY, textPaint);
         }

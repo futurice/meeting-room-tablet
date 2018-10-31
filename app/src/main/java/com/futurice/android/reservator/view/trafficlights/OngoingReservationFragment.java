@@ -19,6 +19,7 @@ public class OngoingReservationFragment extends Fragment {
 
     public interface OngoingReservationPresenter {
     void setOngoingReservationFragment(OngoingReservationFragment fragment);
+    void onReservationMinutesChanged(int newMinutes);
     }
 
     private OngoingReservationPresenter presenter;
@@ -148,6 +149,7 @@ public class OngoingReservationFragment extends Fragment {
     public void onChangeCountDownFinished() {
         this.hideCancelWidgets();
         this.isCountingDown = false;
+        this.presenter.onReservationMinutesChanged(this.seekBar.getProgress());
     }
 
     @Override
@@ -184,7 +186,12 @@ public class OngoingReservationFragment extends Fragment {
                 onChangeCountDownFinished();
             }
         };
-
         return view;
+    }
+    @Override
+    public void onResume(){
+        super.onResume();
+        this.updateRemainingMinutesToUi();
+        this.updateMaxMinutesToUi();
     }
 }

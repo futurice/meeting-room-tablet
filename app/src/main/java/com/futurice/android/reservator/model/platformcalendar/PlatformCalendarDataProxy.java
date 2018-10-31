@@ -254,6 +254,70 @@ public class PlatformCalendarDataProxy extends DataProxy {
         }
     }
 
+    @Override
+    public void modifyReservationTimeSpan(Reservation reservation, Room room, TimeSpan timeSpan) throws ReservatorException {
+        long eventId = getEventIdFromReservation(reservation);
+
+        Uri eventUri = ContentUris.withAppendedId(CalendarContract.Events.CONTENT_URI, eventId);
+
+        // Get calendar ID
+        String[] mProjection = {CalendarContract.Events.CALENDAR_ID};
+        String mSelectionClause = "DELETED=0";
+        String[] mSelectionArgs = {};
+        String mSortOrder = null;
+        Cursor result = resolver.query(
+                eventUri,
+                mProjection,
+                mSelectionClause,
+                mSelectionArgs,
+                mSortOrder);
+
+        if (result == null) {
+            return; // Event has already been deleted!
+        }
+
+        if (result.getCount() == 0) {
+            result.close();
+            return; // Event has already been deleted!
+        }
+
+        result.moveToFirst();
+        long calendarId = result.getLong(0);
+        result.close();
+
+        ContentValues newValues = new ContentValues();
+
+        newValues.put(CalendarContract.Events.DTSTART, timeSpan.getStart().getTimeInMillis());
+        newValues.put(CalendarContract.Events.DTEND, timeSpan.getEnd().getTimeInMillis());
+
+
+        // Update in platform calendar
+
+        int nRows = resolver.update(ContentUris.withAppendedId(CalendarContract.Events.CONTENT_URI, eventId), newValues, null,null);
+
+        // Update in local caches, remove first, then add again
+
+        synchronized (locallyCreatedReservationCaches) {
+            for (Map.Entry<Room, HashSet<Reservation>> entry : locallyCreatedReservationCaches.entrySet()) {
+                if (entry.getValue().contains(reservation)) {
+                    HashSet<Reservation> filtered = new HashSet<Reservation>(entry.getValue());
+                    filtered.remove(reservation);
+                    entry.setValue(filtered);
+                }
+            }
+            reservation.setTimeSpan(timeSpan);
+            putToLocalCache(room, reservation);
+        }
+
+        if (nRows > 0) {
+            try {
+                syncGoogleCalendarAccount(getAccountName(calendarId));
+            } catch (ReservatorException e) {
+                ; // Calendar has been deleted by user, can't sync. "Not a biggie"
+            }
+        }
+    }
+
     /**
      * Initiate a sync on a Google Calendar account if possible.
      */
