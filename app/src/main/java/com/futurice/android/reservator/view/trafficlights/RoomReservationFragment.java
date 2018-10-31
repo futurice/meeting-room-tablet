@@ -100,7 +100,7 @@ public class RoomReservationFragment extends Fragment {
 
             if (!reserveButton.isEnabled() && progress > 0)
                 reserveButton.setEnabled(true);
-            
+
             textViewBarDuration.setText(Helpers.convertToHoursAndMinutes(progress));
 
         }

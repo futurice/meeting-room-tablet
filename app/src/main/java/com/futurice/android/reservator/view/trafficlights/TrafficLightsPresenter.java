@@ -307,6 +307,7 @@ public class TrafficLightsPresenter implements
 
         this.roomStatusFragment.setStatusText(resources.getString(R.string.status_free));
         this.roomStatusFragment.setStatusUntilText(resources.getString(R.string.free_for_specific_amount)+" "+Helpers.dateTimeTo24h(freeAt));
+        this.roomStatusFragment.setMeetingNameText("");
 
         this.trafficLightsPageFragment.getView().setBackgroundColor(resources.getColor(R.color.TrafficLightYellow));
 
