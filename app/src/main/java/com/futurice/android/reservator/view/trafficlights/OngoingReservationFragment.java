@@ -35,6 +35,7 @@ public class OngoingReservationFragment extends Fragment {
     private int tickCounter = 0;
 
     private int remainingMinutes = 0;
+    private int maxMinutes = 0;
     private int savedProgress = 0;
 
     private boolean isCountingDown = false;
@@ -116,6 +117,15 @@ public class OngoingReservationFragment extends Fragment {
         }
     }
 
+    private void updateMaxMinutesToUi() {
+        if (this.seekBar != null)
+            this.seekBar.setMax(this.maxMinutes);
+    }
+    public void setMaxMinutes(int minutes) {
+        this.maxMinutes = minutes;
+        updateMaxMinutesToUi();
+    }
+
     public void setRemainingMinutes(int minutes) {
         this.remainingMinutes = minutes;
 
@@ -161,6 +171,7 @@ public class OngoingReservationFragment extends Fragment {
         this.changeProgressBar.setProgress(CANCEL_COUNTDOWN_SECONDS);
 
         this.updateRemainingMinutesToUi();
+        this.updateMaxMinutesToUi();
 
         this.changeTimer=new CountDownTimer((CANCEL_COUNTDOWN_SECONDS+1)*1000,1000) {
             @Override

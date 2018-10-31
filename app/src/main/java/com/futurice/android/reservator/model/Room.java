@@ -58,6 +58,15 @@ public class Room implements Serializable {
         return true;
     }
 
+    public boolean isFreeAt(DateTime time) {
+        for (Reservation r : reservations) {
+            if (r.getStartTime().before(time) && r.getEndTime().after(time)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     public Reservation getCurrentReservation() {
         DateTime now = new DateTime();
         DateTime bookingThresholdEnd = now.add(Calendar.MINUTE, RESERVED_THRESHOLD_MINUTES);
