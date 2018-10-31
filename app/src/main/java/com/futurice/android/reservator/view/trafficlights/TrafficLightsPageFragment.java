@@ -22,6 +22,7 @@ public class TrafficLightsPageFragment extends Fragment {
     private FragmentManager fragmentManager;
 
     private TrafficLightsPagePresenter presenter;
+    private Fragment currentChildFragment;
 
     private void openFragment(Fragment fragment) {
         if (fragmentManager != null) {
@@ -29,8 +30,22 @@ public class TrafficLightsPageFragment extends Fragment {
             fragmentManager.beginTransaction()
                     .replace(R.id.roomReservationContainer, fragment)
                     .commitAllowingStateLoss();
+            this.currentChildFragment = fragment;
             //@formatter:on
         }
+    }
+
+    private void removeCurrentChildFragment() {
+       if (this.currentChildFragment != null) {
+           if (fragmentManager != null) {
+               //@formatter:off
+               fragmentManager.beginTransaction()
+                       .remove(this.currentChildFragment)
+                       .commitAllowingStateLoss();
+               //@formatter:on
+               this.currentChildFragment = null;
+           }
+       }
     }
 
     public void setPresenter(TrafficLightsPagePresenter presenter) {
@@ -93,6 +108,10 @@ public class TrafficLightsPageFragment extends Fragment {
 
     public void showOngoingReservationFragment() {
         this.openFragment(this.ongoingReservationFragment);
+    }
+
+    public void hideBothReservationFragments() {
+        this.removeCurrentChildFragment();
     }
 
     public void showRoomReservationFragment() {
