@@ -8,7 +8,7 @@
     android:layout_height="match_parent"
     android:layout_gravity="center_horizontal"
     android:layout_marginStart="8dp"
-    android:layout_marginTop="8dp"
+    android:layout_marginTop="1dp"
     android:layout_marginEnd="8dp"
     android:layout_marginBottom="8dp"
     android:focusableInTouchMode="true"
@@ -66,6 +66,46 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
     </TextView>
+    <!--
+    <Button
+        android:id="@+id/approveChangeButton"
+        android:layout_width="106dp"
+        android:layout_height="72dp"
+        android:layout_marginBottom="32dp"
+        android:layout_toEndOf="@+id/nameInput"
+        android:text="@string/approveChange"
+        android:textColor="#F8F8F8"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.05"
+        app:layout_constraintStart_toEndOf="@+id/nameInput">
+    </Button>
+    -->
+
+    <ProgressBar
+        android:id="@+id/cangeProgressBar"
+        android:layout_width="542dp"
+        android:layout_height="10dp"
+        android:layout_marginTop="2dp"
+        android:visibility="gone"
+        style="@android:style/Widget.ProgressBar.Horizontal"
+        app:layout_constraintTop_toBottomOf="@+id/barDurationText"
+        app:layout_constraintStart_toStartOf="@+id/ongoingSeekBar"
+        />
+
+    <Button
+        android:id="@+id/cancelChangeButton"
+        android:layout_width="542dp"
+        android:layout_height="72dp"
+        android:layout_marginBottom="32dp"
+        android:text="@string/cancelChange"
+        android:textColor="#F8F8F8"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@+id/cangeProgressBar"
+        app:layout_constraintStart_toStartOf="@+id/cangeProgressBar"
+        app:layout_constraintHorizontal_bias="0.05">
+    </Button>
+
 
 
 
