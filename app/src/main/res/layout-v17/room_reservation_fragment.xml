@@ -93,7 +93,7 @@
         android:hint="@string/meeting_description"
         android:inputType="textPersonName"
         android:singleLine="true"
-        android:textColor="#979797"
+        android:textColor="#F8F8F8"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.45"
