@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="WeekView">
+        <attr name="number_of_days_to_show" format="integer" />
+    </declare-styleable>
+</resources>
