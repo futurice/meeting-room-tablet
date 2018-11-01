@@ -144,8 +144,8 @@ public class CalendarVisualizer extends HorizontalScrollView implements Reservat
         //c.clipRect(area); no clipRect used. the first label goes few pixels above the top
         c.translate(area.left, area.top);
         textPaint.setTextAlign(Align.RIGHT);
-        float normalTextSize = 32f; //textPaint.getTextSize();
-        float smallTextSize = normalTextSize * 0.642f;
+        float normalTextSize = 28f; //textPaint.getTextSize();
+        float smallTextSize = normalTextSize * 0.65f;
         textPaint.setTextSize(smallTextSize);
         float padding = width / 8;
         float x = width - padding;
