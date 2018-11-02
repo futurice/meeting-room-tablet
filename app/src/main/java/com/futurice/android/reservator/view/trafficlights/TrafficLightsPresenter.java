@@ -365,7 +365,7 @@ public class TrafficLightsPresenter implements
                 this.showFreeForRestOfTheDay();
             } else {
                 int freeMinutes = room.minutesFreeFromNow();
-                DateTime freeAt = room.getNextFreeSlot().getStart();
+                DateTime freeAt = room.getNextFreeTime().getEnd();
                 if (freeMinutes >= Room.RESERVED_THRESHOLD_MINUTES) {
                     this.showFreeForMinutes(freeMinutes, freeAt);
                 } else {
