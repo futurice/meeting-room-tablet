@@ -88,6 +88,7 @@ public class TrafficLightsPresenter implements
         try {
             String accountEmail = PreferenceManager.getInstance(this.activity).getDefaultUserName();
             this.model.getDataProxy().reserve(room, timespan, description, accountEmail);
+            this.refreshModel();
         } catch (ReservatorException e) {
             Log.d("Reservator", e.toString());
         }
@@ -96,6 +97,7 @@ public class TrafficLightsPresenter implements
     private void cancelCurrentReservation() {
         try {
             this.model.getDataProxy().cancelReservation(this.room.getCurrentReservation());
+            this.refreshModel();
         } catch (ReservatorException e) {
                 Log.d("Reservator", e.toString());
             }
@@ -104,6 +106,7 @@ public class TrafficLightsPresenter implements
     private void modifyCurrentReservationTimeSpan(TimeSpan timeSpan) {
         try {
             this.model.getDataProxy().modifyReservationTimeSpan(this.room.getCurrentReservation(), this.room, timeSpan);
+            this.refreshModel();
         } catch (ReservatorException e) {
             Log.d("Reservator", e.toString());
         }
