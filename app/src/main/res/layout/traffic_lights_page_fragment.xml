@@ -19,7 +19,7 @@
 
         <FrameLayout
             android:id="@+id/roomStatusContainer"
-            android:layout_width="900dp"
+            android:layout_width="800dp"
             android:layout_height="wrap_content"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent">
@@ -34,7 +34,7 @@
 
         <FrameLayout
             android:id="@+id/roomReservationContainer"
-            android:layout_width="900dp"
+            android:layout_width="800dp"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
             app:layout_constraintStart_toStartOf="parent"
@@ -45,11 +45,11 @@
             android:id="@+id/dayCalendarContainer"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
-            app:layout_constraintBottom_toTopOf="@+id/bottomFragmentContainer"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/roomStatusContainer"
-            app:layout_constraintTop_toTopOf="parent">
+            >
 
             <fragment
                 android:id="@+id/dayCalendarFragment"

@@ -276,7 +276,7 @@ public class CalendarVisualizer extends HorizontalScrollView implements Reservat
 
         textPaint.setColor(reservationTextColor);
         TextPaint textPaintForEllipsize = new TextPaint(textPaint);
-        textPaint.setTextSize(32f);
+        textPaint.setTextSize(22f);
         for (Reservation r : reservations) {
             float textWidth = textPaint.measureText(r.getSubject());
             int tempAvail = 250;
