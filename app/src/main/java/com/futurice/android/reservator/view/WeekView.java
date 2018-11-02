@@ -92,7 +92,7 @@ public class WeekView extends RelativeLayout implements OnClickListener {
                 day.getEnd().add(Calendar.DAY_OF_YEAR, 1));
         }
 
-        CalendarVisualizer cv = new CalendarVisualizer(getContext(), DAY_START_TIME, DAY_END_TIME);
+        CalendarVisualizer cv = new CalendarVisualizer(getContext(), DAY_START_TIME, DAY_END_TIME, this.numberOfDaysToShow);
         cv.setReservations(reservations);
         calendarFrame.addView(cv, LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
         cv.setOnClickListener(this);

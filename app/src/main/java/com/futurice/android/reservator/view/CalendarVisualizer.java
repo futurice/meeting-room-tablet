@@ -54,11 +54,12 @@ public class CalendarVisualizer extends HorizontalScrollView implements Reservat
     private RectF calendarAreaRect, timeLabelRect, headerRect;
     private FrameLayout contentFrame;
 
-    public CalendarVisualizer(Context context, int dayStartTime, int dayEndTime) {
+    public CalendarVisualizer(Context context, int dayStartTime, int dayEndTime, int daysToShow) {
         super(context, null);
 
         this.dayStartTime = dayStartTime;
         this.dayEndTime = dayEndTime;
+        this.daysToShow = daysToShow;
 
         firstDayToShow = new DateTime().stripTime();
         //forces scroll view to have scrollable content area
