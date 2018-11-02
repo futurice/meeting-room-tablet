@@ -5,6 +5,7 @@ import java.util.Calendar;
 import java.util.List;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -22,10 +23,10 @@ import butterknife.BindView;
 
 public class WeekView extends RelativeLayout implements OnClickListener {
 
-    public static final int NUMBER_OF_DAYS_TO_SHOW = 1;
     public static final int DAY_START_TIME = 60 * 8; // minutes from midnight
     public static final int DAY_END_TIME = 60 * 20;
     public static final int NORMALIZATION_START_HOUR = 20;
+    private int numberOfDaysToShow;
 
     private OnFreeTimeClickListener onFreeTimeClickListener = null;
     private OnReservationClickListener onReservationClickListener = null;
@@ -34,14 +35,23 @@ public class WeekView extends RelativeLayout implements OnClickListener {
 
     public WeekView(Context context) {
         super(context);
+        init(context, null, 0);
     }
 
     public WeekView(Context context, AttributeSet attrs) {
         super(context, attrs);
+        init(context, attrs, 0);
     }
 
     public WeekView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
+        init(context, attrs, defStyle);
+    }
+
+    public void init(Context context, AttributeSet attrs, int defStyle) {
+        TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.WeekView, defStyle, 0);
+        numberOfDaysToShow = a.getInteger(R.styleable.WeekView_number_of_days_to_show, 0);
+        a.recycle();
     }
 
     public void refreshData(Room room) {
@@ -56,7 +66,7 @@ public class WeekView extends RelativeLayout implements OnClickListener {
             startOfToday.add(Calendar.MINUTE, DAY_START_TIME),
             startOfToday.add(Calendar.MINUTE, DAY_END_TIME));
 
-        for (int i = 0; i < NUMBER_OF_DAYS_TO_SHOW; i++) {
+        for (int i = 0; i < numberOfDaysToShow; i++) {
             List<Reservation> dayReservations = room.getReservationsForTimeSpan(day);
             List<Reservation> boundDayReservations = new ArrayList<Reservation>(dayReservations.size());
 
