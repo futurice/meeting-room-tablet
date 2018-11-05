@@ -40,7 +40,7 @@
     <string name="room_name">Room Name</string>
     <string name="cancel_reservation">Cancel reservation</string>
     <string name="hint_your_name">Your name</string>
-    <string name="button_reserve">Varaa\nReservera\nReserve</string>
+    <string name="button_reserve">Varaa • Reservera • Reserve</string>
     <string name="message_permissions_are_required">Reservator Needs Permissions to Work!</string>
     <string name="room_capacity">for %1$d</string>
     <string name="end_plus_content_description">plus time</string>

@@ -35,12 +35,12 @@
 -->
     <SeekBar
         android:id="@+id/seekBar"
-        android:layout_width="542dp"
+        android:layout_width="match_parent"
         android:layout_height="33dp"
         android:layout_alignParentTop="false"
         android:layout_alignParentEnd="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="172dp"
+        android:layout_marginBottom="164dp"
         android:max="90"
         android:progress="30"
         android:progressBackgroundTint="@color/seekBarProgressBackgroundColor"
@@ -55,38 +55,40 @@
         android:id="@+id/TextViewBarDuration"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="130dp"
+        android:layout_marginBottom="8dp"
         android:textAlignment="center"
         android:textColor="#F8F8F8"
         android:textSize="30sp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/seekBar"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
-    </TextView>
+        app:layout_constraintStart_toStartOf="parent"></TextView>
 
     <Button
         android:id="@+id/reserveButton"
-        android:layout_width="106dp"
-        android:layout_height="72dp"
+        android:layout_width="match_parent"
+        android:layout_height="84dp"
         android:layout_alignTop="@+id/nameInput"
-        android:layout_marginBottom="32dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginBottom="8dp"
         android:layout_toEndOf="@+id/nameInput"
+        android:background="@color/CalendarResTextColor"
         android:text="@string/button_reserve"
-        android:textColor="#F8F8F8"
+        android:textColor="@color/TrafficLightFree"
+        android:textSize="32dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.05"
-        app:layout_constraintStart_toEndOf="@+id/nameInput">
+        app:layout_constraintTop_toBottomOf="@+id/nameInput">
     </Button>
 
     <EditText
         android:id="@+id/nameInput"
-        android:layout_width="400dp"
+        android:layout_width="match_parent"
         android:layout_height="46dp"
         android:layout_alignParentStart="true"
         android:layout_alignParentBottom="true"
+        android:layout_marginStart="10dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginBottom="40dp"
+        android:layout_marginBottom="108dp"
         android:ems="10"
         android:hint="@string/meeting_description"
         android:inputType="textPersonName"
@@ -94,8 +96,8 @@
         android:textColor="#F8F8F8"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.45"
-        app:layout_constraintStart_toStartOf="parent"></EditText>
+        app:layout_constraintStart_toStartOf="parent">
+    </EditText>
 
 </android.support.constraint.ConstraintLayout>
 
