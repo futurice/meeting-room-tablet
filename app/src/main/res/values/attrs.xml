@@ -2,5 +2,9 @@
 <resources>
     <declare-styleable name="WeekView">
         <attr name="number_of_days_to_show" format="integer" />
+        <attr name="calendar_viewer_text_color" format="color" />
+        <attr name="calendar_viewer_week_text_color" format="color" />
+        <attr name="calendar_viewer_reservation_text_color" format="color" />
+        <attr name="calendar_viewer_border_color" format="color" />
     </declare-styleable>
 </resources>

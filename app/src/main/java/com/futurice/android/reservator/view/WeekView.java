@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
@@ -19,14 +20,13 @@ import com.futurice.android.reservator.model.Reservation;
 import com.futurice.android.reservator.model.Room;
 import com.futurice.android.reservator.model.TimeSpan;
 
-import butterknife.BindView;
-
 public class WeekView extends RelativeLayout implements OnClickListener {
 
     public static final int DAY_START_TIME = 60 * 8; // minutes from midnight
     public static final int DAY_END_TIME = 60 * 20;
     public static final int NORMALIZATION_START_HOUR = 20;
     private int numberOfDaysToShow;
+    private int textColor, weekTextColor, gridColor, reservationTextColor;
     CalendarVisualizer cv;
 
     private OnFreeTimeClickListener onFreeTimeClickListener = null;
@@ -49,9 +49,18 @@ public class WeekView extends RelativeLayout implements OnClickListener {
         init(context, attrs, defStyle);
     }
 
+    @SuppressLint("ResourceAsColor")
     public void init(Context context, AttributeSet attrs, int defStyle) {
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.WeekView, defStyle, 0);
         numberOfDaysToShow = a.getInteger(R.styleable.WeekView_number_of_days_to_show, 0);
+
+        textColor = a.getColor(R.styleable.WeekView_calendar_viewer_text_color, R.color.CalendarTextColor);
+        weekTextColor = a.getColor(R.styleable.WeekView_calendar_viewer_week_text_color,
+            R.color.CalendarWeekTextColor);
+        gridColor = a.getColor(R.styleable.WeekView_calendar_viewer_border_color,
+            R.color.CalendarBorderColor);
+        reservationTextColor = a.getColor(R.styleable
+            .WeekView_calendar_viewer_reservation_text_color, R.color.CalendarResTextColor);
         a.recycle();
         this.cv = new CalendarVisualizer(getContext(), DAY_START_TIME, DAY_END_TIME, this.numberOfDaysToShow);
     }
