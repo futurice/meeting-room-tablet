@@ -21,6 +21,7 @@ public class RoomReservationFragment extends Fragment {
     public interface RoomReservationPresenter {
         void setRoomReservationFragment(RoomReservationFragment fragment);
         void onReservationRequestMade(int minutes, String description);
+        void onMinutesUpdated(int minutes);
     }
 
     private RoomReservationPresenter presenter;
@@ -102,7 +103,7 @@ public class RoomReservationFragment extends Fragment {
                 reserveButton.setEnabled(true);
 
             textViewBarDuration.setText(Helpers.convertToHoursAndMinutes(progress));
-
+            presenter.onMinutesUpdated(minutes);
         }
 
         @Override

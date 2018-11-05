@@ -16,7 +16,7 @@
     <color name="StatusReservedColor">#e5053a</color> //red
     <color name="Transparent">#0000</color>
     <color name="CalendarMarkerReservedColor">#0098d0</color> //blue - todo: We need to change this because it shouldnt be the same color as "free"
-
+    <color name="CalendarMarkerTentativeColor">#aa00a8e0</color>
     <color name="Orange">#fca311</color>
     <color name="TimeBarTickColor">#3333</color>
     <color name="ButtonTextNormal">#333</color>

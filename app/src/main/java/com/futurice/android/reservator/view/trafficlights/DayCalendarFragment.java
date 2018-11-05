@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.futurice.android.reservator.model.Room;
+import com.futurice.android.reservator.model.TimeSpan;
 import com.futurice.android.reservator.view.WeekView;
 
 import com.futurice.android.reservator.R;
@@ -48,6 +49,12 @@ public class DayCalendarFragment extends Fragment {
     public void updateRoomData(Room room) {
         if (this.weekView != null)
             this.weekView.refreshData(room);
+    }
+
+    public void setTentativeTimeSpan(TimeSpan timeSpan) {
+        if (this.weekView != null) {
+            this.weekView.setTentativeTimeSpan(timeSpan);
+        }
     }
 
 }
