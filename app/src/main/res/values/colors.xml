@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="colorPrimary">#f8f8f8</color>
+    <color name="colorPrimary85Alpha">#D9f8f8f8</color>
+    <color name="colorPrimary70Alpha">#B3f8f8f8</color>
     <color name="colorPrimaryDark">#111</color>
     <color name="FreeRoomBlue">#0098d0</color>
     <color name="colorAccent">#F8F8F8</color>
