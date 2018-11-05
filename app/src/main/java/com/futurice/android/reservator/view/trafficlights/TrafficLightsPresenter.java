@@ -46,6 +46,7 @@ public class TrafficLightsPresenter implements
     private Resources resources;
 
     private Room room;
+    private Reservation currentReservation;
 
     private Handler handler = new Handler();
     private Runnable minuteRunnable = new Runnable() {
@@ -96,7 +97,7 @@ public class TrafficLightsPresenter implements
 
     private void cancelCurrentReservation() {
         try {
-            this.model.getDataProxy().cancelReservation(this.room.getCurrentReservation());
+            this.model.getDataProxy().cancelReservation(this.currentReservation);
             this.refreshModel();
         } catch (ReservatorException e) {
                 Log.d("Reservator", e.toString());
@@ -105,7 +106,7 @@ public class TrafficLightsPresenter implements
 
     private void modifyCurrentReservationTimeSpan(TimeSpan timeSpan) {
         try {
-            this.model.getDataProxy().modifyReservationTimeSpan(this.room.getCurrentReservation(), this.room, timeSpan);
+            this.model.getDataProxy().modifyReservationTimeSpan(this.currentReservation, this.room, timeSpan);
             this.refreshModel();
         } catch (ReservatorException e) {
             Log.d("Reservator", e.toString());
@@ -136,6 +137,11 @@ public class TrafficLightsPresenter implements
         this.makeReservation(timeSpan, tempDescription);
     }
 
+    @Override
+    public void onMinutesUpdated(int minutes) {
+        this.dayCalendarFragment.setTentativeTimeSpan(new TimeSpan(new DateTime(), new DateTime(System.currentTimeMillis() + (minutes * 60 * 1000))));
+    }
+
     // ------ Implementation of OngoingReservationFragment.OngoingReservationPresenter
 
     @Override
@@ -152,12 +158,18 @@ public class TrafficLightsPresenter implements
             this.cancelCurrentReservation();
         }
         else {
-            Reservation reservation = this.room.getCurrentReservation();
-            DateTime startTime = reservation.getStartTime();
+
+            DateTime startTime = this.currentReservation.getStartTime();
 
             DateTime newEndTime = new DateTime(startTime.getTimeInMillis() + (newMinutes* 60 * 1000));
             this.modifyCurrentReservationTimeSpan(new TimeSpan(startTime,newEndTime));
         }
+    }
+
+    @Override
+    public void onReservationMinutesUpdated(int minutes) {
+        this.currentReservation.setTimeSpan(new TimeSpan(new DateTime(), new DateTime(System.currentTimeMillis() + (minutes * 60 * 1000))));
+        this.dayCalendarFragment.updateRoomData(this.room);
     }
 
     // ------ Implementation of TrafficLightsPageFragment.TrafficLightsPagePresenter
@@ -268,7 +280,6 @@ public class TrafficLightsPresenter implements
         if (this.room == null)
             return;
 
-        Reservation currentReservation = this.room.getCurrentReservation();
         if (currentReservation == null)
             return;
 
@@ -296,18 +307,20 @@ public class TrafficLightsPresenter implements
     }
 
     private void showReserved() {
+        this.currentReservation = this.room.getCurrentReservation();
         this.trafficLightsPageFragment.getView().setBackgroundColor(resources.getColor(R.color.TrafficLightReserved));
         this.roomStatusFragment.setStatusText(resources.getString(R.string.status_reserved));
+        this.dayCalendarFragment.setTentativeTimeSpan(null);
         this.updateOngoingReservationFragment();
         this.trafficLightsPageFragment.showOngoingReservationFragment();
 
 
         this.roomStatusFragment.hideBookNowText();
-        this.showReservationDetails(room.getCurrentReservation(), room.getNextFreeSlot());
+        this.showReservationDetails(this.currentReservation, room.getNextFreeSlot());
     }
 
     private void showReservationPending(int freeMinutes, DateTime freeAt) {
-
+        this.currentReservation = null;
         this.roomStatusFragment.setStatusText(resources.getString(R.string.status_free));
         this.roomStatusFragment.setStatusUntilText(resources.getString(R.string.free_for_specific_amount)+" "+Helpers.dateTimeTo24h(freeAt));
         this.roomStatusFragment.setMeetingNameText("");
@@ -321,6 +334,7 @@ public class TrafficLightsPresenter implements
     }
 
     private void showFreeForRestOfTheDay() {
+        this.currentReservation = null;
         this.roomStatusFragment.setStatusText(resources.getString(R.string.status_free));
         this.roomStatusFragment.setMeetingNameText("");
         this.roomStatusFragment.setStatusUntilText(resources.getString(R.string.free_for_the_day));
@@ -333,6 +347,7 @@ public class TrafficLightsPresenter implements
     }
 
     private void showFreeForMinutes(int freeMinutes, DateTime freeAt) {
+        this.currentReservation = null;
         this.roomStatusFragment.setStatusText(resources.getString(R.string.status_free));
         this.roomStatusFragment.setStatusUntilText(resources.getString(R.string.free_for_specific_amount)+" "+Helpers.dateTimeTo24h(freeAt));
 

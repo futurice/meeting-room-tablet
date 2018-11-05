@@ -27,6 +27,7 @@ public class WeekView extends RelativeLayout implements OnClickListener {
     public static final int DAY_END_TIME = 60 * 20;
     public static final int NORMALIZATION_START_HOUR = 20;
     private int numberOfDaysToShow;
+    CalendarVisualizer cv;
 
     private OnFreeTimeClickListener onFreeTimeClickListener = null;
     private OnReservationClickListener onReservationClickListener = null;
@@ -52,6 +53,7 @@ public class WeekView extends RelativeLayout implements OnClickListener {
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.WeekView, defStyle, 0);
         numberOfDaysToShow = a.getInteger(R.styleable.WeekView_number_of_days_to_show, 0);
         a.recycle();
+        this.cv = new CalendarVisualizer(getContext(), DAY_START_TIME, DAY_END_TIME, this.numberOfDaysToShow);
     }
 
     public void refreshData(Room room) {
@@ -92,7 +94,6 @@ public class WeekView extends RelativeLayout implements OnClickListener {
                 day.getEnd().add(Calendar.DAY_OF_YEAR, 1));
         }
 
-        CalendarVisualizer cv = new CalendarVisualizer(getContext(), DAY_START_TIME, DAY_END_TIME, this.numberOfDaysToShow);
         cv.setReservations(reservations);
         calendarFrame.addView(cv, LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
         cv.setOnClickListener(this);
@@ -105,6 +106,13 @@ public class WeekView extends RelativeLayout implements OnClickListener {
     public void setOnReservationClickListener(OnReservationClickListener onReservationClickListener) {
         this.onReservationClickListener = onReservationClickListener;
     }
+
+    public void setTentativeTimeSpan(TimeSpan timeSpan) {
+        if (this.cv != null) {
+            this.cv.setTentativeTimeSpan(timeSpan);
+        }
+    }
+
 
     @Override
     public void onClick(final View v) {
