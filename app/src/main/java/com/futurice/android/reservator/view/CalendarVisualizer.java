@@ -37,11 +37,11 @@ public class CalendarVisualizer extends HorizontalScrollView implements Reservat
     TimeSpan touchedTimeSpan;
     Reservation touchedReservation;
     DateTime touchedTime;
-    Shader reservationShader, leftEdgeShader, rightEdgeShader;
+    Shader reservationShader, leftEdgeShader, rightEdgeShader, tentativeShader;
     int textColor, weekTextColor, gridColor, reservationTextColor;
     int weekStartDay = Calendar.MONDAY;
     String dayLabels[], weekLabels[];
-    private Paint markerPaint, textPaint, weekTextPaint, gridPaint;
+    private Paint markerPaint, textPaint, weekTextPaint, gridPaint, tentativePaint;
     private int dayStartTime; // minutes from midnight
     private int dayEndTime;
     private DateTime firstDayToShow;
@@ -53,6 +53,7 @@ public class CalendarVisualizer extends HorizontalScrollView implements Reservat
     private Paint fadingEdgePaint;
     private RectF calendarAreaRect, timeLabelRect, headerRect;
     private FrameLayout contentFrame;
+    private TimeSpan tentativeTimeSpan;
 
     public CalendarVisualizer(Context context, int dayStartTime, int dayEndTime, int daysToShow) {
         super(context, null);
@@ -89,6 +90,10 @@ public class CalendarVisualizer extends HorizontalScrollView implements Reservat
         this.markerPaint = new Paint();
         this.reservationShader = new LinearGradient(0, 0, 1, 1, getResources().getColor(R.color.CalendarMarkerReservedColor), getResources().getColor(R.color.CalendarMarkerReservedColor), TileMode.REPEAT);
         markerPaint.setShader(reservationShader);
+
+        this.tentativePaint = new Paint();
+        this.tentativeShader = new LinearGradient(0, 0, 1, 1, getResources().getColor(R.color.CalendarMarkerTentativeColor), getResources().getColor(R.color.CalendarMarkerTentativeColor), TileMode.REPEAT);
+        this.tentativePaint.setShader(tentativeShader);
 
         this.fadingEdgePaint = new Paint();
         this.leftEdgeShader = new LinearGradient(0, 0, 16, 0, Color.argb(128, 128, 128, 128), Color.argb(0, 0, 0, 0), TileMode.CLAMP);
@@ -247,6 +252,54 @@ public class CalendarVisualizer extends HorizontalScrollView implements Reservat
         c.restore();
     }
 
+    private void drawTentativeArea(Canvas c, RectF area, TimeSpan timeSpan) {
+        c.save();
+        c.clipRect(area.left + getScrollX(), area.top, area.right + getScrollX(), area.bottom);
+        c.translate(area.left, area.top);
+        int height = (int) area.height();
+
+        float[] points = new float[8];
+        short[] indices = new short[6];
+
+        int j = 0;
+
+        //order of points is top-left, top-right, bottom-left, bottom-right
+        points[j] = getXForTime(timeSpan.getStart());
+        points[j + 1] = getProportionalY(timeSpan.getStart()) * height;
+
+        if (daysToShow == 1 )
+            points[j + 2] = getWidth();
+        else
+            points[j + 2] = getXForTime(timeSpan.getStart()) + dayWidth;
+
+        points[j + 3] = points[j + 1];
+        points[j + 4] = points[j];
+        points[j + 5] = getProportionalEndY(timeSpan.getEnd()) * height;
+        points[j + 6] = points[j + 2];
+        points[j + 7] = points[j + 5];
+        j += 8;
+
+        //top-left * 2, top-right, bottom-left, bottom-right * 2
+        // *2 makes reservation connecting triangles zero area
+        int p = 0;
+        short vi = (short) (0); //each reservation needs 4 vertices
+        indices[p] = vi;
+        indices[p + 1] = vi;
+        indices[p + 2] = (short) (vi + 1);
+        indices[p + 3] = (short) (vi + 2);
+        indices[p + 4] = (short) (vi + 3);
+        indices[p + 5] = (short) (vi + 3);
+
+        c.drawVertices(VertexMode.TRIANGLE_STRIP, points.length, points, 0,
+                    points, 0, null, 0, indices, 0, indices.length, tentativePaint);
+
+        Paint linePaint = new Paint();
+        // linePaint.setARGB(200, 255, 255, 255);
+        linePaint.setColor(Color.WHITE);
+
+        c.restore();
+    }
+
     private void drawCalendarLines(Canvas c, RectF area) {
         float height = area.height();
         c.save();
@@ -359,6 +412,9 @@ public class CalendarVisualizer extends HorizontalScrollView implements Reservat
         drawFadingEdges(c, calendarAreaRect);
         drawTimeLabels(c, timeLabelRect);
         drawCurrentTimeIndicators(c, calendarAreaRect);
+
+        if (this.tentativeTimeSpan != null)
+            drawTentativeArea(c, calendarAreaRect, this.tentativeTimeSpan);
 
         Log.d("Performance", "Drew CalendarVisualizer in " + (System.currentTimeMillis() - start) + "ms");
     }
@@ -480,6 +536,10 @@ public class CalendarVisualizer extends HorizontalScrollView implements Reservat
 
     public int getXForTime(DateTime day) {
         return getDaysFromStart(day) * dayWidth;
+    }
+
+    public void setTentativeTimeSpan(TimeSpan span) {
+        this.tentativeTimeSpan = span;
     }
 
     @Override

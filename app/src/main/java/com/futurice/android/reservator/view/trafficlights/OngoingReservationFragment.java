@@ -21,6 +21,7 @@ public class OngoingReservationFragment extends Fragment {
     public interface OngoingReservationPresenter {
     void setOngoingReservationFragment(OngoingReservationFragment fragment);
     void onReservationMinutesChanged(int newMinutes);
+    void onReservationMinutesUpdated(int minutes);
     }
 
     private OngoingReservationPresenter presenter;
@@ -61,7 +62,7 @@ public class OngoingReservationFragment extends Fragment {
             seekBar.setProgress(progress);
             barDurationText.setText(Helpers.convertToHoursAndMinutes(progress));
             //textViewBarEnd.setText("" + progress); //Add amount to current time
-
+            presenter.onReservationMinutesUpdated(progress);
         }
 
         @Override
@@ -87,6 +88,7 @@ public class OngoingReservationFragment extends Fragment {
         changeTimer.cancel();
         hideCancelWidgets();
         isCountingDown = false;
+        presenter.onReservationMinutesUpdated(savedProgress);
     };
 
 
