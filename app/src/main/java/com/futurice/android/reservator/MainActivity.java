@@ -11,6 +11,7 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.view.Window;
 
+import com.futurice.android.reservator.common.LedHelper;
 import com.futurice.android.reservator.model.Model;
 import com.futurice.android.reservator.view.trafficlights.TrafficLightsPageFragment;
 import com.futurice.android.reservator.view.trafficlights.TrafficLightsPresenter;
@@ -101,6 +102,8 @@ public class MainActivity extends FragmentActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        LedHelper.getInstance().setGreenBrightness(0);
+        LedHelper.getInstance().setRedBrightness(0);
         unregisterReceiver(broadcastReceiver);
     }
 }
