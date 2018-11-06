@@ -24,7 +24,7 @@
     <string name="aboutTitle">About</string>
     <string name="addressBookOptionLabel">Require address book contacts for reserving</string>
     <string name="googleAccountType">com.google</string>
-    <string name="selectGoogleAccount">Select Google Account</string>
+    <string name="selectGoogleAccount">Select a Calendar Account</string>
     <string name="settingsDefaultAccountForReservation">Select account for reserving</string>
     <string name="addressBookHelpText">If this option is enabled, reserving with the tablet requires entering a valid name that is synced to the accounts address book contacts.</string>
     <string name="googleAccountHelp">Account or accounts used for searching rooms.</string>
@@ -50,7 +50,7 @@
     <string name="status_free">Vapaa • Ledigt • Free</string>
     <string name="free_for_the_day">Päivän loppuun | hela dagen | for the day</string>
     <string name="free_for_specific_amount">seuraava varaus | nästa reservering | next reservation</string>
-    <string name="status_reserved">Varattu | Resrverat | Reserved</string>
+    <string name="status_reserved">Varattu | Reserverat | Reserved</string>
     <string name="free_at">Vapautuu | Ledigt från | Free at</string>
     <string name="meeting_description">Kuvaus | Beskrivning | Description</string>
     <string name="quick_booking">Pikavaraus | Snabbreservering | Use now:</string>
