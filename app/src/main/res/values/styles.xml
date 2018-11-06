@@ -6,6 +6,11 @@
         <item name="android:textSize">18pt</item>
     </style>
 
+    <style name="CustomProgressBar" parent="@style/Widget.AppCompat.ProgressBar.Horizontal">
+        <item name="android:progressBackgroundTint">#111</item>
+        <item name="android:progressTint">#D2D2D2</item>
+    </style>
+
     <!--
     <color name="CalendarBorderColor">#F8F8F8</color> //light silver
     -->
