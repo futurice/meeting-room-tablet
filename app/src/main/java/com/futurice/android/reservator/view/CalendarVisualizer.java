@@ -386,7 +386,7 @@ public class CalendarVisualizer extends HorizontalScrollView implements Reservat
 
         Paint linePaint = new Paint();
         linePaint.setStrokeWidth(3);
-        linePaint.setColor(getResources().getColor(R.color.StatusReservedColor));
+        linePaint.setColor(getResources().getColor(R.color.CurrentTimeLineColor));
 
         // the red line
         if (daysToShow ==1)
