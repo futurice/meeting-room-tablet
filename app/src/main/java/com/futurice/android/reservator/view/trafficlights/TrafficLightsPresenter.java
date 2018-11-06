@@ -9,6 +9,7 @@ import android.os.Handler;
 
 import com.futurice.android.reservator.R;
 import com.futurice.android.reservator.common.Helpers;
+import com.futurice.android.reservator.common.LedHelper;
 import com.futurice.android.reservator.common.PreferenceManager;
 import com.futurice.android.reservator.model.DateTime;
 import com.futurice.android.reservator.model.Model;
@@ -306,6 +307,21 @@ public class TrafficLightsPresenter implements
         }
     }
 
+    private void showYellowLed() {
+        LedHelper.getInstance().setGreenBrightness(255);
+        LedHelper.getInstance().setRedBrightness(255);
+    }
+
+    private void showGreenLed() {
+        LedHelper.getInstance().setGreenBrightness(255);
+        LedHelper.getInstance().setRedBrightness(0);
+    }
+
+    private void showRedLed() {
+        LedHelper.getInstance().setGreenBrightness(0);
+        LedHelper.getInstance().setRedBrightness(255);
+    }
+
     private void showReserved() {
         this.currentReservation = this.room.getCurrentReservation();
         this.trafficLightsPageFragment.getView().setBackgroundColor(resources.getColor(R.color.TrafficLightReserved));
@@ -317,6 +333,7 @@ public class TrafficLightsPresenter implements
 
         this.roomStatusFragment.hideBookNowText();
         this.showReservationDetails(this.currentReservation, room.getNextFreeSlot());
+        this.showRedLed();
     }
 
     private void showReservationPending(int freeMinutes, DateTime freeAt) {
@@ -331,6 +348,7 @@ public class TrafficLightsPresenter implements
         //this.updateOngoingReservationFragment();
         this.roomStatusFragment.hideBookNowText();
         this.trafficLightsPageFragment.hideBothReservationFragments();
+        this.showYellowLed();
     }
 
     private void showFreeForRestOfTheDay() {
@@ -343,7 +361,7 @@ public class TrafficLightsPresenter implements
         this.roomReservationFragment.setMaxMinutes(MAX_QUICK_BOOK_MINUTES);
         this.trafficLightsPageFragment.getView().setBackgroundColor(resources.getColor(R.color.TrafficLightFree));
         this.trafficLightsPageFragment.showRoomReservationFragment();
-
+        this.showGreenLed();
     }
 
     private void showFreeForMinutes(int freeMinutes, DateTime freeAt) {
@@ -365,6 +383,7 @@ public class TrafficLightsPresenter implements
         this.roomReservationFragment.setMaxMinutes(tempMinutes);
 
         this.trafficLightsPageFragment.showRoomReservationFragment();
+        this.showGreenLed();
     }
 
 
