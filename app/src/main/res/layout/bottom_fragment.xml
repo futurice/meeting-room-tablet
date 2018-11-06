@@ -5,10 +5,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
+
     <FrameLayout
         android:id="@+id/clockBarFragment"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
+
 
      <!--
         <TextView
@@ -25,14 +27,14 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toBottomOf="parent" />
-    -->
+
         <include
             android:id="@+id/bottomFragmentClock"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:textColor="@color/TrafficLightText"
             android:layout_marginStart="10dp"
-            layout="@layout/clock" />
+            layout="@layout/clock" /> -->
 
     </FrameLayout>
 

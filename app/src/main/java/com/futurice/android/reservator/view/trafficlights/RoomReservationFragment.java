@@ -96,11 +96,13 @@ public class RoomReservationFragment extends Fragment {
             seekBar.setProgress(progress);
             minutes = progress;
 
-            if (progress==0)
+            if (progress==0){
                 reserveButton.setEnabled(false);
-
-            if (!reserveButton.isEnabled() && progress > 0)
+                reserveButton.setBackgroundColor(getResources().getColor(R.color.ReserveButtonUnavailable));
+            } else if (!reserveButton.isEnabled() && progress > 0){
                 reserveButton.setEnabled(true);
+                reserveButton.setBackgroundColor(getResources().getColor(R.color.ReserveButtonAvailable));
+            }
 
             textViewBarDuration.setText(Helpers.convertToHoursAndMinutes(progress));
             presenter.onMinutesUpdated(minutes);
