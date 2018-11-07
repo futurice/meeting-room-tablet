@@ -22,87 +22,84 @@
 
     <TextView
         android:id="@+id/ongoingReservationLeft"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="120dp"
+        android:layout_marginTop="104dp"
         android:text="@string/reservation_remaining"
+        android:textAlignment="center"
         android:textColor="#F8F8F8"
         android:textSize="20sp"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <SeekBar
         android:id="@+id/ongoingSeekBar"
-        android:layout_width="542dp"
-        android:layout_height="33dp"
+        android:layout_width="match_parent"
+        android:layout_height="36dp"
         android:layout_alignParentTop="false"
         android:layout_alignParentEnd="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="172dp"
+        android:layout_marginTop="24dp"
         android:max="90"
         android:progress="30"
         android:progressBackgroundTint="@color/seekBarProgressBackgroundColor"
         android:progressTint="@color/seekBarProgress"
         android:thumbTint="@color/seekBarThumbColor"
-        android:layout_marginTop="20dp"
-        app:layout_constraintTop_toBottomOf="@+id/ongoingReservationLeft"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
-    </SeekBar>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/barDurationText"
+        app:layout_constraintVertical_bias="0.0"></SeekBar>
 
     <TextView
         android:id="@+id/barDurationText"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="130dp"
         android:text="30 min"
         android:textAlignment="center"
         android:textColor="#F8F8F8"
         android:textSize="30sp"
-        app:layout_constraintTop_toBottomOf="@+id/ongoingSeekBar"
+        app:layout_constraintTop_toBottomOf="@+id/ongoingReservationLeft"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
     </TextView>
 
     <TextView
         android:id="@+id/modifyPrompt"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
-        android:layout_marginBottom="120dp"
         android:text="@string/modifyPrompt"
+        android:textAlignment="center"
         android:textColor="#F8F8F8"
-        android:textSize="20sp"
-        app:layout_constraintTop_toBottomOf="@+id/barDurationText"
+        android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ongoingSeekBar" />
 
     <ProgressBar
         android:id="@+id/cangeProgressBar"
-        android:layout_width="542dp"
-        android:layout_height="10dp"
-        android:layout_marginTop="2dp"
-        android:visibility="gone"
         style="@style/CustomProgressBar"
-        app:layout_constraintTop_toBottomOf="@+id/barDurationText"
+        android:layout_width="600dp"
+        android:layout_height="13dp"
+        android:layout_marginTop="8dp"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/ongoingSeekBar"
-        />
+        app:layout_constraintTop_toBottomOf="@+id/modifyPrompt" />
 
     <Button
         android:id="@+id/cancelChangeButton"
         android:layout_width="542dp"
         android:layout_height="72dp"
-        android:layout_marginBottom="32dp"
         android:text="@string/cancelChange"
         android:textColor="#F8F8F8"
         android:visibility="gone"
-        app:layout_constraintTop_toBottomOf="@+id/cangeProgressBar"
-        app:layout_constraintStart_toStartOf="@+id/cangeProgressBar"
-        app:layout_constraintHorizontal_bias="0.05">
-    </Button>
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.491"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cangeProgressBar"></Button>
 
 
 
