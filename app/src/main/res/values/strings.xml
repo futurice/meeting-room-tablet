@@ -50,14 +50,14 @@
     <string name="status_free">Vapaa • Ledigt • Free</string>
     <string name="free_for_the_day">Päivän loppuun | hela dagen | for the day</string>
     <string name="free_for_specific_amount">seuraava varaus | nästa reservering | next reservation</string>
-    <string name="status_reserved">Varattu • Reserverat • Reserved</string>
+    <string name="status_reserved">VARATTU • RESERVERAT • RESERVED</string>
     <string name="free_at">Vapautuu | Ledigt från | Free at</string>
     <string name="meeting_description">Kuvaus | Beskrivning | Description</string>
     <string name="quick_booking">Pikavaraus | Snabbreservering | Use now:</string>
-    <string name="reservation_remaining">Varausta jäljellä/Reservering kvar/Reservation remaining</string>
+    <string name="reservation_remaining">VARAUSTA JÄLJJELLÄ | RESERVERING KVAR | RESERVATION REMAINING</string>
     <string name="default_reservation_description">Varaus | Reservering | Reservation</string>
     <string name="approveChange">Vahvista muutos\nKonfirmera förändringen\nConfirm change</string>
-    <string name="cancelChange">Muutokset tallennetaan | Ändringarna sparas | Saving changes\nPeruuta | Avbryt | Cancel</string>
-    <string name="modifyPrompt">Muokkaa varausta liukusäätimestä\nÄndra reserveringen med skjutreglaget\nModify reservation using the slider</string>
+    <string name="cancelChange">Muutokset tallennetaan | Ändringarna sparas | Saving changes\n\nPeruuta | Avbryt | Cancel</string>
+    <string name="modifyPrompt">Muokkaa varausta liukusäätimestä • Ändra reserveringen med skjutreglaget • Modify with slider</string>
 
 </resources>
