@@ -17,6 +17,7 @@ import android.graphics.Paint.Align;
 import android.graphics.RectF;
 import android.graphics.Shader;
 import android.graphics.Shader.TileMode;
+import android.graphics.Typeface;
 import android.text.TextPaint;
 import android.text.TextUtils;
 import android.util.Log;
@@ -39,6 +40,7 @@ public class CalendarVisualizer extends HorizontalScrollView implements Reservat
     DateTime touchedTime;
     Shader reservationShader, leftEdgeShader, rightEdgeShader, tentativeShader;
     int textColor, weekTextColor, gridColor, reservationTextColor;
+    String textFont, reservationTextFont;
     int weekStartDay = Calendar.MONDAY;
     String dayLabels[], weekLabels[];
     private Paint markerPaint, textPaint, weekTextPaint, gridPaint, tentativePaint;
@@ -55,7 +57,9 @@ public class CalendarVisualizer extends HorizontalScrollView implements Reservat
     private FrameLayout contentFrame;
     private TimeSpan tentativeTimeSpan;
 
-    public CalendarVisualizer(Context context, int dayStartTime, int dayEndTime, int daysToShow) {
+    public CalendarVisualizer(Context context, int dayStartTime, int dayEndTime, int daysToShow,
+        int textColor, int weekTextColor, int gridColor, int reservationTextColor,
+        String textFont, String reservationTextFont) {
         super(context, null);
 
         this.dayStartTime = dayStartTime;
@@ -70,10 +74,12 @@ public class CalendarVisualizer extends HorizontalScrollView implements Reservat
         this.addView(contentFrame, LayoutParams.WRAP_CONTENT, LayoutParams.MATCH_PARENT);
 
 
-        this.textColor = getResources().getColor(R.color.CalendarTextColor);
-        this.weekTextColor = getResources().getColor(R.color.CalendarWeekTextColor);
-        this.gridColor = getResources().getColor(R.color.CalendarBorderColor);
-        this.reservationTextColor = getResources().getColor(R.color.CalendarResTextColor);
+        this.textColor = textColor;
+        this.weekTextColor = weekTextColor;
+        this.gridColor = gridColor;
+        this.reservationTextColor = reservationTextColor;
+        this.textFont = textFont;
+        this.reservationTextFont = reservationTextFont;
 
         this.textPaint = new Paint();
         textPaint.setColor(textColor);
@@ -108,6 +114,15 @@ public class CalendarVisualizer extends HorizontalScrollView implements Reservat
         weekLabelFormatter = new SimpleDateFormat(weekLabelFormat, Locale.getDefault());
 
     }
+
+    public Typeface getTypeFaceFromFont(Context ctx, String asset) {
+        try {
+            return Typeface.createFromAsset(ctx.getAssets(), asset);
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
 
     @Override
     public synchronized void setReservations(List<Reservation> reservationList) {
@@ -328,6 +343,7 @@ public class CalendarVisualizer extends HorizontalScrollView implements Reservat
         c.translate(area.left, area.top);
 
         textPaint.setColor(reservationTextColor);
+        textPaint.setTypeface(getTypeFaceFromFont(getContext(), reservationTextFont));
         TextPaint textPaintForEllipsize = new TextPaint(textPaint);
         textPaint.setTextSize(22f);
         for (Reservation r : reservations) {
@@ -341,6 +357,7 @@ public class CalendarVisualizer extends HorizontalScrollView implements Reservat
             c.drawText(subject, getXForTime(r.getStartTime()) + paddingX, getProportionalY(r.getStartTime()) * height + textHeight + paddingY, textPaint);
         }
         textPaint.setColor(textColor);
+        textPaint.setTypeface(getTypeFaceFromFont(getContext(), textFont));
         c.restore();
     }
 

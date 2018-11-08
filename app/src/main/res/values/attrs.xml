@@ -6,5 +6,7 @@
         <attr name="calendar_viewer_week_text_color" format="color" />
         <attr name="calendar_viewer_reservation_text_color" format="color" />
         <attr name="calendar_viewer_border_color" format="color" />
+        <attr name="calendar_viewer_text_font" format="string" />
+        <attr name="calendar_viewer_reservation_text_font" format="string" />
     </declare-styleable>
 </resources>

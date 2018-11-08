@@ -7,6 +7,7 @@ import java.util.List;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.graphics.Typeface;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -27,6 +28,7 @@ public class WeekView extends RelativeLayout implements OnClickListener {
     public static final int NORMALIZATION_START_HOUR = 20;
     private int numberOfDaysToShow;
     private int textColor, weekTextColor, gridColor, reservationTextColor;
+    private String textFont, reservationTextFont;
     CalendarVisualizer cv;
 
     private OnFreeTimeClickListener onFreeTimeClickListener = null;
@@ -61,8 +63,13 @@ public class WeekView extends RelativeLayout implements OnClickListener {
             R.color.CalendarBorderColor);
         reservationTextColor = a.getColor(R.styleable
             .WeekView_calendar_viewer_reservation_text_color, R.color.CalendarResTextColor);
+        textFont = a.getString(R.styleable.WeekView_calendar_viewer_text_font);
+        reservationTextFont = a.getString(
+            R.styleable.WeekView_calendar_viewer_reservation_text_font);
         a.recycle();
-        this.cv = new CalendarVisualizer(getContext(), DAY_START_TIME, DAY_END_TIME, this.numberOfDaysToShow);
+        this.cv = new CalendarVisualizer(getContext(), DAY_START_TIME, DAY_END_TIME,
+            numberOfDaysToShow, textColor, weekTextColor, gridColor, reservationTextColor,
+            textFont, reservationTextFont);
     }
 
     public void refreshData(Room room) {
