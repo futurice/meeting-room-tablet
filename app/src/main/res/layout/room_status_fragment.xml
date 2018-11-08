@@ -95,7 +95,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/roomStatus"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="44dp"
+        android:layout_marginTop="64dp"
         android:layout_marginEnd="8dp"
         android:text="@string/quick_booking"
         android:textAlignment="viewStart"

@@ -47,7 +47,7 @@
     <string name="minus_time_content_description">minus time</string>
     <string name="only_use_resource_calendars">Only use resource calendars</string>
     <string name="default_room_icon_content_description">default room icon</string>
-    <string name="status_free">Vapaa • Ledigt • Free</string>
+    <string name="status_free">VAPAA • LEDIGT • FREE</string>
     <string name="free_for_the_day">Päivän loppuun | hela dagen | for the day</string>
     <string name="free_for_specific_amount">seuraava varaus | nästa reservering | next reservation</string>
     <string name="status_reserved">VARATTU • RESERVERAT • RESERVED</string>
