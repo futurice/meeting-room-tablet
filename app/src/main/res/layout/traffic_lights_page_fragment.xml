@@ -33,6 +33,23 @@
         </FrameLayout>
 
         <FrameLayout
+            android:id="@+id/disconnectedContainer"
+            android:visibility="visible"
+            android:layout_width="800dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            app:layout_constraintBottom_toTopOf="@+id/bottomFragmentContainer"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <fragment
+                android:id="@+id/disconnectedFragment"
+                android:name="com.futurice.android.reservator.view.trafficlights.DisconnectedFragment"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </FrameLayout>
+
+        <FrameLayout
             android:id="@+id/roomReservationContainer"
             android:layout_width="800dp"
             android:layout_height="wrap_content"
@@ -57,19 +74,19 @@
             android:layout_height="match_parent" />
     </FrameLayout>
 
-        <FrameLayout
-            android:id="@+id/bottomFragmentContainer"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="0dp"
-            app:layout_constraintBottom_toBottomOf="parent">
+    <FrameLayout
+        android:id="@+id/bottomFragmentContainer"
+        android:layout_width="718dp"
+        android:layout_height="26dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/dayCalendarContainer"
+        app:layout_constraintStart_toStartOf="parent">
 
-            <fragment
-                android:id="@+id/bottomFragment"
-                android:name="com.futurice.android.reservator.view.trafficlights.BottomFragment"
-                android:layout_height="match_parent"
-                android:layout_width="match_parent"
-                />
-        </FrameLayout>
+        <fragment
+            android:id="@+id/bottomFragment"
+            android:name="com.futurice.android.reservator.view.trafficlights.BottomFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </FrameLayout>
     </android.support.constraint.ConstraintLayout>
 
