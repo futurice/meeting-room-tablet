@@ -49,7 +49,7 @@ public class CalendarVisualizer extends HorizontalScrollView implements Reservat
     private DateTime firstDayToShow;
     private int daysToShow = 1;
     private int dayWidth = 250;
-    private int timeLabelWidth = 85;
+    private int timeLabelWidth = 70; //margin to left of time
     private Reservation[] reservations;
     private SimpleDateFormat dayLabelFormatter, weekLabelFormatter;
     private Paint fadingEdgePaint;
@@ -417,12 +417,12 @@ public class CalendarVisualizer extends HorizontalScrollView implements Reservat
     @Override
     protected void onDraw(Canvas c) {
         long start = System.currentTimeMillis();
-        int headerHeight = Math.min(getHeight(), getWidth()) / 12;
+        int headerHeight = Math.min(getHeight(), getWidth()) / 30;
         timeLabelRect = new RectF(0, headerHeight, timeLabelWidth, getHeight());
         calendarAreaRect = new RectF(timeLabelWidth, headerHeight, getWidth(), getHeight());
-        headerRect = new RectF(timeLabelWidth, 0, getWidth(), headerHeight);
+        //headerRect = new RectF(timeLabelWidth, 0, getWidth(), headerHeight);
 
-        drawDayHeaders(c, headerRect);
+        //drawDayHeaders(c, headerRect);
         drawCalendarLines(c, calendarAreaRect);
         drawCalendarReservations(c, calendarAreaRect);
         drawReservationSubjects(c, calendarAreaRect);

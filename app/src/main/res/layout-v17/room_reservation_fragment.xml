@@ -40,7 +40,7 @@
         android:layout_alignParentTop="false"
         android:layout_alignParentEnd="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="164dp"
+        android:layout_marginBottom="188dp"
         android:max="90"
         android:progress="30"
         android:progressBackgroundTint="@color/seekBarProgressBackgroundColor"
@@ -48,8 +48,7 @@
         android:thumbTint="@color/seekBarThumbColor"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
-    </SeekBar>
+        app:layout_constraintStart_toStartOf="parent"></SeekBar>
 
     <TextView
         android:id="@+id/TextViewBarDuration"
@@ -69,7 +68,7 @@
         android:layout_height="84dp"
         android:layout_alignTop="@+id/nameInput"
         android:layout_marginTop="32dp"
-        android:layout_marginBottom="8dp"
+        android:layout_marginBottom="16dp"
         android:layout_toEndOf="@+id/nameInput"
         android:background="@color/CalendarResTextColor"
         android:text="@string/button_reserve"
@@ -77,8 +76,7 @@
         android:textSize="32dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/nameInput">
-    </Button>
+        app:layout_constraintTop_toBottomOf="@+id/nameInput"></Button>
 
     <EditText
         android:id="@+id/nameInput"
@@ -87,6 +85,7 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentBottom="true"
         android:layout_marginStart="10dp"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="108dp"
         android:ems="10"
@@ -96,8 +95,8 @@
         android:textColor="#F8F8F8"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
-    </EditText>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/seekBar"></EditText>
 
 </android.support.constraint.ConstraintLayout>
 
