@@ -3,6 +3,7 @@ package com.futurice.android.reservator.view.trafficlights;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +19,7 @@ public class TrafficLightsPageFragment extends Fragment {
     private BottomFragment bottomFragment;
     private RoomReservationFragment roomReservationFragment;
     private OngoingReservationFragment ongoingReservationFragment;
+    private DisconnectedFragment disconnectedFragment;
 
     private FragmentManager fragmentManager;
 
@@ -26,12 +28,11 @@ public class TrafficLightsPageFragment extends Fragment {
 
     private void openFragment(Fragment fragment) {
         if (fragmentManager != null) {
-            //@formatter:off
-            fragmentManager.beginTransaction()
-                    .replace(R.id.roomReservationContainer, fragment)
-                    .commitAllowingStateLoss();
-            this.currentChildFragment = fragment;
-            //@formatter:on
+            FragmentTransaction ft = fragmentManager.beginTransaction();
+
+
+
+            ft.commitAllowingStateLoss();
         }
     }
 
@@ -73,6 +74,14 @@ public class TrafficLightsPageFragment extends Fragment {
         catch (ClassCastException e) {
             throw new ClassCastException(presenter.toString() + " must implement OngoingReservationPresenter");
         }
+
+        try {
+            this.disconnectedFragment = new DisconnectedFragment();
+            this.disconnectedFragment.setPresenter((DisconnectedFragment.DisconnectedFragmentPresenter) this.presenter);
+        }
+        catch (ClassCastException e) {
+            throw new ClassCastException(presenter.toString() + " must implement DisconnectedFragmentPresenter");
+        }
     }
 
     @Override
@@ -95,6 +104,8 @@ public class TrafficLightsPageFragment extends Fragment {
             throw new ClassCastException(presenter.toString() + " must implement DayCalendarPresenter");
         }
 
+
+
         /*try {
             this.bottomFragment = (BottomFragment)getChildFragmentManager().findFragmentById(R.id.bottomFragment);
             this.bottomFragment.setPresenter((BottomFragment.BottomFragmentPresenter) this.presenter);
@@ -107,14 +118,91 @@ public class TrafficLightsPageFragment extends Fragment {
     }
 
     public void showOngoingReservationFragment() {
-        this.openFragment(this.ongoingReservationFragment);
+        if (fragmentManager != null) {
+            FragmentTransaction ft = fragmentManager.beginTransaction();
+
+            if (this.ongoingReservationFragment.isAdded()) {
+                ft.show(this.ongoingReservationFragment);
+            } else {
+                ft.add(R.id.roomReservationContainer, this.ongoingReservationFragment);
+            }
+
+            if (this.roomReservationFragment.isAdded()) {
+                ft.hide(this.roomReservationFragment);
+            }
+
+            if (disconnectedFragment.isAdded()) {
+                ft.hide(disconnectedFragment);
+            }
+            ft.commitAllowingStateLoss();
+        }
     }
 
     public void hideBothReservationFragments() {
-        this.removeCurrentChildFragment();
+        if (fragmentManager != null) {
+            FragmentTransaction ft = fragmentManager.beginTransaction();
+
+            if (this.ongoingReservationFragment.isAdded()) {
+                ft.hide(this.ongoingReservationFragment);
+            }
+
+            if (this.roomReservationFragment.isAdded()) {
+                ft.hide(this.roomReservationFragment);
+            }
+
+            if (this.disconnectedFragment.isAdded()) {
+                ft.hide(this.disconnectedFragment);
+            }
+
+            ft.commitAllowingStateLoss();
+        }
     }
 
     public void showRoomReservationFragment() {
-        this.openFragment(this.roomReservationFragment);
+        if (fragmentManager != null) {
+            FragmentTransaction ft = fragmentManager.beginTransaction();
+
+            if (this.roomReservationFragment.isAdded()) {
+                ft.show(this.roomReservationFragment);
+            } else {
+                ft.add(R.id.roomReservationContainer, this.roomReservationFragment);
+            }
+
+            if (this.ongoingReservationFragment.isAdded()) {
+                ft.hide(this.ongoingReservationFragment);
+            }
+
+            if (disconnectedFragment.isAdded()) {
+                ft.hide(disconnectedFragment);
+            }
+            ft.commitAllowingStateLoss();
+        }
     }
+
+    public void showDisconnectedFragment() {
+        if (fragmentManager != null) {
+            FragmentTransaction ft = fragmentManager.beginTransaction();
+
+            if (this.disconnectedFragment.isAdded()) {
+                ft.show(this.disconnectedFragment);
+            } else {
+                ft.add(R.id.roomReservationContainer, this.disconnectedFragment);
+            }
+
+            if (this.ongoingReservationFragment.isAdded()) {
+                ft.hide(this.ongoingReservationFragment);
+            }
+
+            if (roomReservationFragment.isAdded()) {
+                ft.hide(this.roomReservationFragment);
+            }
+            ft.commitAllowingStateLoss();
+        }
+    }
+
+    /*
+    public void hideDisconnectedFragment() {
+        this.removeCurrentChildFragment();
+    }
+    */
 }

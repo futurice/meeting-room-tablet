@@ -5,10 +5,17 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.net.ConnectivityManager;
+import android.net.Network;
+import android.net.NetworkCapabilities;
+import android.net.NetworkInfo;
+import android.net.NetworkRequest;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.Window;
 
 import com.futurice.android.reservator.common.LedHelper;
@@ -16,6 +23,9 @@ import com.futurice.android.reservator.model.Model;
 import com.futurice.android.reservator.view.trafficlights.TrafficLightsPageFragment;
 import com.futurice.android.reservator.view.trafficlights.TrafficLightsPresenter;
 
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,14 +39,132 @@ public class MainActivity extends FragmentActivity {
 
     private Model model;
 
+
+
+    BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            onCalendarUpdated();
+        }
+    };
+
+    class ConnectionStateMonitor extends ConnectivityManager.NetworkCallback {
+
+        final NetworkRequest networkRequest;
+
+        public ConnectionStateMonitor() {
+            networkRequest = new NetworkRequest.Builder().addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET).build();
+
+            /*
+            networkRequest = new NetworkRequest.Builder()
+                    .addTransportType(NetworkCapabilities.TRANSPORT_CELLULAR)
+                    .addTransportType(NetworkCapabilities.TRANSPORT_WIFI)
+                    .addTransportType(NetworkCapabilities.TRANSPORT_ETHERNET)
+                    .build();
+            */
+        }
+
+        public void enable(Context context) {
+            ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+            connectivityManager.registerNetworkCallback(networkRequest , this);
+        }
+
+        @Override
+        public void onAvailable(Network network) {
+            updateNetworkStatus();
+            /*
+            ConnectivityManager cm = (ConnectivityManager) getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+            NetworkInfo info = cm.getNetworkInfo(network);
+            boolean isConnected = (info != null && info.isConnectedOrConnecting());
+
+            if (isConnected) {
+                NetworkCapabilities nc = cm.getNetworkCapabilities(network);
+                if (nc != null) {
+                    boolean isInternetValid = nc.hasCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED);
+                    if (isInternetValid) {
+                        setConnected();
+                    }
+                }
+            }
+            */
+        }
+
+        @Override
+        public void onLost(Network network) {
+            setDisconnected();
+            //updateNetworkStatus();
+        }
+
+    }
+
+    private ConnectionStateMonitor connectionStateMonitor = new ConnectionStateMonitor();
+
+    private void setConnected() {
+        if (this.presenter == null)
+            return;
+        this.presenter.setConnected();
+    }
+
+    private void setDisconnected() {
+        if (this.presenter == null)
+            return;
+        this.presenter.setDisconnected();
+    }
+
+    public void updateNetworkStatus() {
+        if (this.presenter == null)
+            return;
+
+        if (this.isConnectedToGoogle())
+            this.setConnected();
+        else
+            this.setDisconnected();
+    }
+
+    private boolean isConnectedToGoogle() {
+        try {
+            HttpURLConnection urlConnection = (HttpURLConnection)
+                    (new URL("http://clients3.google.com/generate_204")
+                            .openConnection());
+            urlConnection.setUseCaches(false);
+            urlConnection.setRequestProperty("User-Agent", "Android");
+            urlConnection.setRequestProperty("Connection", "close");
+            urlConnection.setConnectTimeout(1500);
+            urlConnection.connect();
+            if (urlConnection.getResponseCode() == 204 &&
+                    urlConnection.getContentLength() == 0) {
+                Log.d("Reservator", "isConnectedToGoogle() returning true");
+                return true;
+            }
+            else
+                return false;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+    /*
+    private boolean hasInternetConnection() {
+        final ConnectivityManager connectivityManager = (ConnectivityManager)this.
+                getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        final Network network = connectivityManager.getActiveNetwork();
+        final NetworkCapabilities capabilities = connectivityManager
+                .getNetworkCapabilities(network);
+
+        return capabilities != null
+                && capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET) && capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED);
+    }
+*/
     private void openFragment(Fragment fragment) {
         if (fragmentManager != null) {
-            //@formatter:off
-            fragmentManager.beginTransaction()
-                    .replace(R.id.main_container, fragment)
-                    .addToBackStack(fragment.toString())
-                    .commit();
-            //@formatter:on
+
+            FragmentTransaction ft = fragmentManager.beginTransaction();
+            if (fragment.isAdded())
+                ft.show(fragment);
+            else
+                ft.add(R.id.main_container,fragment);
+
+            ft.commit();
         }
     }
 
@@ -59,6 +187,11 @@ public class MainActivity extends FragmentActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+
+        registerReceiver(broadcastReceiver,
+            new IntentFilter(CalendarStateReceiver.CALENDAR_CHANGED));
+
         this.fragmentManager = getSupportFragmentManager();
         this.trafficLightsPageFragment = new TrafficLightsPageFragment();
 
@@ -66,14 +199,13 @@ public class MainActivity extends FragmentActivity {
         this.presenter = new TrafficLightsPresenter(this, this.model);
         this.trafficLightsPageFragment.setPresenter(this.presenter);
 
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        this.connectionStateMonitor.enable(this);
+
         setContentView(R.layout.main_activity);
         ButterKnife.bind(this);
 
         this.openFragment(this.trafficLightsPageFragment);
-        registerReceiver(
-            broadcastReceiver,
-            new IntentFilter(CalendarStateReceiver.CALENDAR_CHANGED));
+        this.updateNetworkStatus();
     }
 
     @Override
@@ -92,12 +224,7 @@ public class MainActivity extends FragmentActivity {
             this.model.getDataProxy().refreshRoomReservations(this.model.getFavoriteRoom());
     }
 
-    BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            onCalendarUpdated();
-        }
-    };
+
 
     @Override
     protected void onDestroy() {
@@ -106,4 +233,6 @@ public class MainActivity extends FragmentActivity {
         LedHelper.getInstance().setRedBrightness(0);
         unregisterReceiver(broadcastReceiver);
     }
+
+
 }

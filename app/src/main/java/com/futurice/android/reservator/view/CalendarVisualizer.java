@@ -433,7 +433,7 @@ public class CalendarVisualizer extends HorizontalScrollView implements Reservat
         if (this.tentativeTimeSpan != null)
             drawTentativeArea(c, calendarAreaRect, this.tentativeTimeSpan);
 
-        Log.d("Performance", "Drew CalendarVisualizer in " + (System.currentTimeMillis() - start) + "ms");
+        //Log.d("Performance", "Drew CalendarVisualizer in " + (System.currentTimeMillis() - start) + "ms");
     }
 
     private int getDaysFromStart(DateTime day) {

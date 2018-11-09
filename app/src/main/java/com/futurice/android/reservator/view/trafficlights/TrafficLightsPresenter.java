@@ -28,6 +28,7 @@ public class TrafficLightsPresenter implements
         RoomReservationFragment.RoomReservationPresenter,
         DayCalendarFragment.DayCalendarPresenter,
         OngoingReservationFragment.OngoingReservationPresenter,
+        DisconnectedFragment.DisconnectedFragmentPresenter,
         com.futurice.android.reservator.common.Presenter,
         com.futurice.android.reservator.model.DataUpdatedListener,
         com.futurice.android.reservator.model.AddressBookUpdatedListener {
@@ -36,12 +37,13 @@ public class TrafficLightsPresenter implements
     final int MAX_QUICK_BOOK_MINUTES = 120; //minutes
     final int DEFAULT_MINUTES = 45;
 
+    private boolean connected = true;
     private TrafficLightsPageFragment trafficLightsPageFragment;
     private RoomStatusFragment roomStatusFragment;
     private RoomReservationFragment roomReservationFragment;
     private OngoingReservationFragment ongoingReservationFragment;
     private DayCalendarFragment dayCalendarFragment;
-
+    private DisconnectedFragment disconnectedFragment;
     private Activity activity;
     private Model model;
     private Resources resources;
@@ -58,6 +60,23 @@ public class TrafficLightsPresenter implements
         }
     };
 
+    // Get a handler that can be used to post to the main thread
+    private Handler mainHandler;
+
+    private Runnable updateRunnable = new Runnable() {
+        @Override
+        public void run() {
+            if (room != null)
+                updateRoomData(room);
+        }
+    };
+
+    private void runThreadSafeUpdateRoomData() {
+        if (this.mainHandler != null) {
+            this.mainHandler.post(updateRunnable);
+        }
+    }
+
     private void refreshModel() {
         if (this.room != null)
             this.model.getDataProxy().refreshRoomReservations(this.room);
@@ -72,15 +91,25 @@ public class TrafficLightsPresenter implements
         this.activity = activity;
         this.resources = activity.getResources();
 
+        mainHandler = new Handler(activity.getMainLooper());
         this.model = model;
         this.model.getDataProxy().addDataUpdatedListener(this);
         this.model.getAddressBook().addDataUpdatedListener(this);
 
     }
 
+    private boolean isStarted() {
+        if (trafficLightsPageFragment != null && roomStatusFragment != null &&
+                ongoingReservationFragment != null && roomReservationFragment != null && dayCalendarFragment != null &&
+                disconnectedFragment!=null)
+            return true;
+        else
+            return false;
+    }
     private void tryStarting() {
         if (trafficLightsPageFragment != null && roomStatusFragment != null &&
-                ongoingReservationFragment != null && roomReservationFragment != null && dayCalendarFragment != null) {
+                ongoingReservationFragment != null && roomReservationFragment != null && dayCalendarFragment != null &&
+                disconnectedFragment!=null) {
             this.model.getDataProxy().refreshRoomReservations(this.model.getFavoriteRoom());
             handler.postDelayed(minuteRunnable, 60000);
         }
@@ -194,6 +223,14 @@ public class TrafficLightsPresenter implements
     @Override
     public void setDayCalendarFragment(DayCalendarFragment fragment) {
         this.dayCalendarFragment = fragment;
+        this.tryStarting();
+    }
+
+    // ------- Implementation of DisconnectedFragment.DisconnectedFragmentPresenter
+
+    @Override
+    public void setDisconnectedFragment(DisconnectedFragment fragment) {
+        this.disconnectedFragment = fragment;
         this.tryStarting();
     }
 
@@ -328,8 +365,11 @@ public class TrafficLightsPresenter implements
         this.roomStatusFragment.setStatusText(resources.getString(R.string.status_reserved));
         this.dayCalendarFragment.setTentativeTimeSpan(null);
         this.updateOngoingReservationFragment();
-        this.trafficLightsPageFragment.showOngoingReservationFragment();
 
+        if (this.connected)
+            this.trafficLightsPageFragment.showOngoingReservationFragment();
+        else
+            this.trafficLightsPageFragment.showDisconnectedFragment();
 
         this.roomStatusFragment.hideBookNowText();
         this.showReservationDetails(this.currentReservation, room.getNextFreeSlot());
@@ -347,7 +387,12 @@ public class TrafficLightsPresenter implements
         //this.trafficLightsPageFragment.showOngoingReservationFragment();
         //this.updateOngoingReservationFragment();
         this.roomStatusFragment.hideBookNowText();
-        this.trafficLightsPageFragment.hideBothReservationFragments();
+
+        if (this.connected)
+            this.trafficLightsPageFragment.hideBothReservationFragments();
+        else
+            this.trafficLightsPageFragment.showDisconnectedFragment();
+
         this.showYellowLed();
     }
 
@@ -356,11 +401,19 @@ public class TrafficLightsPresenter implements
         this.roomStatusFragment.setStatusText(resources.getString(R.string.status_free));
         this.roomStatusFragment.setMeetingNameText("");
         this.roomStatusFragment.setStatusUntilText(resources.getString(R.string.free_for_the_day));
-        this.roomStatusFragment.showBookNowText();
+
 
         this.roomReservationFragment.setMaxMinutes(MAX_QUICK_BOOK_MINUTES);
         this.trafficLightsPageFragment.getView().setBackgroundColor(resources.getColor(R.color.TrafficLightFree));
-        this.trafficLightsPageFragment.showRoomReservationFragment();
+
+        if (this.connected) {
+            this.trafficLightsPageFragment.showRoomReservationFragment();
+            this.roomStatusFragment.showBookNowText();
+        }
+        else {
+            this.trafficLightsPageFragment.showDisconnectedFragment();
+            this.roomStatusFragment.hideBookNowText();
+        }
         this.showGreenLed();
     }
 
@@ -382,13 +435,19 @@ public class TrafficLightsPresenter implements
             tempMinutes = freeMinutes;
         this.roomReservationFragment.setMaxMinutes(tempMinutes);
 
-        this.trafficLightsPageFragment.showRoomReservationFragment();
+        if (this.connected)
+            this.trafficLightsPageFragment.showRoomReservationFragment();
+        else
+            this.trafficLightsPageFragment.showDisconnectedFragment();
+
         this.showGreenLed();
     }
 
 
     public void updateRoomData(Room room) {
-        //updateConnected();
+        if (!isStarted())
+            return;
+
         this.room = room;
 
         this.dayCalendarFragment.updateRoomData(room);
@@ -410,6 +469,20 @@ public class TrafficLightsPresenter implements
             this.showReserved();
         }
     }
+
+    public void setConnected() {
+        Log.d("Reservator","TrafficLightsPresenter::setConnected()");
+        this.connected = true;
+        runThreadSafeUpdateRoomData();
+    }
+
+    public void setDisconnected() {
+        Log.d("Reservator","TrafficLightsPresenter::setDisconnected()");
+        this.connected = false;
+        runThreadSafeUpdateRoomData();
+    }
+
+
     /*
     public void updateRoomData(Room room) {
         //updateConnected();

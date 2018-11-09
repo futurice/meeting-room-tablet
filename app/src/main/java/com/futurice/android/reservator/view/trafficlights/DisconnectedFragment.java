@@ -1,6 +1,6 @@
 package com.futurice.android.reservator.view.trafficlights;
 
-import android.app.Fragment;
+import android.support.v4.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -15,17 +15,17 @@ import android.widget.TextView;
 import com.futurice.android.reservator.R;
 import com.futurice.android.reservator.common.Helpers;
 
-public class DisconnectedFragment extends android.app.Fragment {
+public class DisconnectedFragment extends Fragment {
 
     public interface DisconnectedFragmentPresenter {
-        void setDisconnectedFragmentPresenter(DisconnectedFragment fragment);
+        void setDisconnectedFragment(DisconnectedFragment fragment);
     }
 
     private DisconnectedFragmentPresenter presenter;
 
     public void setPresenter(DisconnectedFragmentPresenter presenter) {
         this.presenter = presenter;
-        this.presenter.setDisconnectedFragmentPresenter(this);
+        this.presenter.setDisconnectedFragment(this);
     }
 
     @Override
