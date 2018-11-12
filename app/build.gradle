@@ -10,8 +10,8 @@ android {
 
     defaultConfig {
         applicationId "com.futurice.android.reservator"
-        versionCode 22
-        versionName "5.1.3"
+        versionCode 23
+        versionName "5.1.3+1.0.0"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
 

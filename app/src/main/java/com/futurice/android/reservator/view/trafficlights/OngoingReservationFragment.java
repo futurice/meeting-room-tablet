@@ -22,6 +22,9 @@ public class OngoingReservationFragment extends Fragment {
     void setOngoingReservationFragment(OngoingReservationFragment fragment);
     void onReservationMinutesChanged(int newMinutes);
     void onReservationMinutesUpdated(int minutes);
+
+    void onReservationChangeStarted();
+    void onReservationChangeEnded();
     }
 
     private OngoingReservationPresenter presenter;
@@ -63,6 +66,7 @@ public class OngoingReservationFragment extends Fragment {
             barDurationText.setText(Helpers.convertToHoursAndMinutes(progress));
             //textViewBarEnd.setText("" + progress); //Add amount to current time
             presenter.onReservationMinutesUpdated(progress);
+            presenter.onReservationChangeStarted();
         }
 
         @Override
@@ -72,7 +76,7 @@ public class OngoingReservationFragment extends Fragment {
 
         @Override
         public void onStopTrackingTouch(android.widget.SeekBar seekBar) {
-           startChangeCountDown();
+            startChangeCountDown();
         }
     };
 
@@ -89,6 +93,7 @@ public class OngoingReservationFragment extends Fragment {
         hideCancelWidgets();
         isCountingDown = false;
         presenter.onReservationMinutesUpdated(savedProgress);
+        presenter.onReservationChangeEnded();
     };
 
 
@@ -153,6 +158,7 @@ public class OngoingReservationFragment extends Fragment {
         this.hideCancelWidgets();
         this.isCountingDown = false;
         this.presenter.onReservationMinutesChanged(this.seekBar.getProgress());
+        this.presenter.onReservationChangeEnded();
     }
 
     @Override

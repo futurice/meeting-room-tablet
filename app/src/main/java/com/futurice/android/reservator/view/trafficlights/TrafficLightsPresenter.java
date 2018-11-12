@@ -38,6 +38,8 @@ public class TrafficLightsPresenter implements
     final int DEFAULT_MINUTES = 45;
 
     private boolean connected = true;
+    private boolean reservationChangeInProgess= false;
+
     private TrafficLightsPageFragment trafficLightsPageFragment;
     private RoomStatusFragment roomStatusFragment;
     private RoomReservationFragment roomReservationFragment;
@@ -200,6 +202,17 @@ public class TrafficLightsPresenter implements
     public void onReservationMinutesUpdated(int minutes) {
         this.currentReservation.setTimeSpan(new TimeSpan(new DateTime(), new DateTime(System.currentTimeMillis() + (minutes * 60 * 1000))));
         this.dayCalendarFragment.updateRoomData(this.room);
+    }
+
+    @Override
+    public void onReservationChangeStarted() {
+       this.reservationChangeInProgess = true;
+    }
+
+    @Override
+
+    public void onReservationChangeEnded() {
+        this.reservationChangeInProgess = false;
     }
 
     // ------ Implementation of TrafficLightsPageFragment.TrafficLightsPagePresenter
@@ -447,7 +460,7 @@ public class TrafficLightsPresenter implements
 
 
     public void updateRoomData(Room room) {
-        if (!isStarted())
+        if (!isStarted() || this.reservationChangeInProgess)
             return;
 
         this.room = room;
