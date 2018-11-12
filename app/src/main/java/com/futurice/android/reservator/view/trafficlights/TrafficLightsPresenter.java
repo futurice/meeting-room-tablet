@@ -244,6 +244,8 @@ public class TrafficLightsPresenter implements
     @Override
     public void roomReservationsUpdated(Room room) {
         this.updateRoomData(room);
+        //this.room = room;
+        //runThreadSafeUpdateRoomData();
     }
 
     @Override
