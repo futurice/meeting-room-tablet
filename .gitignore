@@ -189,3 +189,5 @@ gradle-app.setting
 # End of https://www.gitignore.io/api/gradle,android,androidstudio
 /gradle.properties
 /keystore/reservator_release.keystore
+
+app/release/
