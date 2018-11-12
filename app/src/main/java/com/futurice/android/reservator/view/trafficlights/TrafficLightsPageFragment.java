@@ -26,6 +26,7 @@ public class TrafficLightsPageFragment extends Fragment {
     private TrafficLightsPagePresenter presenter;
     private Fragment currentChildFragment;
 
+    /*
     private void openFragment(Fragment fragment) {
         if (fragmentManager != null) {
             FragmentTransaction ft = fragmentManager.beginTransaction();
@@ -49,6 +50,7 @@ public class TrafficLightsPageFragment extends Fragment {
        }
     }
 
+    */
     public void setPresenter(TrafficLightsPagePresenter presenter) {
         this.presenter = presenter;
         this.presenter.setTrafficLightsPageFragment(this);
@@ -119,6 +121,8 @@ public class TrafficLightsPageFragment extends Fragment {
 
     public void showOngoingReservationFragment() {
         if (fragmentManager != null) {
+            fragmentManager.executePendingTransactions();
+
             FragmentTransaction ft = fragmentManager.beginTransaction();
 
             if (this.ongoingReservationFragment.isAdded()) {
@@ -140,6 +144,8 @@ public class TrafficLightsPageFragment extends Fragment {
 
     public void hideBothReservationFragments() {
         if (fragmentManager != null) {
+            fragmentManager.executePendingTransactions();
+
             FragmentTransaction ft = fragmentManager.beginTransaction();
 
             if (this.ongoingReservationFragment.isAdded()) {
@@ -160,6 +166,8 @@ public class TrafficLightsPageFragment extends Fragment {
 
     public void showRoomReservationFragment() {
         if (fragmentManager != null) {
+            fragmentManager.executePendingTransactions();
+
             FragmentTransaction ft = fragmentManager.beginTransaction();
 
             if (this.roomReservationFragment.isAdded()) {
@@ -181,6 +189,8 @@ public class TrafficLightsPageFragment extends Fragment {
 
     public void showDisconnectedFragment() {
         if (fragmentManager != null) {
+            fragmentManager.executePendingTransactions();
+
             FragmentTransaction ft = fragmentManager.beginTransaction();
 
             if (this.disconnectedFragment.isAdded()) {

@@ -17,6 +17,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.Window;
+import android.view.WindowManager;
 
 import com.futurice.android.reservator.common.LedHelper;
 import com.futurice.android.reservator.model.Model;
@@ -157,7 +158,7 @@ public class MainActivity extends FragmentActivity {
 */
     private void openFragment(Fragment fragment) {
         if (fragmentManager != null) {
-
+            fragmentManager.executePendingTransactions();
             FragmentTransaction ft = fragmentManager.beginTransaction();
             if (fragment.isAdded())
                 ft.show(fragment);
@@ -188,6 +189,7 @@ public class MainActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
 
         requestWindowFeature(Window.FEATURE_NO_TITLE);
+        this.getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
         registerReceiver(broadcastReceiver,
             new IntentFilter(CalendarStateReceiver.CALENDAR_CHANGED));

@@ -54,7 +54,7 @@
     <string name="free_at">Vapautuu | Ledigt från | Free at</string>
     <string name="meeting_description">Kuvaus | Beskrivning | Description</string>
     <string name="quick_booking">Pikavaraus | Snabbreservering | Use now:</string>
-    <string name="reservation_remaining">VARAUSTA JÄLJJELLÄ | RESERVERING KVAR | RESERVATION REMAINING</string>
+    <string name="reservation_remaining">VARAUSTA JÄLJELLÄ | RESERVERING KVAR | RESERVATION REMAINING</string>
     <string name="default_reservation_description">Varaus | Reservering | Reservation</string>
     <string name="approveChange">Vahvista muutos\nKonfirmera förändringen\nConfirm change</string>
     <string name="cancelChange">Muutokset tallennetaan | Ändringarna sparas | Saving changes\n\nPeruuta | Avbryt | Cancel</string>
