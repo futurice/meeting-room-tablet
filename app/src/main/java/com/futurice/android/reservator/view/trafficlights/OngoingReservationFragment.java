@@ -43,18 +43,20 @@ public class OngoingReservationFragment extends Fragment {
     private int remainingMinutes = 0;
     private int maxMinutes = 0;
     private int savedProgress = 0;
+    private int progress = 0;
 
     private boolean isCountingDown = false;
 
+
     SeekBar.OnSeekBarChangeListener seekBarChangeListener = new SeekBar.OnSeekBarChangeListener() {
 
-        int minutesIncrement = 5;
+        //int minutesIncrement = 5;
         //int currentTime = Integer.valueOf(getCurrentTime());
 
         @Override
-        public void onProgressChanged(android.widget.SeekBar seekBar, int progress, boolean b) {
+        public void onProgressChanged(android.widget.SeekBar seekBar, int barProgress, boolean b) {
 
-            progress = ((int) Math.round(progress / minutesIncrement)) * minutesIncrement;
+            //barProgress = ((int) Math.round(barProgress / minutesIncrement)) * minutesIncrement;
 
             //This should now move in 5 (minute) increments
             //For some reason, progress shows up as a string saying progress instead of immediately changing to the int
@@ -62,20 +64,24 @@ public class OngoingReservationFragment extends Fragment {
             //textViewBarBegin.setText(getCurrentTime() + "");
 
             //progress += Integer.valueOf(getCurrentTime());
-            seekBar.setProgress(progress);
-            barDurationText.setText(Helpers.convertToHoursAndMinutes(progress));
+            //seekBar.setProgress(barProgress);
+            barDurationText.setText(Helpers.convertToHoursAndMinutes(barProgress));
             //textViewBarEnd.setText("" + progress); //Add amount to current time
-            presenter.onReservationMinutesUpdated(progress);
-            presenter.onReservationChangeStarted();
+            presenter.onReservationMinutesUpdated(barProgress);
+            //presenter.onReservationChangeStarted();
         }
 
         @Override
         public void onStartTrackingTouch(android.widget.SeekBar seekBar) {
+            //savedProgress = ((int) Math.round(seekBar.getProgress() / minutesIncrement)) * minutesIncrement;
             savedProgress = seekBar.getProgress();
         }
 
         @Override
         public void onStopTrackingTouch(android.widget.SeekBar seekBar) {
+            seekBar.setEnabled(false);
+            //progress = ((int) Math.round(seekBar.getProgress() / minutesIncrement)) * minutesIncrement;
+            progress = seekBar.getProgress();
             startChangeCountDown();
         }
     };
@@ -94,8 +100,16 @@ public class OngoingReservationFragment extends Fragment {
         isCountingDown = false;
         presenter.onReservationMinutesUpdated(savedProgress);
         presenter.onReservationChangeEnded();
+        seekBar.setEnabled(true);
     };
 
+    private void saveChanges() {
+        this.hideCancelWidgets();
+        this.isCountingDown = false;
+        this.presenter.onReservationMinutesChanged(progress);
+        this.presenter.onReservationChangeEnded();
+        seekBar.setEnabled(true);
+    };
 
     public void showChancelWidgets() {
         this.changeProgressBar.setVisibility(View.VISIBLE);
@@ -155,10 +169,7 @@ public class OngoingReservationFragment extends Fragment {
             this.changeProgressBar.setProgress(this.tickCounter);
     }
     public void onChangeCountDownFinished() {
-        this.hideCancelWidgets();
-        this.isCountingDown = false;
-        this.presenter.onReservationMinutesChanged(this.seekBar.getProgress());
-        this.presenter.onReservationChangeEnded();
+       this.saveChanges();
     }
 
     @Override

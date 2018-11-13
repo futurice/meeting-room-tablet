@@ -92,8 +92,9 @@ public class RoomReservationFragment extends Fragment {
 
         @Override
         public void onProgressChanged(android.widget.SeekBar seekBar, int progress, boolean b) {
-            progress = ((int) Math.round(progress / minutesIncrement)) * minutesIncrement;
-            seekBar.setProgress(progress);
+            //progress = ((int) Math.round(progress / minutesIncrement)) * minutesIncrement;
+            //seekBar.setProgress(progress);
+
             minutes = progress;
 
             if (progress==0){
