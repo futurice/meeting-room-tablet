@@ -125,12 +125,6 @@ public class TrafficLightsPageFragment extends Fragment {
 
             FragmentTransaction ft = fragmentManager.beginTransaction();
 
-            if (this.ongoingReservationFragment.isAdded()) {
-                ft.show(this.ongoingReservationFragment);
-            } else {
-                ft.add(R.id.roomReservationContainer, this.ongoingReservationFragment);
-            }
-
             if (this.roomReservationFragment.isAdded()) {
                 ft.hide(this.roomReservationFragment);
             }
@@ -138,7 +132,15 @@ public class TrafficLightsPageFragment extends Fragment {
             if (disconnectedFragment.isAdded()) {
                 ft.hide(disconnectedFragment);
             }
+
+            if (this.ongoingReservationFragment.isAdded()) {
+                ft.show(this.ongoingReservationFragment);
+            } else {
+                ft.add(R.id.roomReservationContainer, this.ongoingReservationFragment);
+            }
+
             ft.commitAllowingStateLoss();
+            fragmentManager.executePendingTransactions();
         }
     }
 
@@ -161,6 +163,7 @@ public class TrafficLightsPageFragment extends Fragment {
             }
 
             ft.commitAllowingStateLoss();
+            fragmentManager.executePendingTransactions();
         }
     }
 
@@ -170,12 +173,6 @@ public class TrafficLightsPageFragment extends Fragment {
 
             FragmentTransaction ft = fragmentManager.beginTransaction();
 
-            if (this.roomReservationFragment.isAdded()) {
-                ft.show(this.roomReservationFragment);
-            } else {
-                ft.add(R.id.roomReservationContainer, this.roomReservationFragment);
-            }
-
             if (this.ongoingReservationFragment.isAdded()) {
                 ft.hide(this.ongoingReservationFragment);
             }
@@ -183,7 +180,15 @@ public class TrafficLightsPageFragment extends Fragment {
             if (disconnectedFragment.isAdded()) {
                 ft.hide(disconnectedFragment);
             }
+
+            if (this.roomReservationFragment.isAdded()) {
+                ft.show(this.roomReservationFragment);
+            } else {
+                ft.add(R.id.roomReservationContainer, this.roomReservationFragment);
+            }
+
             ft.commitAllowingStateLoss();
+            fragmentManager.executePendingTransactions();
         }
     }
 
@@ -193,12 +198,6 @@ public class TrafficLightsPageFragment extends Fragment {
 
             FragmentTransaction ft = fragmentManager.beginTransaction();
 
-            if (this.disconnectedFragment.isAdded()) {
-                ft.show(this.disconnectedFragment);
-            } else {
-                ft.add(R.id.roomReservationContainer, this.disconnectedFragment);
-            }
-
             if (this.ongoingReservationFragment.isAdded()) {
                 ft.hide(this.ongoingReservationFragment);
             }
@@ -206,7 +205,15 @@ public class TrafficLightsPageFragment extends Fragment {
             if (roomReservationFragment.isAdded()) {
                 ft.hide(this.roomReservationFragment);
             }
+
+            if (this.disconnectedFragment.isAdded()) {
+                ft.show(this.disconnectedFragment);
+            } else {
+                ft.add(R.id.roomReservationContainer, this.disconnectedFragment);
+            }
+
             ft.commitAllowingStateLoss();
+            fragmentManager.executePendingTransactions();
         }
     }
 
