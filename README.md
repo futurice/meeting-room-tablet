@@ -19,7 +19,7 @@ Installation
 -----------
 
 1. Configure the Android Calendar App to synchronize itself with the cloud-based calendar of your choice (Google calendar or Office365). In order to do this, go to Android Settings - Accounts and add your calendar account.
-<img src="images/CreateAccount.png" width="200" height="300"> <img src="images/SignInYliopisto.png" width="300">
+<img src="images/CreateAccount.png" width="200" height="300"> <img src="images/SignInYliopisto.png" width="400">
 
 2. Using the Android Calendar App or the user interface of your cloud-based calendar, create a calendar for the meeting room you want to reserve with the Reservator app. Check that the events you create in the UI of you cloud-based calendar get synchronized in the Android calendar app.
 
