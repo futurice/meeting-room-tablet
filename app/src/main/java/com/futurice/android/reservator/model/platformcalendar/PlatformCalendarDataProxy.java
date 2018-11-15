@@ -202,7 +202,10 @@ public class PlatformCalendarDataProxy extends DataProxy {
 
     @Override
     public void cancelReservation(Reservation reservation) throws ReservatorException {
-        if (!reservation.isCancellable()) return;
+        if (!reservation.isCancellable()) {
+            Log.d("Reservator","Reservation was not cancellable");
+            return;
+        }
         long eventId = getEventIdFromReservation(reservation);
 
         Uri eventUri = ContentUris.withAppendedId(CalendarContract.Events.CONTENT_URI, eventId);

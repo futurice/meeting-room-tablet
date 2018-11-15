@@ -388,6 +388,11 @@ public class TrafficLightsPresenter implements
 
         this.roomStatusFragment.hideBookNowText();
         this.showReservationDetails(this.currentReservation, room.getNextFreeSlot());
+
+        this.roomReservationFragment.clearDescription();
+        this.roomReservationFragment.setMaxMinutes(MAX_QUICK_BOOK_MINUTES);
+        this.roomReservationFragment.setMinutes(DEFAULT_MINUTES);
+
         this.showRedLed();
     }
 
