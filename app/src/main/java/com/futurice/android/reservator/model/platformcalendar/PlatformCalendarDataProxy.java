@@ -295,18 +295,18 @@ public class PlatformCalendarDataProxy extends DataProxy {
 
         int nRows = resolver.update(ContentUris.withAppendedId(CalendarContract.Events.CONTENT_URI, eventId), newValues, null,null);
 
-        // Update in local caches, remove first, then add again
+        // Update in local caches
 
         synchronized (locallyCreatedReservationCaches) {
             for (Map.Entry<Room, HashSet<Reservation>> entry : locallyCreatedReservationCaches.entrySet()) {
                 if (entry.getValue().contains(reservation)) {
                     HashSet<Reservation> filtered = new HashSet<Reservation>(entry.getValue());
                     filtered.remove(reservation);
+                    reservation.setTimeSpan(timeSpan);
+                    filtered.add(reservation);
                     entry.setValue(filtered);
                 }
             }
-            reservation.setTimeSpan(timeSpan);
-            putToLocalCache(room, reservation);
         }
 
         if (nRows > 0) {
