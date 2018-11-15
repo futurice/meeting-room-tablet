@@ -8,7 +8,7 @@ public class Reservation implements Comparable<Reservation>, Serializable {
     final private String id;
     private TimeSpan timeSpan;
     final private String subject;
-    private boolean cancellable = false;
+    private boolean cancellable = true;
 
     public Reservation(String id, String subject, TimeSpan timeSpan) {
         this.id = id;

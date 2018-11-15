@@ -87,6 +87,12 @@ public class RoomReservationFragment extends Fragment {
         this.updateMinutesToUi();
     }
 
+    public void clearDescription() {
+        if (this.nameInput != null)
+            this.nameInput.setText("");
+    }
+
+
     SeekBar.OnSeekBarChangeListener seekBarChangeListener = new SeekBar.OnSeekBarChangeListener() {
         int minutesIncrement = 5;
 
