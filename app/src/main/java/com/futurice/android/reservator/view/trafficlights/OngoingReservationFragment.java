@@ -74,6 +74,7 @@ public class OngoingReservationFragment extends Fragment {
         @Override
         public void onStartTrackingTouch(android.widget.SeekBar seekBar) {
             //savedProgress = ((int) Math.round(seekBar.getProgress() / minutesIncrement)) * minutesIncrement;
+            presenter.onReservationChangeStarted();
             savedProgress = seekBar.getProgress();
         }
 
