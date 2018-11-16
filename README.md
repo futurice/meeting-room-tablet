@@ -1,7 +1,7 @@
 UbiKampus Reservator
 ==========
 
-<img src="images/FreeEmpty.png" width="400"> <img src="images/Reserved.png" width="400">
+<img src="images/FreeEmpty.png" width="425"> <img src="images/Reserved.png" width="425">
 
 Description
 -----------
