@@ -1,13 +1,13 @@
 UbiKampus Reservator
 ==========
 
---Picture here
+<img src="images/FreeEmpty.png" width="400"> <img src="images/Reserved.png" width="400">
 
 Description
 -----------
-UbiKampus Reservator[Name WIP] is an Android application for displaying and reserving meeting rooms, developed by Futurice and the University of Helsinki. 
+UbiKampus Reservator is an Android application for displaying and reserving meeting rooms, developed by Futurice and the University of Helsinki. 
 
-UbiKampus Reservator[Name WIP] is a fork of the original Futurice Reservator at https://github.com/futurice/meeting-room-tablet. New features include support for Office365 calendars and a new UI. 
+UbiKampus Reservator is a fork of the original Futurice Reservator at https://github.com/futurice/meeting-room-tablet. New features include support for Office365 calendars and a new UI. 
 
 This application is meant for tablets so there are a few layout problems when using it on mobile phones.
 
