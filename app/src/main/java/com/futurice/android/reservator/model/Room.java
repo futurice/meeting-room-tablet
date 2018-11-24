@@ -60,7 +60,8 @@ public class Room implements Serializable {
 
     public boolean isFreeAt(DateTime time) {
         for (Reservation r : reservations) {
-            if (r.getStartTime().before(time) && r.getEndTime().after(time)) {
+            if ((r.getStartTime().before(time) && r.getEndTime().after(time))||
+                    r.getStartTime().compareTo(time) == 0) {
                 return false;
             }
         }

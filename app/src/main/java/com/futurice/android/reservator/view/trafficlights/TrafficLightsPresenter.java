@@ -336,18 +336,26 @@ public class TrafficLightsPresenter implements
         if (currentReservation == null)
             return;
 
-
+        long endTime = currentReservation.getEndTime().getTimeInMillis();
+        int remainingMinutes = (int) Math.round((endTime - System.currentTimeMillis()) / 60000f);
         int tempMax = MAX_QUICK_BOOK_MINUTES;
 
         if (room.isFreeAt(currentReservation.getEndTime())) {
-            tempMax = room.minutesFreeFrom(currentReservation.getEndTime());
+            int freeAfterThis = room.minutesFreeFrom(currentReservation.getEndTime());
+
+            if (freeAfterThis < Integer.MAX_VALUE)
+                tempMax = remainingMinutes + room.minutesFreeFrom(currentReservation.getEndTime());
+            else
+                tempMax = Integer.MAX_VALUE;
+        }
+        else {      //back to back reservations
+            tempMax = remainingMinutes;
         }
 
         if (tempMax > MAX_QUICK_BOOK_MINUTES)
             tempMax = MAX_QUICK_BOOK_MINUTES;
 
-        long endTime = currentReservation.getEndTime().getTimeInMillis();
-        int remainingMinutes = (int) Math.round((endTime - System.currentTimeMillis()) / 60000f);
+
 
         if (this.ongoingReservationFragment != null) {
             this.ongoingReservationFragment.setMaxMinutes(tempMax);
@@ -390,6 +398,7 @@ public class TrafficLightsPresenter implements
         this.showReservationDetails(this.currentReservation, room.getNextFreeSlot());
 
         this.roomReservationFragment.clearDescription();
+
         this.roomReservationFragment.setMaxMinutes(MAX_QUICK_BOOK_MINUTES);
         this.roomReservationFragment.setMinutes(DEFAULT_MINUTES);
 
