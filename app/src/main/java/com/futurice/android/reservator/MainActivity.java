@@ -1,6 +1,7 @@
 package com.futurice.android.reservator;
 import android.accounts.Account;
 import android.accounts.AccountManager;
+import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -16,8 +17,10 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 
 import com.futurice.android.reservator.common.LedHelper;
 import com.futurice.android.reservator.model.Model;
@@ -226,8 +229,6 @@ public class MainActivity extends FragmentActivity {
             this.model.getDataProxy().refreshRoomReservations(this.model.getFavoriteRoom());
     }
 
-
-
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -236,5 +237,20 @@ public class MainActivity extends FragmentActivity {
         unregisterReceiver(broadcastReceiver);
     }
 
+    private void hideSoftKeyboard() {
+        InputMethodManager inputMethodManager =
+                (InputMethodManager) this.getSystemService(
+                        Activity.INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromWindow(
+                getWindow().getDecorView().getRootView().getWindowToken(), 0);
+    }
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent event) {
+        //Log.d("Reservator","touch event");
+        if (event.getActionMasked() == MotionEvent.ACTION_DOWN)
+            this.hideSoftKeyboard();
+        return super.dispatchTouchEvent(event);
+    }
 
 }

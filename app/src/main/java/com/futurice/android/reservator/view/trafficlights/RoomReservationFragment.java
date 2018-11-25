@@ -95,7 +95,9 @@ public class RoomReservationFragment extends Fragment {
     }
 
     public int getCurrentMinutes() {
-        return seekBar.getProgress();
+        if (seekBar != null)
+            return seekBar.getProgress();
+        return 0;
     }
 
     SeekBar.OnSeekBarChangeListener seekBarChangeListener = new SeekBar.OnSeekBarChangeListener() {
