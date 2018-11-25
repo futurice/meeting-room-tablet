@@ -31,6 +31,7 @@ import android.widget.TextView;
 import com.futurice.android.reservator.R;
 import com.futurice.android.reservator.model.DateTime;
 import com.futurice.android.reservator.model.Reservation;
+import com.futurice.android.reservator.model.Room;
 import com.futurice.android.reservator.model.TimeSpan;
 
 public class CalendarVisualizer extends HorizontalScrollView implements ReservatorVisualizer,
@@ -56,6 +57,7 @@ public class CalendarVisualizer extends HorizontalScrollView implements Reservat
     private RectF calendarAreaRect, timeLabelRect, headerRect;
     private FrameLayout contentFrame;
     private TimeSpan tentativeTimeSpan;
+    private Room room;
 
     public CalendarVisualizer(Context context, int dayStartTime, int dayEndTime, int daysToShow,
         int textColor, int weekTextColor, int gridColor, int reservationTextColor,
@@ -123,7 +125,9 @@ public class CalendarVisualizer extends HorizontalScrollView implements Reservat
         }
     }
 
-
+    public synchronized void setRoom(Room room) {
+        this.room = room;
+    }
     @Override
     public synchronized void setReservations(List<Reservation> reservationList) {
         long start = System.currentTimeMillis();
@@ -209,6 +213,7 @@ public class CalendarVisualizer extends HorizontalScrollView implements Reservat
         c.clipRect(area.left + getScrollX(), area.top, area.right + getScrollX(), area.bottom);
         c.translate(area.left, area.top);
         int height = (int) area.height();
+        int paddingLeft = 1;
         if (reservations.length > 0) {
             float[] points = new float[reservations.length * 8];
             short[] indices = new short[reservations.length * 6];
@@ -218,8 +223,10 @@ public class CalendarVisualizer extends HorizontalScrollView implements Reservat
                 points[j] = getXForTime(reservations[i].getStartTime());
                 points[j + 1] = getProportionalY(reservations[i].getStartTime()) * height;
 
-                if (daysToShow == 1 )
+                if (daysToShow == 1 ) {
                     points[j + 2] = getWidth();
+                    points[j] += paddingLeft;
+                }
                 else
                     points[j + 2] = getXForTime(reservations[i].getStartTime()) + dayWidth;
 
@@ -249,8 +256,8 @@ public class CalendarVisualizer extends HorizontalScrollView implements Reservat
 
             // Draw the separator line only if the next reservation is following this one immediately.
             for (int i = 0; i < reservations.length; i++) {
-                if ((i + 1) < reservations.length &&
-                        reservations[i].getEndTime().getTimeInMillis() == reservations[i + 1].getStartTime().getTimeInMillis()) {
+                if ((i + 1) < reservations.length && !room.isFreeAt(reservations[i].getEndTime())) {
+                    //reservations[i].getEndTime().getTimeInMillis() == reservations[i + 1].getStartTime().getTimeInMillis()) {
                     int tempStopX = getXForTime(reservations[i].getStartTime()) + dayWidth;
                     if (daysToShow == 1)
                         tempStopX = getWidth();
@@ -277,13 +284,15 @@ public class CalendarVisualizer extends HorizontalScrollView implements Reservat
         short[] indices = new short[6];
 
         int j = 0;
-
+        int paddingLeft = 1;
         //order of points is top-left, top-right, bottom-left, bottom-right
         points[j] = getXForTime(timeSpan.getStart());
         points[j + 1] = getProportionalY(timeSpan.getStart()) * height;
 
-        if (daysToShow == 1 )
+        if (daysToShow == 1 ) {
             points[j + 2] = getWidth();
+            points[j] += paddingLeft;
+        }
         else
             points[j + 2] = getXForTime(timeSpan.getStart()) + dayWidth;
 
@@ -334,9 +343,10 @@ public class CalendarVisualizer extends HorizontalScrollView implements Reservat
     }
 
     private void drawReservationSubjects(Canvas c, RectF area) {
+        textPaint.setTextSize(22f);
         float textHeight = textPaint.getTextSize();
         int paddingX = 10;
-        int paddingY = 15;
+        int paddingY = 0;
         float height = area.height();
         c.save();
         c.clipRect(area.left + getScrollX(), area.top, area.right + getScrollX(), area.bottom);
@@ -345,8 +355,15 @@ public class CalendarVisualizer extends HorizontalScrollView implements Reservat
         textPaint.setColor(reservationTextColor);
         textPaint.setTypeface(getTypeFaceFromFont(getContext(), reservationTextFont));
         TextPaint textPaintForEllipsize = new TextPaint(textPaint);
-        textPaint.setTextSize(22f);
+
+
         for (Reservation r : reservations) {
+            float highlightEndY = getProportionalEndY(r.getEndTime()) * height;
+            float textY = getProportionalY(r.getStartTime()) * height + textHeight + paddingY;
+
+            if ((highlightEndY - textY) < ((textHeight/2)-4))
+                continue;
+
             float textWidth = textPaint.measureText(r.getSubject());
             int tempAvail = 250;
             if (daysToShow == 1)
