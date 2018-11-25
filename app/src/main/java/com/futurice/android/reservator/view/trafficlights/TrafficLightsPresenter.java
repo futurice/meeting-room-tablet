@@ -39,6 +39,7 @@ public class TrafficLightsPresenter implements
 
     private boolean connected = true;
     private boolean reservationChangeInProgess= false;
+    private boolean tentativeChangeInProgess= false;
 
     private TrafficLightsPageFragment trafficLightsPageFragment;
     private RoomStatusFragment roomStatusFragment;
@@ -172,6 +173,17 @@ public class TrafficLightsPresenter implements
     @Override
     public void onMinutesUpdated(int minutes) {
         this.dayCalendarFragment.setTentativeTimeSpan(new TimeSpan(new DateTime(), new DateTime(System.currentTimeMillis() + (minutes * 60 * 1000))));
+    }
+
+    @Override
+    public void onTentativeChangeStarted() {
+        this.tentativeChangeInProgess = true;
+    }
+
+    @Override
+
+    public void onTentativeChangeEnded() {
+        this.tentativeChangeInProgess = false;
     }
 
     // ------ Implementation of OngoingReservationFragment.OngoingReservationPresenter
@@ -359,7 +371,8 @@ public class TrafficLightsPresenter implements
 
         if (this.ongoingReservationFragment != null) {
             this.ongoingReservationFragment.setMaxMinutes(tempMax);
-            this.ongoingReservationFragment.setRemainingMinutes(remainingMinutes);
+            if (!this.reservationChangeInProgess)
+                this.ongoingReservationFragment.setRemainingMinutes(remainingMinutes);
         }
 
         if (remainingMinutes <= 0) {
@@ -433,6 +446,10 @@ public class TrafficLightsPresenter implements
 
 
         this.roomReservationFragment.setMaxMinutes(MAX_QUICK_BOOK_MINUTES);
+
+        int minutes = this.roomReservationFragment.getCurrentMinutes();
+        this.dayCalendarFragment.setTentativeTimeSpan(new TimeSpan(new DateTime(), new DateTime(System.currentTimeMillis() + (minutes * 60 * 1000))));
+
         this.trafficLightsPageFragment.getView().setBackgroundColor(resources.getColor(R.color.TrafficLightFree));
 
         if (this.connected) {
@@ -464,6 +481,10 @@ public class TrafficLightsPresenter implements
             tempMinutes = freeMinutes;
         this.roomReservationFragment.setMaxMinutes(tempMinutes);
 
+        int minutes = this.roomReservationFragment.getCurrentMinutes();
+        this.dayCalendarFragment.setTentativeTimeSpan(new TimeSpan(new DateTime(), new DateTime(System.currentTimeMillis() + (minutes * 60 * 1000))));
+
+
         if (this.connected)
             this.trafficLightsPageFragment.showRoomReservationFragment();
         else
@@ -474,12 +495,13 @@ public class TrafficLightsPresenter implements
 
 
     public void updateRoomData(Room room) {
-        if (!isStarted() || this.reservationChangeInProgess)
+        if (!isStarted())
             return;
 
         this.room = room;
 
-        this.dayCalendarFragment.updateRoomData(room);
+
+
         this.roomStatusFragment.setRoomTitleText(room.getName());
 
         if (room.isBookable(QUICK_BOOK_THRESHOLD)) {
@@ -497,6 +519,8 @@ public class TrafficLightsPresenter implements
         } else {
             this.showReserved();
         }
+        if (!this.reservationChangeInProgess)
+            this.dayCalendarFragment.updateRoomData(room);
     }
 
     public void setConnected() {

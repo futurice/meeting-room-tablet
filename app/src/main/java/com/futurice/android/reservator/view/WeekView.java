@@ -109,7 +109,7 @@ public class WeekView extends RelativeLayout implements OnClickListener {
                 day.getStart().add(Calendar.DAY_OF_YEAR, 1),
                 day.getEnd().add(Calendar.DAY_OF_YEAR, 1));
         }
-
+        cv.setRoom(room);
         cv.setReservations(reservations);
         calendarFrame.addView(cv, LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
         cv.setOnClickListener(this);
