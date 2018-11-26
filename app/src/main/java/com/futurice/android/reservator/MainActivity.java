@@ -36,6 +36,9 @@ import java.util.List;
 import butterknife.ButterKnife;
 
 public class MainActivity extends FragmentActivity {
+    public String KIOSK_ON_INTENT_NAME = "com.futurice.android.reservator.KIOSK_ON";
+    public String KIOSK_OFF_INTENT_NAME = "com.futurice.android.reservator.KIOSK_OFF";
+
     private FragmentManager fragmentManager;
 
     private TrafficLightsPageFragment trafficLightsPageFragment;
@@ -44,11 +47,24 @@ public class MainActivity extends FragmentActivity {
     private Model model;
 
 
-
-    BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+    BroadcastReceiver calendarChangeReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             onCalendarUpdated();
+        }
+    };
+
+    BroadcastReceiver kioskOnReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Log.d("Reservator","KIOSK_ON intent received");
+        }
+    };
+
+    BroadcastReceiver kioskOffReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Log.d("Reservator","KIOSK_OFF intent received");
         }
     };
 
@@ -194,8 +210,6 @@ public class MainActivity extends FragmentActivity {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         this.getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
-        registerReceiver(broadcastReceiver,
-            new IntentFilter(CalendarStateReceiver.CALENDAR_CHANGED));
 
         this.fragmentManager = getSupportFragmentManager();
         this.trafficLightsPageFragment = new TrafficLightsPageFragment();
@@ -211,11 +225,16 @@ public class MainActivity extends FragmentActivity {
 
         this.openFragment(this.trafficLightsPageFragment);
         this.updateNetworkStatus();
+
+        this.registerReceiver(calendarChangeReceiver, new IntentFilter(CalendarStateReceiver.CALENDAR_CHANGED));
+        this.registerReceiver(kioskOnReceiver, new IntentFilter(this.KIOSK_ON_INTENT_NAME));
+        this.registerReceiver(kioskOffReceiver, new IntentFilter(this.KIOSK_OFF_INTENT_NAME));
     }
 
     @Override
     public void onResume() {
         super.onResume();
+
         if (getAvailableAccounts().length <= 0) {
             showSetupWizard();
         }
@@ -234,7 +253,7 @@ public class MainActivity extends FragmentActivity {
         super.onDestroy();
         LedHelper.getInstance().setGreenBrightness(0);
         LedHelper.getInstance().setRedBrightness(0);
-        unregisterReceiver(broadcastReceiver);
+        unregisterReceiver(calendarChangeReceiver);
     }
 
     private void hideSoftKeyboard() {

@@ -129,6 +129,8 @@ public class TrafficLightsPresenter implements
     }
 
     private void cancelCurrentReservation() {
+        if (currentReservation == null)
+            return;
         try {
             this.model.getDataProxy().cancelReservation(this.currentReservation);
             this.refreshModel();
@@ -138,6 +140,8 @@ public class TrafficLightsPresenter implements
     }
 
     private void modifyCurrentReservationTimeSpan(TimeSpan timeSpan) {
+        if (currentReservation == null)
+            return;
         try {
             this.model.getDataProxy().modifyReservationTimeSpan(this.currentReservation, this.room, timeSpan);
             this.refreshModel();
@@ -212,6 +216,8 @@ public class TrafficLightsPresenter implements
 
     @Override
     public void onReservationMinutesUpdated(int minutes) {
+        if (currentReservation == null)
+            return;
         this.currentReservation.setTimeSpan(new TimeSpan(new DateTime(), new DateTime(System.currentTimeMillis() + (minutes * 60 * 1000))));
         this.dayCalendarFragment.updateRoomData(this.room);
     }

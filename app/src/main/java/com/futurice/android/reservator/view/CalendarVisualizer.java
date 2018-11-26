@@ -560,6 +560,9 @@ public class CalendarVisualizer extends HorizontalScrollView implements Reservat
     }
 
     private DateTime getFirstDayToShow() {
+        if (daysToShow == 1)
+            return new DateTime().stripTime();
+
         if (reservations.length > 0
                 && reservations[0].getStartTime().before(firstDayToShow)) {
             return reservations[0].getStartTime();
