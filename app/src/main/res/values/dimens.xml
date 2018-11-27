@@ -2,4 +2,6 @@
 <resources>
     <dimen name="digitalClockTextSize">36sp</dimen>
   <dimen name="appCheckPermissionNotAllowed">30sp</dimen>
+    <dimen name="seek_bar_thickness">6dp</dimen>
+    <dimen name="seek_bar_thumb_size">25dp</dimen>
 </resources>

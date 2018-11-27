@@ -37,9 +37,15 @@
     <color name="TrafficLightReserved">#e5053a</color> //red
     <color name="TrafficLightText">#fff</color>
 
-    <color name="seekBarProgress">#F8F8F8</color>
-    <color name="seekBarProgressBackgroundColor">#424242</color>
-    <color name="seekBarThumbColor">#F8F8F8</color>
+    <color name="seekBar_Free_Progress">#F8F8F8</color>
+    <color name="seekBar_Free_ProgressBackgroundColor">#424242</color>
+    <color name="seekBar_Free_SecondaryProgress">#3CC</color>
+    <color name="seekBar_Free_ThumbColor">#F8F8F8</color>
+
+    <color name="seekBar_Reserved_Progress">#F8F854F8</color>
+    <color name="seekBar_Reserved_ProgressBackgroundColor">#423242</color>
+    <color name="seekBar_Reserved_SecondaryProgress">#3CC3</color>
+    <color name="seekBar_Reserved_ThumbColor">#F8F238F8</color>
 
     <color name="ReserveButtonAvailable">#F8F8F8</color>
     <color name="ReserveButtonUnavailable">#424242</color>
