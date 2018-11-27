@@ -41,6 +41,9 @@
     <color name="seekBarProgressBackgroundColor">#424242</color>
     <color name="seekBarThumbColor">#F8F8F8</color>
 
+    <color name="pureWhite">#FFFF</color>
+    <color name="faintWhite">#1Affffff</color>
+
     <color name="ReserveButtonAvailable">#F8F8F8</color>
     <color name="ReserveButtonUnavailable">#424242</color>
 
