@@ -176,7 +176,8 @@ public class TrafficLightsPresenter implements
 
     @Override
     public void onMinutesUpdated(int minutes) {
-        this.dayCalendarFragment.setTentativeTimeSpan(new TimeSpan(new DateTime(), new DateTime(System.currentTimeMillis() + (minutes * 60 * 1000))));
+        if (this.currentReservation == null)
+            this.dayCalendarFragment.setTentativeTimeSpan(new TimeSpan(new DateTime(), new DateTime(System.currentTimeMillis() + (minutes * 60 * 1000))));
     }
 
     @Override
@@ -209,7 +210,7 @@ public class TrafficLightsPresenter implements
 
             DateTime startTime = this.currentReservation.getStartTime();
 
-            DateTime newEndTime = new DateTime(startTime.getTimeInMillis() + (newMinutes* 60 * 1000));
+            DateTime newEndTime = new DateTime(System.currentTimeMillis() + (newMinutes* 60 * 1000));
             this.modifyCurrentReservationTimeSpan(new TimeSpan(startTime,newEndTime));
         }
     }
@@ -218,7 +219,7 @@ public class TrafficLightsPresenter implements
     public void onReservationMinutesUpdated(int minutes) {
         if (currentReservation == null)
             return;
-        this.currentReservation.setTimeSpan(new TimeSpan(new DateTime(), new DateTime(System.currentTimeMillis() + (minutes * 60 * 1000))));
+        this.currentReservation.setTimeSpan(new TimeSpan(this.currentReservation.getStartTime(), new DateTime(System.currentTimeMillis() + (minutes * 60 * 1000))));
         this.dayCalendarFragment.updateRoomData(this.room);
     }
 
@@ -358,6 +359,7 @@ public class TrafficLightsPresenter implements
         int remainingMinutes = (int) Math.round((endTime - System.currentTimeMillis()) / 60000f);
         int tempMax = MAX_QUICK_BOOK_MINUTES;
 
+        // Maximum time until the next reservation
         if (room.isFreeAt(currentReservation.getEndTime())) {
             int freeAfterThis = room.minutesFreeFrom(currentReservation.getEndTime());
 
@@ -373,7 +375,8 @@ public class TrafficLightsPresenter implements
         if (tempMax > MAX_QUICK_BOOK_MINUTES)
             tempMax = MAX_QUICK_BOOK_MINUTES;
 
-
+        if (remainingMinutes > tempMax)
+            tempMax = remainingMinutes;
 
         if (this.ongoingReservationFragment != null) {
             this.ongoingReservationFragment.setMaxMinutes(tempMax);
