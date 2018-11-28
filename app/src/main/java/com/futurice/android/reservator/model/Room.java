@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
 
@@ -177,7 +178,9 @@ public class Room implements Serializable {
 
     public List<Reservation> getReservationsForTimeSpan(TimeSpan ts) {
         List<Reservation> daysReservations = new ArrayList<Reservation>();
-        for (Reservation r : reservations) {
+        Iterator iterator = reservations.iterator();
+        while (iterator.hasNext()){
+            Reservation r = (Reservation) iterator.next();
             if (r.getTimeSpan().intersects(ts)) {
                 daysReservations.add(r);
             }

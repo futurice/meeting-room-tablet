@@ -48,22 +48,26 @@ public final class WizardAccountSelectionFragment
         View view = inflater.inflate(R.layout.wizard_account_selection, container, false);
         unbinder = ButterKnife.bind(this, view);
         title.setText(R.string.selectGoogleAccount);
-        accountsRadioGroup.setOnCheckedChangeListener(
-                new RadioGroup.OnCheckedChangeListener() {
-                    @Override
-                    public void onCheckedChanged(
-                            RadioGroup group, int checkedId) {
-                        String account =
-                                ((RadioButton) group.findViewById(checkedId))
-                                        .getText().toString();
-                        PreferenceManager.getInstance(getActivity())
-                                .setDefaultCalendarAccount(account);
-                        PreferenceManager.getInstance(getActivity())
-                                .setDefaultUserName(account);
-                    }
-                });
-
         return view;
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        accountsRadioGroup.setOnCheckedChangeListener(
+            new RadioGroup.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(
+                    RadioGroup group, int checkedId) {
+                    String account =
+                        ((RadioButton) group.findViewById(checkedId))
+                            .getText().toString();
+                    PreferenceManager.getInstance(getActivity())
+                        .setDefaultCalendarAccount(account);
+                    PreferenceManager.getInstance(getActivity())
+                        .setDefaultUserName(account);
+                }
+            });
     }
 
     @Override
