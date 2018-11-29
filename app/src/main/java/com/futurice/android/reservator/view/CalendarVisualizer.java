@@ -58,11 +58,14 @@ public class CalendarVisualizer extends HorizontalScrollView implements Reservat
     private FrameLayout contentFrame;
     private TimeSpan tentativeTimeSpan;
     private Room room;
+    private Context context;
 
     public CalendarVisualizer(Context context, int dayStartTime, int dayEndTime, int daysToShow,
         int textColor, int weekTextColor, int gridColor, int reservationTextColor,
         String textFont, String reservationTextFont) {
         super(context, null);
+
+        this.context = context;
 
         this.dayStartTime = dayStartTime;
         this.dayEndTime = dayEndTime;
@@ -169,7 +172,8 @@ public class CalendarVisualizer extends HorizontalScrollView implements Reservat
         //c.clipRect(area); no clipRect used. the first label goes few pixels above the top
         c.translate(area.left, area.top);
         textPaint.setTextAlign(Align.RIGHT);
-        float normalTextSize = 28f; //textPaint.getTextSize();
+        float normalTextSize = context.getResources().getDimensionPixelSize(R.dimen.timeLabelTextSize); //textPaint
+        // .getTextSize();
         float smallTextSize = normalTextSize * 0.65f;
         textPaint.setTextSize(smallTextSize);
         float padding = width / 8;
@@ -343,10 +347,13 @@ public class CalendarVisualizer extends HorizontalScrollView implements Reservat
     }
 
     private void drawReservationSubjects(Canvas c, RectF area) {
-        textPaint.setTextSize(22f);
+        textPaint.setTextSize(context.getResources().getDimensionPixelSize(R.dimen
+            .reservationSubjectTextSize));
         float textHeight = textPaint.getTextSize();
-        int paddingX = 10;
-        int paddingY = 0;
+        int paddingX = context.getResources().getDimensionPixelSize(R.dimen
+            .reservationSubjectPaddingX);
+        int paddingY = context.getResources().getDimensionPixelSize(R.dimen
+            .reservationSubjectPaddingY);
         float height = area.height();
         c.save();
         c.clipRect(area.left + getScrollX(), area.top, area.right + getScrollX(), area.bottom);
@@ -355,8 +362,6 @@ public class CalendarVisualizer extends HorizontalScrollView implements Reservat
         textPaint.setColor(reservationTextColor);
         textPaint.setTypeface(getTypeFaceFromFont(getContext(), reservationTextFont));
         TextPaint textPaintForEllipsize = new TextPaint(textPaint);
-
-
         for (Reservation r : reservations) {
             float highlightEndY = getProportionalEndY(r.getEndTime()) * height;
             float textY = getProportionalY(r.getStartTime()) * height + textHeight + paddingY;
