@@ -38,6 +38,7 @@ import com.futurice.android.reservator.view.RoomReservationPopup;
 import com.futurice.android.reservator.view.RoomTrafficLights;
 import com.futurice.android.reservator.view.WeekView;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Vector;
 
@@ -361,7 +362,7 @@ public class RoomActivity extends ReservatorActivity implements OnMenuItemClickL
 	}*/
 
     @Override
-    public void roomListUpdated(Vector<Room> rooms) {
+    public void roomListUpdated(ArrayList<Room> rooms) {
         // XXX: todo
 		/*
 		for (Room r : rooms) {

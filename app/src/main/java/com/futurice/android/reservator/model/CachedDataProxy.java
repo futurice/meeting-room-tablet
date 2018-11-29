@@ -1,5 +1,6 @@
 package com.futurice.android.reservator.model;
 
+import java.util.ArrayList;
 import java.util.Vector;
 
 import android.util.Log;
@@ -11,20 +12,20 @@ public class CachedDataProxy extends DataProxy {
     private static final long CACHE_RESERVATION_FOR = 60 * 1000; // 1 minute
 
     private final DataProxy dataProxy;
-    private final CacheMap<String, Vector<Reservation>> reservationCache;
-    private Vector<Room> rooms;
+    private final CacheMap<String, ArrayList<Reservation>> reservationCache;
+    private ArrayList<Room> rooms;
 
     public CachedDataProxy(DataProxy dataProxy) {
         this.dataProxy = dataProxy;
-        this.reservationCache = new CacheMap<String, Vector<Reservation>>();
+        this.reservationCache = new CacheMap<String, ArrayList<Reservation>>();
         this.rooms = null;
     }
 
 
     @Override
-    public Vector<Reservation> getRoomReservations(Room r)
+    public ArrayList<Reservation> getRoomReservations(Room r)
         throws ReservatorException {
-        Vector<Reservation> reservations = reservationCache.get(r.getEmail());
+        ArrayList<Reservation> reservations = reservationCache.get(r.getEmail());
         if (reservations == null) {
             Log.d("CACHE", "getRoomReservations -- " + r.getEmail());
             reservations = dataProxy.getRoomReservations(r);
@@ -34,7 +35,7 @@ public class CachedDataProxy extends DataProxy {
     }
 
     @Override
-    public Vector<Room> getRooms() {
+    public ArrayList<Room> getRooms() {
         // TODO: do not cache forever
         if (this.rooms == null) {
             Log.d("CACHE", "getRooms");

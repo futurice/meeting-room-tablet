@@ -25,7 +25,7 @@ public abstract class DataProxy {
      * @return the rooms
      * @throws ReservatorException
      */
-    abstract public Vector<Room> getRooms();
+    abstract public ArrayList<Room> getRooms();
 
     /**
      * Synchronously get a list of reservations mapped to a room. The reservations are not updated to the room.
@@ -34,7 +34,7 @@ public abstract class DataProxy {
      * @return reservations for the room
      * @throws ReservatorException
      */
-    abstract public Vector<Reservation> getRoomReservations(Room r) throws ReservatorException;
+    abstract public ArrayList<Reservation> getRoomReservations(Room r) throws ReservatorException;
 
     /**
      * Synchronously cancel a reservation.
@@ -54,7 +54,7 @@ public abstract class DataProxy {
      * @throws ReservatorException
      */
     public Room getRoomWithName(String roomName) throws ReservatorException {
-        Vector<Room> rooms = getRooms();
+        ArrayList<Room> rooms = getRooms();
         Iterator<Room> it = rooms.iterator();
         while (it.hasNext()) {
             Room room = it.next();
@@ -72,7 +72,7 @@ public abstract class DataProxy {
      * @throws ReservatorException
      */
     public ArrayList<String> getRoomNames() {
-        Vector<Room> rooms = getRooms();
+        ArrayList<Room> rooms = getRooms();
         ArrayList<String> roomNames = new ArrayList<String>();
         Iterator<Room> it = rooms.iterator();
         while (it.hasNext()) {
@@ -122,7 +122,7 @@ public abstract class DataProxy {
         listeners.remove(listener);
     }
 
-    private void notifyRoomsUpdated(Vector<Room> rooms) {
+    private void notifyRoomsUpdated(ArrayList<Room> rooms) {
         for (DataUpdatedListener l : listeners) {
             l.roomListUpdated(rooms);
         }
@@ -155,16 +155,16 @@ public abstract class DataProxy {
      *
      * @author vman
      */
-    private class RoomListRefreshTask extends AsyncTask<Void, Void, Vector<Room>> {
+    private class RoomListRefreshTask extends AsyncTask<Void, Void, ArrayList<Room>> {
         ReservatorException e = null;
 
         @Override
-        protected Vector<Room> doInBackground(Void... params) {
+        protected ArrayList<Room> doInBackground(Void... params) {
             return getRooms();
         }
 
         @Override
-        protected void onPostExecute(Vector<Room> rooms) {
+        protected void onPostExecute(ArrayList<Room> rooms) {
             if (rooms == null) {
                 notifyRefreshFailed(e);
             } else {
@@ -185,7 +185,7 @@ public abstract class DataProxy {
         protected Room doInBackground(Room... rooms) {
             Room room = rooms[0];
             try {
-                Vector<Reservation> reservations = getRoomReservations(room);
+                ArrayList<Reservation> reservations = getRoomReservations(room);
                 room.setReservations(reservations);
                 return room;
             } catch (ReservatorException e) {

@@ -348,10 +348,10 @@ public class PlatformCalendarDataProxy extends DataProxy {
     }
 
     @Override
-    public Vector<Room> getRooms() {
+    public ArrayList<Room> getRooms() {
         setSyncOn();
 
-        Vector<Room> rooms = new Vector<Room>();
+        ArrayList<Room> rooms = new ArrayList<Room>();
 
         String[] mProjection = {
             CalendarContract.Calendars._ID,
@@ -432,9 +432,9 @@ public class PlatformCalendarDataProxy extends DataProxy {
     }
 
     @Override
-    public Vector<Reservation> getRoomReservations(Room r) throws ReservatorException {
+    public ArrayList<Reservation> getRoomReservations(Room r) throws ReservatorException {
         if (!(r instanceof PlatformCalendarRoom)) {
-            return new Vector<Reservation>();
+            return new ArrayList<Reservation>();
         }
 
         PlatformCalendarRoom room = (PlatformCalendarRoom) r;
@@ -488,7 +488,7 @@ public class PlatformCalendarDataProxy extends DataProxy {
             reservations.addAll(roomCache);
         }
 
-        return new Vector<Reservation>(reservations);
+        return new ArrayList<Reservation>(reservations);
     }
 
     private HashSet<Reservation> getInstancesTableReservations(
@@ -599,8 +599,8 @@ public class PlatformCalendarDataProxy extends DataProxy {
         return defaultTitle;
     }
 
-    private Vector<String> getAuthoritySortedAttendees(final long eventId) {
-        Vector<String> attendees = new Vector<String>();
+    private ArrayList<String> getAuthoritySortedAttendees(final long eventId) {
+        ArrayList<String> attendees = new ArrayList<String>();
 
         String[] mProjection = {
             CalendarContract.Attendees.ATTENDEE_NAME,

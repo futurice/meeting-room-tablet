@@ -17,7 +17,7 @@ public class Room implements Serializable {
     // Rooms that are free for this long to future are considered "free"
     static private final int FREE_THRESHOLD_MINUTES = 180;
     private String name, email;
-    private Vector<Reservation> reservations;
+    private ArrayList<Reservation> reservations;
 
     //public Vector<Reservation> getReservations(){
     //	return this.reservations;
@@ -27,7 +27,7 @@ public class Room implements Serializable {
     public Room(String name, String email) {
         this.name = name;
         this.email = email;
-        this.reservations = new Vector<Reservation>();
+        this.reservations = new ArrayList<Reservation>();
     }
 
     public String getName() {
@@ -38,7 +38,7 @@ public class Room implements Serializable {
         return email;
     }
 
-    public void setReservations(Vector<Reservation> reservations) {
+    public void setReservations(ArrayList<Reservation> reservations) {
         this.reservations = reservations;
         Collections.sort(reservations);
     }

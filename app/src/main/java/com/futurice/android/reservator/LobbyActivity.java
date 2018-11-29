@@ -219,7 +219,7 @@ public class LobbyActivity extends ReservatorActivity
     }
 
     @Override
-    public void roomListUpdated(Vector<Room> rooms) {
+    public void roomListUpdated(ArrayList<Room> rooms) {
         HashSet<String> hiddenRooms =
                 PreferenceManager.getInstance(this).getUnselectedRooms();
 
