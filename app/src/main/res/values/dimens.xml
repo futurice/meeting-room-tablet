@@ -5,7 +5,7 @@
     <dimen name="reservationSubjectTextSize">14sp</dimen>
     <dimen name="reservationSubjectPaddingX">6dp</dimen>
     <dimen name="reservationSubjectPaddingY">0dp</dimen>
-    <dimen name="timeLabelTextSize">14dp</dimen>
+    <dimen name="timeLabelTextSize">26dp</dimen>
     <dimen name="seek_bar_thickness">6dp</dimen>
     <dimen name="seek_bar_thumb_size">25dp</dimen>
 </resources>
