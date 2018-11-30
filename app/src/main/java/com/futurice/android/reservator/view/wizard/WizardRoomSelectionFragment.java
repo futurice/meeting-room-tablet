@@ -58,7 +58,18 @@ public final class WizardRoomSelectionFragment extends android.support.v4.app.Fr
         unbinder = ButterKnife.bind(this, view);
 
         title.setText(R.string.shown_rooms);
+        return view;
+    }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        unbinder.unbind();
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
         preferences = PreferenceManager.getInstance(getActivity());
         application = ((ReservatorApplication) getActivity().getApplication());
 
@@ -75,14 +86,6 @@ public final class WizardRoomSelectionFragment extends android.support.v4.app.Fr
             }
         });
         onlyUseResource.setChecked(preferences.getCalendarMode() == PlatformCalendarDataProxy.Mode.RESOURCES);
-
-        return view;
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        unbinder.unbind();
     }
 
     public void saveSelection() {

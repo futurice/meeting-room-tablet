@@ -42,6 +42,18 @@ public final class WizardDefaultRoomSelectionFragment extends android.support.v4
         unbinder = ButterKnife.bind(this, view);
 
         title.setText(R.string.defaultRoomSelectionTitle);
+        return view;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        unbinder.unbind();
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
         roomRadioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
@@ -50,14 +62,6 @@ public final class WizardDefaultRoomSelectionFragment extends android.support.v4
                 preferences.setSelectedRoom(roomName);
             }
         });
-
-        return view;
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        unbinder.unbind();
     }
 
     public void reloadRooms() {
