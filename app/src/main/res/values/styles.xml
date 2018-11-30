@@ -39,13 +39,13 @@
 
     <color name="seekBar_Free_Progress">#F8F8F8</color>
     <color name="seekBar_Free_ProgressBackgroundColor">#424242</color>
-    <color name="seekBar_Free_SecondaryProgress">#3CC</color>
+    <color name="seekBar_Free_SecondaryProgress">#424242</color>
     <color name="seekBar_Free_ThumbColor">#F8F8F8</color>
 
-    <color name="seekBar_Reserved_Progress">#F8F854F8</color>
-    <color name="seekBar_Reserved_ProgressBackgroundColor">#423242</color>
-    <color name="seekBar_Reserved_SecondaryProgress">#3CC3</color>
-    <color name="seekBar_Reserved_ThumbColor">#F8F238F8</color>
+    <color name="seekBar_Reserved_Progress">#F8F8F8</color>
+    <color name="seekBar_Reserved_ProgressBackgroundColor">#424242</color>
+    <color name="seekBar_Reserved_SecondaryProgress">#424242</color>
+    <color name="seekBar_Reserved_ThumbColor">#F8F8F8</color>
 
     <color name="pureWhite">#FFFF</color>
     <color name="faintWhite">#1Affffff</color>

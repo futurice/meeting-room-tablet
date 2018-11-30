@@ -64,19 +64,23 @@
 
     <Button
         android:id="@+id/reserveButton"
-        android:layout_width="match_parent"
-        android:layout_height="84dp"
+        android:layout_width="391dp"
+        android:layout_height="72dp"
         android:layout_alignTop="@+id/nameInput"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="32dp"
+        android:layout_marginEnd="8dp"
         android:layout_marginBottom="16dp"
         android:layout_toEndOf="@+id/nameInput"
-        android:background="@color/CalendarResTextColor"
+        android:background="@drawable/reserve_button"
         android:text="@string/button_reserve"
         android:textColor="@color/TrafficLightFree"
-        android:textSize="32dp"
+        android:textSize="25dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/nameInput"></Button>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/nameInput"
+        app:layout_constraintVertical_bias="1.0"></Button>
 
     <EditText
         android:id="@+id/nameInput"
