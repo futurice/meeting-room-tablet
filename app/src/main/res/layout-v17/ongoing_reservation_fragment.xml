@@ -31,7 +31,7 @@
         android:text="@string/reservation_remaining"
         android:textAlignment="center"
         android:textIsSelectable="false"
-        android:textSize="25sp"
+        android:textSize="23sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
