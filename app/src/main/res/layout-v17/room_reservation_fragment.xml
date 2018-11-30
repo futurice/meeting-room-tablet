@@ -36,19 +36,19 @@
     <SeekBar
         android:id="@+id/seekBar"
         android:layout_width="match_parent"
-        android:layout_height="33dp"
+        android:layout_height="wrap_content"
         android:layout_alignParentTop="false"
         android:layout_alignParentEnd="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="188dp"
         android:max="90"
         android:progress="30"
-        android:progressBackgroundTint="@color/seekBarProgressBackgroundColor"
-        android:progressTint="@color/seekBarProgress"
-        android:thumbTint="@color/seekBarThumbColor"
+        android:progressDrawable="@drawable/seekbar_free"
+        android:thumb="@drawable/seekthumb_free"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"></SeekBar>
+        app:layout_constraintStart_toStartOf="parent">
+    </SeekBar>
 
     <TextView
         android:id="@+id/TextViewBarDuration"
