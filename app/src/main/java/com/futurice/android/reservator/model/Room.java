@@ -17,7 +17,7 @@ public class Room implements Serializable {
     // Rooms that are free for this long to future are considered "free"
     static private final int FREE_THRESHOLD_MINUTES = 180;
     private String name, email;
-    private Vector<Reservation> reservations;
+    private ArrayList<Reservation> reservations;
 
     //public Vector<Reservation> getReservations(){
     //	return this.reservations;
@@ -27,7 +27,7 @@ public class Room implements Serializable {
     public Room(String name, String email) {
         this.name = name;
         this.email = email;
-        this.reservations = new Vector<Reservation>();
+        this.reservations = new ArrayList<Reservation>();
     }
 
     public String getName() {
@@ -38,7 +38,7 @@ public class Room implements Serializable {
         return email;
     }
 
-    public void setReservations(Vector<Reservation> reservations) {
+    public void setReservations(ArrayList<Reservation> reservations) {
         this.reservations = reservations;
         Collections.sort(reservations);
     }
@@ -50,7 +50,9 @@ public class Room implements Serializable {
 
     public boolean isFree() {
         DateTime now = new DateTime();
-        for (Reservation r : reservations) {
+        Iterator iterator = reservations.iterator();
+        while (iterator.hasNext()) {
+            Reservation r = (Reservation) iterator.next();
             if (r.getStartTime().before(now) && r.getEndTime().after(now)) {
                 return false;
             }
@@ -60,9 +62,10 @@ public class Room implements Serializable {
     }
 
     public boolean isFreeAt(DateTime time) {
-        for (Reservation r : reservations) {
-            if ((r.getStartTime().before(time) && r.getEndTime().after(time))||
-                    r.getStartTime().compareTo(time) == 0) {
+        Iterator iterator = reservations.iterator();
+        while (iterator.hasNext()) {
+            Reservation r = (Reservation) iterator.next();
+            if (r.getStartTime().before(time) && r.getEndTime().after(time)) {
                 return false;
             }
         }
@@ -73,7 +76,9 @@ public class Room implements Serializable {
         DateTime now = new DateTime();
         DateTime bookingThresholdEnd = now.add(Calendar.MINUTE, RESERVED_THRESHOLD_MINUTES);
 
-        for (Reservation r : reservations) {
+        Iterator iterator = reservations.iterator();
+        while (iterator.hasNext()) {
+            Reservation r = (Reservation) iterator.next();
             if (r.getEndTime().after(now) && r.getStartTime().before(bookingThresholdEnd)) {
                 return r;
             }
@@ -90,7 +95,9 @@ public class Room implements Serializable {
      * @return Integer.MAX_VALUE if no reservations in future
      */
     public int minutesFreeFrom(DateTime from) {
-        for (Reservation r : reservations) {
+        Iterator iterator = reservations.iterator();
+        while (iterator.hasNext()) {
+            Reservation r = (Reservation) iterator.next();
             if (r.getStartTime().after(from)) {
                 return (int) ((r.getStartTime().getTimeInMillis() - from.getTimeInMillis()) / 60000);
             }
@@ -113,7 +120,9 @@ public class Room implements Serializable {
     public int reservedForFrom(DateTime from) {
         DateTime to = from;
 
-        for (Reservation r : reservations) {
+        Iterator iterator = reservations.iterator();
+        while (iterator.hasNext()) {
+            Reservation r = (Reservation) iterator.next();
             if (r.getStartTime().before(to) && r.getEndTime().after(to)) {
                 to = r.getEndTime();
                 to = to.add(Calendar.MINUTE, 5);
@@ -137,7 +146,9 @@ public class Room implements Serializable {
         DateTime max = now.add(Calendar.DAY_OF_YEAR, 1).stripTime();
 
 
-        for (Reservation r : reservations) {
+        Iterator iterator = reservations.iterator();
+        while (iterator.hasNext()) {
+            Reservation r = (Reservation) iterator.next();
             // bound nextFreeTime to
             if (r.getStartTime().after(max)) {
                 return new TimeSpan(now, max);
@@ -162,7 +173,9 @@ public class Room implements Serializable {
 
         TimeSpan candidateSlot = new TimeSpan(now, now.add(Calendar.MINUTE, length));
 
-        for (Reservation r : reservations) {
+        Iterator iterator = reservations.iterator();
+        while (iterator.hasNext()){
+            Reservation r = (Reservation) iterator.next();
             if (r.getStartTime().afterOrEqual(candidateSlot.getEnd())) return candidateSlot;
             if (r.getTimeSpan().intersects(candidateSlot)) {
                 if (r.getEndTime().afterOrEqual(max)) return null;
@@ -243,7 +256,9 @@ public class Room implements Serializable {
 
         TimeSpan restOfDay = new TimeSpan(now, max);
 
-        for (Reservation r : reservations) {
+        Iterator iterator = reservations.iterator();
+        while (iterator.hasNext()){
+            Reservation r = (Reservation) iterator.next();
             if (r.getTimeSpan().intersects(restOfDay)) return false;
             if (r.getStartTime().after(max)) return true;
         }

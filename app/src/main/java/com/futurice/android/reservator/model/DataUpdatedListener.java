@@ -1,5 +1,6 @@
 package com.futurice.android.reservator.model;
 
+import java.util.ArrayList;
 import java.util.Vector;
 
 /**
@@ -8,7 +9,7 @@ import java.util.Vector;
  * @author vman
  */
 public interface DataUpdatedListener {
-    void roomListUpdated(Vector<Room> rooms);
+    void roomListUpdated(ArrayList<Room> rooms);
 
     void roomReservationsUpdated(Room room);
 

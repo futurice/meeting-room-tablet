@@ -18,6 +18,7 @@ import com.futurice.android.reservator.model.ReservatorException;
 import com.futurice.android.reservator.model.Room;
 import com.futurice.android.reservator.model.TimeSpan;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Locale;
 import java.util.Vector;
@@ -269,7 +270,7 @@ public class TrafficLightsPresenter implements
     // ------- Implementation of model.DataUpdatedListener
 
     @Override
-    public void roomListUpdated(Vector<Room> rooms) {
+    public void roomListUpdated(ArrayList<Room> rooms) {
 
     }
 
