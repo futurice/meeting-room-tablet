@@ -26,10 +26,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="104dp"
+        android:textAllCaps="true"
+        android:textColor="@color/colorPrimary70Alpha"
         android:text="@string/reservation_remaining"
         android:textAlignment="center"
-        android:textColor="#F8F8F8"
-        android:textSize="20sp"
+        android:textIsSelectable="false"
+        android:textSize="25sp"
+        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

@@ -52,7 +52,7 @@
     <string name="free_for_specific_amount">seuraava varaus | nästa reservering | next reservation</string>
     <string name="status_reserved">VARATTU • RESERVERAT • RESERVED</string>
     <string name="free_at">Vapautuu | Ledigt från | Free at</string>
-    <string name="meeting_description">Kuvaus | Beskrivning | Enter reservation name</string>
+    <string name="meeting_description">Syötä kuvaus | Ange beskrivning | Enter description</string>
     <string name="quick_booking">Pikavaraus | Snabbreservering | Use now:</string>
     <string name="reservation_remaining">VARAUSTA JÄLJELLÄ | RESERVERING KVAR | RESERVATION REMAINING</string>
     <string name="default_reservation_description">Varaus | Reservering | Reservation</string>
