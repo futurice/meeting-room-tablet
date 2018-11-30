@@ -94,6 +94,7 @@
         android:layout_marginBottom="108dp"
         android:background="@color/faintWhite"
         android:ems="10"
+        android:paddingLeft="10dp"
         android:textSize="22sp"
         android:hint="@string/meeting_description"
         android:textColorHint="@color/pureWhite"
