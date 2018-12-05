@@ -97,7 +97,7 @@
         android:paddingLeft="10dp"
         android:textSize="22sp"
         android:hint="@string/meeting_description"
-        android:textColorHint="@color/pureWhite"
+        android:textColorHint="@color/whiteA"
         android:inputType="textPersonName"
         android:singleLine="true"
         android:textColor="@color/pureWhite"

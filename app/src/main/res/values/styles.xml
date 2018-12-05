@@ -48,6 +48,7 @@
     <color name="seekBar_Reserved_ThumbColor">#F8F8F8</color>
 
     <color name="pureWhite">#FFFF</color>
+    <color name="whiteA">#A6FFFFFF</color>
     <color name="faintWhite">#1Affffff</color>
 
     <color name="ReserveButtonAvailable">#F8F8F8</color>
