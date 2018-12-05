@@ -38,7 +38,7 @@
     <color name="TrafficLightText">#fff</color>
 
     <color name="seekBar_Free_Progress">#F8F8F8</color>
-    <color name="seekBar_Free_ProgressBackgroundColor">#424242</color>
+    <color name="seekBar_Free_ProgressBackgroundColor">#73424242</color>
     <color name="seekBar_Free_SecondaryProgress">#424242</color>
     <color name="seekBar_Free_ThumbColor">#F8F8F8</color>
 
