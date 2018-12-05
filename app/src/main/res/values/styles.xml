@@ -21,7 +21,7 @@
     <color name="StatusReservedColor">#CCe5053a</color> //red
     <color name="Transparent">#0000</color>
     <color name="CalendarMarkerReservedColor">#e5053a</color>
-    <color name="CalendarMarkerTentativeColor">#30e5053a</color>
+    <color name="CalendarMarkerTentativeColor">#300098d0</color>
     <color name="Orange">#fca311</color>
     <color name="TimeBarTickColor">#3333</color>
     <color name="ButtonTextNormal">#333</color>
